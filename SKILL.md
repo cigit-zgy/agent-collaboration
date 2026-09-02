@@ -3,7 +3,7 @@ name: agent-collaboration
 description: >
   Coordinate User, ChatGPT, and Codex for repository work that needs design,
   direct remote action, committed local execution, verification, independent audit,
-  project onboarding, or Skill onboarding.
+  project onboarding, Skill onboarding, or maintained Skill authoring.
 ---
 
 # Agent Collaboration
@@ -46,14 +46,18 @@ Evidence, not Codex self-reported PASS, determines final acceptance.
   `references/project-agents-template.md`; add a project workflow Skill from
   `references/project-skill-template.md` only when the project exposes an
   Agent-operable workflow.
+- Maintained `SKILL.md` authoring or review:
+  `references/skill-writing-standard.md` first; then use the relevant project or
+  standalone Skill template. The standard defines required information and writing
+  discipline without imposing one universal body-section layout.
 - Project concept/design authority and report lifecycle:
   `references/report-concept-policy.md`. Scientific/research projects may declare
   selected concepts as canonical design specifications; Skills/references then act as
   operational projections.
 - Standalone first-party Skill repository onboarding:
   `references/skill-repository-policy.md` → `references/skill-agents-template.md` →
-  `references/skill-package-architecture.md` → the appropriate template under
-  `references/skill-templates/`.
+  `references/skill-package-architecture.md` → `references/skill-writing-standard.md`
+  → the appropriate template under `references/skill-templates/`.
 - Formal Codex task authoring: `references/chatgpt-task-template.md` plus the
   selected level from `references/verification-levels.md`.
 - Codex launch: `references/codex-launch-template.md`.
