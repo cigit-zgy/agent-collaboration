@@ -1,5 +1,11 @@
 # ChatGPT formal task template
 
+Formal tasks live under `reports/chatgpt/` and use:
+
+```text
+YYMMDD_chatgpt_NN.md
+```
+
 Use every field and section. Write `None` where a section genuinely has no
 content; do not omit it.
 
@@ -37,7 +43,9 @@ Status: <STATUS>
 
 ## Git requirements
 
-## Agent report
+## Codex report
+
+Expected path: `reports/codex/YYMMDD_codex_NN.md`
 
 ## Final stdout
 ```
@@ -47,6 +55,10 @@ relevant artifacts. The task must state the actual baseline SHA and one
 verification level. Required changes and acceptance criteria must be directly
 checkable, and non-goals must bound the work. Do not use open-ended phrases such
 as “improve as much as possible,” and do not pre-schedule the next task.
+
+If the task changes a durable design decision, update the owning
+`reports/concept/` topic before or as part of the committed task so Codex has a
+stable authoritative contract.
 
 Commit and push the task before handing it to Codex. Codex treats that committed
 task as the sole specification; chat additions are not task authority.
