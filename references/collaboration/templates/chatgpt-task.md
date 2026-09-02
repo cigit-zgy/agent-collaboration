@@ -15,8 +15,9 @@ A formal task is issued only after ChatGPT has:
 1. identified the concrete local/unavailable capability that requires Codex;
 2. partitioned every requested deliverable into `DIRECT` or `LOCAL`;
 3. completed and committed/pushed all `DIRECT` deliverables that are in scope;
-4. reduced Codex scope to the remaining `LOCAL` work;
-5. pinned the exact `agent-collaboration` GitHub authority used to author the task.
+4. frozen those DIRECT artifacts as Codex read-only inputs;
+5. reduced Codex scope to the remaining `LOCAL` work;
+6. pinned the exact `agent-collaboration` GitHub authority used to author the task.
 
 A task is invalid if it delegates a deliverable that ChatGPT can already complete through current connected capabilities without naming a concrete local-only dependency for that deliverable.
 
@@ -58,6 +59,12 @@ The collaboration commit is required for formal tasks. Do not encode a machine-l
 ### ChatGPT-completed before handoff
 
 <List every DIRECT deliverable completed before this task was issued, with paths/commits when relevant.>
+
+### Frozen DIRECT inputs — Codex read-only
+
+<List the exact files/directories Codex may read but MUST NOT substantively edit, delete, rename, reformat, regenerate, or replace.>
+
+If local implementation exposes a defect in one of these artifacts, stop the affected work and report the conflict to ChatGPT. Do not repair the frozen artifact locally.
 
 ### Codex-owned local work
 
@@ -110,9 +117,11 @@ references/*.md
 substantive design/projection documentation
 ```
 
-Codex may consume those artifacts as frozen authority/operational inputs.
+Codex consumes those artifacts as frozen authority/operational inputs.
 
-Codex may edit a normally `DIRECT` artifact only when the task states an inseparable local-only dependency and constrains the edit mechanically so that no new design semantics are introduced.
+Unless the task explicitly declares a narrowly mechanical exception, Codex must not modify any frozen DIRECT input. A discovered conflict is reported upward; it is not fixed by Codex through design/projection edits.
+
+Codex may edit a normally `DIRECT` artifact only when the task states an inseparable local-only dependency, names the exact file and permitted transformation, and constrains the edit mechanically so that no new design semantics are introduced.
 
 Examples of valid Codex-owned work:
 
@@ -163,6 +172,7 @@ cigit-zgy/agent-collaboration@<PINNED_AGENT_COLLABORATION_SHA>
 先 fetch 并确认当前仓库状态和 baseline。
 严格执行 committed task，不依据聊天补充或扩大 scope。
 需要 collaboration 规则时读取上面 pinned GitHub authority；不要用未验证的本地副本替代。
+Frozen DIRECT inputs 对 Codex 只读；若实现发现矛盾，停止相关工作并报告，不要改写这些文件。
 完成实现、规定验证、Codex report、commit 和 push。
 最后输出 task 要求的固定 stdout。
 ```
