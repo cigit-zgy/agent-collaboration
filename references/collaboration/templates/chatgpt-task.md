@@ -17,7 +17,8 @@ A formal task is issued only after ChatGPT has:
 3. completed and committed/pushed all `DIRECT` deliverables that are in scope;
 4. frozen those DIRECT artifacts as Codex read-only inputs;
 5. reduced Codex scope to the remaining `LOCAL` work;
-6. pinned the exact `agent-collaboration` GitHub authority used to author the task.
+6. pinned the exact `agent-collaboration` GitHub authority used to author the task;
+7. established the design/projection baseline commit from which the task is issued.
 
 A task is invalid if it delegates a deliverable that ChatGPT can already complete through current connected capabilities without naming a concrete local-only dependency for that deliverable.
 
@@ -32,7 +33,7 @@ status: issued
 date: <YYYY-MM-DD>
 repository: <OWNER/REPOSITORY>
 branch: <BRANCH>
-baseline_sha: <BASELINE_SHA>
+baseline_sha: <DIRECT_DESIGN_PROJECTION_BASELINE_SHA>
 verification_level: <level_1 | level_2 | level_3>
 collaboration_repository: cigit-zgy/agent-collaboration
 collaboration_commit: <PINNED_AGENT_COLLABORATION_SHA>
@@ -44,6 +45,10 @@ concepts: []
 codex_report: reports/codex/<YYMMDD_codex_NN.md>
 ---
 ```
+
+`baseline_sha` is the commit after the task's DIRECT design/projection inputs are complete and before the formal task artifact is committed. It is **not** the execution handoff commit.
+
+The task/handoff commit is the commit containing this task file. Because a file cannot contain the SHA of the commit that contains itself, the exact task/handoff commit is supplied in the launch block after the task has been committed and pushed.
 
 The collaboration commit is required for formal tasks. Do not encode a machine-local `agent-collaboration` path as the authority source.
 
@@ -94,6 +99,7 @@ Codex resolves these exact files from GitHub unless an already-existing local ch
 ## Scope
 ## Required changes
 ## Non-goals
+## Upstream/downstream ownership boundary
 ## Scientific / product boundaries
 ## Engineering constraints
 ## Verification
@@ -146,9 +152,42 @@ references/*.md contract authoring
 acceptance-criteria design
 ```
 
-Use the task-pinned `agent-collaboration` commit for collaboration/Git/concurrency/verification rules. Required changes and acceptance criteria should be directly checkable.
+## Required upstream/downstream boundary statement
 
-Commit and push the formal task before handoff; the committed task source is Codex's execution specification.
+For a task that changes or re-establishes an upstream contract/stage, the task must state whether downstream migration is in scope.
+
+Default wording when downstream migration is **not** in scope:
+
+```text
+Make the current owner conform to its frozen contract.
+If downstream consumers still depend on the old contract, report the exact drift.
+Do not modify those consumers, reintroduce rejected interfaces, or add compatibility
+shims merely to make unrelated repository-wide tests pass.
+```
+
+Acceptance criteria should distinguish:
+
+```text
+current owner conformance
+from
+whole-pipeline compatibility
+```
+
+A focused stage can pass while explicit downstream drift remains, provided whole-pipeline migration was not promised by the task.
+
+## Handoff and branch-freeze rules
+
+Commit and push the formal task before handoff. The committed task source is Codex's execution specification.
+
+The launch block must provide the exact task/handoff commit. Codex must reach and verify that commit before LOCAL implementation begins.
+
+Once the User launches the task or Codex reports execution has begun, the handed-off branch is frozen for overlapping ChatGPT/User repository writes until Codex finishes or the task is explicitly aborted/superseded.
+
+Do not advance the same branch with frozen-input or task-relevant changes during active Codex execution. If a DIRECT artifact must change, stop/supersede the task, commit the new DIRECT state, and issue a new coordinated handoff rather than forcing avoidable Git reconciliation.
+
+Independent concurrent work belongs on a separate branch/worktree with proven non-interference.
+
+Use the task-pinned `agent-collaboration` commit for collaboration/Git/concurrency/verification rules. Required changes and acceptance criteria should be directly checkable.
 
 ## Launch block
 
@@ -163,16 +202,19 @@ Repository:
 Task:
 reports/chatgpt/<TASK_FILE>.md
 
-Task commit:
+Task commit / execution handoff:
 <TASK_COMMIT>
 
 Collaboration authority:
 cigit-zgy/agent-collaboration@<PINNED_AGENT_COLLABORATION_SHA>
 
-先 fetch 并确认当前仓库状态和 baseline。
+先 fetch 并确认当前仓库状态、baseline 和 exact task/handoff commit。
+安全同步到 task/handoff commit 后才开始实现。
 严格执行 committed task，不依据聊天补充或扩大 scope。
 需要 collaboration 规则时读取上面 pinned GitHub authority；不要用未验证的本地副本替代。
 Frozen DIRECT inputs 对 Codex 只读；若实现发现矛盾，停止相关工作并报告，不要改写这些文件。
+当前 handoff branch 在本任务执行期间视为冻结；若发现远端并发推进，不自行 merge/rebase/cherry-pick，按 protocol 停止并报告。
+发现 out-of-scope downstream drift 时只报告，不自行迁移或加 compatibility shim。
 完成实现、规定验证、Codex report、commit 和 push。
 最后输出 task 要求的固定 stdout。
 ```
