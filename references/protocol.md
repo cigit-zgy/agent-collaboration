@@ -1,231 +1,147 @@
 # Collaboration protocol
 
-## Shared authority and entrypoints
-
-`agent-collaboration` is the shared operating source for the three-party workflow:
-
-```text
-User ↔ ChatGPT ↔ Codex
-```
-
-The three roles use the same protocol but enter it differently:
-
-- Codex is routed here automatically by the machine-wide `~/.codex/AGENTS.md` for
-  formal ChatGPT ↔ Codex repository work.
-- ChatGPT is not assumed to discover the User's local Skill automatically in a new
-  conversation. The User explicitly asks ChatGPT to use `agent-collaboration` and
-  identifies the target project repository.
-- Each project's root `AGENTS.md` is its project-level entry point and constitution.
-  It links back to the canonical collaboration repository and routes project-owned
-  Skills, concepts, and reports.
-- The User remains the final human authority for goals, scientific/product choices,
-  and genuine human-only ambiguity.
-
-No participant should maintain a competing copy of this workflow in project notes or
-chat prompts. Project `AGENTS.md` files add project-specific rules but route global
-collaboration back to this Skill rather than duplicating it.
+This file is the current operational authority for the User ↔ ChatGPT ↔ Codex
+collaboration loop.
 
 ## Roles
 
 ### User
 
-- defines the goal;
-- makes scientific and product decisions;
-- resolves genuine human-only ambiguity;
-- approves exceptional scope changes;
-- explicitly invokes this collaboration protocol for ChatGPT in a new conversation
-  when it is needed.
+- defines goals and constraints;
+- makes genuine human scientific/product decisions;
+- approves exceptional scope or trust-boundary changes.
 
 ### ChatGPT
 
-ChatGPT is the planner, design partner, remote-capable executor, formal task author,
-independent auditor, and acceptance authority.
+ChatGPT is the design partner, remote-capable executor, formal task author, independent
+auditor, and acceptance authority.
 
-User + ChatGPT own design. Before delegation, ChatGPT must inspect the target
-repository and current evidence, resolve every design decision that can reasonably be
-resolved through User interaction and available sources, record durable conclusions
-in the project concept assets when appropriate, and decide whether Codex is actually
-required.
+Before delegation, ChatGPT must inspect current repository evidence, resolve every
+design decision that can reasonably be resolved, and decide whether local execution
+is actually required.
 
-### Delegation boundary
-
-ChatGPT must not delegate work merely because Codex is capable of doing it.
-
-If ChatGPT can safely and completely perform a task using its currently available
-connected tools, it should do that work directly and verify the result itself. Typical
-examples include repository inspection, design clarification, concept/report updates,
-formal task authoring, and deterministic repository text changes supported by the
-connected repository tooling.
-
-Codex should receive only work that materially requires a local-machine capability
-unavailable to ChatGPT, such as:
-
-- local filesystem or uncommitted worktree state;
-- local CLI/tool installation or invocation;
-- project runtime/environment execution;
-- local tests, builds, rendering, or large artifacts;
-- credentials/secrets or machine-local services;
-- local Git operations that cannot be safely completed through ChatGPT's connected
-  repository tools;
-- another explicit capability unavailable to ChatGPT.
-
-When Codex is required, ChatGPT must remove avoidable design discretion before
-handoff. The committed task should freeze every decision that can reasonably be
-frozen: exact scope, authoritative sources, affected files/areas, required behavior,
-non-goals, engineering constraints, verification level, acceptance criteria, Git
-requirements, report path, and fixed stdout. Include exact commands or replacement
-text when they materially reduce ambiguity.
-
-Codex executes; it does not redesign. If the committed task contains a contradiction,
-a missing prerequisite, an infeasible instruction, or a design-affecting ambiguity,
-Codex reports it instead of silently choosing a new architecture, scientific/product
-meaning, or scope. Codex may choose incidental coding mechanics only when those
-choices do not change approved behavior, architecture, scientific/product semantics,
-or task boundaries.
-
-For a Codex task, ChatGPT writes the formal specification under the target project's
-`reports/chatgpt/`, commits and pushes it, then gives the User only the short Codex
-launch prompt.
-
-After Codex finishes, ChatGPT independently checks the target repository, diff,
-implementation, Codex report, verification evidence, and relevant artifacts. It does
-not accept Codex's self-reported PASS. ChatGPT decides `PASS`,
-`PASS WITH LIMITATIONS`, `BLOCKED`, or `FAIL`, and only then decides whether to open
-the next task.
-
-When a discussion produces a durable project decision, ChatGPT updates the
-appropriate topic under the target project's `reports/concept/`. Concept files
-capture current design truth and its decision history, not task execution history.
+If ChatGPT can safely and completely perform the work with its connected tools, it
+does the work directly and verifies the result. Do not create a Codex task merely to
+offload effort.
 
 ### Codex
 
-Codex is the local implementer/executor for committed tasks that require local
-capabilities. It executes the committed formal task rather than guessing requirements
-from chat. It does not expand scope or make design decisions without approval. It
-implements, runs the specified verification, writes its implementation report under
-the target project's `reports/codex/`, commits, and pushes. Codex does not grant final
-acceptance and does not rewrite project concepts unless the committed task explicitly
-requires a mechanical concept update already designed by User + ChatGPT.
+Codex is the local executor for committed tasks that genuinely require local-machine
+capability: local worktree state, CLI/runtime execution, builds/tests/rendering,
+credentials or machine-local services, or another capability unavailable to ChatGPT.
 
-## Project integration
+Codex executes the committed specification. It may report contradictions, infeasible
+instructions, missing prerequisites, or unresolved human decisions, but it must not
+silently redesign approved behavior, architecture, scientific/product semantics, or
+scope.
 
-`agent-collaboration` owns the collaboration protocol. Each project owns its own work
-records.
+## Project entry and runtime reading order
+
+Project-specific instructions come from the applicable project `AGENTS.md`.
+A project may declare its Agent-facing workflow Skill at any repository-relative
+path; do not assume `project/SKILL.md`.
+
+For ordinary project operation, prefer:
 
 ```text
-agent-collaboration
-= how the three roles collaborate
-
-project/AGENTS.md
-= project constitution and project-level entry/router
-
-project/SKILL.md
-= project workflow/router
-
-project/reports/concept/
-= durable User + ChatGPT conclusions
-
-project/reports/chatgpt/
-= implementation-ready Codex task specifications
-
-project/reports/codex/
-= Codex execution and verification evidence
+applicable project AGENTS.md
+→ declared project workflow SKILL.md
+→ owning sub-Skill
+→ only references/scripts required by the active branch
 ```
 
-For detailed project entry flows and the recommended `AGENTS.md` collaboration block,
-read `project-integration.md`.
+Load `agent-collaboration/SKILL.md` and this protocol when collaboration/handoff
+rules are needed. Load project concepts only when design history, rationale, or
+supersession is materially needed; concepts are not part of the default runtime path.
 
-## Standard loop
+## Delegation gate
+
+Before issuing a Codex task, ChatGPT must answer:
+
+> Which concrete local or otherwise unavailable capability requires Codex?
+
+If no concrete answer exists, do not delegate.
+
+When delegation is required, ChatGPT freezes every reasonably determinable decision:
+
+- exact scope and non-goals;
+- authoritative operational references;
+- affected files/areas;
+- required behavior and boundaries;
+- verification level and acceptance criteria;
+- Git requirements;
+- expected Codex report path and fixed stdout.
+
+Use `chatgpt-task-template.md` for the formal specification.
+
+## Standard collaboration loop
 
 ```text
-User identifies project + invokes agent-collaboration
-→ ChatGPT reads project AGENTS.md
-→ ChatGPT reads canonical collaboration Skill/references
-→ ChatGPT reads project concept index and only relevant concepts
-→ ChatGPT reads project Skill/router as needed
+User identifies project and goal
+→ ChatGPT reads applicable AGENTS.md
+→ ChatGPT reads the minimum owning operational reference/Skill
 → User + ChatGPT design and decide
-→ ChatGPT delegation decision
+→ delegation gate
    ├─ ChatGPT-capable → ChatGPT performs + verifies directly
-   └─ local-only / unavailable capability → continue below
-→ durable concept update when needed
-→ ChatGPT freezes executable decisions into project reports/chatgpt/
-→ ChatGPT commits/pushes task
-→ short Codex launch prompt
-→ Codex repository synchronization
-→ Codex local implementation/execution
-→ Codex verification
-→ Codex report in project reports/codex/ + commit/push
-→ Codex final synchronization check
+   └─ local/unavailable capability → committed Codex task
+→ Codex safe Git synchronization
+→ local execution + specified verification
+→ Codex report
 → ChatGPT independent audit
-→ verdict
-→ concept update when acceptance changes durable project truth
-→ only then next task
+→ PASS | PASS WITH LIMITATIONS | BLOCKED | FAIL
+→ update decision history only if a durable design decision changed
 ```
+
+Only one formal Codex task is active at a time. The next task begins only after
+independent audit of the previous one.
 
 ## Repository synchronization
 
-For a formal task, local state and the tracked remote branch must be explicit at
-both ends of the task.
+Before local implementation Codex must:
 
-Before implementation Codex must:
+1. `git fetch`;
+2. inspect branch, `HEAD`, upstream, and worktree;
+3. preserve pre-existing User changes;
+4. fast-forward only when the branch is merely behind and doing so is safe;
+5. stop rather than invent a merge/rebase when divergence or dirty state makes the
+   update unsafe;
+6. verify task source/baseline consistency before editing.
 
-1. run `git fetch` for the task repository;
-2. inspect the current branch, `HEAD`, configured upstream, and `git status --short`;
-3. preserve pre-existing user changes; never discard, overwrite, or hide them;
-4. when the worktree is safe and the current branch is only behind its upstream,
-   fast-forward to the fetched upstream state;
-5. stop and report the conflict instead of inventing a merge/rebase when the branch
-   has diverged or existing user changes make synchronization unsafe;
-6. verify that the committed task source and stated baseline are consistent with
-   the synchronized repository before editing.
-
-A formal task does not authorize `reset --hard`, force-push, destructive cleanup,
-or an implicit merge/rebase. Automatic stashing is not a substitute for preserving
-user work.
+A formal task never authorizes `reset --hard`, force-push, destructive cleanup, or
+an invented merge/rebase.
 
 After implementation Codex must:
 
-1. commit all task-scoped repository changes required by the task;
-2. push the current branch to its configured upstream;
+1. commit all task-scoped changes;
+2. push to the configured upstream;
 3. fetch again;
-4. verify `HEAD` equals the fetched upstream branch tip;
-5. report the final worktree state and any intentionally preserved pre-existing
-   changes.
+4. verify `HEAD == upstream` when safely achievable;
+5. report intentionally preserved pre-existing changes.
 
-`HEAD == upstream` is the normal completion condition for repository changes. If it
-cannot be achieved safely, the task report must state why and must not claim a clean
-Git synchronization PASS.
+## Reports and concepts
 
-## Report ownership
-
-Project reports remain in the project that owns them:
+Use stable paths:
 
 ```text
-reports/chatgpt/
-→ committed ChatGPT task specifications
-
-reports/codex/
-→ Codex implementation and verification reports
-
-reports/concept/
-→ durable User + ChatGPT project decisions and design contracts
+reports/chatgpt/YYMMDD_chatgpt_NN.md
+reports/codex/YYMMDD_codex_NN.md
+reports/concept/<topic>.md
 ```
 
-Do not use these directories interchangeably. Do not place transient run logs in
-`reports/concept/`. Existing legacy report directories do not need retrospective
-renaming unless a project task explicitly requests migration.
+Issued formal tasks and Codex reports are stable audit artifacts. Do not move or
+rewrite them later merely for calendar-based organization.
+
+`references/*` is the current operational-policy layer. `reports/concept/*` records
+accepted decision history/rationale and points to the current operational authority;
+it must not redefine operational policy.
 
 ## Invariants
 
-- `agent-collaboration` is the shared collaboration authority for User, ChatGPT, and
-  Codex.
-- Project-specific work records remain in the owning project repository.
-- User + ChatGPT own design; Codex executes the approved specification.
-- ChatGPT delegates only when a required capability is unavailable to ChatGPT or
-  materially local to the User's machine.
-- ChatGPT freezes all reasonably determinable task decisions before Codex handoff.
-- One formal Codex task is active at a time.
-- The next formal Codex task starts only after independent audit of the previous task.
-- Codex executes; ChatGPT accepts.
-- Evidence, not self-reported PASS, determines completion.
-- Scientific and product rigor is mandatory; engineering ceremony is not.
+- User + ChatGPT design; Codex executes approved local work.
+- ChatGPT delegates only for a concrete unavailable/local capability.
+- Codex does not self-accept.
+- Evidence, not self-reported PASS, determines acceptance.
+- Current operational rules live in `references/*`, not duplicated across concepts.
+- Project workflow Skill paths are project-declared.
+- Formal task/report paths remain stable after issue.
+- Scientific/product rigor is mandatory; engineering ceremony is risk-proportional.
