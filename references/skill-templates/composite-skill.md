@@ -1,119 +1,46 @@
-# Composite/router Skill template
+# Composite/router Skill profile
 
-Use for a Skill whose primary responsibility is routing an Agent across several
-bounded downstream Skills or workflow branches.
+Use with the common skeleton in `README.md` when the Skill primarily routes an Agent
+among bounded downstream Skills or workflow branches.
 
-Recommended package:
+## Recommended source package
 
 ```text
 <composite-skill>/
 ├── SKILL.md
 ├── references/           # only cross-cutting routing contracts
-├── <sub-skill-a>/
-│   └── SKILL.md
-├── <sub-skill-b>/
-│   └── SKILL.md
+├── <sub-skill-a>/SKILL.md
+├── <sub-skill-b>/SKILL.md
 └── ...
 ```
 
-A composite Skill should stay thin. Downstream Skills own detailed procedures.
-For a project-level root workflow Skill, prefer `../project-skill-template.md`.
+For a project-level workflow Skill, prefer `../project-skill-template.md`. A
+standalone maintained first-party source repository additionally uses root
+`AGENTS.md` from `../skill-agents-template.md`.
 
-Suggested `SKILL.md`:
+## Profile-specific guidance
 
-```markdown
----
-name: <composite-skill-name>
-description: >
-  <What multi-stage or multi-branch capability this Skill routes>. Use when
-  <concrete triggering workflow or family of tasks>.
----
-
-# <Composite Skill title>
-
-## Role
-
-This Skill routes the active task to the correct downstream capability.
-It owns activation, branch/stage selection, stable interfaces, and stop conditions.
-It does not duplicate downstream implementation details.
-
-## When to use
-
-Use this Skill when:
-
-- <trigger 1>;
-- <trigger 2>.
-
-Do not use it for:
-
-- <work owned by a different top-level capability>.
-
-## Entry inputs / state
-
-<Describe only the shared entry state needed to choose the correct route.>
-
-## Canonical routing
+- `Workflow` should be a stage sequence or branch decision tree, not downstream
+  implementation prose.
+- For each route keep only:
 
 ```text
-<input/state>
-→ <branch or stage A>
-→ <branch or stage B>
-→ ...
+purpose
+trigger/required input
+stable output
+gate/next route
+owning Skill
 ```
 
-or:
+- Cross-cutting contracts may live in `references/`; branch-specific rules belong to
+  the owning sub-Skill.
+- Runtime progressive disclosure loads only the selected downstream Skill, then only
+  resources needed by that branch.
+- Stop when no route matches, an upstream gate fails, a required downstream Skill is
+  absent, or a human/trust transition is required.
+- Do not create forwarding layers that add no real routing or interface value.
 
-```text
-<input/state>
-├── condition A → <sub-skill-a>
-├── condition B → <sub-skill-b>
-└── condition C → <sub-skill-c>
-```
+## Typical examples
 
-## Route table
-
-### `<sub-skill-a>`
-
-- Purpose: <one sentence>.
-- Trigger/input: <routing condition>.
-- Stable output: <output/state>.
-- Gate/next route: <condition>.
-- Owning Skill: `<sub-skill-a>/SKILL.md`.
-
-### `<sub-skill-b>`
-
-- Purpose: <one sentence>.
-- Trigger/input: <routing condition>.
-- Stable output: <output/state>.
-- Gate/next route: <condition>.
-- Owning Skill: `<sub-skill-b>/SKILL.md`.
-
-<Repeat only for real downstream capabilities.>
-
-## Progressive disclosure
-
-Read only the one downstream Skill required by the active route. Do not preload all
-sub-Skills or their references.
-
-## Completion criteria
-
-The composite workflow completes when the requested route reaches its declared
-terminal output/state and all route-level gates have passed.
-
-## Stop conditions
-
-Stop rather than guess when:
-
-- no defined route matches the current task;
-- the required downstream Skill is absent;
-- an upstream gate is not satisfied;
-- the next route requires human authority or a trust-state transition not owned by
-  this composite Skill.
-
-## Boundaries
-
-- This Skill owns routing, not downstream algorithms.
-- Cross-cutting contracts may live in `references/`; branch-specific details belong
-  to the owning sub-Skill.
-- Do not create forwarding layers that add no real routing or contract value.
-```
+Multi-stage scientific workflows, capability families, project Agent routers, and
+branching automation systems composed of independently bounded sub-Skills.
