@@ -7,6 +7,10 @@ as `<agent-name>/SKILL.md`; do not assume it must be at repository root.
 The workflow Skill is not the project constitution. Root `AGENTS.md` owns
 project-level governance and points to this Skill.
 
+If the project declares canonical design-authority concepts, this Skill is an
+operational projection of that accepted design. It routes and executes the design; it
+must not silently redefine it.
+
 ```markdown
 ---
 name: <project-skill-name>
@@ -26,6 +30,10 @@ This Skill is the project workflow router. It should let an unfamiliar Agent dec
 - what stable output that stage produces;
 - what gate permits progression;
 - which sub-Skill/reference to load next.
+
+When root `AGENTS.md` declares design-authority concepts, this Skill and its downstream
+references must remain consistent with those concepts. They may summarize the design
+for execution, but they do not become an independent design source.
 
 ## When to use
 
@@ -83,6 +91,28 @@ or, for branching workflows:
 
 <Repeat only for real top-level routes.>
 
+## Design projection
+
+<INCLUDE WHEN THE PROJECT USES DESIGN-AUTHORITY CONCEPTS.>
+
+State only the governing topic(s) needed to prevent drift, for example:
+
+```text
+Canonical design authority:
+reports/concept/<topic>.md
+
+Operational projection:
+this SKILL.md + <owning references>
+```
+
+Rules:
+
+- do not copy the entire concept into this Skill;
+- do not change scientific/architectural semantics here without an approved concept
+  update;
+- if the projection appears inconsistent with the governing concept, stop and treat
+  it as drift rather than choosing a new interpretation.
+
 ## Trust / lifecycle routing
 
 <OPTIONAL. Include only when trust/lifecycle states affect eligibility or routing.>
@@ -91,8 +121,9 @@ or, for branching workflows:
 <state_01> → <state_02> → <state_03>
 ```
 
-Explain only routing consequences. Detailed semantics belong in the owning project
-contract/Skill.
+Explain only routing consequences. Detailed current design belongs in the governing
+project concept when design-authoritative concepts are used; executable checks belong
+in the owning Skill/reference.
 
 ## Progressive disclosure
 
@@ -106,8 +137,11 @@ applicable AGENTS.md
 ```
 
 Do not preload all sub-Skills, project concepts, references, scripts, tests, or
-assets. Read project concept history only when a task genuinely needs design
-rationale or supersession context.
+assets.
+
+For design/redesign/conformance-audit work, follow the project `AGENTS.md` design path
+instead: read the concept index and only the relevant governing design topic before
+inspecting or changing this operational projection.
 
 ## Runtime entry
 
@@ -128,6 +162,7 @@ Stop rather than guess when:
 - the owning sub-Skill/required contract is absent;
 - an upstream gate is unsatisfied;
 - required source/input authority is missing;
+- a governing design concept and the operational projection appear inconsistent;
 - a human/trust-state transition is required but not authorized.
 
 The workflow completes only when the requested terminal output/state exists and its
@@ -135,9 +170,10 @@ route-level gates have passed.
 
 ## Boundaries
 
-- This Skill owns routing, not detailed stage algorithms.
-- Root `AGENTS.md` owns project governance.
-- Branch-specific rules belong to the owning sub-Skill/reference.
+- This Skill owns routing, not independent project design.
+- Root `AGENTS.md` owns project governance and authority declaration.
+- Governing design-authority concepts own accepted project scientific/architectural semantics when declared.
+- Branch-specific executable rules belong to the owning sub-Skill/reference.
 - Do not create forwarding layers that add no real routing/contract value.
 ```
 
