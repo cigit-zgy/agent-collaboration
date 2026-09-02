@@ -1,63 +1,51 @@
 # Project workflow `SKILL.md` template
 
-Use this template when a maintained project exposes an Agent-operable workflow. The
-workflow Skill may live at repository root or, more commonly for a multi-Skill Agent
-project, at a declared package path such as `<agent-name>/SKILL.md`.
+Use this template when a project exposes an Agent-operable multi-stage or composite
+workflow. The Skill may live at any project-declared repository-relative path, such
+as `<agent-name>/SKILL.md`; do not assume it must be at repository root.
 
-The workflow Skill is the Agent-facing router for the project capability system. It
-explains when the workflow applies, what entry state it expects, which stages or
-branches exist, what each produces, which gate allows progression, and which
-sub-Skill owns detailed procedure.
-
-It is not the project constitution and must not duplicate root `AGENTS.md`, the global
-collaboration protocol, or detailed sub-Skill manuals.
+The workflow Skill is not the project constitution. Root `AGENTS.md` owns
+project-level governance and points to this Skill.
 
 ```markdown
 ---
-name: <project-workflow-skill-name>
+name: <project-skill-name>
 description: >
-  <WHAT THIS WORKFLOW DOES>. Use when <TRIGGERING USER/AGENT INTENTS OR INPUTS>.
+  <WHAT THIS WORKFLOW DOES>. Use when <CONCRETE TRIGGERING INTENTS OR INPUTS>.
 ---
 
-# <Project Workflow Skill Title>
+# <Project Skill title>
 
 ## Role
 
-This Skill is the Agent-facing project workflow/router.
+This Skill is the project workflow router. It should let an unfamiliar Agent decide:
 
-It should let an unfamiliar Agent determine:
-
-- whether this workflow applies;
+- whether the workflow applies;
 - what input/state is required;
-- which workflow stage or capability owns the current task;
-- what stable output that stage must produce;
-- what gate must pass before the next route;
-- which downstream Skill/reference to read next.
-
-Project governance remains in root `AGENTS.md`.
+- which stage/capability owns the current task;
+- what stable output that stage produces;
+- what gate permits progression;
+- which sub-Skill/reference to load next.
 
 ## When to use
 
 Use this Skill when:
 
 - <TRIGGER 1>;
-- <TRIGGER 2>;
-- <TRIGGER 3>.
+- <TRIGGER 2>.
 
 Do not use it for:
 
-- <CLEAR NON-GOAL OR ADJACENT WORKFLOW>;
-- <ANOTHER NON-GOAL>.
+- <NON-GOAL 1>;
+- <NON-GOAL 2>.
 
-## Inputs
-
-Required entry inputs/state:
+## Entry inputs / state
 
 - `<INPUT_OR_STATE_1>`: <MEANING>;
 - `<INPUT_OR_STATE_2>`: <MEANING>.
 
-State any prerequisite gate explicitly. Do not repeat a full schema when an owning
-contract/reference already defines it.
+State only the entry gate needed to choose the correct route. Detailed schemas belong
+in the owning sub-Skill/reference.
 
 ## Canonical workflow
 
@@ -65,166 +53,106 @@ contract/reference already defines it.
 <stage_01>
 → <stage_02>
 → <stage_03>
-→ ...
 ```
 
-or, for branching capability systems:
+or, for branching workflows:
 
 ```text
 <input/state>
-├── condition A → <capability-a>
-├── condition B → <capability-b>
-└── condition C → <capability-c>
+├── <condition A> → <capability A>
+└── <condition B> → <capability B>
 ```
-
-Do not skip, merge, or invent canonical stages unless the project contract permits
-it.
 
 ## Stage / capability routing
 
-### 1. `<stage_or_capability_01>`
+### `<stage_or_capability_a>`
 
 - Purpose: <ONE-SENTENCE RESPONSIBILITY>.
 - Required input: <MINIMUM STABLE INPUT>.
-- Stable output: <OUTPUT/STATE OWNED BY THIS STAGE>.
-- Next-stage gate: <DIRECTLY CHECKABLE CONDITION>.
-- Owning Skill: `<PATH/TO/SKILL.md>`.
+- Stable output: <OUTPUT/STATE>.
+- Gate/next route: <DIRECTLY CHECKABLE CONDITION>.
+- Owning Skill: `<path/to/sub-skill/SKILL.md>`.
 
-### 2. `<stage_or_capability_02>`
+### `<stage_or_capability_b>`
 
 - Purpose: <ONE-SENTENCE RESPONSIBILITY>.
 - Required input: <MINIMUM STABLE INPUT>.
-- Stable output: <OUTPUT/STATE OWNED BY THIS STAGE>.
-- Next-stage gate: <DIRECTLY CHECKABLE CONDITION>.
-- Owning Skill: `<PATH/TO/SKILL.md>`.
+- Stable output: <OUTPUT/STATE>.
+- Gate/next route: <DIRECTLY CHECKABLE CONDITION>.
+- Owning Skill: `<path/to/sub-skill/SKILL.md>`.
 
-<REPEAT ONLY FOR REAL TOP-LEVEL ROUTES.>
+<Repeat only for real top-level routes.>
 
-## Trust or lifecycle progression
+## Trust / lifecycle routing
 
-<OPTIONAL. Include only when meaningful project trust/lifecycle states exist.>
+<OPTIONAL. Include only when trust/lifecycle states affect eligibility or routing.>
 
 ```text
-<state_01>
-→ <state_02>
-→ <state_03>
+<state_01> → <state_02> → <state_03>
 ```
 
-Explain only what each state means for routing/eligibility. Detailed semantics belong
-in project concepts/contracts.
+Explain only routing consequences. Detailed semantics belong in the owning project
+contract/Skill.
 
 ## Progressive disclosure
 
+Normal runtime path:
+
 ```text
-root AGENTS.md
-→ project concept index when durable design context is needed
-→ this workflow SKILL.md
-→ the one owning downstream Skill
-→ only references/scripts required by that Skill
+applicable AGENTS.md
+→ this SKILL.md
+→ one owning sub-Skill
+→ only references/scripts required by the active branch
 ```
 
-Do not preload every concept, Skill, reference, script, asset, or test.
+Do not preload all sub-Skills, project concepts, references, scripts, tests, or
+assets. Read project concept history only when a task genuinely needs design
+rationale or supersession context.
 
 ## Runtime entry
 
-<State only project-specific runtime identity or entry checks.>
+<Declare only project-specific runtime identity/checks needed by this workflow.>
 
 Example:
 
 ```text
 Environment: <ENVIRONMENT_NAME>
-Dependency/tooling authority: <pyproject.toml | package.json | other contract>
+Dependency/tooling authority: <pyproject.toml | other contract>
 ```
-
-Do not copy global environment, Git, verification, or security-tool procedures from
-`agent-collaboration`.
 
 ## Completion and stop conditions
 
-Stop rather than guessing when:
+Stop rather than guess when:
 
-- the owning downstream Skill or required contract is absent;
-- the upstream stage gate is not satisfied;
-- required source/input evidence is missing;
-- a project-defined human decision is required;
-- continuing would cross a trust/lifecycle boundary without the required promotion.
+- no defined route matches the task;
+- the owning sub-Skill/required contract is absent;
+- an upstream gate is unsatisfied;
+- required source/input authority is missing;
+- a human/trust-state transition is required but not authorized.
 
-A workflow is complete only when the requested terminal output/state exists and all
-required gates for that state have passed.
+The workflow completes only when the requested terminal output/state exists and its
+route-level gates have passed.
 
 ## Boundaries
 
-- <PROJECT-SPECIFIC ROUTING INVARIANT>.
-- <WHAT THIS WORKFLOW SKILL MUST NOT OWN>.
-- <WHAT DOWNSTREAM SKILLS MUST NOT BYPASS>.
+- This Skill owns routing, not detailed stage algorithms.
+- Root `AGENTS.md` owns project governance.
+- Branch-specific rules belong to the owning sub-Skill/reference.
+- Do not create forwarding layers that add no real routing/contract value.
 ```
-
-## Placement rule
-
-Do not create both repository-root `SKILL.md` and `<agent-name>/SKILL.md` when they
-would describe the same workflow. Choose one canonical workflow location and declare
-it in root `AGENTS.md`.
-
-For a coordinated collection of project Skills, prefer:
-
-```text
-<project>/
-├── AGENTS.md
-└── <agent-name>/
-    ├── SKILL.md
-    ├── <capability-a>/SKILL.md
-    ├── <capability-b>/SKILL.md
-    └── ...
-```
-
-The package root Skill stays thin; sub-Skills own detailed capability procedures.
 
 ## Writing rules
 
-A good project workflow `SKILL.md` is compact and stable. For each top-level stage or
-capability, prefer five routing facts:
+For each top-level route, keep only five facts:
 
 ```text
 purpose
 required input
 stable output
-next-stage gate
+gate/next route
 owning Skill
 ```
 
-Move detailed schemas, scientific rules, repair logic, commands, validation
-algorithms, and long examples to the owning sub-Skill/reference.
-
-## Onboarding procedure
-
-```text
-User identifies project
-→ ChatGPT reads agent-collaboration
-→ ChatGPT reads project-architecture.md
-→ ChatGPT establishes/normalizes root AGENTS.md
-→ User + ChatGPT decide whether an Agent-operable workflow exists
-→ choose the canonical workflow Skill path, normally <agent-name>/SKILL.md for a
-  multi-Skill Agent project
-→ instantiate this template
-→ add sub-Skills only for real bounded capabilities
-→ Codex is used only for genuinely local execution/discovery verification
-```
-
-Workflow design remains a User + ChatGPT responsibility. Codex executes committed,
-implementation-ready tasks and must not silently redefine workflow semantics.
-
-## Quality criteria
-
-After reading the workflow Skill, an unfamiliar compatible Agent should be able to
-answer:
-
-1. When should this Skill activate?
-2. What does the project workflow accomplish?
-3. What entry inputs/state are required?
-4. What are the top-level stages or capability routes?
-5. What does each consume and produce?
-6. What gate allows progression?
-7. Which downstream Skill owns the current task?
-8. What trust/lifecycle state is relevant, if any?
-9. When must execution stop?
-10. What project runtime identity applies?
+A project may expose this Skill to Codex under `$REPO_ROOT/.agents/skills/` when
+repo-scoped auto-discovery is desired; see `skill-repository-policy.md`. Discovery
+exposure is separate from the maintained source location.
