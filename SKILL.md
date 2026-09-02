@@ -46,6 +46,10 @@ Evidence, not Codex self-reported PASS, determines final acceptance.
   `references/project-agents-template.md`; add a project workflow Skill from
   `references/project-skill-template.md` only when the project exposes an
   Agent-operable workflow.
+- Project concept/design authority and report lifecycle:
+  `references/report-concept-policy.md`. Scientific/research projects may declare
+  selected concepts as canonical design specifications; Skills/references then act as
+  operational projections.
 - Standalone first-party Skill repository onboarding:
   `references/skill-repository-policy.md` → `references/skill-agents-template.md` →
   `references/skill-package-architecture.md` → the appropriate template under
@@ -54,25 +58,57 @@ Evidence, not Codex self-reported PASS, determines final acceptance.
   selected level from `references/verification-levels.md`.
 - Codex launch: `references/codex-launch-template.md`.
 - Codex execution report: `references/codex-report-template.md`.
-- Report/concept lifecycle: `references/report-concept-policy.md`.
 - Verification-tool selection: `references/verification-tools.md`.
 - Skill/project environment ownership: `references/skill-environment-policy.md`.
 
 ## Progressive disclosure
 
-Load only the active route:
+For ordinary collaboration/runtime work, load only the active route:
 
 ```text
 applicable AGENTS.md
 → this SKILL.md
-→ one owning reference
+→ one owning collaboration reference
 → target project workflow SKILL.md when relevant
 → owning sub-Skill
 → only resources required by that Skill
 ```
 
-Do not read project concepts by default. Read `reports/concept/README.md` and a
-specific concept only when historical design rationale or supersession is needed.
+Do not preload project concepts during routine operation merely because they exist.
+
+For design/redesign/conformance-audit work, follow the target project's declared
+authority model. If selected project concepts are canonical design authority, read the
+concept index and only the governing topic(s) before changing their Skill/reference
+projection or implementation.
+
+This repository's own concepts remain decision history/rationale; they do not override
+`references/*`.
+
+## Project design boundary
+
+Keep these levels distinct when a scientific/research project declares
+design-authority concepts:
+
+```text
+project concept
+= canonical WHAT + WHY + accepted scientific/architectural design
+
+project Skill/reference
+= operational projection
+
+code/schema
+= implementation
+
+tests
+= conformance verification
+
+workspace/source evidence
+= runtime artifacts and, where declared, model-specific scientific fact authority
+```
+
+If a downstream projection or implementation disagrees with the governing design,
+treat it as drift rather than silently changing the design. A design change belongs
+to User + ChatGPT first.
 
 ## Skill discovery boundary
 
@@ -87,6 +123,7 @@ or another explicit distribution artifact. The authoritative local policy is
 Stop and surface the issue instead of improvising when:
 
 - a design-affecting decision remains unresolved;
+- a governing project concept and its operational projection are contradictory;
 - the required local capability is unavailable;
 - the target repository state makes safe synchronization impossible;
 - a project/Skill authority is missing or contradictory;
@@ -95,9 +132,11 @@ Stop and surface the issue instead of improvising when:
 
 ## Boundaries
 
-- This Skill routes collaboration; `references/*` owns current operational policy.
+- This Skill routes collaboration; `references/*` owns this repository's current
+  operational policy.
 - Project-specific truth remains in the owning project.
-- Concepts record decision history/rationale and do not override operational
-  references.
+- A project may declare selected concepts as canonical design authority; its
+  Skills/references must conform as operational projections.
+- This repository's concepts remain decision history/rationale.
 - Do not create a Codex task when ChatGPT can safely and completely do the work with
   its connected tools.
