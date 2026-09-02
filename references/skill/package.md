@@ -69,9 +69,38 @@ A healthy existing environment is reused for ordinary work. Environment creation
 
 Machine-wide developer tools such as Semgrep, CodeQL, and pip-audit remain separate from project/Skill runtime dependencies; see `../collaboration/verification.md`.
 
+## Distributable subtree self-containment
+
+When a project declares a subtree to be the distributable/runtime package, that subtree must remain understandable and operable as the distributed unit rather than depending on private outer-repository scaffolding.
+
+The governing test is:
+
+> If a user receives only the declared distributable subtree plus its documented external runtime dependencies, can the package's normal runtime contract still be resolved without hidden repository context?
+
+Package-internal runtime documentation and production code therefore must not require or expose private development-only context such as:
+
+```text
+repository-external governance paths
+private/internal reports or task artifacts
+ChatGPT/Codex collaboration workflow files
+machine-local absolute paths
+outer-repository test fixtures as runtime inputs
+development-only directory names that are absent from the distribution
+```
+
+For example, a distributed `SKILL.md` must not require a user to read an outer `reports/concept/` path that is intentionally excluded from distribution. The package should state its runtime contract directly and use package-relative routing for its own Skills/references/scripts.
+
+This rule does not forbid explicit external dependencies. A package may depend on a documented Python package, CLI, service, data source, operating-system capability, or other external interface when that dependency is part of the public runtime contract.
+
+Tests and repository-level design/governance may remain outside the distributable subtree. They verify or govern the package during development, but production runtime must not depend on their presence unless they are intentionally included in the distribution.
+
+Do not copy private outer governance into the package merely to make it self-contained. Project design can remain in its owning repository authority; the distributable package carries only the operational semantics needed by its users and Agents.
+
 ## Boundary test
 
 A Skill boundary is healthy when capability, activation condition, input/state, stable output, completion condition, and supporting resources are each identifiable. Split only when independent triggers/interfaces/validation responsibilities make separate capabilities real.
+
+For a declared distributable subtree, the boundary test additionally requires that package-internal runtime references resolve inside the subtree or through explicitly documented external dependencies.
 
 ## Progressive disclosure
 
