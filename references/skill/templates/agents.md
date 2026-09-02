@@ -2,7 +2,7 @@
 
 Read `../../collaboration/agents.md` first. Use this specialization for a standalone maintained first-party Skill source repository.
 
-```markdown
+````markdown
 # <SKILL_NAME> repository context
 
 ## Identity
@@ -61,6 +61,6 @@ Use `SKILL.md` for capability operation and `references/skill/*` from agent-coll
 ## Hard invariants
 
 <Short list of real source/discovery/ownership boundaries.>
-```
+````
 
 Embedded sub-Skills normally inherit the nearest project `AGENTS.md`; a separate local file is justified only by real subtree-specific maintenance rules.

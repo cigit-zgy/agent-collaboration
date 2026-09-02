@@ -2,7 +2,7 @@
 
 Read `../../collaboration/agents.md` first. This template specializes that writing standard for a maintained scientific/software project.
 
-```markdown
+````markdown
 # <PROJECT_NAME> project context
 
 ## Identity
@@ -63,6 +63,6 @@ AGENTS.md
 ## Hard invariants
 
 <Short project-wide hard boundaries.>
-```
+````
 
 A project `AGENTS.md` routes to `agent-collaboration` for global collaboration/Git/verification mechanics rather than copying those manuals.

@@ -18,7 +18,7 @@ These are information requirements, not mandatory headings.
 
 ## Common shape
 
-```markdown
+````markdown
 ---
 name: <project-skill-name>
 description: >
@@ -51,6 +51,6 @@ description: >
 
 ## References
 <Only active-branch resources.>
-```
+````
 
 When the project uses design-authority concepts, identify the governing concept without copying it into the Skill. Optional sections such as trust/lifecycle, runtime, human checkpoints, recovery, or STOP exist only when they change routing or execution.

@@ -66,7 +66,7 @@ These are information categories, not mandatory headings.
 
 ## Recommended shape
 
-```markdown
+````markdown
 # <REPOSITORY_OR_SCOPE> context
 
 ## Identity
@@ -98,7 +98,7 @@ These are information categories, not mandatory headings.
 ## Hard invariants
 
 <Short list of repository-wide hard boundaries.>
-```
+````
 
 Omit or rename sections when the same required information is communicated more clearly another way.
 
