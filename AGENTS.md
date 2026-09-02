@@ -12,7 +12,7 @@ serve different purposes.
 
 ## Authority model
 
-Use one current operational authority per concern:
+For this repository itself, use one current operational authority per concern:
 
 ```text
 AGENTS.md
@@ -34,13 +34,24 @@ reports/codex/*
 = execution and verification evidence
 ```
 
-When a concept and an operational reference disagree, the operational reference is
-current policy. Concepts explain why policy evolved; they do not create a competing
-runtime authority.
+When this repository's concept history and an operational reference disagree, the
+operational reference is current policy. Concepts explain why policy evolved; they do
+not create a competing runtime authority here.
+
+Project repositories may declare a different concept role. In maintained scientific
+research projects, selected `reports/concept/*` topics may be the canonical User +
+ChatGPT design specification, while project Skills/references are operational
+projections of that design. This relationship is governed by
+`references/report-concept-policy.md`, `references/project-integration.md`, and
+`references/project-architecture.md`.
+
+Do not conflate project design authority with model/source scientific evidence.
+Project concepts may define the scientific architecture and contracts; registered
+source/evidence remains the authority for model-specific scientific facts.
 
 ## Reading order
 
-For ordinary collaboration work:
+For ordinary collaboration work in this repository:
 
 ```text
 AGENTS.md
@@ -48,9 +59,13 @@ AGENTS.md
 → only the reference required by the active route
 ```
 
-Read `reports/concept/README.md` and a concept topic only when historical design
-rationale, supersession, or the reason behind a current contract is materially
-needed. Concepts are not part of the normal Skill runtime path.
+Read this repository's `reports/concept/README.md` and a concept topic only when
+historical design rationale, supersession, or the reason behind a current contract is
+materially needed.
+
+For a target project, follow that project's declared authority model. Routine runtime
+may stay `AGENTS → workflow Skill → sub-Skill → reference`; design/redesign/audit work
+may require the project's governing design-authority concept first.
 
 ## Skill source, discovery, and distribution
 
@@ -92,13 +107,15 @@ Project-specific assets remain in the repository that owns them.
 
 - User + ChatGPT own collaboration-system design; Codex executes committed local
   tasks that genuinely require local capabilities.
-- Change the single owning `references/*` file for an operational rule; route to it
-  instead of copying the rule into multiple files.
+- Change the single owning `references/*` file for a collaboration operational rule;
+  route to it instead of copying the rule into multiple files.
 - Change root `SKILL.md` only when activation or top-level routing changes.
 - Change root `AGENTS.md` only for repository-maintenance instructions or authority
   routing.
-- Record a concept entry when a mature design decision or rationale changes, but do
-  not duplicate the full current policy there.
+- Record this repository's concept entries as decision history/rationale; do not copy
+  full current collaboration policy there.
+- In project templates, preserve the distinction between canonical design authority,
+  operational projection, implementation, verification, and runtime artifacts.
 - Preserve formal task and Codex report paths after issue. Do not calendar-archive or
   rewrite closed artifacts merely for directory tidiness.
 - Keep optional architecture conditional on a real owner, artifact, and consumer.
@@ -111,8 +128,12 @@ without a real executable consumer and explicit approval.
 
 ## Hard invariants
 
-- `references/*` is the current operational-policy layer.
-- `reports/concept/*` is decision history/rationale, not a second policy layer.
+- `references/*` is this repository's current operational-policy layer.
+- This repository's `reports/concept/*` is decision history/rationale.
+- A project may explicitly declare selected concepts as canonical design authority;
+  its Skills/references then act as operational projections and must not redefine the
+  design.
+- Project design authority and source-grounded scientific fact authority are separate.
 - `SKILL.md` routes; it does not duplicate protocol details.
 - Maintained Skill source, Codex discovery, and external distribution are separate
   boundaries.
