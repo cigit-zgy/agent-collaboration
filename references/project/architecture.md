@@ -69,6 +69,63 @@ controlled investigation      → experiment owner
 
 Promotion between responsibilities is explicit. Experiment outputs become canonical data/model artifacts only after project adoption with provenance. Exploratory code becomes reusable implementation only when a real reusable consumer and stable contract exist. Live workspace state remains mutable even when captured as an experiment input/snapshot.
 
+## External tool integration boundary
+
+Third-party scientific/software tools must be integrated through an explicit adapter boundary when their CLI, API, file layout, schema, or runtime behavior is implementation-specific and may evolve independently of the project.
+
+The project design layer defines what capability and artifact semantics are required; it should not unnecessarily freeze transient third-party command spelling.
+
+The normal ownership model is:
+
+```text
+project concept / contract
+→ required capability and artifact semantics
+
+owning adapter
+→ concrete CLI/API/schema knowledge
+→ version/profile compatibility checks
+→ invocation and output discovery
+
+other project modules
+→ consume the adapter's project-facing result
+→ do not duplicate third-party interface details
+```
+
+Concrete third-party flags, endpoint paths, native output filename patterns, or schema branching should have one implementation owner. Do not scatter the same external interface knowledge across orchestration code, Skills, multiple helpers, and tests unless each occurrence is an intentionally bounded contract assertion.
+
+### Known-profile verification
+
+For an evolving external interface, prefer an explicit known-compatible profile plus verification over speculative runtime adaptation.
+
+A compatibility probe may inspect stable surfaces such as:
+
+```text
+--version
+--help
+capability metadata
+API version endpoint
+schema/version marker
+```
+
+but the probe verifies that a known profile is supported; it does not infer a new interface automatically.
+
+If an expected flag, endpoint, schema, artifact, or semantic capability changes in a way the adapter does not understand:
+
+```text
+unknown / semantically incompatible external profile
+→ fail closed
+→ report the unsupported interface
+→ update + revalidate the adapter explicitly
+```
+
+Do not guess a renamed flag, select a merely plausible replacement, silently switch tools/backends, or reinterpret changed option semantics just because an invocation can be made to run.
+
+### Scientific reproducibility
+
+For scientific preprocessing, conversion, simulation, or other result-bearing tools, successful execution is not sufficient evidence of semantic compatibility. The project should record the tool/version/configuration facts that materially affect reproducibility when those facts are part of the produced result's provenance.
+
+Version pinning is not universally required. Use a fixed version when the project needs exact-environment reproduction; otherwise a validated compatible profile may be sufficient. In both cases, speculative forward compatibility is subordinate to reproducibility and explicit semantics.
+
 ## Project onboarding
 
 ```text
@@ -87,4 +144,4 @@ Project collaboration routes to `../collaboration/protocol.md` rather than copyi
 
 ## Review criterion
 
-A project architecture is sufficient when an unfamiliar Agent can determine the repository's real owners, authority sources, workflow entry, mutable-state boundaries, and design/scientific-fact distinction without inferring a standard directory tree that the project does not actually use.
+A project architecture is sufficient when an unfamiliar Agent can determine the repository's real owners, authority sources, workflow entry, mutable-state boundaries, design/scientific-fact distinction, and external-tool adapter boundaries without inferring a standard directory tree or hidden third-party compatibility behavior that the project does not actually use.
