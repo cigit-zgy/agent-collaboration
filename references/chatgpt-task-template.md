@@ -1,12 +1,30 @@
 # ChatGPT formal task template
 
-Formal tasks live under `reports/chatgpt/` and use:
+Formal Codex tasks live under `reports/chatgpt/` and use:
 
 ```text
 YYMMDD_chatgpt_NN.md
 ```
 
-Every task begins with compact YAML front matter for retrieval and indexing. Keep it factual and concise. Do not include a task-source commit SHA inside the task itself because that would be self-referential.
+## Delegation gate before authoring
+
+Do not create a Codex task until ChatGPT has answered this question:
+
+> Does this work genuinely require a local-machine capability or another capability
+> unavailable to ChatGPT?
+
+If **no**, ChatGPT performs and verifies the work directly with its available
+connected tools. Do not create a Codex task merely to offload work.
+
+If **yes**, ChatGPT freezes every reasonably determinable decision before handoff.
+The formal task should minimize interpretation left to Codex. Specify exact files or
+areas, approved decisions, constraints, expected behavior, non-goals, verification,
+acceptance criteria, Git requirements, report path, and fixed stdout. Include exact
+commands or replacement text when that materially reduces ambiguity.
+
+Every task begins with compact YAML front matter for retrieval and indexing. Keep it
+factual and concise. Do not include a task-source commit SHA inside the task itself
+because that would be self-referential.
 
 ```yaml
 ---
@@ -37,7 +55,8 @@ Metadata rules:
 - `codex_report` is the expected paired report path.
 - do not add speculative metadata fields merely because they might be useful later.
 
-Use every body field and section. Write `None` where a section genuinely has no content; do not omit it.
+Use every body field and section. Write `None` where a section genuinely has no
+content; do not omit it.
 
 ```markdown
 # <Task title>
@@ -52,6 +71,10 @@ Verification level: <LEVEL 1 — FOCUSED | LEVEL 2 — MAJOR | LEVEL 3 — RELEA
 Status: <STATUS>
 
 ## Mission
+
+## Why Codex is required
+
+<State the concrete local/unavailable capability that requires Codex.>
 
 ## Current evidence / diagnosed problem
 
@@ -91,8 +114,18 @@ Expected path: `reports/codex/YYMMDD_codex_NN.md`
 ## Final stdout
 ```
 
-Before authoring the task, ChatGPT must inspect the current repository and relevant artifacts. The task must state the actual baseline SHA and one verification level. Required changes and acceptance criteria must be directly checkable, and non-goals must bound the work. Do not use open-ended phrases such as “improve as much as possible,” and do not pre-schedule the next task.
+Before authoring the task, ChatGPT must inspect the current repository and relevant
+artifacts. The task must state the actual baseline SHA and one verification level.
+Required changes and acceptance criteria must be directly checkable, and non-goals
+must bound the work. Do not use open-ended phrases such as “improve as much as
+possible,” and do not pre-schedule the next task.
 
-If the task changes a durable design decision, update the owning `reports/concept/` topic before or as part of the committed task so Codex has a stable authoritative contract.
+The `Why Codex is required` section is mandatory. If ChatGPT cannot name a concrete
+local or unavailable capability, it should not issue the Codex task.
 
-Commit and push the task before handing it to Codex. Codex treats that committed task as the sole specification; chat additions are not task authority.
+If the task changes a durable design decision, update the owning `reports/concept/`
+topic before or as part of the committed task so Codex has a stable authoritative
+contract.
+
+Commit and push the task before handing it to Codex. Codex treats that committed
+task as the sole specification; chat additions are not task authority.
