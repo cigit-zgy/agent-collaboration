@@ -1,6 +1,6 @@
 ---
 name: agent-collaboration
-description: Use as the shared collaboration hub for User, ChatGPT, and Codex when repository work requires planning, direct remote action, local execution handoff, verification, independent audit, acceptance, or durable project concept assets.
+description: Use as the shared collaboration hub for User, ChatGPT, and Codex when repository work requires planning, direct remote action, local execution handoff, verification, independent audit, acceptance, project onboarding, or durable project concept assets.
 ---
 
 # Agent Collaboration
@@ -30,12 +30,17 @@ verifiable implementation evidence.
   constitution. It links the project to the canonical collaboration repository and
   routes project-specific workflow, concept, and report assets without copying the
   global collaboration protocol.
+- **New project:** when a repository does not yet have a suitable project entry,
+  User + ChatGPT design it from
+  [project-agents-template.md](references/project-agents-template.md). ChatGPT writes
+  the committed `AGENTS.md` directly when its connected tools can do so; Codex is
+  used only for genuinely local verification or other unavailable capabilities.
 - **User:** defines goals, approves genuine human decisions, and may override the
   workflow explicitly.
 
 Project-specific tasks, Codex reports, and concept decisions always remain in the
-project repository that owns them. This repository owns the collaboration protocol,
-not other projects' work records.
+project repository that owns them. This repository owns the collaboration protocol
+and reusable templates, not other projects' work records.
 
 ## Delegation rule
 
@@ -62,6 +67,8 @@ determines completion.
   collaboration loop.
 - Connecting an individual project repository to this global protocol: read
   [project-integration.md](references/project-integration.md).
+- Creating or normalizing a project's root `AGENTS.md`: use
+  [project-agents-template.md](references/project-agents-template.md).
 - ChatGPT authoring a Codex task: use
   [chatgpt-task-template.md](references/chatgpt-task-template.md) and select a
   level from [verification-levels.md](references/verification-levels.md).
