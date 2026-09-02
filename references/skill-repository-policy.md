@@ -34,6 +34,21 @@ Canonical platform reference:
 
 Do not treat legacy `~/.codex/skills/` as the current canonical discovery contract.
 
+## Host compatibility boundary
+
+The `AGENTS.md` rules in this repository are Codex-oriented project/repository
+instructions. They are not claimed to be an Anthropic Claude Code discovery standard
+or a universal Agent-host requirement.
+
+Other Agent hosts may use different instruction files or discovery mechanisms. If a
+project later targets another host, add an explicit adapter/import/symlink only when
+that host is actually supported; do not duplicate all current policy into parallel
+files pre-emptively.
+
+The portable `SKILL.md` capability boundary is intentionally more host-neutral than
+repository-maintenance `AGENTS.md`, but host-specific Skill discovery/distribution
+still follows the target platform's current rules.
+
 ## FIRST_PARTY maintained source
 
 A standalone first-party Skill source repository is maintained under:
