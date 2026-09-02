@@ -40,6 +40,40 @@ repository remain authoritative for this project.
 Do not copy the detailed global protocol, verification levels, report templates, or
 Git synchronization procedure into each project `AGENTS.md`.
 
+## Standard project `AGENTS.md` template
+
+The canonical reusable template is:
+
+`references/project-agents-template.md`
+
+Use it when:
+
+- onboarding a new project into this collaboration model;
+- creating a root `AGENTS.md` for a repository that lacks one;
+- normalizing an existing project entry that has accumulated stale routing or global
+  rules that belong in `agent-collaboration`.
+
+The template is a design scaffold, not a generated file that should be copied
+unchanged. User + ChatGPT inspect the actual repository, decide the project-specific
+purpose, authority, ownership, trust, runtime, workflow, and human checkpoints, then
+instantiate only the applicable sections.
+
+Onboarding follows:
+
+```text
+User identifies new project
+→ ChatGPT reads agent-collaboration
+→ ChatGPT reads project-agents-template.md
+→ ChatGPT inspects the target repository
+→ User + ChatGPT resolve project-specific design
+→ ChatGPT writes/commits project AGENTS.md when connected tools are sufficient
+→ Codex is delegated only if local discovery/state verification is genuinely needed
+```
+
+Do not delegate constitution design to Codex. Codex may verify that the committed
+project entry is discovered correctly on the local machine, but the content of the
+project constitution is a User + ChatGPT design decision.
+
 ## Project-owned assets
 
 Every project's collaboration assets remain in that project's own repository:
@@ -77,6 +111,9 @@ project repository
 → direct ChatGPT action when fully supported
 → Codex formal task only for genuinely local/unavailable capabilities
 ```
+
+If the target repository has no suitable root `AGENTS.md`, ChatGPT first follows the
+standard project template workflow above before proceeding to project implementation.
 
 The project `AGENTS.md` is therefore the bridge from the project repository to the
 shared collaboration authority.
