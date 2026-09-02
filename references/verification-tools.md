@@ -1,8 +1,29 @@
 # Verification tools
 
-Use verification tools to cover a defined risk. Do not install or run them merely
-because they exist. The formal task and `verification-levels.md` decide when the
-extra cost is justified.
+Use verification tools to cover a defined risk. Do not run them merely because they
+are installed. The formal task and `verification-levels.md` decide when the extra
+cost is justified.
+
+## Machine-wide installation
+
+These verification utilities are machine-level developer tools, not project
+runtime dependencies and not Skills. On the current macOS workstation, prefer the
+existing Homebrew installation path so project environments remain untouched:
+
+```text
+brew install semgrep
+brew install --cask codeql
+brew install pip-audit
+```
+
+After installation, record only tool name and executable version in the relevant
+Codex report when a task checks machine readiness. Do not copy these tools into a
+project repository, add them to project `pyproject.toml`, or create a project
+virtual environment merely to host them.
+
+Installation does not make a tool mandatory for ordinary development. CodeQL use
+must also respect GitHub's current CodeQL licensing/repository eligibility; local
+availability is not permission to run it on every repository.
 
 ## Primary adversarial/static tools
 
@@ -30,13 +51,13 @@ when relevant.
 
 ### CodeQL
 
-Use CodeQL for deeper semantic/data-flow analysis where supported and available.
+Use CodeQL for deeper semantic/data-flow analysis where supported and permitted.
 It is primarily a Level 3 release/security gate, or an explicitly security-sensitive
 Level 2 task whose risk justifies deeper analysis.
 
 Prefer the repository's existing GitHub code-scanning workflow when one exists.
 Otherwise use the supported CodeQL CLI/workflow for the repository language and
-selected query suite. Do not make CodeQL availability a universal development
+selected query suite. Do not make CodeQL execution a universal development
 requirement.
 
 ## Python dependency audit
@@ -61,7 +82,7 @@ LEVEL 2 — MAJOR
 → pip-audit only when dependency risk is in scope
 
 LEVEL 3 — RELEASE
-→ select Semgrep and/or CodeQL according to language and repository risk
+→ select Semgrep and/or CodeQL according to language, repository eligibility, and risk
 → add pip-audit for Python dependency release gates when applicable
 ```
 
