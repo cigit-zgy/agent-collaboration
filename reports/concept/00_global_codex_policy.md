@@ -9,6 +9,7 @@ scope: machine-wide Codex defaults, Skill ownership/routing, collaboration, and 
 supersedes: null
 related_tasks:
   - 260902_chatgpt_01
+  - 260902_chatgpt_02
 ---
 
 # Global Codex Operating Policy
@@ -61,3 +62,51 @@ The global file should be small enough to remain reliable in every Codex session
 ### Related tasks
 
 - 260902_chatgpt_01
+
+### Additional decision — synchronization, verification, environments, and speed
+
+Formal Codex repository work must begin from an explicit fetched Git state and end
+with the local task branch synchronized to its configured upstream. Codex preserves
+pre-existing user changes, performs only safe fast-forward synchronization, commits
+and pushes task-scoped changes, fetches again, and normally verifies
+`HEAD == upstream`. Divergence or unsafe dirty state must be reported rather than
+resolved through an invented merge/rebase, destructive reset, force-push, or
+unapproved stash.
+
+Ordinary development defaults to `LEVEL 1 — FOCUSED`. Verification is intentionally
+fast and risk-proportional: affected tests and the smallest useful smoke/integration
+check are preferred over full-suite testing, clean-environment rebuilds, repeated
+reviewers, or release-grade scanning.
+
+For adversarial/static verification, Semgrep Community Edition is the preferred
+fast targeted scanner for security-sensitive changed surfaces. CodeQL is the deeper
+semantic/data-flow tool used primarily for release/security gates when supported;
+`pip-audit` complements these for Python dependency vulnerability checks. These
+tools are selected by risk and verification level, not run on every task.
+
+Environment ownership follows executable code rather than Skill count. Documentation-
+only Skills have no environment. Project-executed code uses the project's declared
+environment. An independently executable first-party Skill may own a runtime only
+when it has a real consumer. Healthy environments are reused; clean rebuilds are
+reserved for reproducibility, release, or demonstrably invalid environments.
+
+### Rationale
+
+The collaboration protocol must keep GitHub and local state auditable without
+turning synchronization into destructive ceremony. Security tools and clean
+environments are useful only when they cover a defined risk. Fast focused feedback
+is the default development mode; broader evidence belongs to major or release work.
+
+### Impact
+
+- `references/protocol.md`
+- `references/chatgpt-task-template.md`
+- `references/codex-report-template.md`
+- `references/verification-levels.md`
+- `references/verification-tools.md`
+- `references/skill-environment-policy.md`
+- the concise machine-wide routing rules in `~/.codex/AGENTS.md`
+
+### Related tasks
+
+- 260902_chatgpt_02
