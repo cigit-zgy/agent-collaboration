@@ -15,7 +15,7 @@ Formal task/report paths remain stable after issue.
 
 ## Concept responsibility
 
-When a project declares `reports/concept/` as design authority, each concept topic is the canonical User + ChatGPT accepted design for one bounded concern.
+When a project declares `reports/concept/` as design authority, each concept topic is the canonical design for one bounded concern after User + ChatGPT design/adjudication and User acceptance.
 
 The authority chain is:
 
@@ -27,7 +27,7 @@ reports/concept/
 → runtime artifacts
 ```
 
-Downstream artifacts conform to the governing concept. A mismatch is projection or implementation drift unless User + ChatGPT explicitly accept a design change first.
+Downstream artifacts conform to the governing concept. A mismatch is projection or implementation drift unless a design change is reviewed/adjudicated by User + ChatGPT and accepted by the User first.
 
 Scientific fact authority remains separate:
 
@@ -64,8 +64,8 @@ Write the accepted system state and semantics declaratively.
 Preferred:
 
 ```text
-A registered source set contains exactly one primary source.
-The registered archive is the canonical byte-preserving source boundary.
+A registered artifact has one canonical identity within its owning scope.
+A preserved source artifact remains byte-identical across downstream read-only use.
 ```
 
 Use procedural wording only when ordering, interaction, or transition is itself part of the accepted design.
@@ -173,8 +173,9 @@ current canonical concept
 → adversarial / expert / implementation review
 → findings
 → User + ChatGPT adjudication
-   ├── reject finding → concept unchanged
-   └── accept finding → concept updated
+→ User decision
+   ├── reject change → concept unchanged
+   └── accept change → concept updated
 → design freeze for the current concern
 → SKILL/reference projection
 → implementation
@@ -185,7 +186,7 @@ Reviewers, Codex, tests, and existing implementation may expose defects, contrad
 
 ### Adjudication
 
-User + ChatGPT decide whether a finding changes the accepted solution. A proposed change becomes design only after it is explicitly accepted and written into the governing concept.
+User + ChatGPT review and adjudicate whether a finding should change the accepted solution. The User retains final acceptance/override authority. A proposed change becomes design only after the User accepts it and the governing concept is updated.
 
 An implementation mismatch is therefore handled as:
 
@@ -194,7 +195,8 @@ concept = A
 projection/code = B
 
 → inspect whether B is drift or whether A should change
-→ User + ChatGPT decide
+→ User + ChatGPT adjudicate
+→ User decides whether the accepted design changes
 → if A remains accepted, repair B
 → if design changes, update A first and then propagate downstream
 ```
@@ -205,7 +207,8 @@ A design concern is frozen when:
 
 ```text
 its responsibility and boundary are clear
-AND the current solution is explicitly accepted by User + ChatGPT
+AND the current solution has been reviewed/adjudicated by User + ChatGPT
+AND the current solution is accepted by the User
 AND blocking design ambiguities for the intended scope are resolved
 AND downstream projection can be written without inventing new design semantics
 ```
@@ -216,7 +219,7 @@ Freeze means the current design is stable enough to project and implement. It do
 
 ### Reopening a frozen design
 
-A frozen concept is reopened only when new evidence or a new User requirement materially changes the accepted design. The concept is updated first, then re-frozen for the revised scope, and only then are Skills/references/code/tests updated.
+A frozen concept is reopened only when new evidence or a new User requirement materially changes the accepted design. User + ChatGPT adjudicate the change; the User decides whether to accept it. The concept is updated first, then re-frozen for the revised scope, and only then are Skills/references/code/tests updated.
 
 Routine implementation discoveries that do not change design remain downstream implementation work.
 
