@@ -1,7 +1,13 @@
-# Codex Agent report template
+# Codex report template
+
+Codex implementation reports live under `reports/codex/` and use:
+
+```text
+YYMMDD_codex_NN.md
+```
 
 ```markdown
-# <Task title> — Agent Report
+# <Task title> — Codex Report
 
 VERDICT: <PASS | PASS WITH LIMITATIONS | BLOCKED | FAIL>
 Task ID: <TASK_ID>
@@ -40,3 +46,6 @@ If Codex can still fix the issue, it must continue fixing or report `FAIL`; it
 must not report `BLOCKED`. Never claim `PASS` without running the required
 verification. Do not present planned work as completed, equate a passing test
 with task acceptance, or hide unfinished scope.
+
+A Codex report records implementation evidence; it does not redefine durable
+project concepts. Durable decisions belong in `reports/concept/`.
