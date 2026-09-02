@@ -27,14 +27,17 @@ verifiable implementation evidence.
   `AGENTS.md`, follows its canonical collaboration reference to this Skill, and then
   reads only the collaboration references needed for the active role.
 - **Project repository:** root `AGENTS.md` is the project-level entry point and
-  constitution. It links the project to the canonical collaboration repository and
-  routes project-specific workflow, concept, and report assets without copying the
-  global collaboration protocol.
-- **New project:** when a repository does not yet have a suitable project entry,
-  User + ChatGPT design it from
-  [project-agents-template.md](references/project-agents-template.md). ChatGPT writes
-  the committed `AGENTS.md` directly when its connected tools can do so; Codex is
-  used only for genuinely local verification or other unavailable capabilities.
+  constitution. The project root `SKILL.md` is the Agent-facing workflow/router.
+  Together they connect global collaboration, durable project concepts, and
+  downstream stage Skills without copying detailed global rules.
+- **New project:** when a repository does not yet have suitable project entry assets,
+  User + ChatGPT design `AGENTS.md` from
+  [project-agents-template.md](references/project-agents-template.md), then design the
+  root workflow Skill from
+  [project-skill-template.md](references/project-skill-template.md). ChatGPT writes
+  and commits those design assets directly when its connected tools can do so;
+  Codex is used only for genuinely local verification or other unavailable
+  capabilities.
 - **User:** defines goals, approves genuine human decisions, and may override the
   workflow explicitly.
 
@@ -69,6 +72,8 @@ determines completion.
   [project-integration.md](references/project-integration.md).
 - Creating or normalizing a project's root `AGENTS.md`: use
   [project-agents-template.md](references/project-agents-template.md).
+- Creating or normalizing a project's root workflow `SKILL.md`: use
+  [project-skill-template.md](references/project-skill-template.md).
 - ChatGPT authoring a Codex task: use
   [chatgpt-task-template.md](references/chatgpt-task-template.md) and select a
   level from [verification-levels.md](references/verification-levels.md).
