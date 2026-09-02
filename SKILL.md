@@ -1,130 +1,103 @@
 ---
 name: agent-collaboration
-description: Use as the shared collaboration hub for User, ChatGPT, and Codex when repository work requires planning, direct remote action, local execution handoff, verification, independent audit, acceptance, project onboarding, Skill initialization, or durable project concept assets.
+description: >
+  Coordinate User, ChatGPT, and Codex for repository work that needs design,
+  direct remote action, committed local execution, verification, independent audit,
+  project onboarding, or Skill onboarding.
 ---
 
 # Agent Collaboration
 
-This Skill is the shared operating hub for the three-party workflow:
+## Role
+
+This Skill is the top-level collaboration router for:
 
 ```text
 User ↔ ChatGPT ↔ Codex
 ```
 
-The User is the human authority. ChatGPT plans, resolves what can be made explicit,
-performs work it can safely complete through its available connected tools, authors
-formal Codex tasks only when local execution is genuinely required, and independently
-accepts or rejects Codex results. Codex executes committed local tasks and returns
-verifiable implementation evidence.
+It decides which collaboration contract to load. Detailed operational rules live in
+`references/`; this file does not duplicate them.
 
-## Entry points
+## Core route
 
-- **Codex:** machine-wide `~/.codex/AGENTS.md` routes formal ChatGPT ↔ Codex
-  repository work to this Skill automatically.
-- **ChatGPT:** a new conversation does not assume this local Skill automatically.
-  The User should explicitly ask ChatGPT to use `agent-collaboration` and provide or
-  identify the target repository. ChatGPT reads the target repository's applicable
-  `AGENTS.md`, follows its canonical collaboration reference to this Skill, and then
-  reads only the collaboration references needed for the active role.
-- **Project repository:** root `AGENTS.md` is the project-level constitution. A
-  project may expose its Agent-operable workflow through a declared project workflow
-  Skill such as `<agent-name>/SKILL.md`; the workflow Skill does not have to live at
-  repository root. `AGENTS.md` must identify the canonical workflow path.
-- **New water research project:** use
-  [project-architecture.md](references/project-architecture.md) as the canonical
-  responsibility map, instantiate root `AGENTS.md` from
-  [project-agents-template.md](references/project-agents-template.md), then create a
-  project workflow Skill from
-  [project-skill-template.md](references/project-skill-template.md) only when the
-  project exposes an Agent-operable workflow. Create optional directories only when
-  their responsibility actually exists.
-- **New standalone first-party Skill repository:** classify ownership with
-  [skill-repository-policy.md](references/skill-repository-policy.md), create the
-  repository-maintenance constitution from
-  [skill-agents-template.md](references/skill-agents-template.md), choose the minimal
-  package/source architecture from
-  [skill-package-architecture.md](references/skill-package-architecture.md), then
-  instantiate the matching capability template from
-  [skill-templates/](references/skill-templates/README.md).
-- **Embedded sub-Skill:** normally inherit the nearest applicable parent
-  `AGENTS.md`; create only the sub-Skill `SKILL.md` and justified runtime resources.
-  Add a nested `AGENTS.md` only for genuine local maintenance rules.
-- **User:** defines goals, approves genuine human decisions, and may override the
-  workflow explicitly.
+Use `references/protocol.md` when repository work needs the three-party design,
+delegation, execution, verification, or acceptance loop.
 
-Project-specific tasks, Codex reports, and concept decisions always remain in the
-project repository that owns them. This repository owns the collaboration protocol
-and reusable templates, not other projects' work records.
-
-## Skill source repository versus distribution
-
-Do not equate a maintained Skill Git repository with a portable Skill runtime
-bundle.
+Key role split:
 
 ```text
-maintained standalone first-party Skill repository
-= AGENTS.md + SKILL.md + justified maintenance/runtime resources
+User + ChatGPT
+= design and acceptance
 
-portable Skill distribution
-= SKILL.md + only references/scripts/assets needed for operation
+ChatGPT
+= direct executor when connected tools are sufficient
+
+Codex
+= local executor only when a genuinely local/unavailable capability is required
 ```
 
-`AGENTS.md` persists as a maintenance constitution in the source repository; it is
-not a required portable Skill component and is not deleted merely because the Skill
-is mature.
+Evidence, not Codex self-reported PASS, determines final acceptance.
 
-## Delegation rule
+## Routing table
 
-Do not delegate work to Codex merely because Codex can do it. Before issuing a Codex
-task, ChatGPT must first determine whether it can safely and completely perform the
-work itself with available connected tools. If yes, ChatGPT performs and verifies it
-directly. Codex receives only work that genuinely requires local-machine execution,
-local repository state, local CLI/runtime access, environments, secrets/credentials,
-large local builds, or another capability unavailable to ChatGPT.
+- Project onboarding or project-entry normalization:
+  `references/project-integration.md` → `references/project-architecture.md` →
+  `references/project-agents-template.md`; add a project workflow Skill from
+  `references/project-skill-template.md` only when the project exposes an
+  Agent-operable workflow.
+- Standalone first-party Skill repository onboarding:
+  `references/skill-repository-policy.md` → `references/skill-agents-template.md` →
+  `references/skill-package-architecture.md` → the appropriate template under
+  `references/skill-templates/`.
+- Formal Codex task authoring: `references/chatgpt-task-template.md` plus the
+  selected level from `references/verification-levels.md`.
+- Codex launch: `references/codex-launch-template.md`.
+- Codex execution report: `references/codex-report-template.md`.
+- Report/concept lifecycle: `references/report-concept-policy.md`.
+- Verification-tool selection: `references/verification-tools.md`.
+- Skill/project environment ownership: `references/skill-environment-policy.md`.
 
-When Codex is required, ChatGPT removes avoidable design ambiguity first. User +
-ChatGPT own design; Codex executes the approved implementation-ready specification.
-The formal task should contain the concrete files, decisions, constraints, commands
-when useful, acceptance criteria, verification level, report path, and fixed stdout
-needed for Codex to execute rather than redesign the task.
+## Progressive disclosure
 
-One formal Codex task is active at a time. Evidence, not a self-reported PASS,
-determines completion.
+Load only the active route:
 
-## References
+```text
+applicable AGENTS.md
+→ this SKILL.md
+→ one owning reference
+→ target project workflow SKILL.md when relevant
+→ owning sub-Skill
+→ only resources required by that Skill
+```
 
-- All roles: read [protocol.md](references/protocol.md) for responsibilities,
-  entrypoints, delegation boundaries, repository synchronization, and the
-  collaboration loop.
-- Designing or normalizing a maintained water-domain research project repository:
-  read [project-architecture.md](references/project-architecture.md).
-- Connecting an individual project repository to this global protocol: read
-  [project-integration.md](references/project-integration.md).
-- Creating or normalizing a project's root `AGENTS.md`: use
-  [project-agents-template.md](references/project-agents-template.md).
-- Creating or normalizing a project's Agent-facing workflow `SKILL.md`: use
-  [project-skill-template.md](references/project-skill-template.md).
-- Creating or normalizing the root `AGENTS.md` of a maintained standalone
-  first-party Skill repository: use
-  [skill-agents-template.md](references/skill-agents-template.md).
-- Designing the package/source layout of an individual reusable Skill: read
-  [skill-package-architecture.md](references/skill-package-architecture.md), then
-  choose a purpose-specific template from
-  [skill-templates/README.md](references/skill-templates/README.md).
-- ChatGPT authoring a Codex task: use
-  [chatgpt-task-template.md](references/chatgpt-task-template.md) and select a
-  level from [verification-levels.md](references/verification-levels.md).
-- Choosing security/static/dependency verification tools: read
-  [verification-tools.md](references/verification-tools.md).
-- Creating, reusing, or rebuilding a Skill/project environment: read
-  [skill-environment-policy.md](references/skill-environment-policy.md).
-- ChatGPT handing off a committed task: use
-  [codex-launch-template.md](references/codex-launch-template.md).
-- Codex reporting work, or ChatGPT auditing it: use
-  [codex-report-template.md](references/codex-report-template.md).
-- Creating, archiving, or maintaining `reports/chatgpt/`, `reports/codex/`, or
-  durable `reports/concept/` assets: read
-  [report-concept-policy.md](references/report-concept-policy.md).
-- Maintaining Skill repository ownership, naming, source/distribution boundaries,
-  and first-/third-party placement: read
-  [skill-repository-policy.md](references/skill-repository-policy.md).
+Do not read project concepts by default. Read `reports/concept/README.md` and a
+specific concept only when historical design rationale or supersession is needed.
+
+## Skill discovery boundary
+
+Maintained source under `/Users/wenv/Documents/skills/` is not itself the canonical
+Codex discovery location. Current Codex local discovery uses `.agents/skills`
+locations; reusable external distribution should use the platform's supported plugin
+or another explicit distribution artifact. The authoritative local policy is
+`references/skill-repository-policy.md`.
+
+## Stop conditions
+
+Stop and surface the issue instead of improvising when:
+
+- a design-affecting decision remains unresolved;
+- the required local capability is unavailable;
+- the target repository state makes safe synchronization impossible;
+- a project/Skill authority is missing or contradictory;
+- continuing would cross a human, scientific, product, or trust boundary without
+  authorization.
+
+## Boundaries
+
+- This Skill routes collaboration; `references/*` owns current operational policy.
+- Project-specific truth remains in the owning project.
+- Concepts record decision history/rationale and do not override operational
+  references.
+- Do not create a Codex task when ChatGPT can safely and completely do the work with
+  its connected tools.
