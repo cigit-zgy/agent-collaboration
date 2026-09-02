@@ -22,11 +22,20 @@ verifiable implementation evidence.
 - **Codex:** machine-wide `~/.codex/AGENTS.md` routes formal ChatGPT ↔ Codex
   repository work to this Skill automatically.
 - **ChatGPT:** a new conversation does not assume this local Skill automatically.
-  The User should explicitly ask ChatGPT to use `agent-collaboration` (or provide the
-  repository). ChatGPT then reads the current `SKILL.md` and only the references
-  needed for the active role before acting.
+  The User should explicitly ask ChatGPT to use `agent-collaboration` and provide or
+  identify the target project repository. ChatGPT reads the project's root
+  `AGENTS.md`, follows its canonical collaboration reference to this Skill, and then
+  reads only the collaboration references needed for the active role.
+- **Project repository:** root `AGENTS.md` is the project-level entry point and
+  constitution. It links the project to the canonical collaboration repository and
+  routes project-specific workflow, concept, and report assets without copying the
+  global collaboration protocol.
 - **User:** defines goals, approves genuine human decisions, and may override the
   workflow explicitly.
+
+Project-specific tasks, Codex reports, and concept decisions always remain in the
+project repository that owns them. This repository owns the collaboration protocol,
+not other projects' work records.
 
 ## Delegation rule
 
@@ -37,10 +46,11 @@ directly. Codex receives only work that genuinely requires local-machine executi
 local repository state, local CLI/runtime access, environments, secrets/credentials,
 large local builds, or another capability unavailable to ChatGPT.
 
-When Codex is required, ChatGPT removes avoidable design ambiguity first. The formal
-task should contain the concrete files, decisions, constraints, commands when useful,
-acceptance criteria, verification level, report path, and fixed stdout needed for
-Codex to execute rather than redesign the task.
+When Codex is required, ChatGPT removes avoidable design ambiguity first. User +
+ChatGPT own design; Codex executes the approved implementation-ready specification.
+The formal task should contain the concrete files, decisions, constraints, commands
+when useful, acceptance criteria, verification level, report path, and fixed stdout
+needed for Codex to execute rather than redesign the task.
 
 One formal Codex task is active at a time. Evidence, not a self-reported PASS,
 determines completion.
@@ -50,6 +60,8 @@ determines completion.
 - All roles: read [protocol.md](references/protocol.md) for responsibilities,
   entrypoints, delegation boundaries, repository synchronization, and the
   collaboration loop.
+- Connecting an individual project repository to this global protocol: read
+  [project-integration.md](references/project-integration.md).
 - ChatGPT authoring a Codex task: use
   [chatgpt-task-template.md](references/chatgpt-task-template.md) and select a
   level from [verification-levels.md](references/verification-levels.md).
@@ -61,8 +73,8 @@ determines completion.
   [codex-launch-template.md](references/codex-launch-template.md).
 - Codex reporting work, or ChatGPT auditing it: use
   [codex-report-template.md](references/codex-report-template.md).
-- Creating or maintaining `reports/chatgpt/`, `reports/codex/`, or durable
-  `reports/concept/` assets: read
+- Creating, archiving, or maintaining `reports/chatgpt/`, `reports/codex/`, or
+  durable `reports/concept/` assets: read
   [report-concept-policy.md](references/report-concept-policy.md).
 - Maintaining a Skill repository: read
   [skill-repository-policy.md](references/skill-repository-policy.md).
