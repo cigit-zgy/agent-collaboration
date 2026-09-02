@@ -1,19 +1,56 @@
 ---
 name: agent-collaboration
-description: Use when repository work is coordinated across a User, ChatGPT, and Codex and requires a committed task, implementation handoff, independent audit, acceptance verdict, or durable project concept asset.
+description: Use as the shared collaboration hub for User, ChatGPT, and Codex when repository work requires planning, direct remote action, local execution handoff, verification, independent audit, acceptance, or durable project concept assets.
 ---
 
 # Agent Collaboration
 
-Use this global protocol when ChatGPT plans and accepts repository work while
-Codex implements the committed formal task. One formal task is active at a
-time; evidence, not a self-reported PASS, determines completion.
+This Skill is the shared operating hub for the three-party workflow:
+
+```text
+User ↔ ChatGPT ↔ Codex
+```
+
+The User is the human authority. ChatGPT plans, resolves what can be made explicit,
+performs work it can safely complete through its available connected tools, authors
+formal Codex tasks only when local execution is genuinely required, and independently
+accepts or rejects Codex results. Codex executes committed local tasks and returns
+verifiable implementation evidence.
+
+## Entry points
+
+- **Codex:** machine-wide `~/.codex/AGENTS.md` routes formal ChatGPT ↔ Codex
+  repository work to this Skill automatically.
+- **ChatGPT:** a new conversation does not assume this local Skill automatically.
+  The User should explicitly ask ChatGPT to use `agent-collaboration` (or provide the
+  repository). ChatGPT then reads the current `SKILL.md` and only the references
+  needed for the active role before acting.
+- **User:** defines goals, approves genuine human decisions, and may override the
+  workflow explicitly.
+
+## Delegation rule
+
+Do not delegate work to Codex merely because Codex can do it. Before issuing a Codex
+task, ChatGPT must first determine whether it can safely and completely perform the
+work itself with available connected tools. If yes, ChatGPT performs and verifies it
+directly. Codex receives only work that genuinely requires local-machine execution,
+local repository state, local CLI/runtime access, environments, secrets/credentials,
+large local builds, or another capability unavailable to ChatGPT.
+
+When Codex is required, ChatGPT removes avoidable design ambiguity first. The formal
+task should contain the concrete files, decisions, constraints, commands when useful,
+acceptance criteria, verification level, report path, and fixed stdout needed for
+Codex to execute rather than redesign the task.
+
+One formal Codex task is active at a time. Evidence, not a self-reported PASS,
+determines completion.
 
 ## References
 
 - All roles: read [protocol.md](references/protocol.md) for responsibilities,
-  repository synchronization, and the collaboration loop.
-- ChatGPT authoring a task: use
+  entrypoints, delegation boundaries, repository synchronization, and the
+  collaboration loop.
+- ChatGPT authoring a Codex task: use
   [chatgpt-task-template.md](references/chatgpt-task-template.md) and select a
   level from [verification-levels.md](references/verification-levels.md).
 - Choosing security/static/dependency verification tools: read
