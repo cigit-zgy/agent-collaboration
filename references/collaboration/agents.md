@@ -2,6 +2,8 @@
 
 This is the collaboration-wide house standard for maintained `AGENTS.md` files. It is informed by current Codex/AGENTS practice, Anthropic project-instruction guidance, and observed scientific-agent repositories; it is not presented as a universal external section template.
 
+`AGENTS.md` is Codex-oriented in this collaboration standard. Anthropic guidance is used only as evidence for general instruction-writing principles; Claude Code's native project-instruction mechanism is separate and should not be conflated with `AGENTS.md` discovery.
+
 ## Purpose
 
 `AGENTS.md` is a scoped constitution and routing document for an Agent working in a repository or directory subtree. It establishes durable context that applies across many tasks.
@@ -36,11 +38,11 @@ Use positive contracts as the default. Reserve `MUST NOT` or explicit prohibitio
 
 ### One rule, one owner, one statement
 
-Do not duplicate a workflow manual, design specification, coding standard, or global collaboration policy inside `AGENTS.md`. Point to the owning artifact.
+Do not duplicate a workflow manual, design specification, coding standard, global collaboration policy, or installation profile inside `AGENTS.md`. Point to the owning artifact.
 
 ### Prefer concrete instructions
 
-Use exact paths, owners, commands, gates, and states. Mechanical formatting/lint requirements should normally be enforced by tooling/CI rather than expanded into prose.
+Use exact repository-relative paths, owners, commands, gates, and states when they are truly scope-local. Mechanical formatting/lint requirements should normally be enforced by tooling/CI rather than expanded into prose.
 
 ### Inspect before claiming
 
@@ -115,15 +117,10 @@ Repository `AGENTS.md` should route to the nearest owner instead of copying that
 
 ## Evidence basis
 
-The standard draws on these recurring practices:
+The standard draws on recurring practices from OpenAI Codex, OpenAI model guidance, Anthropic project-instruction guidance, and scientific-agent repositories reviewed for this collaboration. The common pattern is concise scope-local context, clear authority, concrete routing, progressive disclosure, and separation of prompts/configuration/logs rather than one monolithic instruction file.
 
-- OpenAI Codex: repository/directory-scoped instruction hierarchy, concise local rules, and keeping mechanical formatting/lint in automation where practical.
-- OpenAI model guidance: lean prompts, state each instruction once, expose only relevant tools/context, define success and stopping behavior for agentic workflows.
-- Anthropic: clear/direct project instructions, descriptive structure, context for important rules, positive instructions, and scoped project memory.
-- Scientific-agent repositories reviewed for this collaboration: ECOMATS, SciToolAgent, agent-scaling, WaterRAG, Hydro-Agent-Inversion, EPANET-Agentic, WDN Optimization, materials_concepts, ChemCrow, and Coscientist. The strongest recurring pattern is role/authority clarity, explicit workflow/output, reproducibility evidence, and separation of prompts/configuration/logs rather than one monolithic instruction file.
-
-Platform facts should be rechecked against current vendor documentation when they materially affect discovery or precedence.
+Platform-specific discovery and precedence facts should be rechecked against the current vendor documentation when they materially affect routing.
 
 ## Review checklist
 
-An `AGENTS.md` is ready when an unfamiliar Agent can identify the applicable scope, authority, owner paths, workflow entry, runtime/verification authority, and any genuine human/trust boundary without loading unrelated manuals.
+An `AGENTS.md` is ready when an unfamiliar Agent can identify the applicable scope, authority, owner paths, workflow entry, runtime/verification authority, and any genuine human/trust boundary without loading unrelated manuals or installation-specific detail owned elsewhere.

@@ -125,7 +125,7 @@ A Skill is ready when capability, trigger, minimum input/state, normal path, com
 
 A reference exists to keep specialized detail out of the always-loaded `SKILL.md` while preserving one durable owner for that detail.
 
-Reference count is project-specific. There is no required number of files and no universal body template.
+Reference count is project-specific. There is no required number of files, no universal body template, and no requirement that references be assigned to a taxonomy.
 
 ## Creation gate
 
@@ -140,27 +140,9 @@ If the topic is short, always needed, or inseparable from the normal workflow, k
 
 ## Reference boundary
 
-One reference owns one bounded concern. Good examples include:
+One reference owns one bounded concern. Good examples include source registration, workspace filesystem semantics, unit normalization, object identity, recovery transitions, or symbol normalization.
 
-```text
-source registration
-workspace filesystem contract
-unit normalization
-object identity semantics
-repair/recovery state transitions
-symbol-to-identifier mapping
-```
-
-Avoid references that are merely miscellaneous collections such as:
-
-```text
-notes.md
-misc-rules.md
-general-guidance.md
-extra-details.md
-```
-
-unless the project can state a precise owning concern for them.
+Avoid miscellaneous containers such as `notes.md`, `misc-rules.md`, `general-guidance.md`, or `extra-details.md` unless the project can state a precise owning concern for them.
 
 ## Required information
 
@@ -169,19 +151,17 @@ Every reference should make these items recoverable when applicable:
 - what concern it owns;
 - the object, state, convention, procedure, or mapping being defined;
 - the exact semantics or rules needed by its consumers;
-- any validation, transition, exception, ownership, or interface information that is material to that concern.
+- any validation, transition, exception, ownership, or interface information material to that concern.
 
 These are information categories, not mandatory headings.
 
-## Recommended patterns
+## Common organization examples
 
-Choose the smallest pattern that matches the content. Patterns are guidance, not fixed templates.
+The following are common ways to organize a reference. They are examples of useful shapes, not reference types that a document must be classified into.
 
-### 1. Contract / specification
+### Object/state contract
 
-Use for object, state, schema, field, role, interface, or filesystem contracts.
-
-Common shape:
+Useful when the concern is an object, state, schema, field, role, interface, or filesystem boundary:
 
 ```text
 Purpose
@@ -193,21 +173,9 @@ Purpose
 → Ownership / interface
 ```
 
-Typical topics:
+### Transition/recovery concern
 
-```text
-source registration
-workspace contract
-object identity
-trust state
-schema semantics
-```
-
-### 2. State-transition / procedure
-
-Use when the reference owns transitions, recovery, repair, promotion, retry, or human-confirmation behavior.
-
-Common shape:
+Useful when the concern is recovery, repair, promotion, retry, or another state transition:
 
 ```text
 Purpose
@@ -217,42 +185,30 @@ Purpose
 → Recovery / escalation
 ```
 
-Prefer explicit transition tables when they are clearer than prose.
+A transition table may be clearer than prose.
 
-### 3. Domain / convention
+### Domain/convention concern
 
-Use for scientific conventions, terminology, normalization rules, naming systems, or domain-specific interpretation guidance.
-
-Common shape:
+Useful for scientific conventions, terminology, normalization, naming, or interpretation guidance:
 
 ```text
 Scope
 → Definitions
 → Conventions
 → Representative cases
-→ Scientific or standards basis when needed
+→ Scientific/standards basis when needed
 ```
 
-A domain reference does not need an artificial completion gate when it does not own a workflow.
+A non-workflow reference does not need an artificial completion gate.
 
-### 4. Mapping / decision
+### Mapping or decision tables
 
-Use when the primary content is a deterministic or bounded mapping between conditions and results.
-
-Common shape:
+A mapping table is a presentation form, not a separate document class. Use it inside any reference when the concern is naturally expressed as:
 
 ```text
-Scope
-→ Mapping or decision table
-→ Exceptions / precedence
-```
-
-Example:
-
-```text
-input type + condition → parser route
-validation error       → repair action
-symbol form            → normalized identifier
+condition → result
+input form → normalized form
+error class → recovery action
 ```
 
 ## Scientific references
@@ -303,7 +259,7 @@ For source-ID semantics, use `source-registration.md`.
 
 over copying the complete source-ID contract into multiple files.
 
-Circular ownership between references is invalid: each substantive rule must have one direction of authority.
+Circular ownership between references is invalid: each substantive rule has one direction of authority.
 
 ## Size and splitting
 
@@ -319,7 +275,7 @@ A reference is ready when:
 - its content is needed by a real consumer;
 - it does not duplicate `SKILL.md` or another reference;
 - its semantics are concrete enough for correct use or verification;
-- its structure follows the content rather than a mandatory template;
+- its structure follows the content rather than a mandatory template or taxonomy;
 - scientific facts remain source-grounded where applicable;
 - cross-reference chains remain shallow;
 - examples clarify rather than redefine the contract.

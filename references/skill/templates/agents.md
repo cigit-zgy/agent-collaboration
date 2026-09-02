@@ -20,21 +20,7 @@ references/  Skill-specific operational contracts
 reports/     collaboration/history assets when this repository owns them
 ```
 
-User + ChatGPT own Skill design. Codex executes approved local work.
-
-## Source / discovery / distribution
-
-```text
-maintained source
-/Users/wenv/Documents/skills/<skill-name>/
-
-Codex user discovery
-$HOME/.agents/skills/<skill-name>
-→ normally symlink → maintained source
-
-portable runtime
-SKILL.md + only required runtime resources
-```
+User + ChatGPT maintain Skill design. ChatGPT independently reviews execution evidence; the User retains final decision/override authority. Codex executes approved local work.
 
 ## Repository ownership
 
@@ -50,9 +36,13 @@ README.md       <if present>
 
 List only real paths.
 
+## Source / discovery / distribution
+
+Use `agent-collaboration/references/skill/repository.md` as the owner of maintained-source location, Codex discovery exposure, and external distribution policy. State repository-local exceptions here only when this Skill genuinely differs from that policy.
+
 ## Workflow
 
-Use `SKILL.md` for capability operation and `references/skill/*` from agent-collaboration for repository/package policy when maintaining the Skill itself.
+Use `SKILL.md` for capability operation and `references/skill/*` from agent-collaboration for repository/package/writing policy when maintaining the Skill itself.
 
 ## Runtime and verification
 
@@ -60,7 +50,7 @@ Use `SKILL.md` for capability operation and `references/skill/*` from agent-coll
 
 ## Hard invariants
 
-<Short list of real source/discovery/ownership boundaries.>
+<Short list of real source/discovery/ownership boundaries that are specific to this repository.>
 ````
 
 Embedded sub-Skills normally inherit the nearest project `AGENTS.md`; a separate local file is justified only by real subtree-specific maintenance rules.

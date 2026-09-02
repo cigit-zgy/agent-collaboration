@@ -2,7 +2,7 @@
 name: agent-collaboration
 description: >
   Coordinate User, ChatGPT, and Codex for repository work involving design, direct remote action,
-  local implementation, verification, acceptance, project integration, or Skill maintenance.
+  local execution, verification, acceptance review, project integration, or Skill maintenance.
 ---
 
 # Agent Collaboration
@@ -19,7 +19,7 @@ Load only the reference family that owns the active concern.
 
 ## Core route
 
-For design, delegation, local execution, verification, and acceptance, read:
+For design, delegation, local execution mode selection, Git synchronization, concurrency, verification, and acceptance review, read:
 
 ```text
 references/collaboration/protocol.md
@@ -28,12 +28,14 @@ references/collaboration/protocol.md
 The stable role split is:
 
 ```text
-User + ChatGPT = design and acceptance
-ChatGPT        = direct executor when connected capabilities are sufficient
-Codex          = local executor when genuinely local/unavailable capability is required
+User            = goals, genuine human decisions, final decision/override authority
+User + ChatGPT  = design collaboration
+ChatGPT         = direct executor when connected capabilities suffice
+                  + independent technical acceptance reviewer
+Codex           = local executor when genuinely local/unavailable capability is required
 ```
 
-Evidence determines acceptance; Codex does not self-accept.
+Codex does not self-accept.
 
 ## Reference routing
 
@@ -41,18 +43,18 @@ Evidence determines acceptance; Codex does not self-accept.
 
 Use `references/collaboration/` for the three-party operating loop:
 
-- `protocol.md` — roles, delegation, Git synchronization, acceptance;
+- `protocol.md` — roles, routine-vs-formal Codex execution, Git synchronization, concurrency, acceptance;
 - `verification.md` — verification levels and risk-based tool selection;
 - `agents.md` — collaboration-wide `AGENTS.md` writing standard;
-- `templates/` — formal ChatGPT task, Codex launch, and Codex report formats.
+- `templates/` — formal ChatGPT task/launch format and Codex report format.
 
 ### Project
 
 Use `references/project/` when a scientific/software project joins this collaboration:
 
-- `architecture.md` — project entry, repository ownership, authority hierarchy, reading modes, onboarding;
+- `architecture.md` — project entry and responsibility-based ownership patterns;
 - `concept.md` — `reports/concept/` design-authority contract, concept writing standard, and review/adjudication/freeze/projection lifecycle;
-- `templates/agents.md` — project root `AGENTS.md`;
+- `templates/agents.md` — project root `AGENTS.md` specialization;
 - `templates/skill.md` — project workflow `SKILL.md`.
 
 ### Skill
@@ -62,7 +64,7 @@ Use `references/skill/` for first-party/third-party Skill ownership and package 
 - `repository.md` — maintained source, discovery, distribution, rename lifecycle;
 - `package.md` — package resources, profiles, runtime/environment ownership;
 - `writing.md` — maintained `SKILL.md` and `references/*.md` writing standard;
-- `templates/agents.md` — maintained first-party Skill-repository `AGENTS.md`.
+- `templates/agents.md` — maintained first-party Skill-repository `AGENTS.md` specialization.
 
 ## Progressive disclosure
 
@@ -79,4 +81,4 @@ Project design/redesign/conformance work additionally follows the target project
 
 ## Completion
 
-Collaboration work is complete when the requested design/action/evidence has reached its declared terminal state and the relevant acceptance gate in `references/collaboration/protocol.md` has been satisfied.
+Collaboration work is complete when the requested design/action/evidence reaches its declared terminal state and the applicable review/acceptance gate in `references/collaboration/protocol.md` is satisfied.

@@ -6,7 +6,7 @@ Codex reports live at:
 reports/codex/YYMMDD_codex_NN.md
 ```
 
-A report records execution evidence; it does not redefine project design or operational policy.
+A report records execution evidence; it does not redefine project design or operational policy. Its `verdict` is Codex's execution-status claim and is evidence for ChatGPT's independent acceptance review, not final acceptance by itself.
 
 ## Metadata
 
@@ -44,11 +44,13 @@ limitations: []
 ## Git state
 ```
 
-Verdicts:
+Execution-verdict meanings:
 
-- `PASS`: every acceptance criterion is satisfied.
-- `PASS_WITH_LIMITATIONS`: goal satisfied with material non-blocking limitations.
+- `PASS`: Codex found every task acceptance criterion satisfied by the reported evidence.
+- `PASS_WITH_LIMITATIONS`: Codex found the goal satisfied with material non-blocking limitations.
 - `BLOCKED`: completion requires a genuine human decision or unavailable external prerequisite.
 - `FAIL`: acceptance criteria remain unsatisfied and machine-solvable work remains.
+
+ChatGPT independently reviews the report and underlying evidence; the User retains final decision/override authority.
 
 For repository-changing tasks, report initial/final branch, HEAD, upstream, worktree state, and whether final `HEAD == upstream` was safely achieved.
