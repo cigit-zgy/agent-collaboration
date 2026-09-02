@@ -21,6 +21,11 @@ Do not copy, move, or symlink first-party Skills into `~/.codex/skills/`.
 Never initialize `/Users/wenv/Documents/skills/` itself as a Git repository.
 Each first-party Skill owns only its own repository inside that directory.
 
+After ownership is established, initialize the Skill package from
+`skill-package-architecture.md` and the matching purpose-specific template under
+`skill-templates/`. Do not create optional directories unless the Skill has a real
+consumer for them.
+
 ## THIRD_PARTY
 
 A third-party Skill or Skill repository is maintained upstream by another owner.
@@ -35,6 +40,10 @@ A third-party Skill or Skill repository is maintained upstream by another owner.
   or tag where practical.
 - Do not create a `cigit-zgy` mirror merely to consume an upstream Skill.
 - Never silently convert third-party content into first-party ownership.
+
+Do not normalize third-party Skill package architecture merely to match the
+first-party template. Preserve upstream layout unless an explicit adapter is required
+for consumption.
 
 ## FIRST_PARTY rename contract
 
@@ -58,7 +67,9 @@ Automation may:
 - create its GitHub repository with the User-approved visibility;
 - set `origin` when no conflicting remote exists;
 - rename a first-party repository and update its active local references;
-- update `LOCAL_SKILLS.md`.
+- update `LOCAL_SKILLS.md`;
+- instantiate the approved minimal first-party Skill package after User + ChatGPT
+  have settled the capability boundary and purpose profile.
 
 Automation must not:
 
@@ -66,7 +77,29 @@ Automation must not:
 - fork or mirror third-party content without explicit authorization;
 - overwrite an existing remote;
 - copy, move, or symlink a first-party Skill into `~/.codex/skills/`;
-- perform a partial rename.
+- perform a partial rename;
+- create empty `references/`, `scripts/`, `assets/`, or `tests/` directories merely
+  because they appear in the canonical architecture;
+- create `pyproject.toml` or an independent runtime without a real executable
+  consumer.
 
 If a target GitHub repository already exists, inspect and safely reuse it; never
 overwrite it.
+
+## Initialization order
+
+For a new first-party Skill:
+
+```text
+classify FIRST_PARTY ownership
+→ define capability boundary and trigger
+→ choose purpose profile
+→ instantiate minimal package architecture
+→ write SKILL.md from the matching template
+→ add optional references/scripts/assets/tests/runtime only when justified
+→ register in LOCAL_SKILLS.md
+→ verify discovery and behavior at the level warranted by the Skill
+```
+
+Repository ownership and package architecture are separate concerns: this file owns
+the former; `skill-package-architecture.md` owns the latter.
