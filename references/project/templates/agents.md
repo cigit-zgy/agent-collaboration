@@ -11,7 +11,7 @@ Read `../../collaboration/agents.md` first. This template specializes that writi
 
 ## Authority
 
-User + ChatGPT own project design. Codex executes approved local work.
+User + ChatGPT develop and adjudicate project design. The User retains final design acceptance/override authority. ChatGPT acts as the design partner and independent technical reviewer. Codex executes approved local work and supplies evidence.
 
 ```text
 reports/concept/                 canonical accepted design, when declared
@@ -58,7 +58,7 @@ AGENTS.md
 
 ## Human / trust checkpoints
 
-<Only genuine project-specific decisions or trust transitions.>
+<Only genuine project-specific decisions or trust transitions. Preserve the User's final decision authority where a human decision is required.>
 
 ## Hard invariants
 
