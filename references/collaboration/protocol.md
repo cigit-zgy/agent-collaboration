@@ -135,6 +135,16 @@ An exception is allowed only when a normally direct-capable deliverable is insep
 
 Before formal handoff, every `DIRECT` deliverable in scope must already be committed/pushed or otherwise completed through the connected authority. The Codex task then starts from those artifacts as frozen inputs.
 
+### Frozen DIRECT inputs are read-only to Codex
+
+Every DIRECT artifact listed as completed before handoff is immutable for the duration of the delegated task unless the task explicitly grants a narrowly mechanical exception.
+
+Codex must not substantively edit, delete, rename, reformat, regenerate, or replace a frozen DIRECT artifact. In particular, frozen concept files, `AGENTS.md`, `SKILL.md`, and `references/*.md` are read-only implementation authority when ChatGPT completed them before handoff.
+
+If local implementation reveals that a frozen DIRECT artifact is incomplete, contradictory, or impractical, Codex stops the affected work and reports the exact conflict. It does not repair the design/projection itself. ChatGPT reopens and updates the DIRECT artifact separately, the User accepts any required design change, and local implementation resumes only from the updated frozen input.
+
+A mechanical exception is valid only when the formal task names the exact file, exact permitted transformation, and local-only dependency, and the edit cannot introduce or reinterpret design semantics.
+
 If a requested Codex deliverable lacks a concrete local-only reason, remove it from Codex scope and complete it directly instead.
 
 ### Routine local execution
@@ -193,6 +203,7 @@ User goal
 → update design authority first when design changes
 → partition deliverables: DIRECT | LOCAL
 → ChatGPT completes/verifies DIRECT deliverables
+→ freeze DIRECT artifacts as Codex read-only inputs
 → local-capability gate for remaining LOCAL work
    ├─ no LOCAL work remains → ChatGPT completes task directly
    └─ LOCAL work remains
@@ -261,6 +272,7 @@ Issued formal tasks and reports remain stable audit artifacts.
 - User + ChatGPT develop/adjudicate the design; the User retains final decision authority.
 - Delegation is per deliverable, not per task or file batch.
 - ChatGPT completes all current-capability `DIRECT` deliverables before Codex handoff.
+- Frozen DIRECT artifacts are read-only to Codex unless an explicit mechanical exception is declared.
 - Codex owns only work with a concrete local/unavailable capability dependency.
 - Routine execution is permitted only when persistent/shared mutation is excluded.
 - Codex does not self-accept.
