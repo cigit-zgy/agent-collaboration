@@ -10,6 +10,7 @@ supersedes: null
 related_tasks:
   - 260902_chatgpt_01
   - 260902_chatgpt_02
+  - 260902_chatgpt_03
 ---
 
 # Global Codex Operating Policy
@@ -110,3 +111,21 @@ is the default development mode; broader evidence belongs to major or release wo
 ### Related tasks
 
 - 260902_chatgpt_02
+
+### Additional decision — machine-wide verification utility installation
+
+Semgrep, CodeQL CLI, and `pip-audit` are adopted as machine-wide third-party developer utilities. On this macOS workstation they are installed outside project runtimes, preferably through Homebrew, so verification capability does not mutate project Conda/venv dependencies. Installation alone does not trigger their use: Level 1 remains scanner-free by default, and each tool is invoked only when the selected verification level and risk justify it. CodeQL execution must respect current GitHub licensing and repository eligibility.
+
+### Rationale
+
+Keeping these utilities machine-wide makes them available when a security/release task needs them while preserving project environment boundaries and fast ordinary development.
+
+### Impact
+
+- `references/verification-tools.md`
+- `references/skill-environment-policy.md`
+- machine-level Homebrew installation state
+
+### Related tasks
+
+- 260902_chatgpt_03
