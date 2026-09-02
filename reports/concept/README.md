@@ -6,3 +6,4 @@
 | 01 | `01_report_asset_policy.md` | Report asset metadata policy | active | 2026-09-02 | structured metadata and retrieval for ChatGPT tasks and Codex reports |
 | 02 | `02_collaboration_hub.md` | Three-party collaboration hub | active | 2026-09-02 | shared User-ChatGPT-Codex authority, entrypoints, design ownership, delegation boundary, and task freezing |
 | 03 | `03_project_integration_and_asset_lifecycle.md` | Project integration and collaboration asset lifecycle | active | 2026-09-02 | project AGENTS/SKILL entry templates, project-owned reports, weekly archives, and concept lifecycle |
+| 04 | `04_skill_package_architecture.md` | Canonical Skill package architecture | active | 2026-09-02 | reusable Skill package structure, purpose profiles, progressive disclosure, and first-party initialization |
