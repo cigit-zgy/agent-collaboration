@@ -1,170 +1,132 @@
 # Project `AGENTS.md` template
 
-Use this template when onboarding or normalizing a maintained project repository under
-the `agent-collaboration` workflow. For water-domain research projects, first read
-`project-architecture.md` and instantiate only the responsibilities the actual
-repository owns.
-
-Root `AGENTS.md` is the project-level entry point and constitution. Keep it concise,
-stable, and project-specific; do not copy the detailed global collaboration protocol
-into it.
+Use this scaffold for a maintained project repository. Root `AGENTS.md` is the
+project-local constitution and Codex instruction entry. Keep it concise and durable.
+Do not copy global collaboration mechanics or downstream workflow manuals into it.
 
 ```markdown
 # <PROJECT_NAME> project context
 
 ## Project identity
 
-<ONE-TO-THREE SENTENCES: what this project is, what it produces, and its primary
-purpose.>
+<ONE-TO-THREE SENTENCES: what the project is, what it produces, and why it exists.>
 
-## Scope and precedence
-
-This repository follows the global User ↔ ChatGPT ↔ Codex collaboration protocol.
+## Collaboration and precedence
 
 Canonical collaboration repository:
 `cigit-zgy/agent-collaboration`
 
-Codex local collaboration entry:
+Codex local collaboration source:
 `/Users/wenv/Documents/skills/agent-collaboration/SKILL.md`
 
-Project-specific scientific, product, architectural, safety, and trust-state rules
-in this repository are authoritative for this project. Do not duplicate the global
-collaboration protocol here.
-
-User + ChatGPT own design decisions. Codex executes approved implementation-ready
-specifications and must not silently redesign them.
-
-## Project boundaries
-
-- <CORE IN-SCOPE RESPONSIBILITY>
-- <IMPORTANT OUT-OF-SCOPE RESPONSIBILITY>
-- <BOUNDARY BETWEEN PRODUCTION CODE AND PROJECT/USER ARTIFACTS, IF RELEVANT>
-- <OTHER DURABLE PROJECT BOUNDARY>
+Project-specific scientific, product, architectural, safety, and trust rules in this
+repository are more specific for this project. User + ChatGPT own design; Codex
+executes approved committed local tasks.
 
 ## Authority and trust
 
-<STATE THE PROJECT'S SOURCE-OF-TRUTH OR AUTHORITY ORDER.>
+<STATE THE PROJECT'S SOURCE-OF-TRUTH / TRUST ORDER.>
 
-Example scientific form:
+Example:
 
 ```text
 source evidence
 → derived representation
-→ validated state
-→ approved/released state
+→ machine-validated state
+→ human-approved state
 ```
 
-Define only real project-specific trust states.
+Do not invent trust states when the project has none.
 
 ## Repository ownership
 
-List only directories that actually exist or are approved project responsibilities.
-Use `project-architecture.md` as the responsibility map; do not scaffold every
-optional path.
-
 ```text
-<path>/    <durable responsibility>
-<path>/    <durable responsibility>
-reports/   collaboration tasks/evidence/concepts when such assets exist
+<path>/    <responsibility>
+<path>/    <responsibility>
 ```
 
-State immutable/read-only boundaries explicitly when relevant.
-
-## Project knowledge and reports
-
-Project collaboration assets remain in this repository:
-
-```text
-reports/concept/   durable User + ChatGPT project conclusions
-reports/chatgpt/   implementation-ready Codex task specifications
-reports/codex/     Codex execution and verification evidence
-```
-
-Create report directories when the first owned artifact exists; empty scaffolding is
-not required.
-
-Read `reports/concept/README.md` first when durable design context is needed, then
-only the concept topics relevant to the active task.
+List only boundaries that affect Agent behavior. State immutable/read-only areas
+explicitly.
 
 ## Workflow routing
 
-Canonical project workflow Skill:
-`<PROJECT_WORKFLOW_SKILL_PATH OR "none">`
+Project workflow Skill: `<PROJECT-DECLARED-SKILL-PATH>`
 
-For a multi-Skill Agent project this will commonly be:
+If no Agent-operable workflow exists, say so rather than creating a placeholder
+Skill.
 
-`<agent-name>/SKILL.md`
+For normal runtime work:
 
-Do not create a duplicate repository-root `SKILL.md` when the real workflow router
-already lives inside the Agent package. Read the declared workflow Skill before
-selecting a downstream capability.
-
-<OPTIONAL: short list of stable top-level workflow stages/capabilities.>
+```text
+AGENTS.md
+→ declared workflow SKILL.md
+→ owning sub-Skill
+→ only resources required by that route
+```
 
 ## Runtime and environment
 
-<STATE THE PROJECT'S RUNTIME/ENVIRONMENT AUTHORITY, OR "No project runtime".>
+<STATE THE PROJECT RUNTIME AUTHORITY OR "No project runtime".>
 
 Example:
 
 ```text
 Environment: <ENVIRONMENT_NAME>
-Dependency/tooling authority: <pyproject.toml | package.json | other contract>
+Dependency/tooling authority: <pyproject.toml | other contract>
 ```
 
-Environment mutation, broad verification, Git synchronization, and security-tool
-selection follow the global collaboration policy unless this project explicitly
-requires a stricter rule.
+## Collaboration assets
+
+When they exist:
+
+```text
+reports/chatgpt/   committed local-execution tasks
+reports/codex/     Codex execution evidence
+reports/concept/   decision history/rationale
+```
+
+Concepts are not current operational policy and are not part of normal runtime
+loading. Read `reports/concept/README.md` only when design history, rationale, or
+supersession is materially needed.
 
 ## Human checkpoints
 
-<LIST ONLY DECISIONS THAT GENUINELY REQUIRE HUMAN AUTHORITY.>
+<LIST ONLY PROJECT-SPECIFIC HUMAN DECISIONS.>
 
-If none are project-specific:
-
-`No additional project-specific human checkpoints beyond the global collaboration
-protocol.`
-
-## Non-negotiable project invariants
+## Hard project invariants
 
 - <INVARIANT 1>
 - <INVARIANT 2>
 - <INVARIANT 3>
-
-Keep this list short. Detailed implementation behavior belongs in Skills, contracts,
-or concept files rather than `AGENTS.md`.
 ```
 
 ## Onboarding procedure
 
 ```text
 User identifies project
-→ ChatGPT reads agent-collaboration
 → ChatGPT reads project-architecture.md
-→ ChatGPT inspects actual repository/responsibilities
-→ User + ChatGPT resolve project-specific boundaries and authority
-→ ChatGPT instantiates this AGENTS.md template
-→ if an Agent-operable workflow exists, declare its canonical SKILL.md path
-→ local Codex verification is delegated only when actual local discovery/state must
-  be tested
+→ ChatGPT inspects actual repository
+→ User + ChatGPT settle purpose/authority/ownership
+→ ChatGPT instantiates this AGENTS.md
+→ bootstrap only the minimum assets defined by project-architecture.md
+→ add a project workflow Skill only when a real Agent-operable workflow exists
+→ Codex verifies local discovery/runtime only when genuinely needed
 ```
 
-Do not delegate creation of the project constitution to Codex merely because Codex
-can edit the local file. The constitution is a User + ChatGPT design artifact.
+Do not delegate project-constitution design to Codex merely because Codex can edit
+files locally.
 
 ## Quality criteria
 
-A good project `AGENTS.md` should answer quickly:
+A good project `AGENTS.md` answers quickly:
 
 1. What is this project?
-2. Which project rules are authoritative?
-3. How does it connect to `agent-collaboration`?
-4. What responsibilities/directories does the repository actually own?
-5. Where are durable concepts and collaboration reports?
-6. What project workflow Skill, if any, should be read next?
-7. What trust/runtime boundaries apply?
-8. Which decisions require a human?
+2. What project-local authority/trust model applies?
+3. Who owns which repository responsibility?
+4. What workflow Skill, if any, should be read next?
+5. What runtime authority applies?
+6. Which decisions require a human?
+7. Where is historical decision rationale if needed?
 
-If the file starts explaining detailed implementation steps, experiment methods,
-test commands, sub-Skill internals, or global Git/verification procedure, move that
-detail to the owning Skill/reference/concept instead.
+Detailed implementation, test commands, sub-Skill internals, and global Git/
+verification procedure belong elsewhere.
