@@ -1,6 +1,6 @@
 ---
 name: agent-collaboration
-description: Use as the shared collaboration hub for User, ChatGPT, and Codex when repository work requires planning, direct remote action, local execution handoff, verification, independent audit, acceptance, project onboarding, or durable project concept assets.
+description: Use as the shared collaboration hub for User, ChatGPT, and Codex when repository work requires planning, direct remote action, local execution handoff, verification, independent audit, acceptance, project onboarding, Skill initialization, or durable project concept assets.
 ---
 
 # Agent Collaboration
@@ -38,6 +38,13 @@ verifiable implementation evidence.
   and commits those design assets directly when its connected tools can do so;
   Codex is used only for genuinely local verification or other unavailable
   capabilities.
+- **New first-party Skill:** classify ownership with
+  [skill-repository-policy.md](references/skill-repository-policy.md), choose the
+  minimal package from
+  [skill-package-architecture.md](references/skill-package-architecture.md), then
+  instantiate the appropriate purpose-specific template from
+  [skill-templates/](references/skill-templates/README.md). Do not scaffold optional
+  directories that have no real consumer.
 - **User:** defines goals, approves genuine human decisions, and may override the
   workflow explicitly.
 
@@ -74,6 +81,10 @@ determines completion.
   [project-agents-template.md](references/project-agents-template.md).
 - Creating or normalizing a project's root workflow `SKILL.md`: use
   [project-skill-template.md](references/project-skill-template.md).
+- Designing the package layout of an individual reusable Skill: read
+  [skill-package-architecture.md](references/skill-package-architecture.md), then
+  choose a purpose-specific template from
+  [skill-templates/README.md](references/skill-templates/README.md).
 - ChatGPT authoring a Codex task: use
   [chatgpt-task-template.md](references/chatgpt-task-template.md) and select a
   level from [verification-levels.md](references/verification-levels.md).
@@ -88,5 +99,5 @@ determines completion.
 - Creating, archiving, or maintaining `reports/chatgpt/`, `reports/codex/`, or
   durable `reports/concept/` assets: read
   [report-concept-policy.md](references/report-concept-policy.md).
-- Maintaining a Skill repository: read
-  [skill-repository-policy.md](references/skill-repository-policy.md).
+- Maintaining Skill repository ownership, naming, and first-/third-party placement:
+  read [skill-repository-policy.md](references/skill-repository-policy.md).
