@@ -1,61 +1,52 @@
 # Project workflow `SKILL.md` template
 
-Use this template when a project exposes an Agent-operable multi-stage or composite
-workflow. The Skill may live at any project-declared repository-relative path, such
-as `<agent-name>/SKILL.md`; do not assume it must be at repository root.
+Use this template when a project exposes an Agent-operable multi-stage or composite workflow.
+The Skill may live at any project-declared repository-relative path, such as
+`<agent-name>/SKILL.md`.
 
-The workflow Skill is not the project constitution. Root `AGENTS.md` owns
-project-level governance and points to this Skill.
+Read `skill-writing-standard.md` first. That reference defines the collaboration-wide writing
+principles for every maintained `SKILL.md`.
 
-If the project declares canonical design-authority concepts, this Skill is an
-operational projection of that accepted design. It routes and executes the design; it
-must not silently redefine it.
+A project workflow Skill is an operational router, not the project constitution. Root `AGENTS.md`
+owns project-level governance. When a project declares canonical design-authority concepts, the
+workflow Skill projects that accepted design into an executable route.
+
+## Required information
+
+A project workflow Skill must make the following information easy to recover:
+
+1. workflow purpose and activation condition;
+2. minimum project entry state;
+3. canonical top-level workflow or branch structure;
+4. the owner of each top-level stage/capability;
+5. the stable input, output, and progression gate for each route;
+6. progressive-disclosure routing to the active downstream Skill/reference;
+7. completion semantics for the requested route.
+
+These are information requirements, not mandatory section headings.
+
+## Recommended shape
+
+Use the smallest structure that communicates the real workflow. A common shape is:
 
 ```markdown
 ---
 name: <project-skill-name>
 description: >
-  <WHAT THIS WORKFLOW DOES>. Use when <CONCRETE TRIGGERING INTENTS OR INPUTS>.
+  <WHAT THIS WORKFLOW DOES>. Use when <CONCRETE TRIGGER OR INPUT STATE>.
 ---
 
 # <Project Skill title>
 
-## Role
+## Purpose
 
-This Skill is the project workflow router. It should let an unfamiliar Agent decide:
+<One concise statement of the workflow responsibility and stable outcome.>
 
-- whether the workflow applies;
-- what input/state is required;
-- which stage/capability owns the current task;
-- what stable output that stage produces;
-- what gate permits progression;
-- which sub-Skill/reference to load next.
+## Entry state
 
-When root `AGENTS.md` declares design-authority concepts, this Skill and its downstream
-references must remain consistent with those concepts. They may summarize the design
-for execution, but they do not become an independent design source.
+<Minimum project state required to route correctly.>
 
-## When to use
-
-Use this Skill when:
-
-- <TRIGGER 1>;
-- <TRIGGER 2>.
-
-Do not use it for:
-
-- <NON-GOAL 1>;
-- <NON-GOAL 2>.
-
-## Entry inputs / state
-
-- `<INPUT_OR_STATE_1>`: <MEANING>;
-- `<INPUT_OR_STATE_2>`: <MEANING>.
-
-State only the entry gate needed to choose the correct route. Detailed schemas belong
-in the owning sub-Skill/reference.
-
-## Canonical workflow
+## Workflow
 
 ```text
 <stage_01>
@@ -63,132 +54,115 @@ in the owning sub-Skill/reference.
 → <stage_03>
 ```
 
-or, for branching workflows:
-
-```text
-<input/state>
-├── <condition A> → <capability A>
-└── <condition B> → <capability B>
-```
-
-## Stage / capability routing
+## Routing
 
 ### `<stage_or_capability_a>`
 
 - Purpose: <ONE-SENTENCE RESPONSIBILITY>.
 - Required input: <MINIMUM STABLE INPUT>.
 - Stable output: <OUTPUT/STATE>.
-- Gate/next route: <DIRECTLY CHECKABLE CONDITION>.
-- Owning Skill: `<path/to/sub-skill/SKILL.md>`.
+- Gate: <DIRECTLY CHECKABLE CONDITION>.
+- Owner: `<path/to/sub-skill/SKILL.md>`.
 
 ### `<stage_or_capability_b>`
 
 - Purpose: <ONE-SENTENCE RESPONSIBILITY>.
 - Required input: <MINIMUM STABLE INPUT>.
 - Stable output: <OUTPUT/STATE>.
-- Gate/next route: <DIRECTLY CHECKABLE CONDITION>.
-- Owning Skill: `<path/to/sub-skill/SKILL.md>`.
+- Gate: <DIRECTLY CHECKABLE CONDITION>.
+- Owner: `<path/to/sub-skill/SKILL.md>`.
 
-<Repeat only for real top-level routes.>
+## Completion
+
+<Directly checkable terminal state for the requested route.>
+
+## References
+
+<Route only to resources needed by the active branch.>
+```
+
+The headings above are examples. Omit or rename sections when the same information is communicated
+more clearly another way.
+
+## Route record
+
+For each real top-level route, prefer a compact five-fact record:
+
+```text
+purpose
+required input
+stable output
+gate
+owner
+```
+
+Add another field only when it changes routing or execution.
 
 ## Design projection
 
-<INCLUDE WHEN THE PROJECT USES DESIGN-AUTHORITY CONCEPTS.>
+When the project uses design-authority concepts, identify the governing design topic without copying
+it into the Skill.
 
-State only the governing topic(s) needed to prevent drift, for example:
+Example:
 
 ```text
 Canonical design authority:
 reports/concept/<topic>.md
 
 Operational projection:
-this SKILL.md + <owning references>
+this SKILL.md + owning downstream Skills/references
 ```
 
-Rules:
-
-- do not copy the entire concept into this Skill;
-- do not change scientific/architectural semantics here without an approved concept
-  update;
-- if the projection appears inconsistent with the governing concept, stop and treat
-  it as drift rather than choosing a new interpretation.
-
-## Trust / lifecycle routing
-
-<OPTIONAL. Include only when trust/lifecycle states affect eligibility or routing.>
-
-```text
-<state_01> → <state_02> → <state_03>
-```
-
-Explain only routing consequences. Detailed current design belongs in the governing
-project concept when design-authoritative concepts are used; executable checks belong
-in the owning Skill/reference.
+A project design change is resolved at the design-authority layer first. The workflow Skill then
+projects the accepted design.
 
 ## Progressive disclosure
 
-Normal runtime path:
+Ordinary runtime should follow the shortest valid path:
 
 ```text
 applicable AGENTS.md
-→ this SKILL.md
-→ one owning sub-Skill
-→ only references/scripts required by the active branch
+→ project workflow SKILL.md
+→ one owning stage Skill
+→ only resources required by the active branch
 ```
 
-Do not preload all sub-Skills, project concepts, references, scripts, tests, or
-assets.
+Design/redesign/conformance work follows the target project's declared design-authority path before
+changing operational projections or implementation.
 
-For design/redesign/conformance-audit work, follow the project `AGENTS.md` design path
-instead: read the concept index and only the relevant governing design topic before
-inspecting or changing this operational projection.
+## Optional topics
 
-## Runtime entry
+Include these only when they are real routing concerns:
 
-<Declare only project-specific runtime identity/checks needed by this workflow.>
+- trust/lifecycle state;
+- runtime/environment identity;
+- branch-specific human checkpoints;
+- recovery routing;
+- stop conditions.
 
-Example:
+Detailed scientific schemas, stage-internal algorithms, field semantics, and implementation details
+belong to their owning stage Skill/reference rather than the project router.
 
-```text
-Environment: <ENVIRONMENT_NAME>
-Dependency/tooling authority: <pyproject.toml | other contract>
-```
+## Completion and STOP
 
-## Completion and stop conditions
+Define the valid terminal state positively first.
 
-Stop rather than guess when:
+Use STOP only for conditions where the router cannot continue deterministically, such as unresolved
+design authority, missing route ownership, unsatisfied upstream gates, or an unauthorized
+human/scientific/trust transition.
 
-- no defined route matches the task;
-- the owning sub-Skill/required contract is absent;
-- an upstream gate is unsatisfied;
-- required source/input authority is missing;
-- a governing design concept and the operational projection appear inconsistent;
-- a human/trust-state transition is required but not authorized.
+## Review checklist
 
-The workflow completes only when the requested terminal output/state exists and its
-route-level gates have passed.
+A project workflow Skill is ready when:
 
-## Boundaries
+- an unfamiliar Agent can identify the correct top-level route;
+- every route has one clear owner;
+- route inputs, outputs, and gates are concrete;
+- design authority and operational projection remain distinct;
+- normal runtime does not require loading unrelated stages/resources;
+- the document does not repeat detailed downstream contracts;
+- the structure follows the real workflow rather than a fixed section template.
 
-- This Skill owns routing, not independent project design.
-- Root `AGENTS.md` owns project governance and authority declaration.
-- Governing design-authority concepts own accepted project scientific/architectural semantics when declared.
-- Branch-specific executable rules belong to the owning sub-Skill/reference.
-- Do not create forwarding layers that add no real routing/contract value.
-```
-
-## Writing rules
-
-For each top-level route, keep only five facts:
-
-```text
-purpose
-required input
-stable output
-gate/next route
-owning Skill
-```
-
-A project may expose this Skill to Codex under `$REPO_ROOT/.agents/skills/` when
-repo-scoped auto-discovery is desired; see `skill-repository-policy.md`. Discovery
-exposure is separate from the maintained source location.
+A project may expose this Skill to Codex under `$REPO_ROOT/.agents/skills/` when repo-scoped
+auto-discovery is desired; see `skill-repository-policy.md`. Discovery exposure is separate from the
+maintained source location.
