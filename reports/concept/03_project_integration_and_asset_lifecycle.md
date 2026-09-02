@@ -5,7 +5,7 @@ status: active
 created: 2026-09-02
 updated: 2026-09-02
 authority: global
-scope: project AGENTS/SKILL entry templates, project-owned collaboration assets, weekly report archives, and concept lifecycle
+scope: project AGENTS/workflow-Skill entry templates, project-owned collaboration assets, weekly report archives, and concept lifecycle
 supersedes: null
 related_tasks: []
 ---
@@ -14,42 +14,59 @@ related_tasks: []
 
 ## Current conclusion
 
-Each project repository uses root `AGENTS.md` as its project-level entry point and
-constitution. The file links the project to the canonical
-`cigit-zgy/agent-collaboration` repository for ChatGPT and to
-`/Users/wenv/Documents/skills/agent-collaboration/SKILL.md` for Codex, then routes
-the project's own root `SKILL.md`, concept index, report directories,
-scientific/product authorities, and project-specific precedence.
+Each maintained project repository uses root `AGENTS.md` as its project-level entry
+point and constitution. The file links the project to canonical
+`cigit-zgy/agent-collaboration`, routes the project concept/report locations, and
+declares the canonical Agent-facing project workflow Skill when one exists.
 
-New projects use two canonical reusable scaffolds in order:
+The project workflow Skill does not need to live at repository root. For coordinated
+multi-Skill Agent projects, the preferred pattern is a project-specific Agent package:
 
 ```text
-references/project-agents-template.md
-→ project constitution and project-level routing
-
-references/project-skill-template.md
-→ Agent-facing project workflow/router
+<project>/
+├── AGENTS.md
+└── <agent-name>/
+    ├── SKILL.md
+    ├── <capability-a>/SKILL.md
+    └── <capability-b>/SKILL.md
 ```
 
-User + ChatGPT instantiate these templates after inspecting the actual repository and
-resolving project-specific purpose, authority, ownership, trust, runtime, workflow,
-stage boundaries, and human checkpoints. The templates are not copied blindly.
-Project-entry and workflow design remain User + ChatGPT responsibilities; Codex may
-verify committed local discovery/runtime behavior, but it does not design the
-constitution or silently redefine workflow semantics.
+Root `AGENTS.md` declares the actual workflow path. Do not create a duplicate root
+`SKILL.md` merely for symmetry.
 
-A project root `SKILL.md` follows progressive disclosure. It should be compact enough
-for an unfamiliar compatible Agent to understand when the workflow applies, what
-entry state is required, what the canonical top-level stages are, what each stage
-consumes and produces, which gate permits progression, which downstream Skill owns
-the detailed procedure, and when execution must stop. For each top-level stage the
-preferred root-level description is limited to five routing facts: purpose, required
-input, stable output, next-stage gate, and owning Skill.
+Water-domain project onboarding uses three reusable authorities:
 
-`agent-collaboration` owns only the shared collaboration protocol and reusable
-onboarding templates. Project-specific ChatGPT tasks, Codex reports, concept
-conclusions, project constitutions, and project Skills remain in the project that owns
-them.
+```text
+references/project-architecture.md
+→ repository responsibility map and required/conditional paths
+
+references/project-agents-template.md
+→ project constitution and repository routing
+
+references/project-skill-template.md
+→ Agent-facing project workflow/router, when such a workflow exists
+```
+
+User + ChatGPT instantiate these after inspecting the actual repository and deciding
+project-specific purpose, authority, ownership, trust, runtime, workflow, stage
+boundaries, and human checkpoints. Codex may verify committed local discovery/runtime
+behavior but does not design the constitution or silently redefine workflow semantics.
+
+A project workflow `SKILL.md` follows progressive disclosure. For each top-level
+stage/capability, the preferred routing description is limited to five facts:
+
+```text
+purpose
+required input
+stable output
+next-stage gate
+owning Skill
+```
+
+`agent-collaboration` owns only shared collaboration rules and reusable architecture /
+template authorities. Project-specific tasks, reports, concepts, constitutions,
+Agent packages, Skills, scientific assets, and workspaces remain in the owning
+project repository.
 
 Closed ChatGPT and Codex report pairs are organized about weekly by moving them with
 Git into independent archives:
@@ -59,15 +76,12 @@ reports/chatgpt/archive/<MONDAY_YYMMDD>/
 reports/codex/archive/<MONDAY_YYMMDD>/
 ```
 
-The files are moved, not copied. Only fully closed and independently audited task
-pairs are eligible. Active work remains at the root of its respective report
-directory. Archive folders use the Monday of the completion week.
+Only fully closed and independently audited task pairs are eligible. Active work
+remains at the root of its report directory. Archive means move, not duplicate.
 
 Concept assets are not archived weekly. They are organized by durable topic. Each
-new concept file contains a concise authoritative `Current conclusion` plus a
-chronological `Decision history`. User + ChatGPT add a history checkpoint only when
-a mature stage conclusion materially changes durable project truth; a calendar week
-alone does not create a concept entry.
+concept exposes an authoritative `Current conclusion` plus concise chronological
+`Decision history`. A calendar week alone does not create a concept checkpoint.
 
 ## Decision history
 
@@ -75,7 +89,7 @@ alone does not create a concept entry.
 
 #### Conclusion
 
-The standard project relationship is:
+The standard project relationship was established as:
 
 ```text
 agent-collaboration
@@ -84,11 +98,11 @@ agent-collaboration
 project/AGENTS.md
 = project entry point and constitution
 
-project/root SKILL.md
+project workflow SKILL.md
 = Agent-facing project workflow/router
 
-project/downstream Skills
-= detailed stage procedures and references
+project downstream Skills
+= detailed bounded capability procedures
 
 project/reports/concept/
 = durable User + ChatGPT conclusions
@@ -100,92 +114,75 @@ project/reports/codex/
 = Codex execution evidence
 ```
 
-ChatGPT enters a project by reading its `AGENTS.md`, following the canonical
-collaboration reference, reading only relevant concept topics from the project
-concept index, and then reading the root project Skill and owning downstream Skill as
-needed. Codex enters through machine-wide `~/.codex/AGENTS.md`, then the local
-collaboration Skill, then the target project's `AGENTS.md` and project routing.
-
-When a new repository lacks suitable project entry assets, the onboarding path is:
-
-```text
-User identifies project
-→ ChatGPT reads agent-collaboration
-→ ChatGPT reads references/project-agents-template.md
-→ ChatGPT inspects the repository
-→ User + ChatGPT settle project constitution decisions
-→ ChatGPT writes/commits AGENTS.md when connected tools are sufficient
-→ ChatGPT reads references/project-skill-template.md
-→ User + ChatGPT settle canonical workflow and stage boundaries
-→ ChatGPT writes/commits root SKILL.md when connected tools are sufficient
-→ Codex verifies local discovery/runtime only when that local verification is actually needed
-```
-
-The `AGENTS.md` template defines the stable project-entry categories without
-imposing project-specific content: project identity, scope/precedence, project
-boundaries, authority/trust, repository ownership, knowledge/report routing,
-workflow routing, runtime/environment, human checkpoints, and a short list of project
-invariants.
-
-The root `SKILL.md` template follows the public Agent Skills style: YAML `name` and a
-trigger-oriented `description`, then a compact workflow router. It separates
-activation, inputs, canonical stages, stage routing, optional trust/lifecycle
-progression, progressive disclosure, runtime entry, stop conditions, and boundaries.
-Detailed schemas, algorithms, scientific rules, repair logic, and command sequences
-belong in downstream Skills/references rather than the root router.
-
-Report archives are local to each report owner rather than centralized under one
-`reports/archive/` tree:
-
-```text
-reports/chatgpt/archive/260831/
-reports/codex/archive/260831/
-```
-
-The weekly folder name is the Monday beginning the completion week, formatted as
-`YYMMDD`. `git mv` preserves one active truth rather than creating duplicate copies.
-Any repository-relative metadata links are updated when files move.
-
-Concepts use stable topic files rather than weekly files. `Current conclusion` is
-the current authority; `Decision history` preserves the accepted stages and why the
-current conclusion evolved.
+Project onboarding, report ownership, weekly report archives, and topic-based concept
+lifecycle were established. User + ChatGPT own constitution/workflow design; Codex
+executes committed local tasks.
 
 #### Rationale
 
-A project should remain self-contained: cloning or inspecting its repository should
-expose the project constitution, workflow router, design conclusions, execution
-specifications, and execution evidence without searching a separate central report
-repository. The global collaboration Skill should remain a reusable protocol rather
-than accumulating project-specific history.
-
-Canonical `AGENTS.md` and root `SKILL.md` scaffolds prevent every new project from
-reinventing its entry structure while still requiring User + ChatGPT to make the
-actual project-specific design decisions. Keeping Codex out of constitution and
-workflow design preserves the established design/execution authority split.
-
-Independent weekly archives keep active report directories small while preserving
-clear authorship boundaries. Topic-based concepts provide stable retrieval and avoid
-forcing Agents to reconstruct current design truth from chronological logs.
+A project should remain self-contained and should expose governance, workflow,
+durable design truth, execution specifications, and execution evidence without moving
+project truth into a global collaboration repository.
 
 #### Boundary
 
-This concept governs project integration, reusable project-entry/workflow scaffolds,
-and collaboration-asset lifecycle. It does not dictate project-specific scientific
-content, project directory architecture outside collaboration assets, or a mandatory
-weekly archive when no eligible files exist.
+This concept governs project integration and collaboration-asset lifecycle, not the
+scientific contents of a specific project.
 
 #### Impact
 
-- project root `AGENTS.md`
-- project root `SKILL.md`
-- `references/project-agents-template.md`
-- `references/project-skill-template.md`
-- `references/project-integration.md`
-- `references/report-concept-policy.md`
-- project `reports/chatgpt/`, `reports/codex/`, and `reports/concept/`
-- future project onboarding into the collaboration workflow
+- project `AGENTS.md`
+- project workflow `SKILL.md`
+- project collaboration reports/concepts
+- project onboarding
 
 #### Related tasks
 
-None. The decision was applied directly by ChatGPT through connected repository
-tooling because it did not require local-machine execution.
+None.
+
+### 2026-09-02 — workflow-location refinement
+
+#### Conclusion
+
+The earlier phrase “project root `SKILL.md`” was too restrictive. The canonical rule
+is now:
+
+> root `AGENTS.md` is the repository entry; the Agent-facing workflow `SKILL.md`
+> lives at the one project-declared canonical path.
+
+For multi-Skill Agent projects, `<agent-name>/SKILL.md` is preferred because the
+coordinated sub-Skills form the Agent capability system. A repository-root
+`SKILL.md` remains valid only when it is genuinely the canonical workflow location.
+
+Project architecture itself is now governed separately by
+`references/project-architecture.md` and concept 05.
+
+#### Changes from previous conclusion
+
+- removed the assumption that project workflow Skill must be repository-root;
+- added explicit `<agent-name>/SKILL.md` multi-Skill Agent pattern;
+- separated project responsibility architecture from collaboration integration;
+- retained root `AGENTS.md` as the universal maintained-project entry.
+
+#### Rationale
+
+This matches actual projects such as `water-biomodel-agent`, where repository-level
+governance applies to more than the Agent software package, while the coordinated
+Skills belong inside the Agent package itself.
+
+#### Boundary
+
+This refinement changes Skill placement/routing semantics only. It does not change
+report lifecycle, concept lifecycle, or collaboration authority.
+
+#### Impact
+
+- `references/project-integration.md`
+- `references/project-agents-template.md`
+- `references/project-skill-template.md`
+- root collaboration `SKILL.md`
+- future project onboarding
+
+#### Related tasks
+
+None.
