@@ -51,11 +51,53 @@ project AGENTS.md
 
 Codex is used only when ChatGPT can name a concrete local or otherwise unavailable capability.
 
-After that gate passes, choose the smallest sufficient execution mode.
+Passing this task-level gate does **not** transfer every deliverable in the task to Codex. Delegation is decided per deliverable.
+
+### Deliverable-level capability partition
+
+Before issuing any Codex instruction, ChatGPT partitions the requested outputs into:
+
+```text
+DIRECT
+= ChatGPT can complete the deliverable with current connected capabilities
+  without requiring local-only evidence or execution
+
+LOCAL
+= the deliverable genuinely requires local worktree/runtime/filesystem/build/test/
+  rendering/credential/service capability unavailable to ChatGPT
+```
+
+The governing rule is:
+
+```text
+DIRECT deliverable
+→ ChatGPT completes + verifies it before handoff
+
+LOCAL deliverable
+→ Codex may own its local execution/implementation
+```
+
+A repository-changing task may contain both classes. Repository mutation by itself is not a reason to delegate a particular deliverable when ChatGPT can already make that change directly.
+
+For maintained projects, the following are presumed `DIRECT` when ChatGPT has connected repository read/write access:
+
+- canonical concept/design documents;
+- root or nested `AGENTS.md` authoring;
+- `SKILL.md` authoring;
+- `references/*.md` operational-contract authoring;
+- task specifications and other substantive design/projection documentation.
+
+These files may be inputs to Codex implementation, but Codex does not receive substantive design/projection authorship merely because the same task also contains local Python, tests, CLI, packaging, or runtime work.
+
+An exception is allowed only when a normally direct-capable deliverable is inseparable from a local-only fact or generated result and introduces no new design semantics. The formal task must name that local-only dependency explicitly and constrain the edit mechanically.
+
+Before formal handoff, every `DIRECT` deliverable in scope must already be committed/pushed or otherwise completed through the connected authority. The Codex task then starts from those artifacts as frozen inputs.
+
+If a requested Codex deliverable lacks a concrete local-only reason, remove it from Codex scope and complete it directly instead.
 
 ### Routine local execution
 
-Use routine local execution for bounded, ephemeral local work when all of these are true:
+After the capability partition, use routine local execution for bounded, ephemeral `LOCAL` work when all of these are true:
 
 ```text
 no intended mutation of repository state
@@ -86,16 +128,16 @@ If every routine predicate cannot be established, use the formal path when its s
 
 ### Formal delegated task
 
-Use a formal delegated task when any of these materially applies:
+Use a formal delegated task for the `LOCAL` partition when any of these materially applies:
 
-- repository-changing work;
+- repository-changing local implementation is required;
 - a durable/shared dataset, runtime, external service/state, credential state, or another persistent resource must be changed;
-- durable project artifacts must be created or changed;
-- the task is long or multi-step enough to need a frozen specification;
+- durable local project artifacts must be created or changed;
+- the local work is long or multi-step enough to need a frozen specification;
 - scientific, product, trust, security, or data-loss risk requires an auditable boundary;
 - reproducibility, accountability, or later acceptance requires a durable evidence chain.
 
-For a formal task, ChatGPT freezes the determinable scope, governing design/operational sources, affected area, required behavior, verification level, acceptance criteria, Git requirements, and expected report path.
+For a formal task, ChatGPT first completes all `DIRECT` deliverables, then freezes the remaining local scope, governing design/operational sources, affected area, required behavior, verification level, acceptance criteria, Git requirements, and expected report path.
 
 Formal task format and launch block: `templates/chatgpt-task.md`.
 
@@ -107,11 +149,13 @@ User goal
 → User + ChatGPT develop/adjudicate design
 → User accepts the project decision when final human authority is required
 → update design authority first when design changes
-→ delegation gate
-   ├─ connected capability sufficient → ChatGPT executes + verifies
-   └─ local capability required
+→ partition deliverables: DIRECT | LOCAL
+→ ChatGPT completes/verifies DIRECT deliverables
+→ local-capability gate for remaining LOCAL work
+   ├─ no LOCAL work remains → ChatGPT completes task directly
+   └─ LOCAL work remains
        ├─ routine local execution → Codex result → ChatGPT review
-       └─ formal delegated task   → committed task → Codex execution/report
+       └─ formal delegated task   → committed local-only spec → Codex execution/report
 → ChatGPT independent acceptance review
 → User retains final decision/override authority
 ```
@@ -170,9 +214,11 @@ Issued formal tasks and reports remain stable audit artifacts.
 ## Invariants
 
 - User + ChatGPT develop/adjudicate the design; the User retains final decision authority.
-- ChatGPT delegates only for a concrete unavailable/local capability.
+- Delegation is per deliverable, not per task or file batch.
+- ChatGPT completes all current-capability `DIRECT` deliverables before Codex handoff.
+- Codex owns only work with a concrete local/unavailable capability dependency.
 - Routine execution is permitted only when persistent/shared mutation is excluded.
 - Codex does not self-accept.
 - Evidence determines technical acceptance.
-- Formal ceremony is used only when the task requires a durable specification/evidence chain or persistent/shared mutation.
+- Formal ceremony is used only when the remaining local work requires a durable specification/evidence chain or persistent/shared mutation.
 - Scientific/product rigor is mandatory; verification effort is risk-proportional.
