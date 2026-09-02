@@ -29,6 +29,16 @@ Verification level: <LEVEL>
 ## Explicit non-goals
 
 ## Git state
+
+Initial branch: <BRANCH>
+Initial HEAD: <SHA>
+Initial upstream: <REF + SHA>
+Initial worktree: <CLEAN | PRESERVED USER CHANGES + SUMMARY>
+Final branch: <BRANCH>
+Final HEAD: <SHA>
+Final upstream: <REF + SHA>
+Final worktree: <CLEAN | PRESERVED USER CHANGES + SUMMARY>
+HEAD == upstream: <PASS | FAIL>
 ```
 
 ## Verdict meanings
@@ -46,6 +56,10 @@ If Codex can still fix the issue, it must continue fixing or report `FAIL`; it
 must not report `BLOCKED`. Never claim `PASS` without running the required
 verification. Do not present planned work as completed, equate a passing test
 with task acceptance, or hide unfinished scope.
+
+For repository-changing tasks, `HEAD == upstream` is the normal Git completion
+condition. A failed or unsafe synchronization must be reported explicitly and
+cannot be hidden behind a task-level PASS.
 
 A Codex report records implementation evidence; it does not redefine durable
 project concepts. Durable decisions belong in `reports/concept/`.
