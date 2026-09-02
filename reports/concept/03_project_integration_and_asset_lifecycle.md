@@ -5,7 +5,7 @@ status: active
 created: 2026-09-02
 updated: 2026-09-02
 authority: global
-scope: project AGENTS entrypoint, project-owned collaboration assets, weekly report archives, and concept lifecycle
+scope: project AGENTS entrypoint and template, project-owned collaboration assets, weekly report archives, and concept lifecycle
 supersedes: null
 related_tasks: []
 ---
@@ -21,9 +21,17 @@ constitution. The file links the project to the canonical
 the project's own `SKILL.md`, concept index, report directories, scientific/product
 authorities, and project-specific precedence.
 
-`agent-collaboration` owns only the shared collaboration protocol. Project-specific
-ChatGPT tasks, Codex reports, and concept conclusions remain in the project that owns
-them.
+New projects use the canonical reusable scaffold
+`references/project-agents-template.md`. User + ChatGPT instantiate that template
+after inspecting the actual repository and resolving project-specific purpose,
+authority, ownership, trust, runtime, workflow, and human checkpoints. The template
+is not copied blindly. Project-constitution design remains a User + ChatGPT
+responsibility; Codex may verify local discovery after the committed design exists,
+but it does not design the constitution.
+
+`agent-collaboration` owns only the shared collaboration protocol and reusable
+onboarding templates. Project-specific ChatGPT tasks, Codex reports, and concept
+conclusions remain in the project that owns them.
 
 Closed ChatGPT and Codex report pairs are organized about weekly by moving them with
 Git into independent archives:
@@ -53,7 +61,7 @@ The standard project relationship is:
 
 ```text
 agent-collaboration
-= global collaboration rules
+= global collaboration rules + reusable project-entry templates
 
 project/AGENTS.md
 = project entry point and constitution
@@ -76,6 +84,25 @@ canonical collaboration reference, reading only relevant concept topics from the
 project concept index, and then reading the project Skill/router as needed. Codex
 enters through machine-wide `~/.codex/AGENTS.md`, then the local collaboration Skill,
 then the target project's `AGENTS.md` and project routing.
+
+When a new repository lacks a suitable `AGENTS.md`, the onboarding path is:
+
+```text
+User identifies project
+→ ChatGPT reads agent-collaboration
+→ ChatGPT reads references/project-agents-template.md
+→ ChatGPT inspects the repository
+→ User + ChatGPT settle project-specific constitution decisions
+→ ChatGPT writes/commits AGENTS.md when its connected tools are sufficient
+→ Codex verifies local discovery only when that local verification is actually needed
+```
+
+The canonical template defines the stable project-entry categories without imposing
+project-specific content: project identity, scope/precedence, project boundaries,
+authority/trust, repository ownership, knowledge/report routing, workflow routing,
+runtime/environment, human checkpoints, and a short list of project invariants.
+Detailed global Git/verification procedure and detailed sub-Skill implementation do
+not belong in project `AGENTS.md`.
 
 Report archives are local to each report owner rather than centralized under one
 `reports/archive/` tree:
@@ -101,20 +128,26 @@ execution evidence without searching a separate central report repository. The
 global collaboration Skill should remain a reusable protocol rather than accumulating
 project-specific history.
 
+A canonical `AGENTS.md` scaffold prevents every new project from reinventing its
+entry structure while still requiring User + ChatGPT to make the actual
+project-specific design decisions. Keeping Codex out of constitution design preserves
+the established design/execution authority split.
+
 Independent weekly archives keep active report directories small while preserving
 clear authorship boundaries. Topic-based concepts provide stable retrieval and avoid
 forcing Agents to reconstruct current design truth from chronological logs.
 
 #### Boundary
 
-This concept governs project integration and collaboration-asset lifecycle. It does
-not dictate project-specific scientific content, project directory architecture
-outside collaboration assets, or a mandatory weekly archive when no eligible files
-exist.
+This concept governs project integration, the reusable project-entry scaffold, and
+collaboration-asset lifecycle. It does not dictate project-specific scientific
+content, project directory architecture outside collaboration assets, or a mandatory
+weekly archive when no eligible files exist.
 
 #### Impact
 
 - project root `AGENTS.md`
+- `references/project-agents-template.md`
 - `references/project-integration.md`
 - `references/report-concept-policy.md`
 - project `reports/chatgpt/`, `reports/codex/`, and `reports/concept/`
