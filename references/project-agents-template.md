@@ -1,12 +1,13 @@
 # Project `AGENTS.md` template
 
-Use this template when onboarding a repository into the `agent-collaboration`
-workflow. Root `AGENTS.md` is the project-level entry point and constitution. Keep
-it concise, stable, and project-specific; do not copy the detailed global
-collaboration protocol into it.
+Use this template when onboarding or normalizing a maintained project repository under
+the `agent-collaboration` workflow. For water-domain research projects, first read
+`project-architecture.md` and instantiate only the responsibilities the actual
+repository owns.
 
-Replace placeholders, remove sections that are genuinely not applicable, and keep
-only rules that are durable for the project.
+Root `AGENTS.md` is the project-level entry point and constitution. Keep it concise,
+stable, and project-specific; do not copy the detailed global collaboration protocol
+into it.
 
 ```markdown
 # <PROJECT_NAME> project context
@@ -44,7 +45,7 @@ specifications and must not silently redesign them.
 
 <STATE THE PROJECT'S SOURCE-OF-TRUTH OR AUTHORITY ORDER.>
 
-Example forms:
+Example scientific form:
 
 ```text
 source evidence
@@ -53,77 +54,73 @@ source evidence
 → approved/released state
 ```
 
-or, for a non-scientific project:
-
-```text
-project contract
-→ implementation
-→ verification evidence
-→ accepted release
-```
-
-Define any project-specific trust states here. Do not invent trust states merely
-because the template provides this section.
+Define only real project-specific trust states.
 
 ## Repository ownership
 
+List only directories that actually exist or are approved project responsibilities.
+Use `project-architecture.md` as the responsibility map; do not scaffold every
+optional path.
+
 ```text
 <path>/    <durable responsibility>
 <path>/    <durable responsibility>
-reports/   collaboration tasks, execution evidence, and durable project concepts
+reports/   collaboration tasks/evidence/concepts when such assets exist
 ```
 
-State read-only or immutable directories explicitly when they exist. Do not list
-every directory; list only ownership boundaries that affect Agent behavior.
+State immutable/read-only boundaries explicitly when relevant.
 
 ## Project knowledge and reports
 
 Project collaboration assets remain in this repository:
 
 ```text
-reports/
-├── chatgpt/    implementation-ready Codex task specifications
-├── codex/      Codex execution and verification evidence
-└── concept/    durable User + ChatGPT project conclusions
+reports/concept/   durable User + ChatGPT project conclusions
+reports/chatgpt/   implementation-ready Codex task specifications
+reports/codex/     Codex execution and verification evidence
 ```
 
-Read `reports/concept/README.md` first when durable design context is needed, then
-read only the concept topics relevant to the current task.
+Create report directories when the first owned artifact exists; empty scaffolding is
+not required.
 
-Report metadata, archival rules, and task/report lifecycle follow the canonical
-`agent-collaboration` policy.
+Read `reports/concept/README.md` first when durable design context is needed, then
+only the concept topics relevant to the active task.
 
 ## Workflow routing
 
-Project workflow router:
-`<PROJECT_SKILL_OR_ROUTER_PATH>`
+Canonical project workflow Skill:
+`<PROJECT_WORKFLOW_SKILL_PATH OR "none">`
 
-Read the root router before selecting a downstream Skill or workflow. Do not infer a
-downstream stage that the project does not define.
+For a multi-Skill Agent project this will commonly be:
 
-<OPTIONAL: short list of stable top-level workflow stages, without duplicating the
-sub-Skill manuals.>
+`<agent-name>/SKILL.md`
+
+Do not create a duplicate repository-root `SKILL.md` when the real workflow router
+already lives inside the Agent package. Read the declared workflow Skill before
+selecting a downstream capability.
+
+<OPTIONAL: short list of stable top-level workflow stages/capabilities.>
 
 ## Runtime and environment
 
 <STATE THE PROJECT'S RUNTIME/ENVIRONMENT AUTHORITY, OR "No project runtime".>
 
-Examples:
+Example:
 
 ```text
 Environment: <ENVIRONMENT_NAME>
 Dependency/tooling authority: <pyproject.toml | package.json | other contract>
 ```
 
-Environment creation, dependency mutation, broad verification, Git synchronization,
-and security-tool selection follow the global collaboration policy unless this
-project explicitly requires a stricter rule.
+Environment mutation, broad verification, Git synchronization, and security-tool
+selection follow the global collaboration policy unless this project explicitly
+requires a stricter rule.
 
 ## Human checkpoints
 
 <LIST ONLY DECISIONS THAT GENUINELY REQUIRE HUMAN AUTHORITY.>
 
-If none are project-specific, write:
+If none are project-specific:
 
 `No additional project-specific human checkpoints beyond the global collaboration
 protocol.`
@@ -134,42 +131,40 @@ protocol.`
 - <INVARIANT 2>
 - <INVARIANT 3>
 
-Keep this list short. Detailed implementation behavior belongs in project Skills,
-contracts, or concept files rather than in `AGENTS.md`.
+Keep this list short. Detailed implementation behavior belongs in Skills, contracts,
+or concept files rather than `AGENTS.md`.
 ```
 
 ## Onboarding procedure
 
-For a new project repository:
-
 ```text
-User identifies the project
+User identifies project
 → ChatGPT reads agent-collaboration
-→ ChatGPT reads this template
-→ ChatGPT inspects the target repository
-→ User + ChatGPT resolve project-specific decisions
-→ ChatGPT writes the project's root AGENTS.md when its connected tools can do so
-→ project AGENTS.md becomes the project entry point
-→ local Codex verification is delegated only when actual local discovery/state must be tested
+→ ChatGPT reads project-architecture.md
+→ ChatGPT inspects actual repository/responsibilities
+→ User + ChatGPT resolve project-specific boundaries and authority
+→ ChatGPT instantiates this AGENTS.md template
+→ if an Agent-operable workflow exists, declare its canonical SKILL.md path
+→ local Codex verification is delegated only when actual local discovery/state must
+  be tested
 ```
 
 Do not delegate creation of the project constitution to Codex merely because Codex
-can edit the local file. The constitution is a User + ChatGPT design artifact. Codex
-may verify local discovery after the design is committed.
+can edit the local file. The constitution is a User + ChatGPT design artifact.
 
 ## Quality criteria
 
-A good project `AGENTS.md` should answer, quickly:
+A good project `AGENTS.md` should answer quickly:
 
 1. What is this project?
 2. Which project rules are authoritative?
-3. How does the project connect to `agent-collaboration`?
-4. Where are durable concepts and collaboration reports?
-5. What project Skill/router should be read next?
-6. What are the main ownership/trust boundaries?
-7. Which runtime/environment contract applies?
+3. How does it connect to `agent-collaboration`?
+4. What responsibilities/directories does the repository actually own?
+5. Where are durable concepts and collaboration reports?
+6. What project workflow Skill, if any, should be read next?
+7. What trust/runtime boundaries apply?
 8. Which decisions require a human?
 
-If the file starts explaining detailed implementation steps, test commands,
-sub-Skill internals, or global Git/verification procedure, move that detail to the
-owning Skill/reference instead.
+If the file starts explaining detailed implementation steps, experiment methods,
+test commands, sub-Skill internals, or global Git/verification procedure, move that
+detail to the owning Skill/reference/concept instead.
