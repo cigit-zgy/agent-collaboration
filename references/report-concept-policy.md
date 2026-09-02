@@ -1,17 +1,24 @@
 # Report and concept asset policy
 
-This policy defines the durable project-report layout used by the ChatGPT ↔ Codex collaboration workflow.
+This policy defines the durable project-report layout used by the User ↔ ChatGPT ↔
+Codex collaboration workflow.
 
 ## Directory ownership
 
-Projects using this protocol should use:
+Each project using this protocol owns its own collaboration assets:
 
 ```text
 reports/
 ├── chatgpt/
-│   └── YYMMDD_chatgpt_NN.md
+│   ├── YYMMDD_chatgpt_NN.md
+│   └── archive/
+│       └── YYMMDD/
+│           └── <closed ChatGPT task files>
 ├── codex/
-│   └── YYMMDD_codex_NN.md
+│   ├── YYMMDD_codex_NN.md
+│   └── archive/
+│       └── YYMMDD/
+│           └── <closed Codex report files>
 └── concept/
     ├── README.md
     ├── 00_project_concept.md
@@ -22,17 +29,72 @@ reports/
 
 Ownership is strict:
 
-- `reports/chatgpt/`: committed formal task specifications authored by ChatGPT.
-- `reports/codex/`: Codex implementation, verification, limitation, and Git-state reports.
-- `reports/concept/`: durable design decisions formed by the User and ChatGPT.
+- `reports/chatgpt/`: current or not-yet-archived formal task specifications authored
+  by ChatGPT.
+- `reports/chatgpt/archive/`: archived closed ChatGPT task specifications.
+- `reports/codex/`: current or not-yet-archived Codex implementation reports.
+- `reports/codex/archive/`: archived closed Codex implementation reports.
+- `reports/concept/`: durable design conclusions formed by the User and ChatGPT.
 
-Do not put transient run logs, scratch notes, raw test output, or Codex execution history in `reports/concept/`.
+Project report assets stay in the project that owns them. Do not centralize other
+projects' reports inside the `agent-collaboration` repository.
 
-Existing projects may retain legacy report directories. New work follows this layout; do not rename historical reports merely for cosmetic consistency unless a specific migration task requires it.
+Do not put transient run logs, scratch notes, raw test output, or Codex execution
+history in `reports/concept/`.
+
+Existing projects may retain legacy report directories. New work follows this
+layout; do not rename historical reports merely for cosmetic consistency unless a
+specific migration task requires it.
+
+## Weekly report archive
+
+Archive is lifecycle organization, not a duplicate backup. Git already preserves
+historical versions.
+
+Use independent archives under `chatgpt/` and `codex/`:
+
+```text
+reports/chatgpt/archive/260831/
+reports/codex/archive/260831/
+```
+
+The archive folder name is the Monday that begins the completion week, formatted as
+`YYMMDD`. For example, work completed during 2026-08-31 through 2026-09-06 belongs
+under `260831/`.
+
+Archive maintenance is normally performed about once per week. Do not create empty
+weekly folders merely because a calendar week exists.
+
+A task pair is eligible for archive only after:
+
+1. ChatGPT issued the formal task;
+2. Codex completed or terminated the task and wrote its report;
+3. ChatGPT independently audited the result and issued the final verdict;
+4. no further execution is expected under that task ID.
+
+Unfinished, blocked-awaiting-decision, or still-active task/report files remain in
+the root of their respective `chatgpt/` or `codex/` directory even when a new week
+begins.
+
+When archiving a closed pair:
+
+1. use `git mv`, not copy-and-delete semantics that leave duplicate active files;
+2. move the ChatGPT task to `reports/chatgpt/archive/<MONDAY_YYMMDD>/`;
+3. move the Codex report to `reports/codex/archive/<MONDAY_YYMMDD>/`;
+4. set the ChatGPT task metadata `status` to `closed` if it is not already closed;
+5. update active repository-relative metadata links such as `codex_report` so they
+   resolve to the archived location;
+6. preserve task IDs, task-source SHAs, baseline SHAs, verdicts, summaries, and Git
+   history unchanged.
+
+Do not archive `reports/concept/` by week. Concept assets are long-lived project
+knowledge, not execution-history batches.
 
 ## Structured metadata for ChatGPT tasks
 
-Every new `reports/chatgpt/*.md` task begins with YAML front matter. Its purpose is retrieval, filtering, and task/report linkage rather than duplicating the full task body.
+Every new `reports/chatgpt/*.md` task begins with YAML front matter. Its purpose is
+retrieval, filtering, and task/report linkage rather than duplicating the full task
+body.
 
 Required fields:
 
@@ -62,10 +124,14 @@ codex_report: reports/codex/260902_codex_02.md
 Rules:
 
 - `summary` is a compact one-to-three-sentence synopsis of purpose and scope.
-- `tags` contains a small number of stable retrieval terms, not every noun in the task.
-- `concepts` contains only durable concept assets that materially govern the task; use `[]` when none.
-- `codex_report` records the expected paired Codex report path.
-- do not store the task-source commit SHA inside the task itself; that commit contains the file and would create a self-reference problem.
+- `tags` contains a small number of stable retrieval terms, not every noun in the
+  task.
+- `concepts` contains only durable concept assets that materially govern the task;
+  use `[]` when none.
+- `codex_report` records the paired Codex report path and must be updated if the
+  report is archived.
+- do not store the task-source commit SHA inside the task itself; that commit
+  contains the file and would create a self-reference problem.
 
 ## Structured metadata for Codex reports
 
@@ -102,13 +168,17 @@ Rules:
 - `verdict` uses `PASS`, `PASS_WITH_LIMITATIONS`, `BLOCKED`, or `FAIL` in YAML.
 - `limitations` contains only material non-blocking limitations; use `[]` when none.
 - `task_source_sha` binds the report to the committed formal task.
-- do not store the commit that contains the report inside that same report; Git history and final stdout own the final report commit SHA.
+- do not store the commit that contains the report inside that same report; Git
+  history and final stdout own the final report commit SHA.
 
-Task/report metadata is deliberately compact. Do not add authors, timestamps, hashes, counters, environment fingerprints, or other fields unless they have a current retrieval or provenance consumer.
+Task/report metadata is deliberately compact. Do not add authors, timestamps, hashes,
+counters, environment fingerprints, or other fields unless they have a current
+retrieval or provenance consumer.
 
 ## Concept model
 
-Concept assets are organized by stable topic, not by conversation or task.
+Concept assets record mature stage conclusions and their evolution. They are
+organized by stable topic, not by week, conversation, or implementation task.
 
 Use one file per durable topic:
 
@@ -120,9 +190,12 @@ Use one file per durable topic:
 04_validation_protocol.md
 ```
 
-Continue updating the same topic file while the subject remains the same. Do not create a new file for every discussion. Split a file only when the topic becomes a separate durable contract with its own scope and consumers.
+Continue updating the same topic file while the subject remains the same. Do not
+create a new file for every discussion or every week. Split a file only when the
+topic becomes a separate durable contract with its own scope and consumers.
 
-`reports/concept/README.md` is the authoritative index. Agents should inspect the index first and read only concept files relevant to the current task.
+`reports/concept/README.md` is the authoritative index. Agents inspect the index
+first and read only concept files relevant to the current task.
 
 Recommended index fields:
 
@@ -156,69 +229,83 @@ Required metadata:
 - `id`: stable numeric topic identifier matching the filename prefix;
 - `title`: durable topic name;
 - `status`: `active`, `frozen`, or `deprecated`;
-- `created`: first decision date;
-- `updated`: date of the latest durable change;
+- `created`: first durable conclusion date;
+- `updated`: date of the latest durable conclusion change;
 - `authority`: normally `project`;
 - `scope`: one concise boundary statement;
 - `supersedes`: prior concept ID/file when applicable, otherwise `null`;
-- `related_tasks`: formal task IDs that materially implemented or changed the concept; use `[]` when none.
+- `related_tasks`: formal task IDs that materially implemented or changed the
+  concept; use `[]` when none.
 
 Do not add metadata merely because it might be useful later.
 
-## Dated decision history
+## Current conclusion and decision history
 
-Within a concept file, maintain chronological decision sections using ISO dates:
+Every new concept topic uses two semantic layers:
 
 ```markdown
 # Workspace Contract
 
-## 2026-08-29
+## Current conclusion
 
-### Decision
-<current decision introduced on this date>
+<Concise authoritative statement of what the project currently accepts as true.>
 
-### Rationale
-<why this decision was made>
+## Decision history
 
-### Impact
-<what contracts, Skills, or artifacts this affects>
+### 2026-08-29
 
-### Related tasks
+#### Conclusion
+<Stage conclusion accepted on this date.>
+
+#### Rationale
+<Why it was accepted.>
+
+#### Boundary
+<What this conclusion covers and explicitly does not cover.>
+
+#### Impact
+<What contracts, Skills, interfaces, or artifacts it affects.>
+
+#### Related tasks
 - 260829_chatgpt_01
 
-## 2026-09-02
+### 2026-09-02
 
-### Decision
-<new or revised durable decision>
+#### Conclusion
+<New or revised mature conclusion.>
 
-### Changes from previous state
-<what changed; omit only when this is the first entry>
+#### Changes from previous conclusion
+<Material delta from the prior accepted state.>
 
-### Rationale
-<why>
+#### Rationale
+<Why the change was accepted.>
 
-### Impact
-<affected project areas>
+#### Boundary
+<Updated scope or exclusions.>
 
-### Related tasks
-- 260902_chatgpt_01
+#### Impact
+<Affected project areas.>
+
+#### Related tasks
+- 260902_chatgpt_03
 ```
 
-Dates are durable decision checkpoints, not daily logs. Add a dated section only when a discussion changes or materially clarifies project truth.
+`Current conclusion` is the authoritative fast-reading layer. Keep it concise and
+update it in place when a mature decision changes.
 
-## Current truth and history
+`Decision history` preserves why the current conclusion evolved. Add a dated entry
+only when User + ChatGPT reach a sufficiently mature stage conclusion that affects
+future architecture, scientific/product semantics, interfaces, trust states,
+workflow, validation, or another durable project contract. A weekly discussion
+cadence may often produce such a checkpoint, but the calendar alone is not a reason
+to create an entry.
 
-The latest non-deprecated dated decision in a topic is authoritative unless the file explicitly states otherwise. Preserve earlier dated decisions as concise history rather than rewriting the past to look internally consistent.
+Do not require an Agent to reconstruct current truth by reading all historical
+entries. If history and `Current conclusion` disagree, `Current conclusion` is
+current authority and the newest history entry should explain the change.
 
-When a decision is superseded:
-
-1. add a new dated section explaining the replacement;
-2. update front-matter `updated`;
-3. update `status` or `supersedes` where appropriate;
-4. update `reports/concept/README.md`;
-5. update related task IDs when an implementation task exists.
-
-Do not duplicate the same rule in several concept files. One topic owns the rule; other topics link to it.
+When a concept itself is superseded or deprecated, update front matter and the
+concept index rather than moving it into weekly report archives.
 
 ## What belongs in concept
 
@@ -230,7 +317,7 @@ Record:
 - scientific or product semantics;
 - trust-state definitions;
 - testing or release policy when it is project-specific;
-- explicit changes to those decisions.
+- mature changes to those decisions.
 
 Do not record:
 
@@ -244,13 +331,17 @@ Do not record:
 ## Relationship to tasks and reports
 
 ```text
-User + ChatGPT discussion
-→ reports/concept/ durable decision when needed
-→ reports/chatgpt/ committed implementation task
+User + ChatGPT discussion and design
+→ reports/concept/ mature durable conclusion when needed
+→ ChatGPT direct repository action when fully supported
+OR
+→ reports/chatgpt/ implementation-ready local task when Codex is required
 → Codex implementation
 → reports/codex/ implementation evidence
 → ChatGPT independent audit
 → update concept only if acceptance establishes or changes durable project truth
+→ weekly git-move of closed task/report pairs into their own archives
 ```
 
-A formal task may cite concept files as authoritative sources. A Codex report may reference them but must not silently redefine them.
+A formal task may cite concept files as authoritative sources. A Codex report may
+reference them but must not silently redefine them.
