@@ -87,11 +87,15 @@ policies, or template bodies.
 Keep these concerns distinct:
 
 ```text
+project-architecture.md
+= canonical responsibility map for maintained water-domain research projects
+
 project-agents-template.md
 = project repository constitution scaffold
 
 project-skill-template.md
-= project-level Agent workflow/router scaffold
+= project Agent-facing workflow/router scaffold; path is project-declared and need
+  not be repository root
 
 skill-agents-template.md
 = maintained first-party standalone Skill repository constitution scaffold
@@ -113,6 +117,11 @@ maintenance ownership does:
 - third-party Skill: preserve upstream structure; do not inject first-party
   `AGENTS.md` conventions;
 - portable distribution bundle: `AGENTS.md` is not a required Skill component.
+
+For maintained water-domain research projects, root `AGENTS.md` is the required
+project entry. Other repository responsibilities are conditional and are created
+only when their real consumer exists. The canonical responsibility map is
+`references/project-architecture.md`.
 
 ## Runtime
 
@@ -144,5 +153,6 @@ logs. Report lifecycle and archive rules are defined by the repository's own
 - First-party standalone Skill repositories keep root `AGENTS.md` across the
   maintenance lifecycle; maturity is not a reason to delete it.
 - Embedded sub-Skills do not receive redundant `AGENTS.md` files by default.
-- Do not create optional architecture merely for symmetry.
+- Project architecture is responsibility-based; optional directories are not created
+  for symmetry.
 - User + ChatGPT design; Codex executes approved local work.
