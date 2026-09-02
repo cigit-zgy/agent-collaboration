@@ -1,162 +1,162 @@
-# Skill repository policy
+# Skill repository and discovery policy
 
-Classify every Skill as exactly one of:
+This file is the current operational authority for Skill ownership, maintained source,
+Codex local discovery, and external distribution.
 
-- `FIRST_PARTY`
-- `THIRD_PARTY`
+## Ownership classes
 
-Repository ownership and portable Skill packaging are separate concerns. A Git source
-repository may contain maintenance assets that are not part of the installed/runtime
-Skill bundle.
+Classify every consumed Skill as exactly one of:
 
-## FIRST_PARTY
+- `FIRST_PARTY`: designed and maintained by the User;
+- `THIRD_PARTY`: maintained upstream by another owner.
 
-A first-party Skill is designed and maintained by the user.
+This two-class ownership model is this repository's policy; it is not an OpenAI
+platform requirement.
 
-- Local source root: `/Users/wenv/Documents/skills/<skill-name>/`
-- One maintained standalone Skill uses one folder and one user-owned GitHub
-  repository.
-- GitHub repository name equals the Skill folder name.
-- Repository visibility is `PRIVATE` unless the User explicitly chooses otherwise.
-- Identity: folder name = `SKILL.md` `name:` = GitHub repository name.
-- `/Users/wenv/Documents/skills/LOCAL_SKILLS.md` records ownership, source,
-  repository, purpose, and update strategy.
+## Current Codex discovery facts
 
-Do not copy, move, or symlink first-party Skills into `~/.codex/skills/`.
-Never initialize `/Users/wenv/Documents/skills/` itself as a Git repository.
-Each first-party Skill owns only its own repository inside that directory.
-
-### Maintained standalone first-party Skill repository
-
-A standalone first-party Skill repository that is maintained over time must keep a
-root `AGENTS.md` as its repository-maintenance constitution.
-
-`AGENTS.md` is not the Skill runtime workflow. Root `SKILL.md` remains the
-Agent-facing capability authority. `AGENTS.md` tells future maintenance Agents how to
-understand and change the repository, which files own which concerns, what runtime or
-verification authority applies, and what must not be mixed into the Skill.
-
-Use `skill-agents-template.md` when creating or normalizing this file. Do not delete
-`AGENTS.md` merely because the Skill is mature.
-
-### Embedded first-party sub-Skill
-
-A sub-Skill embedded inside a larger project/composite repository normally inherits
-the nearest applicable parent `AGENTS.md` and should not receive another one merely
-for symmetry.
-
-Add a nested `AGENTS.md` only when the subtree has genuine local maintenance rules
-that must narrow or override the parent scope.
-
-### Distribution boundary
-
-A portable Skill bundle does not require `AGENTS.md`. A packaging/install process may
-ship only:
+OpenAI's current Codex documentation defines local Skill discovery under
+`.agents/skills` locations:
 
 ```text
-SKILL.md
-references/   # if required
-scripts/      # if required
-assets/       # if required
+repository-scoped: $CWD/.agents/skills and parent .agents/skills up to $REPO_ROOT
+user-scoped:       $HOME/.agents/skills
+admin-scoped:      /etc/codex/skills
+system-scoped:     bundled by OpenAI
 ```
 
-while the maintained source repository keeps `AGENTS.md`, tests, reports, README,
-CI/configuration, or other maintenance assets. Excluding maintenance files from a
-runtime bundle is not a reason to delete them from source.
+Codex follows symlinked Skill folders. These locations are for authoring/local
+discovery. For reusable distribution beyond one repository/user, OpenAI recommends
+plugins.
 
-After ownership is established, initialize the Skill from
-`skill-package-architecture.md` and the matching purpose-specific template under
-`skill-templates/`. Do not create optional directories unless the Skill has a real
-consumer for them.
+Canonical platform reference:
+`https://developers.openai.com/codex/skills`
 
-## THIRD_PARTY
+Do not treat legacy `~/.codex/skills/` as the current canonical discovery contract.
 
-A third-party Skill or Skill repository is maintained upstream by another owner.
+## FIRST_PARTY maintained source
 
-- Install or discover it through `~/.codex/skills/` or the official Codex plugin
-  mechanism.
-- When a full upstream repository is needed, keep it under `~/.codex/upstream/`
-  and expose only the required Skill through `~/.codex/skills/`.
-- Prefer an official Codex plugin when it is reliable and does not create duplicate
-  discovery.
-- Preserve upstream ownership and record the upstream repository plus pinned commit
-  or tag where practical.
-- Do not create a `cigit-zgy` mirror merely to consume an upstream Skill.
-- Never silently convert third-party content into first-party ownership.
+A standalone first-party Skill source repository is maintained under:
 
-Do not normalize third-party Skill package architecture or inject first-party
-`AGENTS.md` conventions merely to match our templates. Preserve upstream layout
-unless an explicit adapter is required for consumption.
+```text
+/Users/wenv/Documents/skills/<skill-name>/
+```
+
+Rules:
+
+- one maintained Skill uses one folder and one User-owned GitHub repository;
+- folder name = `SKILL.md` `name:` = GitHub repository name;
+- repository visibility is `PRIVATE` unless the User explicitly chooses otherwise;
+- root `AGENTS.md` is retained as the source-repository maintenance constitution;
+- `/Users/wenv/Documents/skills/LOCAL_SKILLS.md` records ownership, source,
+  repository, purpose, discovery exposure, and update strategy;
+- `/Users/wenv/Documents/skills/` itself is not a Git repository and is not assumed
+  to be a Codex discovery location.
+
+### User-scoped Codex discovery bridge
+
+When a standalone first-party Skill should be available to Codex across repositories,
+expose the maintained source through:
+
+```text
+$HOME/.agents/skills/<skill-name>
+  → symlink → /Users/wenv/Documents/skills/<skill-name>
+```
+
+Prefer a symlink so maintained source remains single-copy. Before creating or
+replacing a discovery path, inspect existing files/symlinks and preserve User work.
+Do not overwrite a conflicting discovery entry silently.
+
+### Repo-scoped discovery
+
+A project-owned or embedded Skill that should be discoverable only inside one
+repository may be exposed under:
+
+```text
+$REPO_ROOT/.agents/skills/<skill-name>
+```
+
+The discovered entry may be the maintained Skill folder itself or a repository-local
+symlink to the actual package, provided the target is stable and portable for that
+repository. A project may also route explicitly to an internal `SKILL.md` from its
+`AGENTS.md`; auto-discovery is not required for every internal workflow document.
+
+## THIRD_PARTY Skills
+
+Preserve upstream ownership and prefer current supported distribution/discovery:
+
+1. use an official OpenAI plugin when the upstream Skill is distributed that way and
+   doing so does not create duplicate discovery;
+2. otherwise keep upstream source in an appropriate upstream location and expose the
+   required Skill through `$HOME/.agents/skills/` or repository `.agents/skills/`;
+3. symlink rather than mirror when a single upstream source should remain canonical;
+4. record upstream repository and pinned tag/commit when practical.
+
+Do not create a `cigit-zgy` mirror merely to consume third-party content. Do not
+silently convert third-party content into first-party ownership.
+
+## Source repository versus portable distribution
+
+Keep these separate:
+
+```text
+maintained source repository
+= AGENTS.md + SKILL.md + justified source/maintenance assets
+
+Codex local discovery entry
+= .agents/skills path exposing the Skill to Codex
+
+portable Skill distribution
+= SKILL.md + only runtime resources needed by the consumer
+
+external reusable distribution
+= plugin or another explicit supported package
+```
+
+A source repository can contain reports, tests, CI, maintenance docs, or other assets
+that do not belong in the portable runtime bundle.
 
 ## FIRST_PARTY rename contract
 
-A rename is complete only when all of these agree:
+A standalone first-party rename is complete only when all applicable identities agree:
 
-1. local folder name;
+1. maintained source folder name;
 2. `SKILL.md` `name:`;
 3. GitHub repository name;
 4. Git `origin`;
-5. `/Users/wenv/Documents/skills/LOCAL_SKILLS.md`;
-6. active non-historical references to that Skill name in local global routing.
+5. `LOCAL_SKILLS.md`;
+6. active discovery symlink/path under `$HOME/.agents/skills/` when present;
+7. active non-historical routing references.
 
-After a GitHub repository rename, explicitly reset `origin`; do not rely on a GitHub
-redirect. Partial renames are prohibited.
-
-## Automation boundary
-
-Automation may:
-
-- run `git init` inside one first-party Skill folder;
-- create its GitHub repository with the User-approved visibility;
-- set `origin` when no conflicting remote exists;
-- rename a first-party repository and update its active local references;
-- update `LOCAL_SKILLS.md`;
-- instantiate the approved root `AGENTS.md` and minimal first-party Skill package
-  after User + ChatGPT have settled the capability boundary and purpose profile.
-
-Automation must not:
-
-- publish a private first-party repository publicly without explicit approval;
-- fork or mirror third-party content without explicit authorization;
-- overwrite an existing remote;
-- copy, move, or symlink a first-party Skill into `~/.codex/skills/`;
-- perform a partial rename;
-- add nested `AGENTS.md` files to embedded sub-Skills without genuine local rules;
-- create empty `references/`, `scripts/`, `assets/`, or `tests/` directories merely
-  because they appear in the canonical architecture;
-- create `pyproject.toml` or an independent runtime without a real executable
-  consumer.
-
-If a target GitHub repository already exists, inspect and safely reuse it; never
-overwrite it.
+After a GitHub repository rename, explicitly reset `origin`. Do not rely on GitHub
+redirects. Partial renames are prohibited.
 
 ## Initialization order
 
 For a new standalone first-party Skill:
 
 ```text
-classify FIRST_PARTY ownership
+classify FIRST_PARTY
 → define capability boundary and trigger
-→ create root AGENTS.md from skill-agents-template.md
-→ choose purpose profile
-→ instantiate minimal package architecture
+→ create source-repository AGENTS.md from skill-agents-template.md
+→ choose package profile from skill-package-architecture.md
 → write SKILL.md from the matching template
-→ add optional references/scripts/assets/tests/runtime only when justified
-→ register in LOCAL_SKILLS.md
-→ verify discovery and behavior at the level warranted by the Skill
+→ add optional resources only when justified
+→ register maintained source in LOCAL_SKILLS.md
+→ expose through $HOME/.agents/skills only when Codex user-scoped discovery is desired
+→ verify discovery and behavior at the warranted level
 ```
 
-For an embedded sub-Skill:
+For an embedded project Skill, inherit the nearest applicable project `AGENTS.md` by
+default and use repo-scoped `.agents/skills/` only when auto-discovery is desired.
 
-```text
-inherit parent AGENTS.md
-→ define capability boundary and trigger
-→ choose purpose profile
-→ write SKILL.md
-→ add only justified optional resources
-```
+## Automation boundary
 
-Repository ownership, repository-maintenance instructions, and portable package
-architecture are distinct concerns. This file owns ownership/placement; the
-`skill-agents-template.md` owns the maintained first-party repository constitution
-scaffold; `skill-package-architecture.md` owns package/source-layout rules.
+Automation may create/update discovery symlinks after inspecting the target and
+confirming there is no conflicting User-owned entry. It must not:
+
+- overwrite existing remotes or discovery entries;
+- publish private source publicly without explicit approval;
+- create duplicate first-party source copies merely for discovery;
+- normalize third-party source layout to first-party conventions;
+- create empty optional package directories or unnecessary runtimes.
