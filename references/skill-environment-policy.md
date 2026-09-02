@@ -36,6 +36,15 @@ Follow upstream installation/runtime instructions. Do not mutate the upstream
 Skill's environment model, vendor dependencies, or create a new environment unless
 installation or the active task requires it.
 
+## Machine-wide developer tools
+
+Developer utilities such as Semgrep, CodeQL, and `pip-audit` are not project
+runtime dependencies. Install them at machine/tool-manager level according to
+`verification-tools.md`; do not inject them into a project's Conda/venv environment
+merely because a verification task may call them.
+
+Their presence does not change a project's declared runtime or dependency set.
+
 ## Verification discipline
 
 A clean environment rebuild is not a default verification technique. Use one only
