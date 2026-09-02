@@ -1,7 +1,6 @@
 # Report and concept asset policy
 
-This policy defines the durable project-report layout used by the
-ChatGPT ↔ Codex collaboration workflow.
+This policy defines the durable project-report layout used by the ChatGPT ↔ Codex collaboration workflow.
 
 ## Directory ownership
 
@@ -27,12 +26,85 @@ Ownership is strict:
 - `reports/codex/`: Codex implementation, verification, limitation, and Git-state reports.
 - `reports/concept/`: durable design decisions formed by the User and ChatGPT.
 
-Do not put transient run logs, scratch notes, raw test output, or Codex execution
-history in `reports/concept/`.
+Do not put transient run logs, scratch notes, raw test output, or Codex execution history in `reports/concept/`.
 
-Existing projects may retain legacy report directories. New work follows this
-layout; do not rename historical reports merely for cosmetic consistency unless a
-specific migration task requires it.
+Existing projects may retain legacy report directories. New work follows this layout; do not rename historical reports merely for cosmetic consistency unless a specific migration task requires it.
+
+## Structured metadata for ChatGPT tasks
+
+Every new `reports/chatgpt/*.md` task begins with YAML front matter. Its purpose is retrieval, filtering, and task/report linkage rather than duplicating the full task body.
+
+Required fields:
+
+```yaml
+---
+artifact_type: chatgpt_task
+task_id: 260902_chatgpt_02
+title: Harden global Git and verification policy
+status: issued
+date: 2026-09-02
+repository: cigit-zgy/agent-collaboration
+branch: master
+baseline_sha: <BASELINE_SHA>
+verification_level: level_1
+summary: >
+  Update global Git synchronization, verification tooling, environment reuse,
+  and fast-development policy.
+tags:
+  - git-sync
+  - verification
+concepts:
+  - 00_global_codex_policy
+codex_report: reports/codex/260902_codex_02.md
+---
+```
+
+Rules:
+
+- `summary` is a compact one-to-three-sentence synopsis of purpose and scope.
+- `tags` contains a small number of stable retrieval terms, not every noun in the task.
+- `concepts` contains only durable concept assets that materially govern the task; use `[]` when none.
+- `codex_report` records the expected paired Codex report path.
+- do not store the task-source commit SHA inside the task itself; that commit contains the file and would create a self-reference problem.
+
+## Structured metadata for Codex reports
+
+Every new `reports/codex/*.md` report begins with YAML front matter:
+
+```yaml
+---
+artifact_type: codex_report
+task_id: 260902_chatgpt_02
+title: Global Git and verification policy implementation
+verdict: PASS_WITH_LIMITATIONS
+date: 2026-09-02
+repository: cigit-zgy/agent-collaboration
+branch: master
+task_source_sha: <TASK_SOURCE_SHA>
+baseline_sha: <BASELINE_SHA>
+verification_level: level_1
+summary: >
+  Applied the machine-global policy and verified Git synchronization and tool
+  availability.
+tags:
+  - git-sync
+  - verification
+concepts:
+  - 00_global_codex_policy
+limitations:
+  - semgrep-not-installed
+---
+```
+
+Rules:
+
+- `summary` describes actual implementation and resulting state, not planned work.
+- `verdict` uses `PASS`, `PASS_WITH_LIMITATIONS`, `BLOCKED`, or `FAIL` in YAML.
+- `limitations` contains only material non-blocking limitations; use `[]` when none.
+- `task_source_sha` binds the report to the committed formal task.
+- do not store the commit that contains the report inside that same report; Git history and final stdout own the final report commit SHA.
+
+Task/report metadata is deliberately compact. Do not add authors, timestamps, hashes, counters, environment fingerprints, or other fields unless they have a current retrieval or provenance consumer.
 
 ## Concept model
 
@@ -48,12 +120,9 @@ Use one file per durable topic:
 04_validation_protocol.md
 ```
 
-Continue updating the same topic file while the subject remains the same. Do not
-create a new file for every discussion. Split a file only when the topic becomes a
-separate durable contract with its own scope and consumers.
+Continue updating the same topic file while the subject remains the same. Do not create a new file for every discussion. Split a file only when the topic becomes a separate durable contract with its own scope and consumers.
 
-`reports/concept/README.md` is the authoritative index. Agents should inspect the
-index first and read only concept files relevant to the current task.
+`reports/concept/README.md` is the authoritative index. Agents should inspect the index first and read only concept files relevant to the current task.
 
 Recommended index fields:
 
@@ -135,14 +204,11 @@ Within a concept file, maintain chronological decision sections using ISO dates:
 - 260902_chatgpt_01
 ```
 
-Dates are durable decision checkpoints, not daily logs. Add a dated section only
-when a discussion changes or materially clarifies project truth.
+Dates are durable decision checkpoints, not daily logs. Add a dated section only when a discussion changes or materially clarifies project truth.
 
 ## Current truth and history
 
-The latest non-deprecated dated decision in a topic is authoritative unless the
-file explicitly states otherwise. Preserve earlier dated decisions as concise
-history rather than rewriting the past to look internally consistent.
+The latest non-deprecated dated decision in a topic is authoritative unless the file explicitly states otherwise. Preserve earlier dated decisions as concise history rather than rewriting the past to look internally consistent.
 
 When a decision is superseded:
 
@@ -152,8 +218,7 @@ When a decision is superseded:
 4. update `reports/concept/README.md`;
 5. update related task IDs when an implementation task exists.
 
-Do not duplicate the same rule in several concept files. One topic owns the rule;
-other topics link to it.
+Do not duplicate the same rule in several concept files. One topic owns the rule; other topics link to it.
 
 ## What belongs in concept
 
@@ -188,5 +253,4 @@ User + ChatGPT discussion
 → update concept only if acceptance establishes or changes durable project truth
 ```
 
-A formal task may cite concept files as authoritative sources. A Codex report may
-reference them but must not silently redefine them.
+A formal task may cite concept files as authoritative sources. A Codex report may reference them but must not silently redefine them.
