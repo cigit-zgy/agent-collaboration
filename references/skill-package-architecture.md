@@ -1,43 +1,91 @@
 # Skill package architecture
 
-This reference defines the standard package architecture for a reusable Agent Skill.
-It applies to first-party Skills designed or maintained under the collaboration
-workflow. It is intentionally smaller than a general software or research-project
-architecture.
+This reference defines the standard architecture for reusable Agent Skills maintained
+under the collaboration workflow. It deliberately separates three different
+boundaries that must not be conflated:
+
+```text
+maintained source repository
+portable Skill distribution bundle
+embedded sub-Skill inside a larger project/repository
+```
 
 A Skill is a bounded capability package: it teaches an Agent when the capability
 applies, how to perform the workflow, what supporting knowledge or deterministic
 operations are available, and when the workflow is complete or must stop.
 
-## Canonical package
+## 1. Portable Skill distribution bundle
+
+The portable runtime package follows the common Agent Skills pattern:
 
 ```text
 <skill-name>/
 ├── SKILL.md              # required Agent-facing entry
 ├── references/           # optional on-demand knowledge/contracts
 ├── scripts/              # optional deterministic executable helpers
-├── assets/               # optional templates/static resources
-├── tests/                # optional first-party executable verification
-├── pyproject.toml        # optional independent Python runtime/tooling authority
-└── README.md             # optional human-facing documentation
+└── assets/               # optional templates/static resources
 ```
 
 Only `SKILL.md` is structurally required by this policy. Optional paths exist only
-when the Skill has a real consumer for them. Do not create empty directories to make
-a Skill look complete.
+when the capability has a real consumer for them. Do not create empty directories to
+make a Skill look complete.
 
-This package model is compatible with the common Agent Skills pattern of a required
-`SKILL.md` plus optional `references/`, `scripts/`, and `assets/`. `tests/`,
-`pyproject.toml`, and a human-facing `README.md` are first-party engineering
-extensions and are not mandatory for portable Skill consumption.
+`AGENTS.md` is not a required portable Skill runtime file. It belongs to repository
+maintenance when a Skill is maintained as an independent source repository.
+
+## 2. Maintained first-party Skill source repository
+
+A standalone first-party Skill that is developed and maintained over time uses a
+repository-level constitution in addition to its runtime Skill entry:
+
+```text
+<first-party-skill-repo>/
+├── AGENTS.md             # required repository-maintenance constitution
+├── SKILL.md              # required Agent-facing Skill entry
+├── references/           # optional
+├── scripts/              # optional
+├── assets/               # optional
+├── tests/                # optional first-party executable verification
+├── pyproject.toml        # optional independent Python runtime/tooling authority
+└── README.md             # optional human-facing repository documentation
+```
+
+`AGENTS.md` persists across the maintenance lifecycle. Skill maturity is not a reason
+to delete it. It governs how future Agents should understand, modify, verify, and
+maintain the source repository. It does not replace `SKILL.md`, and a portable Skill
+packaging/install process may omit it when only runtime Skill resources are needed.
+
+Use `skill-agents-template.md` when creating or normalizing this repository-level
+constitution.
+
+## 3. Embedded sub-Skill
+
+A Skill embedded inside a larger project or composite repository normally inherits
+the nearest applicable parent `AGENTS.md`:
+
+```text
+<project>/
+├── AGENTS.md
+├── SKILL.md
+└── <sub-skill>/
+    └── SKILL.md
+```
+
+Do not add one `AGENTS.md` per sub-Skill merely for symmetry. Add a nested
+`AGENTS.md` only when that subtree has genuine maintenance rules that differ from the
+parent scope and need narrower precedence.
 
 ## Core design rule
 
-Use the smallest package that protects the capability boundary.
+Use the smallest architecture that protects the real capability and maintenance
+boundary.
 
 ```text
+AGENTS.md
+= repository maintenance/governance for a maintained source repository
+
 SKILL.md
-= activation + workflow + routing
+= activation + workflow + routing for Skill operation
 
 references/
 = knowledge the Agent may need, but should not preload
@@ -58,9 +106,29 @@ README.md
 = human-facing repository explanation, not Agent runtime instructions
 ```
 
-A Skill must not acquire a directory merely because another Skill has it.
+A Skill must not acquire a file or directory merely because another Skill has it.
 
-## `SKILL.md` — required
+## `AGENTS.md` — repository-maintenance layer
+
+For a maintained standalone first-party Skill repository, root `AGENTS.md` is
+required by this first-party collaboration policy.
+
+It should define only durable maintenance concerns such as:
+
+- what repository is being maintained;
+- which file is the Agent-facing Skill authority;
+- source-repository versus distribution boundary;
+- directory ownership;
+- runtime/verification authority when relevant;
+- maintenance invariants and non-goals;
+- collaboration routing.
+
+It must not duplicate the full runtime workflow from `SKILL.md`.
+
+`AGENTS.md` is not required for a portable distribution bundle and is normally not
+added to embedded sub-Skills that already inherit a parent constitution.
+
+## `SKILL.md` — required runtime entry
 
 Every Skill has exactly one primary `SKILL.md` at its package root.
 
@@ -134,9 +202,7 @@ Typical uses:
 
 Do not create a script for work that is simpler and safer as one direct tool call or
 one short Agent instruction. Do not move speculative abstractions into `scripts/`.
-
-Scripts must have a real workflow consumer. Shared logic should not be extracted
-until there are real consumers for the abstraction.
+Scripts must have a real workflow consumer.
 
 ## `assets/` — optional
 
@@ -148,7 +214,7 @@ Examples:
 - document or figure templates;
 - style files;
 - static configuration fragments;
-- example input/output fixtures intended for reuse;
+- reusable example input/output fixtures;
 - icons or other generation resources.
 
 Do not put explanatory Markdown in `assets/` when it is actually Agent reference
@@ -156,16 +222,12 @@ material; use `references/` instead.
 
 ## `tests/` — optional first-party extension
 
-Create `tests/` when the Skill owns executable behavior whose contract warrants
-independent verification.
+Create `tests/` when the maintained source repository owns executable behavior whose
+contract warrants independent verification.
 
-Tests should protect real Skill behavior, especially:
-
-- deterministic scripts;
-- public command/entry behavior;
-- parsing/validation contracts;
-- stable artifact shapes;
-- integration boundaries that are easy to regress.
+Tests should protect real Skill behavior, especially deterministic scripts, public
+entry behavior, parsing/validation contracts, stable artifact shapes, and integration
+boundaries that are easy to regress.
 
 Documentation-only Skills do not need tests merely for symmetry. Do not add
 hash/freshness/duplicate tests unless a real persistent trust boundary requires them.
@@ -191,13 +253,15 @@ Agent-operational authority.
 
 ## Purpose profiles
 
-Choose the package profile that matches the capability. Do not force all profiles
-into one structure.
+Purpose profile controls the Skill capability/package shape. It does not determine
+whether `AGENTS.md` exists; maintenance ownership determines that separately.
 
 ### Documentation Skill
 
 Use when the capability is primarily durable guidance, standards, or reasoning
 instructions.
+
+Portable package:
 
 ```text
 <skill>/
@@ -205,22 +269,24 @@ instructions.
 └── references/           # only if needed
 ```
 
-Typical examples: coding style, manuscript guidance, policy interpretation.
+A standalone maintained first-party repository adds root `AGENTS.md`.
 
 ### Executable Skill
 
 Use when the capability combines Agent instructions with deterministic code.
+
+Portable/source resources may include:
 
 ```text
 <skill>/
 ├── SKILL.md
 ├── references/           # if domain/contracts are needed
 ├── scripts/
-├── tests/                # when behavior warrants verification
+├── tests/                # source-repository verification only when warranted
 └── pyproject.toml        # only if the Skill owns an independent runtime
 ```
 
-Typical examples: workspace initialization, deterministic converters, validators.
+A standalone maintained first-party repository adds root `AGENTS.md`.
 
 ### Asset-oriented Skill
 
@@ -235,9 +301,8 @@ or static resources.
 └── assets/
 ```
 
-Tests and runtime declarations remain conditional.
-
-Typical examples: scientific figures, document templates, diagram generation.
+Tests and runtime declarations remain conditional. A standalone maintained
+first-party repository adds root `AGENTS.md`.
 
 ### Composite/router Skill
 
@@ -253,12 +318,9 @@ Skills or workflow branches.
     ...
 ```
 
-A composite Skill should stay thin. It owns activation, stage/branch routing, stable
-interfaces, and stop conditions; downstream Skills own detailed procedures.
-
-For a project-level composite workflow, prefer the dedicated
-`project-skill-template.md` because a project root Skill also routes project concepts,
-trust/lifecycle state, and project runtime identity.
+The standalone maintained repository has one root `AGENTS.md`; its embedded
+sub-Skills normally do not each add another one. A project-level composite workflow
+uses the dedicated `project-skill-template.md`.
 
 ## Skill boundary test
 
@@ -274,13 +336,11 @@ A Skill has a healthy boundary when the following are all reasonably clear:
 
 Split a Skill when multiple branches have independent triggers, independent inputs
 and outputs, distinct validation contracts, and can be operated or evolved without
-loading the others.
-
-Do not split merely to make directories smaller.
+loading the others. Do not split merely to make directories smaller.
 
 ## Progressive disclosure
 
-Use this loading model:
+Use this loading model for Skill operation:
 
 ```text
 Skill discovery
@@ -291,36 +351,60 @@ Skill discovery
 → execute only what the active branch requires
 ```
 
-Do not preload every reference, script, asset, test, or sibling Skill.
+Repository-maintenance Agents additionally read the applicable `AGENTS.md` before
+modifying the source repository.
 
 ## Initialization decision
 
-When creating a Skill, decide in this order:
+For a new standalone first-party Skill repository:
 
 ```text
-1. Define the capability boundary and trigger.
-2. Choose the purpose profile.
-3. Create SKILL.md.
-4. Add references only for real on-demand knowledge.
-5. Add scripts only for real deterministic operations.
-6. Add assets only for real reusable resources.
-7. Add tests only for executable behavior that needs verification.
-8. Add pyproject.toml only if the Skill truly owns an independent Python runtime.
-9. Add README.md only for a real human-facing repository need.
+1. Define ownership and capability boundary.
+2. Create root AGENTS.md from skill-agents-template.md.
+3. Choose the purpose profile.
+4. Create SKILL.md from the matching purpose template.
+5. Add references only for real on-demand knowledge.
+6. Add scripts only for real deterministic operations.
+7. Add assets only for real reusable resources.
+8. Add tests only for executable behavior that needs verification.
+9. Add pyproject.toml only if the Skill truly owns an independent Python runtime.
+10. Add README.md only for a real human-facing repository need.
 ```
 
+For an embedded sub-Skill, normally skip step 2 and inherit the parent `AGENTS.md`.
 Never scaffold optional directories pre-emptively.
+
+## Distribution rule
+
+Do not equate Git repository contents with the portable Skill artifact.
+
+A maintained source repository may contain:
+
+```text
+AGENTS.md
+reports/
+tests/
+README.md
+CI/configuration
+other maintenance assets
+```
+
+that are not required for Skill runtime. Packaging or installation should include
+only the resources needed by the Skill's operational contract. Do not delete
+maintenance assets from source merely because they are excluded from a distribution
+bundle.
 
 ## Relationship to repository ownership
 
-This architecture describes the contents of a Skill package. Repository ownership,
-first-party/third-party classification, naming, local location, GitHub visibility,
-and rename rules are governed separately by `skill-repository-policy.md`.
+Repository ownership, first-party/third-party classification, naming, local location,
+GitHub visibility, and rename rules are governed by
+`skill-repository-policy.md`.
 
-For a new first-party Skill, apply both:
+For a new first-party Skill, apply:
 
 ```text
 skill-repository-policy.md
+→ skill-agents-template.md for standalone maintained repositories
 → skill-package-architecture.md
 → purpose-specific Skill template
 ```
