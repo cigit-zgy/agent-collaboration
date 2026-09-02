@@ -7,7 +7,8 @@ updated: 2026-09-02
 authority: global
 scope: machine-wide Codex defaults, Skill ownership/routing, collaboration, and verification discipline
 supersedes: null
-related_tasks: []
+related_tasks:
+  - 260902_chatgpt_01
 ---
 
 # Global Codex Operating Policy
@@ -59,4 +60,4 @@ The global file should be small enough to remain reliable in every Codex session
 
 ### Related tasks
 
-To be assigned by the implementing ChatGPT formal task.
+- 260902_chatgpt_01
