@@ -8,6 +8,7 @@ role: decision_history
 operational_authority:
   - references/project-architecture.md
   - references/project-integration.md
+  - references/report-concept-policy.md
 related_tasks: []
 ---
 
@@ -49,6 +50,24 @@ related_tasks: []
 - Decision: a new maintained water research project starts with `AGENTS.md`,
   human-facing `README.md`, and `reports/concept/README.md`; other responsibilities
   are created only when they have a real owner, artifact, and consumer.
-- Rationale: initialize governance and durable design-history navigation without
+- Rationale: initialize governance and the canonical project-design index without
   pre-creating empty code/data/experiment/Agent directories.
 - Operational authority: `references/project-architecture.md`.
+
+### 2026-09-02 — Water research concepts are the upstream project design source
+
+- Decision: maintained water research projects use selected `reports/concept/*`
+  topics as canonical User + ChatGPT design specifications for project-level
+  scientific, architectural, trust, interface, and cross-stage decisions.
+- Hierarchy: `concept design authority → Skill/reference operational projection →
+  code/schema implementation → tests → runtime artifacts`.
+- Rationale: the complete accepted project plan should remain independent of current
+  implementation details, while Skills/references can stay compact and executable for
+  Agents.
+- Boundary: model-specific scientific facts still come from registered original
+  sources and evidence/provenance, not from project design concepts.
+- Runtime consequence: ordinary operation keeps the short
+  `AGENTS → workflow Skill → sub-Skill → reference` route; design/redesign/audit reads
+  only the relevant governing concept first.
+- Operational authority: `references/project-architecture.md`,
+  `references/project-integration.md`, `references/report-concept-policy.md`.
