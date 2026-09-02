@@ -193,6 +193,89 @@ For a formal task, ChatGPT first completes all `DIRECT` deliverables, then freez
 
 Formal task format and launch block: `templates/chatgpt-task.md`.
 
+## Formal handoff state
+
+A formal repository-changing task has two distinct Git reference points:
+
+```text
+design/projection baseline
+= the commit after the DIRECT design/projection artifacts are complete
+  and before the formal task artifact is added
+
+task/handoff commit
+= the commit that contains the issued formal task and therefore represents
+  the exact repository state Codex must reach before implementation begins
+```
+
+`baseline_sha` in the task describes the design/projection baseline. The containing task commit is supplied separately in the launch block because a file cannot contain the SHA of the commit that contains itself.
+
+Codex start discipline is therefore:
+
+```text
+fetch
+→ verify branch/worktree safety
+→ reach the exact task/handoff commit by safe synchronization
+→ verify the task source and frozen DIRECT inputs
+→ only then begin LOCAL implementation
+```
+
+Codex must not begin from an earlier design baseline merely because the task file is visible remotely.
+
+## Handoff branch freeze
+
+Once the User launches a formal Codex task or Codex reports that execution has begun, the handed-off branch is frozen for overlapping ChatGPT/User repository writes until that execution is completed or explicitly aborted.
+
+The default serialized flow is:
+
+```text
+ChatGPT completes DIRECT artifacts
+→ ChatGPT commits formal task
+→ Codex executes LOCAL work on the handed-off branch
+→ Codex pushes/fetches/verifies
+→ ChatGPT performs acceptance
+→ branch is available for the next coordinated change
+```
+
+During active execution, ChatGPT must not advance the same branch with task-relevant or frozen-input changes merely because the changed files appear non-overlapping. A same-branch remote advance can force an otherwise successful local implementation into avoidable divergence and reconciliation.
+
+If a DIRECT artifact or task specification must change after Codex has started:
+
+```text
+stop/abort or explicitly supersede the active task
+→ preserve Codex/User local state
+→ ChatGPT updates and commits the DIRECT artifact
+→ issue a new task/handoff commit or explicit resumed task
+→ Codex continues only from the new coordinated handoff
+```
+
+Independent work may still proceed concurrently on a separate branch/worktree when non-interference is established under the concurrency rules below.
+
+## Upstream/downstream ownership boundary
+
+A task owns only the stage/module/contracts explicitly included in its scope.
+
+If an in-scope upstream contract change reveals that an out-of-scope downstream consumer is stale, the executor must report the downstream drift rather than silently migrate the downstream consumer.
+
+Default rule:
+
+```text
+make the current owner correct
+→ verify the current owner against its accepted contract
+→ report downstream incompatibility
+→ stop at the ownership boundary
+```
+
+Unless the formal task explicitly includes downstream migration, Codex must not:
+
+- edit downstream stages merely to restore repository-wide compatibility;
+- add compatibility shims that preserve a rejected upstream contract;
+- reintroduce removed fields/files/interfaces for an old consumer;
+- broaden scope only to make unrelated full-repository tests green.
+
+A focused stage may therefore be accepted while later stages are explicitly reported as drift, provided the current stage satisfies its own contract and the task did not promise whole-pipeline compatibility.
+
+Repository-wide checks that fail solely because an intentionally pending downstream owner still targets the old contract are evidence of downstream drift, not automatic failure of the completed upstream stage. The report must identify the affected consumer and the stale assumption precisely.
+
 ## Collaboration loop
 
 ```text
@@ -208,7 +291,11 @@ User goal
    ├─ no LOCAL work remains → ChatGPT completes task directly
    └─ LOCAL work remains
        ├─ routine local execution → Codex result → ChatGPT review
-       └─ formal delegated task   → committed local-only spec → Codex execution/report
+       └─ formal delegated task
+          → committed local-only specification
+          → task/handoff commit
+          → handoff branch freeze
+          → Codex execution/report
 → ChatGPT independent acceptance review
 → User retains final decision/override authority
 ```
@@ -218,6 +305,8 @@ User goal
 Independent local/formal tasks may run concurrently when their branches/worktrees and mutable resources are independent.
 
 Tasks that share a branch, worktree, files, datasets, runtime state, external state, credentials, or another mutable resource require explicit coordination before concurrent execution.
+
+An active formal handoff freezes its handed-off branch for overlapping repository writes even when another actor believes the paths are non-overlapping. Use a separate branch/worktree for genuinely independent concurrent work or serialize the changes.
 
 If non-interference or exclusive ownership cannot be established, concurrent execution is not allowed; serialize the tasks.
 
@@ -233,7 +322,8 @@ Before editing, Codex:
 2. inspects branch, HEAD, upstream, and worktree;
 3. preserves pre-existing User changes;
 4. fast-forwards only when the branch is merely behind and the update is safe;
-5. verifies task source and baseline before editing.
+5. reaches and verifies the exact task/handoff commit;
+6. verifies the task source, declared baseline, and frozen DIRECT inputs before editing.
 
 Divergence that requires merge/rebase/cherry-pick is an explicit reconciliation decision rather than implicit task permission.
 
@@ -249,6 +339,8 @@ Codex does not self-accept. ChatGPT independently reviews the evidence and issue
 PASS | PASS WITH LIMITATIONS | BLOCKED | FAIL
 ```
 
+A scoped implementation may receive `PASS WITH LIMITATIONS` when its own acceptance criteria are satisfied but explicitly out-of-scope downstream drift or unavailable optional external verification remains. Such limitations must not be used to hide an in-scope contract failure.
+
 The User retains final project/scientific/product decision and override authority.
 
 ## Stable collaboration artifacts
@@ -260,22 +352,4 @@ reports/chatgpt/YYMMDD_chatgpt_NN.md
 reports/codex/YYMMDD_codex_NN.md
 ```
 
-Project concepts use project-declared design paths such as `reports/concept/<topic>.md`.
-
-Issued formal tasks and reports remain stable audit artifacts.
-
-## Invariants
-
-- The GitHub repository `cigit-zgy/agent-collaboration` is the canonical maintained collaboration source; local copies are optional caches.
-- Formal tasks pin collaboration authority by repository + commit + path.
-- Unresolved pinned authority is BLOCKED; similarly named local content is never an accepted substitute.
-- User + ChatGPT develop/adjudicate the design; the User retains final decision authority.
-- Delegation is per deliverable, not per task or file batch.
-- ChatGPT completes all current-capability `DIRECT` deliverables before Codex handoff.
-- Frozen DIRECT artifacts are read-only to Codex unless an explicit mechanical exception is declared.
-- Codex owns only work with a concrete local/unavailable capability dependency.
-- Routine execution is permitted only when persistent/shared mutation is excluded.
-- Codex does not self-accept.
-- Evidence determines technical acceptance.
-- Formal ceremony is used only when the remaining local work requires a durable specification/evidence chain or persistent/shared mutation.
-- Scientific/product rigor is mandatory; verification effort is risk-proportional.
+Issued task/report artifacts remain durable evidence and are not silently rewritten into later state. If a task is superseded, preserve it and issue a new task artifact that names the superseded task explicitly.
