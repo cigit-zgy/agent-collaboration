@@ -22,7 +22,7 @@ Codex executes the supplied scope and reports contradictions, missing prerequisi
 
 ## Project authority
 
-Project-specific precedence comes from the applicable project `AGENTS.md`. Maintained scientific projects may declare `reports/concept/` as canonical User + ChatGPT design authority; see `../project/concept.md` and `../project/architecture.md`.
+Project-specific precedence comes from the applicable project `AGENTS.md`. Maintained scientific projects may declare `reports/concept/` as canonical project design authority; see `../project/concept.md` and `../project/architecture.md`.
 
 Project design authority remains separate from registered source/evidence authority for model-specific scientific facts.
 
@@ -58,14 +58,19 @@ After that gate passes, choose the smallest sufficient execution mode.
 Use routine local execution for bounded, ephemeral local work when all of these are true:
 
 ```text
-no intended repository mutation
+no intended mutation of repository state
+AND no intended mutation of durable/shared datasets
+AND no intended mutation of persistent runtime state
+AND no intended mutation of external mutable/service state
+AND no intended mutation of credential state
+AND no intended mutation of any other persistent/shared resource
 AND no durable project artifact is required
 AND no design/scientific/trust decision is delegated
 AND no audit chain is required
 AND the task can be understood from a direct instruction
 ```
 
-Typical examples include reproducing a bug, running a focused test, inspecting an environment, checking a local file/state, or gathering diagnostic evidence.
+Typical examples include reproducing a bug, running a focused test, inspecting an environment, checking a local file/state, or gathering diagnostic evidence without persistent/shared mutation.
 
 Route:
 
@@ -77,11 +82,14 @@ direct Codex instruction
 
 Routine local execution does not require a committed ChatGPT task or Codex report unless the work discovers a reason to escalate.
 
+If every routine predicate cannot be established, use the formal path when its scope can be safely specified; otherwise stop and surface the unresolved boundary.
+
 ### Formal delegated task
 
 Use a formal delegated task when any of these materially applies:
 
 - repository-changing work;
+- a durable/shared dataset, runtime, external service/state, credential state, or another persistent resource must be changed;
 - durable project artifacts must be created or changed;
 - the task is long or multi-step enough to need a frozen specification;
 - scientific, product, trust, security, or data-loss risk requires an auditable boundary;
@@ -96,7 +104,8 @@ Formal task format and launch block: `templates/chatgpt-task.md`.
 ```text
 User goal
 → inspect applicable authority/evidence
-→ User + ChatGPT decide design
+→ User + ChatGPT develop/adjudicate design
+→ User accepts the project decision when final human authority is required
 → update design authority first when design changes
 → delegation gate
    ├─ connected capability sufficient → ChatGPT executes + verifies
@@ -112,6 +121,8 @@ User goal
 Independent local/formal tasks may run concurrently when their branches/worktrees and mutable resources are independent.
 
 Tasks that share a branch, worktree, files, datasets, runtime state, external state, credentials, or another mutable resource require explicit coordination before concurrent execution.
+
+If non-interference or exclusive ownership cannot be established, concurrent execution is not allowed; serialize the tasks.
 
 Concurrency is therefore constrained by shared mutable state, not by an arbitrary single-task rule.
 
@@ -131,7 +142,7 @@ Divergence that requires merge/rebase/cherry-pick is an explicit reconciliation 
 
 After implementation Codex commits task-scoped changes, pushes, fetches again, verifies `HEAD == upstream` when safely achievable, and reports intentionally preserved pre-existing changes.
 
-Routine read-only local execution does not create Git ceremony merely because Codex is involved.
+Routine read-only/local-inspection execution does not create Git ceremony merely because Codex is involved.
 
 ## Acceptance
 
@@ -158,9 +169,10 @@ Issued formal tasks and reports remain stable audit artifacts.
 
 ## Invariants
 
-- User + ChatGPT develop the design; the User retains final decision authority.
+- User + ChatGPT develop/adjudicate the design; the User retains final decision authority.
 - ChatGPT delegates only for a concrete unavailable/local capability.
+- Routine execution is permitted only when persistent/shared mutation is excluded.
 - Codex does not self-accept.
 - Evidence determines technical acceptance.
-- Formal ceremony is used only when the task requires a durable specification/evidence chain.
+- Formal ceremony is used only when the task requires a durable specification/evidence chain or persistent/shared mutation.
 - Scientific/product rigor is mandatory; verification effort is risk-proportional.
