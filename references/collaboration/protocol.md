@@ -20,6 +20,48 @@ Codex is the local executor for work that genuinely requires local-machine capab
 
 Codex executes the supplied scope and reports contradictions, missing prerequisites, or unresolved human decisions instead of silently redesigning approved behavior.
 
+## Collaboration authority source
+
+The canonical maintained source for this collaboration standard is the GitHub repository:
+
+```text
+cigit-zgy/agent-collaboration
+```
+
+No machine-local installation or checkout of `agent-collaboration` is assumed.
+
+A formal task that depends on this collaboration standard must pin the exact authority it was authored against using:
+
+```text
+repository + commit SHA + repository-relative path
+```
+
+Resolution order for Codex is:
+
+```text
+1. exact verified local checkout at the pinned repository + commit, if one already exists
+2. otherwise fetch/read the exact pinned files from GitHub
+3. if the pinned authority cannot be resolved, BLOCKED
+```
+
+A local checkout is only a cache. It is not an authority merely because its filenames look similar or it has its own upstream.
+
+Codex must not substitute:
+
+```text
+an older local clone
+another Skill
+similarly named files
+a guessed renamed path
+an inferred "equivalent" policy
+```
+
+for an unresolved pinned collaboration path.
+
+If a task cites an invalid machine-local collaboration path but also identifies an unambiguous pinned GitHub repository/commit/path, use the pinned GitHub authority and report the stale local path as a task-authoring defect. If no pinned GitHub authority exists, stop rather than infer replacements.
+
+ChatGPT may inspect current `master` while authoring a task, but Codex executes against the task-pinned commit so collaboration policy cannot drift during execution.
+
 ## Project authority
 
 Project-specific precedence comes from the applicable project `AGENTS.md`. Maintained scientific projects may declare `reports/concept/` as canonical project design authority; see `../project/concept.md` and `../project/architecture.md`.
@@ -213,6 +255,9 @@ Issued formal tasks and reports remain stable audit artifacts.
 
 ## Invariants
 
+- The GitHub repository `cigit-zgy/agent-collaboration` is the canonical maintained collaboration source; local copies are optional caches.
+- Formal tasks pin collaboration authority by repository + commit + path.
+- Unresolved pinned authority is BLOCKED; similarly named local content is never an accepted substitute.
 - User + ChatGPT develop/adjudicate the design; the User retains final decision authority.
 - Delegation is per deliverable, not per task or file batch.
 - ChatGPT completes all current-capability `DIRECT` deliverables before Codex handoff.
