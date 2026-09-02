@@ -1,16 +1,24 @@
 ---
 name: agent-collaboration
-description: Use when establishing or maintaining the global ChatGPT-Codex research and development collaboration protocol and its first-party Skill repository.
+description: Use when repository work is coordinated across a User, ChatGPT, and Codex and requires a committed task, implementation handoff, independent audit, or acceptance verdict.
 ---
 
 # Agent Collaboration
 
-This is the global ChatGPT ↔ Codex research and development collaboration
-protocol Skill.
+Use this global protocol when ChatGPT plans and accepts repository work while
+Codex implements the committed formal task. One formal task is active at a
+time; evidence, not a self-reported PASS, determines completion.
 
 ## References
 
-- For Skill ownership, repository, discovery symlink, and rename rules, read
+- All roles: read [protocol.md](references/protocol.md) for responsibilities and
+  the collaboration loop.
+- ChatGPT authoring a task: use
+  [chatgpt-task-template.md](references/chatgpt-task-template.md) and select a
+  level from [verification-levels.md](references/verification-levels.md).
+- ChatGPT handing off a committed task: use
+  [codex-launch-template.md](references/codex-launch-template.md).
+- Codex reporting work, or ChatGPT auditing it: use
+  [codex-report-template.md](references/codex-report-template.md).
+- Maintaining a Skill repository: read
   [skill-repository-policy.md](references/skill-repository-policy.md).
-
-No collaboration protocol, task template, or report template is defined yet.
