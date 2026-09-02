@@ -43,6 +43,17 @@ Status: <STATUS>
 
 ## Git requirements
 
+State the branch/upstream expectations and any repository-specific exceptions.
+Unless the task explicitly says otherwise, Codex must follow
+`references/protocol.md` repository synchronization:
+
+- fetch and inspect branch, `HEAD`, upstream, and worktree before editing;
+- preserve pre-existing user changes;
+- fast-forward only when safe; do not invent a merge/rebase for divergence;
+- commit and push all task-scoped repository changes;
+- fetch again and verify final `HEAD == upstream`;
+- report any intentionally preserved non-task worktree changes.
+
 ## Codex report
 
 Expected path: `reports/codex/YYMMDD_codex_NN.md`
