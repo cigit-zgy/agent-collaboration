@@ -1,6 +1,6 @@
 # Skill repository and discovery policy
 
-This contract governs Skill ownership, maintained source, Codex local discovery, and external distribution.
+This contract governs Skill ownership, maintained source, discovery, and distribution.
 
 ## Ownership classes
 
@@ -11,37 +11,57 @@ Every consumed Skill is either:
 
 This two-class model is local policy, not a platform requirement.
 
-## Maintained source and discovery
+Ownership and source location are separate concerns. A first-party Skill may be maintained canonically in GitHub without any machine-local checkout.
 
-Standalone first-party source is maintained under:
+## Canonical source modes
 
-```text
-/Users/wenv/Documents/skills/<skill-name>/
-```
-
-Codex user-scoped discovery normally exposes it through:
+A maintained Skill declares one canonical source mode:
 
 ```text
-$HOME/.agents/skills/<skill-name>
-→ symlink → maintained source
+REMOTE_CANONICAL
+= a GitHub repository is the maintained authority; local copies are optional caches
+
+LOCAL_CANONICAL
+= an explicitly declared local source is the maintained authority and may be exposed to Agent discovery
 ```
 
-Repository-scoped discovery may use:
+Do not infer source mode from the presence of a directory on one machine.
+
+### `agent-collaboration`
+
+The `agent-collaboration` Skill is `REMOTE_CANONICAL`:
 
 ```text
-$REPO_ROOT/.agents/skills/<skill-name>
+repository: cigit-zgy/agent-collaboration
+canonical transport: GitHub
 ```
+
+No local installation is required or assumed.
+
+When another project/task needs this Skill, identify it by:
+
+```text
+repository + pinned commit SHA + repository-relative path
+```
+
+A verified local checkout at the same repository and pinned commit may be used as a read cache. A stale clone or similarly named local Skill is not equivalent authority.
+
+## Discovery
+
+Discovery paths are conveniences, not maintained-source authority.
+
+When a Skill is intentionally installed for Codex discovery, user-scoped or repository-scoped `.agents/skills/` entries may expose it according to the target platform's current rules. Such exposure is optional and must not be treated as proof that the discovered content is current.
 
 Current platform discovery facts should be rechecked against OpenAI documentation when they materially change installation or routing.
 
 ## Source, discovery, and distribution
 
 ```text
-maintained source repository
-= AGENTS.md + SKILL.md + justified maintenance/runtime resources
+canonical maintained source
+= explicitly declared GitHub repository or local source
 
-Codex discovery entry
-= .agents/skills path exposing the Skill
+Agent discovery entry
+= optional path exposing the Skill to a host
 
 portable runtime bundle
 = SKILL.md + runtime resources required by consumers
@@ -52,22 +72,42 @@ external reusable distribution
 
 ## FIRST_PARTY identity
 
-For a standalone first-party Skill, maintained folder name, `SKILL.md` name, GitHub repository name, Git remote, `LOCAL_SKILLS.md`, active discovery path, and active routing references remain aligned. A rename updates all applicable identities as one operation.
+For a standalone first-party Skill, the canonical repository/source identity, `SKILL.md` name, active distribution/discovery references, and current routing references remain aligned.
+
+For a `REMOTE_CANONICAL` Skill, GitHub repository identity and pinned commit/path references are authoritative. Do not require a local folder, symlink, or `LOCAL_SKILLS.md` entry merely for use.
+
+For a `LOCAL_CANONICAL` Skill, any local-source/discovery invariants must be explicitly declared by the owning environment rather than assumed globally.
 
 ## THIRD_PARTY
 
-Preserve upstream ownership and structure. Prefer supported upstream distribution; otherwise expose the upstream source through the appropriate discovery path without converting it into first-party ownership.
+Preserve upstream ownership and structure. Prefer supported upstream distribution; otherwise consume the exact upstream source/version required by the task without converting it into first-party ownership.
+
+## Resolution safety
+
+When a task names a Skill authority:
+
+```text
+exact declared source/version resolves
+→ use it
+
+exact source/version unavailable
+→ BLOCKED or request a corrected authority reference
+```
+
+Do not silently substitute an older clone, another Skill, guessed path rename, or semantically similar document.
 
 ## Initialization
 
+For a new first-party Skill:
+
 ```text
 classify ownership
+→ choose canonical source mode deliberately
 → define capability boundary + trigger
-→ create repository AGENTS.md from templates/agents.md when standalone first-party
+→ create repository AGENTS.md when the maintained source is a standalone repository
 → choose package shape from package.md
 → write SKILL.md using writing.md
 → add only justified resources
-→ register maintained source in LOCAL_SKILLS.md
 → expose discovery only when needed
 → verify behavior at the warranted level
 ```
@@ -76,4 +116,4 @@ Embedded project Skills inherit the nearest applicable project `AGENTS.md` unles
 
 ## Automation boundary
 
-Discovery automation preserves existing User-owned entries and source ownership. Publishing visibility, destructive replacement, ownership conversion, or divergent duplicate source copies require explicit authorization rather than being inferred from discovery needs.
+Discovery/source automation preserves existing User-owned entries and canonical ownership. Publishing visibility, destructive replacement, ownership conversion, divergent duplicate sources, or changing canonical source mode require explicit authorization rather than being inferred from convenience.
