@@ -1,55 +1,106 @@
 # Skill templates
 
-Use these templates after reading `../skill-package-architecture.md` and choosing the
-actual capability profile of the Skill.
+Use these templates after `../skill-package-architecture.md` and after the capability
+boundary/trigger are known.
 
-Do not combine templates mechanically. Pick the smallest profile that matches the
-capability and add optional resources only when they have real consumers.
+The profile files define only profile-specific package/resources. Use the common
+`SKILL.md` skeleton below instead of repeating the same progressive-disclosure,
+completion, stop, and boundary boilerplate in every profile.
+
+## Profiles
 
 | Profile | Template | Use when |
 |---|---|---|
-| Documentation | `documentation-skill.md` | The Skill primarily provides durable instructions, standards, or reasoning guidance. |
-| Executable | `executable-skill.md` | The Skill combines Agent guidance with deterministic scripts or commands. |
-| Asset-oriented | `asset-oriented-skill.md` | The Skill creates/manipulates artifacts using reusable templates or static assets. |
-| Composite/router | `composite-skill.md` | The Skill mainly routes among bounded downstream Skills or workflow branches. |
+| Documentation | `documentation-skill.md` | Durable instructions, standards, conventions, or reasoning guidance are the main capability. |
+| Executable | `executable-skill.md` | Deterministic scripts/commands materially implement the capability. |
+| Asset-oriented | `asset-oriented-skill.md` | Reusable templates/static assets are central to artifact creation/manipulation. |
+| Composite/router | `composite-skill.md` | The Skill routes among bounded downstream Skills or workflow branches. |
 
-For a project-level root workflow Skill, use `../project-skill-template.md` instead of
-the generic composite template.
+For a project-level workflow Skill, use `../project-skill-template.md` instead of the
+generic composite profile.
 
-## `AGENTS.md` is an ownership decision, not a profile decision
+## Common `SKILL.md` skeleton
 
-These four templates describe `SKILL.md` capability/workflow profiles. They do not
-decide whether the surrounding repository has an `AGENTS.md`.
+```markdown
+---
+name: <skill-name>
+description: >
+  <WHAT THE CAPABILITY DOES>. Use when <CONCRETE TRIGGER/INPUT>.
+---
 
-Apply this separate rule:
+# <Skill title>
+
+## Role / purpose
+
+<Capability boundary and stable outcome.>
+
+## When to use
+
+Use when:
+- <trigger>.
+
+Do not use for:
+- <non-goal>.
+
+## Required inputs / state
+
+- `<input>`: <meaning>.
+
+## Workflow
+
+1. <inspect/validate entry state>
+2. <perform capability-specific work>
+3. <load only resources needed by the active branch>
+4. <produce stable output>
+
+## Outputs
+
+- `<output/state>`: <meaning>.
+
+## Resources
+
+<Route only to references/scripts/assets actually needed by this Skill.>
+
+## Completion and stop conditions
+
+Complete when <directly checkable condition>.
+
+Stop rather than infer when required input/authority is missing, no defined route
+matches, or continuing would cross a human/trust boundary without authorization.
+
+## Boundaries
+
+- <capability-specific invariant>
+- <what this Skill does not own>
+```
+
+## `AGENTS.md` is an ownership decision
+
+Capability profile does not decide whether a local `AGENTS.md` exists:
 
 ```text
-standalone maintained FIRST_PARTY Skill repository
+standalone maintained FIRST_PARTY source repository
 → root AGENTS.md from ../skill-agents-template.md
-→ one of the four SKILL.md templates
+→ one capability profile
 
-embedded sub-Skill in a parent project/repository
-→ inherit nearest applicable parent AGENTS.md by default
-→ one of the four SKILL.md templates
+embedded sub-Skill
+→ inherit nearest parent AGENTS.md by default
+→ one capability profile
 
-portable Skill distribution bundle
+portable distribution
 → AGENTS.md not required
-→ SKILL.md + only runtime resources actually needed
 
-THIRD_PARTY Skill
+THIRD_PARTY
 → preserve upstream structure
 ```
 
-A Documentation Skill can therefore have a root `AGENTS.md` when it is an independent
-first-party source repository, while an Executable or Composite sub-Skill may have no
-local `AGENTS.md` because it inherits the parent project constitution.
+## Common rules
 
-Common rules for every Skill template:
-
-- `SKILL.md` is required;
-- YAML `name` and trigger-oriented `description` are required;
-- keep `SKILL.md` operational and compact;
-- use progressive disclosure;
-- never create empty optional directories;
-- do not duplicate repository/project governance from `AGENTS.md`;
-- stop rather than invent missing input, authority, or trust state.
+- `SKILL.md` is the capability entry; `AGENTS.md` is repository/project maintenance
+  guidance when applicable.
+- Keep `description` trigger-oriented.
+- Runtime progressive disclosure is `name + description → SKILL.md → only required
+  resources`.
+- Do not load project concepts by default.
+- Do not create empty optional directories.
+- Do not add runtime, scripts, tests, or assets without real consumers.
