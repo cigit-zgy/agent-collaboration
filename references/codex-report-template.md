@@ -1,12 +1,15 @@
 # Codex report template
 
-Codex implementation reports live under `reports/codex/` and use:
+Codex reports live under stable paths:
 
 ```text
-YYMMDD_codex_NN.md
+reports/codex/YYMMDD_codex_NN.md
 ```
 
-Every report begins with compact YAML front matter for retrieval and indexing. Keep it factual and concise. Do not attempt to record the commit that contains the report inside that same report; Git history and final stdout own that value.
+A report records execution evidence; it does not redefine project concepts or current
+operational policy.
+
+## YAML metadata
 
 ```yaml
 ---
@@ -21,34 +24,26 @@ task_source_sha: <TASK_SOURCE_SHA>
 baseline_sha: <BASELINE_SHA>
 verification_level: <level_1 | level_2 | level_3>
 summary: >
-  <ONE-TO-THREE-SENTENCE IMPLEMENTATION AND RESULT SUMMARY>
+  <ONE-TO-THREE-SENTENCE IMPLEMENTATION/RESULT SUMMARY>
 tags:
   - <TAG>
-concepts:
-  - <CONCEPT_ID_OR_FILE>
-limitations:
-  - <SHORT_LIMITATION>
+concepts: []
+limitations: []
 ---
 ```
 
-Metadata rules:
+Rules:
 
-- `summary` states what was actually implemented and the resulting state; do not copy the Changes section verbatim.
-- `tags` contains only a few stable retrieval terms.
-- `concepts` lists durable concept assets materially relevant to the implementation; use `[]` when none.
-- `limitations` contains only material non-blocking limitations; use `[]` when none.
-- `verdict` uses an underscore in YAML (`PASS_WITH_LIMITATIONS`) while the human-readable body keeps `PASS WITH LIMITATIONS`.
-- do not add speculative metadata fields or self-referential final commit SHAs.
+- `task_source_sha` binds the report to the exact committed task Codex executed;
+- do not repeat identity metadata in the body;
+- do not record the commit containing the report inside that same report;
+- do not move or rewrite the report later for calendar organization;
+- `limitations` contains only material non-blocking limitations.
+
+## Body template
 
 ```markdown
-# <Task title> — Codex Report
-
-VERDICT: <PASS | PASS WITH LIMITATIONS | BLOCKED | FAIL>
-Task ID: <TASK_ID>
-Task source SHA: <TASK_SOURCE_SHA>
-Baseline SHA: <BASELINE_SHA>
-Final SHA: <FINAL_SHA_IF_KNOWN_WITHOUT_SELF_REFERENCE>
-Verification level: <LEVEL>
+# <Task title> — Codex report
 
 ## Changes actually made
 
@@ -64,26 +59,22 @@ Verification level: <LEVEL>
 
 ## Git state
 
-Initial branch: <BRANCH>
-Initial HEAD: <SHA>
-Initial upstream: <REF + SHA>
-Initial worktree: <CLEAN | PRESERVED USER CHANGES + SUMMARY>
-Final branch: <BRANCH>
-Final HEAD: <SHA>
-Final upstream: <REF + SHA>
-Final worktree: <CLEAN | PRESERVED USER CHANGES + SUMMARY>
-HEAD == upstream: <PASS | FAIL>
+- Initial: <branch / HEAD / upstream / worktree summary>
+- Final: <branch / HEAD / upstream / worktree summary>
+- HEAD == upstream: <PASS | FAIL>
 ```
 
 ## Verdict meanings
 
 - `PASS`: every acceptance criterion is satisfied.
-- `PASS WITH LIMITATIONS`: the task goal is satisfied, with real, non-blocking, explicitly recorded limitations.
-- `BLOCKED`: the unresolved issue cannot reasonably be solved by the current Agent because it requires a human decision, an unavailable external system, or genuinely insufficient source evidence.
+- `PASS_WITH_LIMITATIONS`: task goal satisfied with real non-blocking limitations.
+- `BLOCKED`: completion requires a genuine human decision or unavailable external
+  prerequisite.
 - `FAIL`: acceptance criteria are not satisfied and machine-solvable work remains.
 
-If Codex can still fix the issue, it must continue fixing or report `FAIL`; it must not report `BLOCKED`. Never claim `PASS` without running the required verification. Do not present planned work as completed, equate a passing test with task acceptance, or hide unfinished scope.
+If Codex can still fix an in-scope issue, it should continue or report `FAIL`, not
+`BLOCKED`. Passing tests alone does not establish task acceptance.
 
-For repository-changing tasks, `HEAD == upstream` is the normal Git completion condition. A failed or unsafe synchronization must be reported explicitly and cannot be hidden behind a task-level PASS.
-
-A Codex report records implementation evidence; it does not redefine durable project concepts. Durable decisions belong in `reports/concept/`.
+For repository-changing tasks, final `HEAD == upstream` is the normal synchronization
+condition when it can be achieved safely. Pre-existing User changes must remain
+preserved and explicitly reported.
