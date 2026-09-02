@@ -19,7 +19,7 @@ Load only the reference family that owns the active concern.
 
 ## Core route
 
-For design, delegation, local execution mode selection, Git synchronization, concurrency, verification, and acceptance review, read:
+For design, deliverable-level delegation, local execution mode selection, Git synchronization, concurrency, verification, and acceptance review, read:
 
 ```text
 references/collaboration/protocol.md
@@ -30,10 +30,20 @@ The stable role split is:
 ```text
 User            = goals, genuine human decisions, final decision/override authority
 User + ChatGPT  = design collaboration
-ChatGPT         = direct executor when connected capabilities suffice
+ChatGPT         = direct executor for every deliverable supported by current connected capabilities
+                  + formal task author for only the remaining local work
                   + independent technical acceptance reviewer
-Codex           = local executor when genuinely local/unavailable capability is required
+Codex           = local executor for deliverables with a concrete local/unavailable dependency
 ```
+
+Delegation is **per deliverable**, not per task. A mixed task is partitioned first:
+
+```text
+DIRECT → ChatGPT completes before handoff
+LOCAL  → Codex may execute locally
+```
+
+Repository mutation alone does not make a deliverable `LOCAL`. When ChatGPT has connected repository read/write access, substantive concept, `AGENTS.md`, `SKILL.md`, and `references/*.md` authoring is normally completed directly before Codex handoff.
 
 Codex does not self-accept.
 
@@ -43,7 +53,7 @@ Codex does not self-accept.
 
 Use `references/collaboration/` for the three-party operating loop:
 
-- `protocol.md` — roles, routine-vs-formal Codex execution, Git synchronization, concurrency, acceptance;
+- `protocol.md` — roles, deliverable partition, routine-vs-formal Codex execution, Git synchronization, concurrency, acceptance;
 - `verification.md` — verification levels and risk-based tool selection;
 - `agents.md` — collaboration-wide `AGENTS.md` writing standard;
 - `templates/` — formal ChatGPT task/launch format and Codex report format.
@@ -81,4 +91,4 @@ Project design/redesign/conformance work additionally follows the target project
 
 ## Completion
 
-Collaboration work is complete when the requested design/action/evidence reaches its declared terminal state and the applicable review/acceptance gate in `references/collaboration/protocol.md` is satisfied.
+Collaboration work is complete when all `DIRECT` deliverables are completed directly, any necessary `LOCAL` work has been executed and reviewed, and the applicable acceptance gate in `references/collaboration/protocol.md` is satisfied.
