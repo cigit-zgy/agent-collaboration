@@ -1,23 +1,14 @@
 # Collaboration decision-history index
 
-`reports/concept/` records accepted design history and rationale. It is not the
-current operational-policy layer and is not part of ordinary Skill runtime loading.
+`reports/concept/` records accepted collaboration design history and rationale. Current operational rules live under `references/` and applicable `AGENTS.md` / `SKILL.md` files.
 
-Current operational rules live in `references/*` and repository-local `AGENTS.md` /
-Agent-facing `SKILL.md` files as appropriate.
+| ID | File | Topic | Status | Operational authority |
+|---|---|---|---|---|
+| 00 | `00_global_codex_policy.md` | Global Codex operating-policy decisions | active | `references/collaboration/protocol.md`, `references/collaboration/verification.md`, `references/skill/repository.md`, `references/skill/package.md` |
+| 01 | `01_report_asset_policy.md` | Report/concept asset decisions | active | `references/project/concept.md`, collaboration task/report templates |
+| 02 | `02_collaboration_hub.md` | Three-party collaboration decisions | active | `references/collaboration/protocol.md` |
+| 03 | `03_project_integration_and_asset_lifecycle.md` | Project integration and entry decisions | active | `references/project/architecture.md`, `references/project/concept.md`, project templates |
+| 04 | `04_skill_package_architecture.md` | Skill source, discovery, package decisions | active | `references/skill/repository.md`, `references/skill/package.md`, `references/skill/writing.md` |
+| 05 | `05_water_research_project_architecture.md` | Water research project architecture decisions | active | `references/project/architecture.md` |
 
-Read this index only when historical rationale, supersession, or the reason behind a
-current contract is materially needed.
-
-| ID | File | Topic | Status | Updated | Operational authority |
-|---|---|---|---|---|---|
-| 00 | `00_global_codex_policy.md` | Global Codex operating-policy decisions | active | 2026-09-02 | `references/protocol.md`, `references/skill-repository-policy.md`, verification/environment references |
-| 01 | `01_report_asset_policy.md` | Report asset lifecycle decisions | active | 2026-09-02 | `references/report-concept-policy.md`, task/report templates |
-| 02 | `02_collaboration_hub.md` | Three-party collaboration decisions | active | 2026-09-02 | `references/protocol.md` |
-| 03 | `03_project_integration_and_asset_lifecycle.md` | Project integration and entry decisions | active | 2026-09-02 | `references/project-integration.md`, `references/project-architecture.md`, project templates |
-| 04 | `04_skill_package_architecture.md` | Skill source, discovery, and package decisions | active | 2026-09-02 | `references/skill-repository-policy.md`, `references/skill-package-architecture.md`, Skill templates |
-| 05 | `05_water_research_project_architecture.md` | Water research project architecture decisions | active | 2026-09-02 | `references/project-architecture.md` |
-
-If a concept and its listed operational authority disagree, follow the operational
-authority and treat the concept as historical context that may need a new decision
-record entry.
+If a historical concept and its current operational authority differ, follow the operational authority.

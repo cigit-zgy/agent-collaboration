@@ -1,144 +1,78 @@
-# Agent Collaboration repository context
+# agent-collaboration repository context
 
-## Repository role
+## Identity
 
-This is the maintained first-party source repository for the `agent-collaboration`
-Skill. It defines how User, ChatGPT, and Codex collaborate and provides reusable
-project/Skill onboarding contracts.
+This repository is the maintained first-party source for the `agent-collaboration` Skill. It defines the reusable User ↔ ChatGPT ↔ Codex collaboration contract used across maintained projects and Skills.
 
-Root `AGENTS.md` governs maintenance of this repository. Root `SKILL.md` is the
-Agent-facing collaboration router. They are persistent source-repository assets and
-serve different purposes.
-
-## Authority model
-
-For this repository itself, use one current operational authority per concern:
+## Authority
 
 ```text
 AGENTS.md
-= repository-local maintenance instructions
+= repository-maintenance constitution
 
 SKILL.md
-= activation and top-level routing only
+= collaboration entry and routing
 
-references/*
-= current operational collaboration/project/Skill contracts
+references/
+= current operational contracts
 
-reports/concept/*
-= accepted decision history, rationale, and pointers to current operational authority
+reports/concept/
+= this repository's decision history/rationale
 
-reports/chatgpt/*
-= committed local-execution specifications
-
-reports/codex/*
-= execution and verification evidence
+reports/chatgpt/ + reports/codex/
+= formal task specifications and execution evidence
 ```
 
-When this repository's concept history and an operational reference disagree, the
-operational reference is current policy. Concepts explain why policy evolved; they do
-not create a competing runtime authority here.
+User + ChatGPT own collaboration design. Codex executes approved local work and supplies verification evidence.
 
-Project repositories may declare a different concept role. In maintained scientific
-research projects, selected `reports/concept/*` topics may be the canonical User +
-ChatGPT design specification, while project Skills/references are operational
-projections of that design. This relationship is governed by
-`references/report-concept-policy.md`, `references/project-integration.md`, and
-`references/project-architecture.md`.
-
-Do not conflate project design authority with model/source scientific evidence.
-Project concepts may define the scientific architecture and contracts; registered
-source/evidence remains the authority for model-specific scientific facts.
-
-## Reading order
-
-For ordinary collaboration work in this repository:
+## Repository ownership
 
 ```text
-AGENTS.md
-→ SKILL.md
-→ only the reference required by the active route
+references/collaboration/   three-party protocol, verification, AGENTS writing, task/report templates
+references/project/         project architecture, concept policy, project templates
+references/skill/           Skill repository/package/writing policy and Skill-repository template
+reports/concept/             collaboration decision history/rationale
+reports/chatgpt/             committed local-execution specifications
+reports/codex/               Codex execution evidence
 ```
 
-Read this repository's `reports/concept/README.md` and a concept topic only when
-historical design rationale, supersession, or the reason behind a current contract is
-materially needed.
+Each concern has one current operational owner under `references/`.
 
-For a target project, follow that project's declared authority model. Routine runtime
-may stay `AGENTS → workflow Skill → sub-Skill → reference`; design/redesign/audit work
-may require the project's governing design-authority concept first.
+## Routing
 
-## Skill source, discovery, and distribution
-
-Keep these boundaries distinct:
+Read `SKILL.md` first for collaboration work, then load only the owning reference for the active topic.
 
 ```text
-maintained first-party source
-/Users/wenv/Documents/skills/<skill-name>/
-
-Codex local discovery
-$HOME/.agents/skills/<skill-name>
-  → normally a symlink to the maintained source
-
-repo-scoped Codex discovery
-$REPO_ROOT/.agents/skills/<skill-name>
-  → checked-in package or symlink when the Skill should be discoverable only there
-
-external reusable distribution
-OpenAI plugin or another explicit distribution artifact
+collaboration behavior → references/collaboration/
+project integration     → references/project/
+Skill design/maintenance→ references/skill/
 ```
 
-OpenAI's current Codex discovery locations and symlink support are external platform
-facts, not conventions invented by this repository. See
-`references/skill-repository-policy.md` for the maintained-source/discovery contract.
+For authoring or reviewing repository/project `AGENTS.md`, use `references/collaboration/agents.md` before the relevant project/Skill template.
 
-Do not treat `/Users/wenv/Documents/skills/` itself as an automatic Codex discovery
-location. Do not use legacy `~/.codex/skills/` as the canonical current discovery
-contract.
+## Source and discovery
 
-## Scope boundaries
+Maintained source:
 
-This repository owns global collaboration rules and reusable templates. It does not
-own another project's scientific truth, tasks, Codex reports, workspaces, data,
-experiments, manuscript, or project-specific concepts.
+```text
+/Users/wenv/Documents/skills/agent-collaboration/
+```
 
-Project-specific assets remain in the repository that owns them.
+Codex user-scoped discovery normally exposes that source through:
 
-## Maintenance rules
+```text
+$HOME/.agents/skills/agent-collaboration
+```
 
-- User + ChatGPT own collaboration-system design; Codex executes committed local
-  tasks that genuinely require local capabilities.
-- Change the single owning `references/*` file for a collaboration operational rule;
-  route to it instead of copying the rule into multiple files.
-- Change root `SKILL.md` only when activation or top-level routing changes.
-- Change root `AGENTS.md` only for repository-maintenance instructions or authority
-  routing.
-- Record this repository's concept entries as decision history/rationale; do not copy
-  full current collaboration policy there.
-- In project templates, preserve the distinction between canonical design authority,
-  operational projection, implementation, verification, and runtime artifacts.
-- Preserve formal task and Codex report paths after issue. Do not calendar-archive or
-  rewrite closed artifacts merely for directory tidiness.
-- Keep optional architecture conditional on a real owner, artifact, and consumer.
+Detailed ownership/discovery rules live in `references/skill/repository.md`.
 
-## Runtime
+## Runtime and verification
 
-This repository is documentation/policy oriented and owns no independent runtime by
-default. Do not create `pyproject.toml`, scripts, environments, or dependencies
-without a real executable consumer and explicit approval.
+This repository owns no independent runtime by default. Documentation-only changes use direct structural/link review; executable verification follows `references/collaboration/verification.md` when a task actually introduces or changes executable behavior.
 
 ## Hard invariants
 
-- `references/*` is this repository's current operational-policy layer.
-- This repository's `reports/concept/*` is decision history/rationale.
-- A project may explicitly declare selected concepts as canonical design authority;
-  its Skills/references then act as operational projections and must not redefine the
-  design.
-- Project design authority and source-grounded scientific fact authority are separate.
-- `SKILL.md` routes; it does not duplicate protocol details.
-- Maintained Skill source, Codex discovery, and external distribution are separate
-  boundaries.
-- Standalone first-party Skill source repositories retain their root `AGENTS.md` for
-  maintenance; embedded sub-Skills normally inherit the nearest parent instructions.
-- Project workflow Skill paths are project-declared; do not assume `project/SKILL.md`.
-- Formal task/report artifacts keep stable repository paths once issued.
-- User + ChatGPT design; Codex executes approved local work.
+- Current operational policy has one owner under `references/`.
+- Formal task/report artifacts remain stable after issue.
+- Project-specific scientific/design truth remains in the owning project.
+- Repository restructuring preserves the meaning and active routing of current policy.

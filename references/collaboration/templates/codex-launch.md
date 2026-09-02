@@ -1,7 +1,6 @@
 # Codex launch template
 
-After committing and pushing the formal task, ChatGPT gives the User only this
-plain-text block. It does not repeat the full task.
+After committing and pushing the formal task, give the User only this launch block:
 
 ```text
 执行正式任务：
