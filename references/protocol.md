@@ -13,36 +13,60 @@
 
 ChatGPT is the planner, formal task author, independent auditor, and acceptance
 authority. Before writing a task, it inspects the target repository and current
-evidence. It commits and pushes the formal task, then gives the User only the
-short Codex launch prompt.
+evidence. It writes formal tasks under `reports/chatgpt/`, commits and pushes the
+task, then gives the User only the short Codex launch prompt.
 
 After Codex finishes, ChatGPT independently checks the repository, diff,
-implementation, report, verification evidence, and relevant artifacts. It does
-not accept Codex's self-reported PASS. ChatGPT decides `PASS`,
+implementation, Codex report, verification evidence, and relevant artifacts. It
+does not accept Codex's self-reported PASS. ChatGPT decides `PASS`,
 `PASS WITH LIMITATIONS`, `BLOCKED`, or `FAIL`, and only then decides whether to
 open the next task.
+
+When a discussion produces a durable project decision, ChatGPT updates the
+appropriate topic under `reports/concept/`. Concept files capture current design
+truth, not task execution history.
 
 ### Codex
 
 Codex is the implementer. It executes the committed formal task rather than
 guessing requirements from chat. It does not expand scope without approval. It
-implements, runs the specified verification, writes the Agent report, commits,
-and pushes. Codex does not grant final acceptance.
+implements, runs the specified verification, writes its implementation report under
+`reports/codex/`, commits, and pushes. Codex does not grant final acceptance and
+does not rewrite project concepts unless the committed task explicitly requires it.
 
 ## Standard loop
 
 ```text
 User requirement
 → ChatGPT independent inspection
-→ ChatGPT formal committed task
+→ durable concept update when needed
+→ ChatGPT formal committed task in reports/chatgpt/
 → short Codex launch prompt
 → Codex implementation
 → Codex verification
-→ Codex report + commit/push
+→ Codex report in reports/codex/ + commit/push
 → ChatGPT independent audit
 → verdict
+→ concept update when acceptance changes durable project truth
 → only then next task
 ```
+
+## Report ownership
+
+```text
+reports/chatgpt/
+→ committed ChatGPT task specifications
+
+reports/codex/
+→ Codex implementation and verification reports
+
+reports/concept/
+→ durable User + ChatGPT project decisions and design contracts
+```
+
+Do not use these directories interchangeably. Do not place transient run logs in
+`reports/concept/`. Existing legacy report directories do not need retrospective
+renaming unless a project task explicitly requests migration.
 
 ## Invariants
 
