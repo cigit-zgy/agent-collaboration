@@ -26,18 +26,18 @@ verifiable implementation evidence.
   identify the target repository. ChatGPT reads the target repository's applicable
   `AGENTS.md`, follows its canonical collaboration reference to this Skill, and then
   reads only the collaboration references needed for the active role.
-- **Project repository:** root `AGENTS.md` is the project-level constitution. The
-  project root `SKILL.md` is the Agent-facing workflow/router. Together they connect
-  global collaboration, durable project concepts, and downstream stage Skills
-  without copying detailed global rules.
-- **New project:** when a repository does not yet have suitable project entry assets,
-  User + ChatGPT design `AGENTS.md` from
-  [project-agents-template.md](references/project-agents-template.md), then design the
-  root workflow Skill from
-  [project-skill-template.md](references/project-skill-template.md). ChatGPT writes
-  and commits those design assets directly when its connected tools can do so;
-  Codex is used only for genuinely local verification or other unavailable
-  capabilities.
+- **Project repository:** root `AGENTS.md` is the project-level constitution. A
+  project may expose its Agent-operable workflow through a declared project workflow
+  Skill such as `<agent-name>/SKILL.md`; the workflow Skill does not have to live at
+  repository root. `AGENTS.md` must identify the canonical workflow path.
+- **New water research project:** use
+  [project-architecture.md](references/project-architecture.md) as the canonical
+  responsibility map, instantiate root `AGENTS.md` from
+  [project-agents-template.md](references/project-agents-template.md), then create a
+  project workflow Skill from
+  [project-skill-template.md](references/project-skill-template.md) only when the
+  project exposes an Agent-operable workflow. Create optional directories only when
+  their responsibility actually exists.
 - **New standalone first-party Skill repository:** classify ownership with
   [skill-repository-policy.md](references/skill-repository-policy.md), create the
   repository-maintenance constitution from
@@ -96,11 +96,13 @@ determines completion.
 - All roles: read [protocol.md](references/protocol.md) for responsibilities,
   entrypoints, delegation boundaries, repository synchronization, and the
   collaboration loop.
+- Designing or normalizing a maintained water-domain research project repository:
+  read [project-architecture.md](references/project-architecture.md).
 - Connecting an individual project repository to this global protocol: read
   [project-integration.md](references/project-integration.md).
 - Creating or normalizing a project's root `AGENTS.md`: use
   [project-agents-template.md](references/project-agents-template.md).
-- Creating or normalizing a project's root workflow `SKILL.md`: use
+- Creating or normalizing a project's Agent-facing workflow `SKILL.md`: use
   [project-skill-template.md](references/project-skill-template.md).
 - Creating or normalizing the root `AGENTS.md` of a maintained standalone
   first-party Skill repository: use
