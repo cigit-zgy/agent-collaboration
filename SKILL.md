@@ -51,7 +51,7 @@ Use `references/collaboration/` for the three-party operating loop:
 Use `references/project/` when a scientific/software project joins this collaboration:
 
 - `architecture.md` — project entry, repository ownership, authority hierarchy, reading modes, onboarding;
-- `concept.md` — `reports/concept/` design-authority contract;
+- `concept.md` — `reports/concept/` design-authority contract, concept writing standard, and review/adjudication/freeze/projection lifecycle;
 - `templates/agents.md` — project root `AGENTS.md`;
 - `templates/skill.md` — project workflow `SKILL.md`.
 
@@ -61,7 +61,7 @@ Use `references/skill/` for first-party/third-party Skill ownership and package 
 
 - `repository.md` — maintained source, discovery, distribution, rename lifecycle;
 - `package.md` — package resources, profiles, runtime/environment ownership;
-- `writing.md` — maintained `SKILL.md` writing standard;
+- `writing.md` — maintained `SKILL.md` and `references/*.md` writing standard;
 - `templates/agents.md` — maintained first-party Skill-repository `AGENTS.md`.
 
 ## Progressive disclosure
