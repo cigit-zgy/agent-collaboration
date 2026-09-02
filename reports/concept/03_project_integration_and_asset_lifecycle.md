@@ -10,6 +10,7 @@ operational_authority:
   - references/project-architecture.md
   - references/project-agents-template.md
   - references/project-skill-template.md
+  - references/report-concept-policy.md
 related_tasks: []
 ---
 
@@ -39,8 +40,7 @@ related_tasks: []
 ### 2026-09-02 — Runtime reading path stays short
 
 - Decision: ordinary project operation follows `AGENTS.md → workflow SKILL.md →
-  owning sub-Skill → required resource`. Concepts are read only for historical design
-  rationale/supersession.
+  owning sub-Skill → required resource`.
 - Supersedes: the earlier default route through concept index/topics before the
   project workflow Skill.
 - Rationale: preserve progressive disclosure rather than creating a document
@@ -53,3 +53,21 @@ related_tasks: []
   conditional directory triggers live in `project-architecture.md`.
 - Rationale: keep ownership and creation criteria in one operational authority.
 - Operational authority: `references/project-architecture.md`.
+
+### 2026-09-02 — Scientific projects may use concepts as canonical design authority
+
+- Decision: a project may explicitly declare selected `reports/concept/*` topics as
+  canonical User + ChatGPT design specifications. When declared, project
+  Skills/references are operational projections, code/schema is implementation, tests
+  verify conformance, and downstream layers must not silently redefine the concept.
+- Changes: supersedes the over-broad assumption that every project's concept folder
+  is history/rationale only. `agent-collaboration` itself still uses concepts only as
+  decision history.
+- Rationale: research projects often need the complete accepted scientific and
+  architectural plan from User + ChatGPT discussions to remain the upstream design
+  truth, while routine Agent execution still needs compact operational projections.
+- Boundary: design authority is distinct from registered source/evidence authority
+  for model-specific scientific facts.
+- Operational authority: `references/project-integration.md`,
+  `references/project-agents-template.md`, `references/project-skill-template.md`,
+  `references/report-concept-policy.md`.
