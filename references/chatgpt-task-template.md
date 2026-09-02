@@ -1,84 +1,62 @@
 # ChatGPT formal task template
 
-Formal Codex tasks live under `reports/chatgpt/` and use:
+Formal Codex tasks live under stable paths:
 
 ```text
-YYMMDD_chatgpt_NN.md
+reports/chatgpt/YYMMDD_chatgpt_NN.md
 ```
 
-## Delegation gate before authoring
+Do not create a Codex task until ChatGPT can name the concrete local/unavailable
+capability that requires Codex.
 
-Do not create a Codex task until ChatGPT has answered this question:
+## YAML metadata
 
-> Does this work genuinely require a local-machine capability or another capability
-> unavailable to ChatGPT?
-
-If **no**, ChatGPT performs and verifies the work directly with its available
-connected tools. Do not create a Codex task merely to offload work.
-
-If **yes**, ChatGPT freezes every reasonably determinable decision before handoff.
-The formal task should minimize interpretation left to Codex. Specify exact files or
-areas, approved decisions, constraints, expected behavior, non-goals, verification,
-acceptance criteria, Git requirements, report path, and fixed stdout. Include exact
-commands or replacement text when that materially reduces ambiguity.
-
-Every task begins with compact YAML front matter for retrieval and indexing. Keep it
-factual and concise. Do not include a task-source commit SHA inside the task itself
-because that would be self-referential.
+Use identity/retrieval metadata once:
 
 ```yaml
 ---
 artifact_type: chatgpt_task
 task_id: <TASK_ID>
 title: <SHORT_TITLE>
-status: <issued | superseded | closed>
+status: issued
 date: <YYYY-MM-DD>
 repository: <OWNER/REPOSITORY>
 branch: <BRANCH>
 baseline_sha: <BASELINE_SHA>
 verification_level: <level_1 | level_2 | level_3>
 summary: >
-  <ONE-TO-THREE-SENTENCE PURPOSE AND SCOPE SUMMARY>
+  <ONE-TO-THREE-SENTENCE PURPOSE/SCOPE>
 tags:
   - <TAG>
-concepts:
-  - <CONCEPT_ID_OR_FILE>
+concepts: []
 codex_report: reports/codex/<YYMMDD_codex_NN.md>
 ---
 ```
 
-Metadata rules:
+Rules:
 
-- `summary` states what the task changes and why; do not copy the Mission section verbatim.
-- `tags` contains only a few stable retrieval terms.
-- `concepts` lists only durable concept assets that actually govern the task; use `[]` when none.
-- `codex_report` is the expected paired report path.
-- do not add speculative metadata fields merely because they might be useful later.
+- do not store the task-source commit SHA inside the task itself;
+- do not repeat metadata fields in the body;
+- `concepts` contains only decision-history topics materially relevant to why the
+  task exists; operational authority should be listed under `Authoritative sources`;
+- after Codex executes the committed task source, do not mutate or move this task.
 
-Use every body field and section. Write `None` where a section genuinely has no
-content; do not omit it.
+## Body template
 
 ```markdown
 # <Task title>
-
-Task ID: <TASK_ID>
-Issued: <DATE>
-Repository: <OWNER/REPOSITORY>
-Local repository: <ABSOLUTE_LOCAL_REPOSITORY>
-Branch: <BRANCH>
-Baseline SHA: <BASELINE_SHA>
-Verification level: <LEVEL 1 — FOCUSED | LEVEL 2 — MAJOR | LEVEL 3 — RELEASE>
-Status: <STATUS>
 
 ## Mission
 
 ## Why Codex is required
 
-<State the concrete local/unavailable capability that requires Codex.>
+<State the concrete local/unavailable capability. If none exists, do not issue the task.>
 
 ## Current evidence / diagnosed problem
 
 ## Authoritative sources
+
+<List the current operational references/contracts and exact repository artifacts.>
 
 ## Scope
 
@@ -96,36 +74,22 @@ Status: <STATUS>
 
 ## Git requirements
 
-State the branch/upstream expectations and any repository-specific exceptions.
-Unless the task explicitly says otherwise, Codex must follow
-`references/protocol.md` repository synchronization:
-
-- fetch and inspect branch, `HEAD`, upstream, and worktree before editing;
-- preserve pre-existing user changes;
-- fast-forward only when safe; do not invent a merge/rebase for divergence;
-- commit and push all task-scoped repository changes;
-- fetch again and verify final `HEAD == upstream`;
-- report any intentionally preserved non-task worktree changes.
+Follow `references/protocol.md` unless the task explicitly states a stricter
+repository-specific rule.
 
 ## Codex report
 
 Expected path: `reports/codex/YYMMDD_codex_NN.md`
 
 ## Final stdout
+
+<Exact fixed stdout format.>
 ```
 
-Before authoring the task, ChatGPT must inspect the current repository and relevant
-artifacts. The task must state the actual baseline SHA and one verification level.
-Required changes and acceptance criteria must be directly checkable, and non-goals
-must bound the work. Do not use open-ended phrases such as “improve as much as
-possible,” and do not pre-schedule the next task.
+Before authoring, ChatGPT inspects the current repository/evidence and resolves every
+design decision that can reasonably be resolved remotely. Required changes and
+acceptance criteria must be directly checkable. Avoid open-ended instructions such
+as “improve as much as possible.”
 
-The `Why Codex is required` section is mandatory. If ChatGPT cannot name a concrete
-local or unavailable capability, it should not issue the Codex task.
-
-If the task changes a durable design decision, update the owning `reports/concept/`
-topic before or as part of the committed task so Codex has a stable authoritative
-contract.
-
-Commit and push the task before handing it to Codex. Codex treats that committed
-task as the sole specification; chat additions are not task authority.
+Commit and push the task before handoff. Codex treats that committed task source as
+the specification; chat additions do not silently supersede it.
