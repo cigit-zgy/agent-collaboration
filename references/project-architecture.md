@@ -1,322 +1,227 @@
 # Canonical water research project architecture
 
-This reference defines the default repository architecture for maintained water-domain
-research projects under the `agent-collaboration` workflow. It is intended to cover
-both mechanistic/dynamic-model projects and water-domain Agent projects with one
-shared structure.
+This file is the current operational authority for repository architecture used by
+maintained water-domain research projects under `agent-collaboration`. One structure
+covers mechanistic/dynamic-model research and water-domain Agent research.
 
-The architecture is responsibility-based rather than directory-count based. Only
-project entry/governance assets are universal. All other directories are conditional
-and are created only when the project has a real responsibility for them.
+The architecture is responsibility-based. Do not create directories merely because
+they appear in the canonical diagram.
 
 ## Canonical architecture
 
 ```text
 <project>/
-├── AGENTS.md                    # required project constitution and maintenance entry
-├── README.md                    # conditional human-facing project orientation
+├── AGENTS.md                    # required project constitution
+├── README.md                    # normal human-facing project orientation
 ├── pyproject.toml               # conditional project runtime/tooling authority
-├── ARCHITECTURE.md              # conditional human-facing system architecture
+├── ARCHITECTURE.md              # conditional cross-module system explanation
 │
-├── <agent-name>/                # conditional Agent capability package
-│   ├── SKILL.md                 # Agent-facing composite/project workflow router
-│   ├── <capability-a>/
-│   │   └── SKILL.md
-│   ├── <capability-b>/
-│   │   └── SKILL.md
-│   └── ...
+├── <agent-name>/                # conditional maintained Agent/capability source
+│   ├── SKILL.md                 # composite/project workflow Skill
+│   └── <capability>/SKILL.md    # conditional sub-Skills
 │
+├── .agents/skills/              # conditional Codex repo-scoped discovery exposure
 ├── src/                         # conditional reusable production implementation
 ├── models/                      # conditional durable model definitions/resources
-├── data/                        # conditional project-owned research data
+├── data/                        # conditional canonical project-owned research data
 ├── workspace/                   # conditional mutable case/model working state
 ├── experiments/                 # conditional controlled research investigations
 ├── tests/                       # conditional implementation/contract verification
 ├── docs/                        # conditional durable technical documentation
-├── manuscript/                  # conditional publication/manuscript assets
+├── manuscript/                  # conditional publication assets
 │
-└── reports/                     # collaboration/project knowledge when such assets exist
-    ├── concept/                 # durable User + ChatGPT project conclusions
-    ├── chatgpt/                 # implementation-ready ChatGPT task specifications
-    └── codex/                   # Codex execution/verification evidence
+└── reports/
+    ├── concept/                 # decision history/rationale when needed
+    ├── chatgpt/                 # formal Codex tasks when issued
+    └── codex/                   # Codex execution evidence when produced
 ```
 
-Do not create empty optional directories merely to match this diagram. A repository
-may legitimately contain only a subset of these responsibilities.
+`.agents/skills/` is a Codex discovery surface, not a second maintained source tree.
+When a project Skill is maintained elsewhere in the repository, prefer a stable
+repo-local symlink rather than a duplicate copy if auto-discovery is desired.
 
-## Required versus conditional
+## Project initialization
 
-| Path | Status | Responsibility |
-|---|---|---|
-| `AGENTS.md` | **REQUIRED** | Project constitution, authority, ownership boundaries, collaboration link, and routing to project knowledge/workflow. |
-| `<agent-name>/SKILL.md` | **CONDITIONAL** | Required only when the project exposes an Agent-operable workflow/capability system. It is the workflow/router for that Agent package. |
-| `reports/concept/` | **CONDITIONAL but standard for durable design** | Create when User + ChatGPT have durable project conclusions that should survive conversations. |
-| `reports/chatgpt/` | **CONDITIONAL** | Create when a formal Codex task is issued. |
-| `reports/codex/` | **CONDITIONAL** | Create when Codex execution evidence is produced. |
-| All other paths | **CONDITIONAL** | Create only when the corresponding responsibility exists. |
-
-Git does not preserve empty directories, so `reports/` subdirectories need not be
-pre-created. Create them when the first owned artifact exists.
-
-## `AGENTS.md` — required project entry
-
-Root `AGENTS.md` is the repository-level constitution for Agents that develop,
-maintain, or operate inside the project repository.
-
-It should define only durable project-level concerns:
-
-- project purpose and scope;
-- scientific/product authority and trust boundaries;
-- repository ownership boundaries;
-- canonical collaboration reference;
-- project concept/report locations;
-- declared Agent workflow router, when one exists;
-- runtime authority, when one exists;
-- project-specific human checkpoints and hard invariants.
-
-Do not turn `AGENTS.md` into a detailed scientific method, implementation manual, or
-copy of the global collaboration protocol.
-
-## `<agent-name>/` — conditional Agent capability system
-
-Create one Agent capability package when the project has a reusable Agent-operable
-workflow composed of one or more Skills.
-
-Use an actual project-specific name such as `water-bioprocess-agent/`; do not require
-a literal directory named `agent/`.
+For a new maintained water research project, bootstrap only assets with immediate
+responsibility:
 
 ```text
-<agent-name>/
-├── SKILL.md
-├── <capability-a>/SKILL.md
-├── <capability-b>/SKILL.md
-└── ...
+<project>/
+├── AGENTS.md
+├── README.md
+└── reports/
+    └── concept/
+        └── README.md
 ```
 
-The package root `SKILL.md` is the composite workflow/router. Sub-Skills own bounded
-capabilities. A collection of coordinated Skills therefore forms the Agent capability
-system, while the repository root `AGENTS.md` continues to govern the whole project.
+These files establish project governance, human orientation, and an index location
+for durable design history. Do not pre-create empty `chatgpt/`, `codex/`, `src/`,
+`models/`, `data/`, `workspace/`, `experiments/`, `tests/`, `docs/`, `manuscript/`,
+`<agent-name>/`, `.agents/skills/`, `pyproject.toml`, or `ARCHITECTURE.md`.
 
-Do not create a second repository-root `SKILL.md` merely for symmetry when the
-project's actual workflow router is already `<agent-name>/SKILL.md`. The project
-`AGENTS.md` must declare the canonical workflow-Skill path explicitly.
+Expand only when a real owner, artifact, and consumer exist.
 
-Embedded sub-Skills normally inherit the project root `AGENTS.md`; add nested
-`AGENTS.md` only when a subtree has genuine additional maintenance rules.
+## Ownership contracts
 
-## `src/` — conditional reusable production implementation
+### `AGENTS.md`
 
-Create `src/` when the project owns reusable production code that should be separated
-from research runs, workspaces, notebooks, or one-off analyses.
+Required repository constitution for Agent maintenance/operation. It defines project
+purpose, authority/trust boundaries, repository ownership, collaboration link,
+workflow entry when present, runtime authority when present, human checkpoints, and
+hard invariants.
 
-Examples include:
+It does not contain detailed workflow algorithms or duplicate global collaboration
+policy.
 
-- reusable numerical/model infrastructure;
-- parsers, APIs, libraries, or shared deterministic services;
-- production utilities consumed by multiple project workflows.
+### `README.md`
 
-Do not move code into `src/` merely because it is Python. A script owned by one Skill
-may remain under that Skill's `scripts/` when that is its real consumer boundary.
+Human-facing project orientation: purpose, status, setup pointers, and navigation.
+It is not an Agent operational authority.
 
-## `models/` — conditional durable scientific model definitions
+### `<agent-name>/`
 
-Create `models/` when the repository owns durable model definitions or model-level
-resources independent of a single run/workspace.
+Maintained source for a project-owned Agent capability system. Use when the project
+exposes a repeatable Agent-operable workflow.
 
-Examples include:
+`<agent-name>/SKILL.md` is the composite/project workflow router. Sub-Skills own
+bounded capabilities. Do not create one `AGENTS.md` per sub-Skill unless genuine
+local maintenance rules differ from the project root.
 
-- mechanistic model definitions;
-- canonical parameter/model configurations;
-- model schemas or reusable model resources;
-- model fixtures intended to be retained as project assets.
+If Codex auto-discovery is desired, expose the package under
+`$REPO_ROOT/.agents/skills/` according to `skill-repository-policy.md`.
 
-Do not use `models/` for transient calibration outputs, one user's workspace state,
-or generated artifacts that belong to a run.
+### `src/`
 
-## `data/` — conditional project-owned research data
+Reusable executable implementation and infrastructure. Examples: solvers, model
+engines, parsers, APIs, validators, reusable utilities.
 
-Create `data/` only when research data are genuinely owned or managed by the
-repository/project.
+`src/` owns executable behavior; it does not own model-specific scientific content
+merely because code can represent it.
 
-Typical contents may include stable raw/processed datasets, manifests, metadata, or
-small fixtures. Large, sensitive, licensed, or externally governed datasets may live
-outside Git; in that case keep only the project-approved manifests/metadata needed to
-reproduce access and interpretation.
+### `models/`
 
-Do not use `data/` as a generic dumping directory for generated results or workspace
-state.
+Durable model-specific definitions/resources that are treated as project research
+objects rather than general implementation infrastructure: equations/specifications,
+parameter sets, schemas/configurations, calibrated model artifacts, or canonical
+model packages.
 
-## `workspace/` — conditional mutable working state
-
-Create `workspace/` when workflows need model-specific, case-specific, or user/task
-working state that evolves during operation.
-
-Workspace content may include registered inputs, intermediate artifacts, retained
-workflow state, generated evidence, candidate objects, or user-reviewed outputs as
-defined by the project contract.
-
-`workspace/` is not production source code and must not silently become the authority
-for reusable implementation. Its lifecycle and immutability rules are project-specific
-and belong in `AGENTS.md`, concepts, and the owning workflow Skill.
-
-## `experiments/` — conditional controlled research investigations
-
-Create `experiments/` when the project performs controlled scientific investigations
-whose design, execution, and outputs need to be preserved as research evidence.
-
-This directory is intentionally broad enough to cover water-domain work such as:
-
-- calibration and parameter-estimation studies;
-- simulation studies;
-- benchmark and baseline comparisons;
-- validation studies;
-- sensitivity/uncertainty analysis;
-- ablation studies;
-- case studies or controlled method comparisons.
-
-`experiments/` is **not mandatory**. Create it only when the project has such
-research investigations.
-
-Each experiment should make its scientific intent and reproducibility boundary clear.
-As appropriate, preserve or point to:
+Boundary with `src/`:
 
 ```text
-question / hypothesis
-configuration / protocol
-input-data or model references
-implementation/version reference
-outputs/results
-analysis or evaluation summary
+reusable engine/algorithm/API implementation → src/
+model-specific durable definition/artifact    → models/
 ```
 
-The exact subdirectory names are chosen by the science. Do not force every project to
-use fixed `calibration/`, `benchmark/`, `ablation/`, or other child directories.
+A model implemented as Python may have reusable execution code in `src/` and
+model-specific definitions/configuration under `models/`; do not duplicate the same
+truth in both.
 
-Do not put reusable production code, canonical project datasets, or mutable workflow
-state into `experiments/` merely because they were used by an experiment. Experiments
-reference those authorities instead.
+### `data/`
 
-## `tests/` — conditional verification
+Canonical project-owned datasets intended for reuse across analyses/experiments.
+Raw/processed naming is project-specific; provenance and licensing/size constraints
+must be defined when data is actually introduced.
 
-Create root `tests/` when the project owns implementation or cross-component contracts
-that warrant repository-level verification.
+Temporary run outputs do not become canonical `data/` automatically.
 
-Typical responsibilities include:
+### `workspace/`
 
-- production-code behavior;
-- cross-Skill integration contracts;
-- model/schema invariants;
-- stable artifact shapes;
-- project-level regression tests.
+Mutable operational state for a particular model, case, user task, or Agent run.
+Examples: source bundles, prepared evidence, working candidates, intermediate review
+state, temporary generated artifacts.
 
-Skill-local executable behavior may instead be tested inside the owning Skill package
-when that boundary is clearer. Do not duplicate the same contract at both levels.
+`workspace/` is not the canonical store for reusable datasets or formal experiment
+results.
 
-## `docs/` — conditional durable technical documentation
+### `experiments/`
 
-Create `docs/` for durable human-facing technical or design documentation that is too
-large or specialized for `README.md`/`AGENTS.md` and is not a collaboration concept.
+Controlled research investigations with reproducible purpose and boundaries. It may
+contain calibration studies, simulations, benchmarks, validation studies,
+sensitivity/uncertainty analyses, ablations, or case studies.
 
-Examples include user/developer guides, architecture explanations, generated
-reference documentation, or long technical specifications intended for human
-consumption.
+Each experiment owns its investigation-specific configuration, inputs/references,
+outputs, and analysis products unless something is deliberately promoted to another
+project-level authority.
 
-Do not use `docs/` as a replacement for `reports/concept/`: accepted User + ChatGPT
-design truth belongs in concepts; general human documentation belongs in `docs/`.
+### `tests/`
 
-## `manuscript/` — conditional publication assets
+Regression/contract verification for reusable code, schemas, APIs, deterministic
+workflows, or other stable behavior. Do not use tests as a substitute for scientific
+experiments or empirical validation.
 
-Create `manuscript/` when the repository owns a paper, preprint, supplement, figure
-source, response-to-reviewers material, or other publication artifacts.
+### `docs/`
 
-Keep manuscript assets separate from production code, datasets, and transient
-workspace state. Scientific claims in the manuscript do not automatically become
-software/model authority unless the project explicitly promotes them into the
-relevant contract or concept.
+Durable human-facing technical documentation that is too detailed for README and is
+not an Agent runtime contract. Do not use it as a second operational policy layer.
 
-## `README.md` — conditional human-facing orientation
+### `manuscript/`
 
-Create root `README.md` when humans need a conventional repository landing page for
-purpose, setup, usage, contribution, publication, or release information.
+Paper source, figures/tables assembled for publication, supplementary material, and
+submission assets. The manuscript may consume project outputs but does not become
+the source of truth for production code/data/model objects unless explicitly defined.
 
-It is strongly recommended for shared or open-source repositories, but it is not an
-Agent runtime requirement and should not duplicate the detailed workflow in
-`SKILL.md` or project governance in `AGENTS.md`.
+### `reports/`
 
-## `pyproject.toml` — conditional Python runtime/tooling authority
-
-Create root `pyproject.toml` only when the project owns a Python package/runtime or
-project-wide Python tooling contract.
-
-If executable code belongs entirely to an independently maintained Skill or another
-runtime authority, do not create a project `pyproject.toml` merely for symmetry.
-Environment ownership and rebuild policy follow `skill-environment-policy.md` plus
-project-specific rules.
-
-## `ARCHITECTURE.md` — conditional human-facing system map
-
-Create `ARCHITECTURE.md` only when the project has cross-module/system structure that
-cannot be explained compactly through `AGENTS.md`, the workflow Skill, and concept
-routing.
-
-It may describe stable component boundaries and data/control flow for human
-maintainers, but it must not become a second source of truth for contracts already
-owned by project concepts or Skills.
-
-## `reports/` — conditional collaboration/project knowledge
-
-Use the standard ownership split when collaboration artifacts exist:
+Collaboration assets only:
 
 ```text
-reports/concept/   durable User + ChatGPT conclusions
-reports/chatgpt/   committed implementation-ready Codex tasks
-reports/codex/     Codex execution and verification evidence
+reports/concept/  accepted decision history/rationale + pointers to current authority
+reports/chatgpt/  immutable committed local-execution tasks
+reports/codex/    execution/verification evidence
 ```
 
-Do not put ordinary experiment results, user workspace output, or manuscript drafts
-into these directories.
+Current operational policy belongs in the project's owning contracts/Skills, not in
+concept history.
 
-## Mechanistic-model and Agent projects use the same architecture
+## Promotion rules between responsibilities
 
-The structure is deliberately shared.
+Do not allow artifacts to drift silently between directories.
 
-A mechanistic/dynamic-model project may emphasize:
+### Experiment → canonical data
 
-```text
-models/
-data/
-experiments/
-src/
-tests/
-```
+An experiment-generated dataset moves/becomes canonical under `data/` only after an
+explicit project decision that it is reusable outside that experiment, with enough
+provenance to identify its origin and transformation. Until then it remains an
+experiment output.
 
-An Agent-centered water project may emphasize:
+### Experiment → model
 
-```text
-<agent-name>/
-workspace/
-experiments/
-src/
-tests/
-```
+An experimental calibration/model artifact becomes a durable `models/` artifact only
+when the project explicitly adopts it as a reusable model definition/state. Until
+then it remains experiment-owned.
 
-These are different responsibility mixes, not different project architectures.
+### Exploratory implementation → `src/`
 
-## Initialization rule
+Code written inside an experiment/workspace becomes `src/` only when it has a real
+reusable consumer and a stable implementation contract. Do not promote exploratory
+code merely to make the repository look clean.
 
-Initialize in this order:
+### Workspace → experiment
 
-```text
-1. Create/normalize root AGENTS.md.
-2. Identify the project's real responsibility boundaries.
-3. Create only directories with current real consumers.
-4. If the project exposes an Agent workflow, choose <agent-name>/ and create its
-   SKILL.md from project-skill-template.md.
-5. Add sub-Skills only for bounded reusable capabilities.
-6. Add runtime, models, data, workspace, experiments, tests, docs, or manuscript
-   directories only when their responsibilities actually exist.
-7. Create report directories when the first owned collaboration asset is written.
-```
+A workspace artifact may be captured as an experiment input/snapshot when the
+experiment requires it. The experiment owns the captured research input; the live
+workspace remains mutable and must not be treated as immutable experiment evidence.
 
-The template is a responsibility map, not a command to scaffold every possible
-folder.
+## Conditional creation triggers
+
+Create only when the responsibility exists:
+
+- `<agent-name>/`: repeatable Agent-operable workflow exists;
+- `.agents/skills/`: Codex repo-scoped auto-discovery is desired;
+- `pyproject.toml`: project owns a Python runtime/tooling contract;
+- `src/`: reusable production implementation exists;
+- `models/`: model-specific durable artifacts exist;
+- `data/`: reusable canonical project data exists;
+- `workspace/`: mutable model/case/Agent working state exists;
+- `experiments/`: controlled reproducible research investigations exist;
+- `tests/`: stable behavior needs regression protection;
+- `docs/`: durable technical explanation exceeds README/Skill scope;
+- `manuscript/`: publication work is owned by the repository;
+- `ARCHITECTURE.md`: cross-module structure is too complex to understand from
+  `AGENTS.md`, workflow Skill, and directory ownership alone.
+
+## Default rule
+
+The template is a vocabulary of responsibilities, not a directory checklist.
+Initialize the smallest meaningful project and grow it only when a responsibility is
+real.
