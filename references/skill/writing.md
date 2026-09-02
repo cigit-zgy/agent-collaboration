@@ -1,6 +1,61 @@
-# SKILL.md writing standard
+# Skill documentation writing standard
 
-This collaboration-wide house standard governs maintained `SKILL.md` files. It is derived from current Agent-Skill practice and observed scientific-agent repositories; it is not a universal external section template.
+This collaboration-wide house standard governs maintained `SKILL.md` files and the Markdown documents under a Skill's `references/` directory. It is derived from current Agent-Skill practice and observed scientific-agent repositories; it is not a universal external section template.
+
+The governing model is:
+
+```text
+SKILL.md
+= capability entry, normal workflow, completion, and progressive-disclosure routing
+
+references/*.md
+= bounded detailed contracts or durable on-demand knowledge
+```
+
+## Shared writing principles
+
+### Valid system first
+
+Describe correct state and normal execution as the main prose. Use prohibitions only for real scientific, trust, authorization, security, or data-loss boundaries that are not already unambiguous from the positive contract.
+
+### One concern, one owner, one statement
+
+Every substantive rule has one owning source. A `SKILL.md` or reference may summarize another owner only when the summary is needed for routing or local interpretation; detailed rules remain at their owner.
+
+```text
+project concept = accepted design semantics
+SKILL.md        = operational entry/workflow
+reference       = bounded detailed contract or on-demand knowledge
+code/schema     = implementation
+tests           = conformance evidence
+```
+
+### Concrete and checkable language
+
+Normative text identifies observable artifacts, fields, states, transitions, mappings, or gates. Vague terms such as `robust`, `proper`, `safe`, or `rigorous` require concrete criteria when they carry normative meaning.
+
+### Normative vocabulary
+
+Use `MUST`, `SHOULD`, `MAY`, and `MUST NOT` only when the strength matters. Ordinary explanatory prose needs no normative keyword.
+
+### Non-duplicative instructions
+
+State an instruction once at its owner. Repetition for emphasis increases context cost and can distort Agent behavior.
+
+### Shallow progressive disclosure
+
+Normal loading should remain shallow:
+
+```text
+SKILL.md
+→ one directly relevant reference
+```
+
+A reference may point to another owning reference when the dependency is real, but chains should remain shallow and should not become a substitute for choosing a clear owner.
+
+---
+
+# `SKILL.md`
 
 ## Core objective
 
@@ -15,39 +70,9 @@ An unfamiliar Agent should recover six facts with minimal reading:
 
 These are information categories, not mandatory Markdown headings.
 
-## Writing model
-
-### Valid system first
-
-Describe correct state and normal execution as the main prose. Use prohibitions only for real scientific, trust, authorization, security, or data-loss boundaries that are not already unambiguous from the positive contract.
-
-### One rule, one owner, one statement
-
-A Skill may summarize a governing concept/reference for execution but routes to the owner for detail rather than duplicating the full rule.
-
-```text
-project concept = accepted design semantics
-SKILL.md        = operational entry/workflow
-reference       = bounded detailed contract
-code/schema     = implementation
-tests           = conformance evidence
-```
-
-### Concrete and checkable
-
-Normative text identifies observable artifacts, fields, states, transitions, or gates. Vague terms such as `robust`, `proper`, `safe`, or `rigorous` require concrete criteria when they carry normative meaning.
-
-### Normative vocabulary
-
-Use `MUST`, `SHOULD`, `MAY`, and `MUST NOT` only when the strength matters. Ordinary explanatory prose needs no normative keyword.
-
-### Non-duplicative instructions
-
-State an instruction once at its owner. Repetition for emphasis increases context cost and can distort Agent behavior.
-
 ## Required information
 
-The Skill communicates purpose/boundary, activation, minimum entry state, normal procedure, completion/output, and progressive-disclosure routing. The `description` frontmatter should normally carry capability + trigger:
+The `description` frontmatter should normally carry capability + trigger:
 
 ```yaml
 ---
@@ -65,7 +90,7 @@ Normal procedure favors action-oriented flow such as:
 Discover → Confirm → Register → Verify → Report
 ```
 
-Completion is preferably a directly inspectable artifact/state/predicate rather than a second success flag.
+Completion is preferably a directly inspectable artifact, state, or predicate rather than a second success flag.
 
 ## Optional topics
 
@@ -84,16 +109,217 @@ References
 
 Use a dedicated STOP section only when the Agent must stop rather than continue deterministically: unresolved human decision, missing authority/upstream state, conflicting durable state, or a hard scientific/trust/authorization/data-loss boundary.
 
-## Relationship to references
-
-`SKILL.md` is the capability entry and execution router. Detailed schemas, field semantics, domain rules, recovery matrices, exact validation logic, and large examples move to their owning `references/` document when not needed on every run.
-
-The detailed writing standard for `references/*.md` is intentionally left for its own design discussion.
-
 ## Size guidance
 
 No fixed line count is a conformance requirement. Length is an architecture signal: inspect long Skills for duplicated rules, embedded reference material, or multiple capabilities. Split only when the new file owns a real bounded topic and improves progressive disclosure.
 
-## Review
+## SKILL review
 
 A Skill is ready when capability, trigger, minimum input/state, normal path, completion, and resource routing are clear; detailed rules have one owner; positive contracts dominate; hard negative/STOP rules are limited to genuine boundaries; and governing project design is not redefined.
+
+---
+
+# `references/*.md`
+
+## Purpose
+
+A reference exists to keep specialized detail out of the always-loaded `SKILL.md` while preserving one durable owner for that detail.
+
+Reference count is project-specific. There is no required number of files and no universal body template.
+
+## Creation gate
+
+Create a new reference only when all of the following are materially true:
+
+1. the topic is not needed on every Skill invocation;
+2. the topic is independently coherent and stable enough to have one owner;
+3. at least one real workflow or Agent consumer needs the topic;
+4. the owner can be described in one sentence without overlapping another reference.
+
+If the topic is short, always needed, or inseparable from the normal workflow, keep it in `SKILL.md` instead.
+
+## Reference boundary
+
+One reference owns one bounded concern. Good examples include:
+
+```text
+source registration
+workspace filesystem contract
+unit normalization
+object identity semantics
+repair/recovery state transitions
+symbol-to-identifier mapping
+```
+
+Avoid references that are merely miscellaneous collections such as:
+
+```text
+notes.md
+misc-rules.md
+general-guidance.md
+extra-details.md
+```
+
+unless the project can state a precise owning concern for them.
+
+## Required information
+
+Every reference should make these items recoverable when applicable:
+
+- what concern it owns;
+- the object, state, convention, procedure, or mapping being defined;
+- the exact semantics or rules needed by its consumers;
+- any validation, transition, exception, ownership, or interface information that is material to that concern.
+
+These are information categories, not mandatory headings.
+
+## Recommended patterns
+
+Choose the smallest pattern that matches the content. Patterns are guidance, not fixed templates.
+
+### 1. Contract / specification
+
+Use for object, state, schema, field, role, interface, or filesystem contracts.
+
+Common shape:
+
+```text
+Purpose
+→ Object / state
+→ Required structure
+→ Semantics
+→ Rules
+→ Validation
+→ Ownership / interface
+```
+
+Typical topics:
+
+```text
+source registration
+workspace contract
+object identity
+trust state
+schema semantics
+```
+
+### 2. State-transition / procedure
+
+Use when the reference owns transitions, recovery, repair, promotion, retry, or human-confirmation behavior.
+
+Common shape:
+
+```text
+Purpose
+→ Entry state
+→ Transition
+→ Outcomes
+→ Recovery / escalation
+```
+
+Prefer explicit transition tables when they are clearer than prose.
+
+### 3. Domain / convention
+
+Use for scientific conventions, terminology, normalization rules, naming systems, or domain-specific interpretation guidance.
+
+Common shape:
+
+```text
+Scope
+→ Definitions
+→ Conventions
+→ Representative cases
+→ Scientific or standards basis when needed
+```
+
+A domain reference does not need an artificial completion gate when it does not own a workflow.
+
+### 4. Mapping / decision
+
+Use when the primary content is a deterministic or bounded mapping between conditions and results.
+
+Common shape:
+
+```text
+Scope
+→ Mapping or decision table
+→ Exceptions / precedence
+```
+
+Example:
+
+```text
+input type + condition → parser route
+validation error       → repair action
+symbol form            → normalized identifier
+```
+
+## Scientific references
+
+When a reference contains scientific semantics, distinguish project design from model-specific scientific facts:
+
+```text
+project concept/reference
+= how scientific information is represented, interpreted, validated, or operated on
+
+registered source/evidence
+= model-specific values, equations, symbols, and scientific claims
+```
+
+A reference may define evidence requirements and interpretation contracts, but it does not invent source-specific scientific facts.
+
+## Examples
+
+Use examples when they materially disambiguate a contract, mapping, edge case, or output shape. Examples illustrate the rule; they do not silently create additional rules.
+
+Large examples belong in a separate reference or asset only when they have a real consumer and improve progressive disclosure.
+
+## Naming and organization
+
+Use descriptive topic names, normally in lowercase kebab-case:
+
+```text
+workspace.md
+source-registration.md
+unit-normalization.md
+object-identity.md
+recovery.md
+```
+
+The `references/` directory already communicates document type, so suffixes such as `-reference`, `-guide`, or `-contract` are unnecessary unless they resolve a real ambiguity.
+
+Keep a stage's references flat by default. Add subdirectories only when a real second-level grouping improves navigation for several related files.
+
+## Cross-reference discipline
+
+A reference links to another reference only when the other file owns a dependency needed to interpret the current topic. Do not restate that dependency in full.
+
+Prefer:
+
+```text
+For source-ID semantics, use `source-registration.md`.
+```
+
+over copying the complete source-ID contract into multiple files.
+
+Circular ownership between references is invalid: each substantive rule must have one direction of authority.
+
+## Size and splitting
+
+No fixed line-count limit defines conformance. Split a reference when it contains multiple independent concerns with different consumers, owners, or change lifecycles.
+
+Do not split one coherent contract merely to make files shorter.
+
+## Reference review
+
+A reference is ready when:
+
+- its owning concern can be stated in one sentence;
+- its content is needed by a real consumer;
+- it does not duplicate `SKILL.md` or another reference;
+- its semantics are concrete enough for correct use or verification;
+- its structure follows the content rather than a mandatory template;
+- scientific facts remain source-grounded where applicable;
+- cross-reference chains remain shallow;
+- examples clarify rather than redefine the contract.
