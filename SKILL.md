@@ -15,11 +15,19 @@ This Skill routes the collaboration contract for:
 User ↔ ChatGPT ↔ Codex
 ```
 
+Canonical maintained source:
+
+```text
+GitHub repository: cigit-zgy/agent-collaboration
+```
+
+No machine-local installation is assumed. Formal delegated tasks pin the exact collaboration commit they use; Codex reads that pinned GitHub authority unless an existing local checkout is verified to be the same repository at the same commit.
+
 Load only the reference family that owns the active concern.
 
 ## Core route
 
-For design, deliverable-level delegation, local execution mode selection, Git synchronization, concurrency, verification, and acceptance review, read:
+For collaboration authority resolution, design, deliverable-level delegation, local execution mode selection, Git synchronization, concurrency, verification, and acceptance review, read:
 
 ```text
 references/collaboration/protocol.md
@@ -53,7 +61,7 @@ Codex does not self-accept.
 
 Use `references/collaboration/` for the three-party operating loop:
 
-- `protocol.md` — roles, deliverable partition, routine-vs-formal Codex execution, Git synchronization, concurrency, acceptance;
+- `protocol.md` — GitHub authority resolution, roles, deliverable partition, routine-vs-formal Codex execution, Git synchronization, concurrency, acceptance;
 - `verification.md` — verification levels and risk-based tool selection;
 - `agents.md` — collaboration-wide `AGENTS.md` writing standard;
 - `templates/` — formal ChatGPT task/launch format and Codex report format.
@@ -71,7 +79,7 @@ Use `references/project/` when a scientific/software project joins this collabor
 
 Use `references/skill/` for first-party/third-party Skill ownership and package design:
 
-- `repository.md` — maintained source, discovery, distribution, rename lifecycle;
+- `repository.md` — canonical source modes, discovery, distribution, and source resolution;
 - `package.md` — package resources, profiles, runtime/environment ownership;
 - `writing.md` — maintained `SKILL.md` and `references/*.md` writing standard;
 - `templates/agents.md` — maintained first-party Skill-repository `AGENTS.md` specialization.
@@ -91,4 +99,4 @@ Project design/redesign/conformance work additionally follows the target project
 
 ## Completion
 
-Collaboration work is complete when all `DIRECT` deliverables are completed directly, any necessary `LOCAL` work has been executed and reviewed, and the applicable acceptance gate in `references/collaboration/protocol.md` is satisfied.
+Collaboration work is complete when all `DIRECT` deliverables are completed directly, any necessary `LOCAL` work has been executed against the pinned authorities and reviewed, and the applicable acceptance gate in `references/collaboration/protocol.md` is satisfied.
