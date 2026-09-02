@@ -23,13 +23,13 @@ verifiable implementation evidence.
   repository work to this Skill automatically.
 - **ChatGPT:** a new conversation does not assume this local Skill automatically.
   The User should explicitly ask ChatGPT to use `agent-collaboration` and provide or
-  identify the target project repository. ChatGPT reads the project's root
+  identify the target repository. ChatGPT reads the target repository's applicable
   `AGENTS.md`, follows its canonical collaboration reference to this Skill, and then
   reads only the collaboration references needed for the active role.
-- **Project repository:** root `AGENTS.md` is the project-level entry point and
-  constitution. The project root `SKILL.md` is the Agent-facing workflow/router.
-  Together they connect global collaboration, durable project concepts, and
-  downstream stage Skills without copying detailed global rules.
+- **Project repository:** root `AGENTS.md` is the project-level constitution. The
+  project root `SKILL.md` is the Agent-facing workflow/router. Together they connect
+  global collaboration, durable project concepts, and downstream stage Skills
+  without copying detailed global rules.
 - **New project:** when a repository does not yet have suitable project entry assets,
   User + ChatGPT design `AGENTS.md` from
   [project-agents-template.md](references/project-agents-template.md), then design the
@@ -38,19 +38,40 @@ verifiable implementation evidence.
   and commits those design assets directly when its connected tools can do so;
   Codex is used only for genuinely local verification or other unavailable
   capabilities.
-- **New first-party Skill:** classify ownership with
-  [skill-repository-policy.md](references/skill-repository-policy.md), choose the
-  minimal package from
+- **New standalone first-party Skill repository:** classify ownership with
+  [skill-repository-policy.md](references/skill-repository-policy.md), create the
+  repository-maintenance constitution from
+  [skill-agents-template.md](references/skill-agents-template.md), choose the minimal
+  package/source architecture from
   [skill-package-architecture.md](references/skill-package-architecture.md), then
-  instantiate the appropriate purpose-specific template from
-  [skill-templates/](references/skill-templates/README.md). Do not scaffold optional
-  directories that have no real consumer.
+  instantiate the matching capability template from
+  [skill-templates/](references/skill-templates/README.md).
+- **Embedded sub-Skill:** normally inherit the nearest applicable parent
+  `AGENTS.md`; create only the sub-Skill `SKILL.md` and justified runtime resources.
+  Add a nested `AGENTS.md` only for genuine local maintenance rules.
 - **User:** defines goals, approves genuine human decisions, and may override the
   workflow explicitly.
 
 Project-specific tasks, Codex reports, and concept decisions always remain in the
 project repository that owns them. This repository owns the collaboration protocol
 and reusable templates, not other projects' work records.
+
+## Skill source repository versus distribution
+
+Do not equate a maintained Skill Git repository with a portable Skill runtime
+bundle.
+
+```text
+maintained standalone first-party Skill repository
+= AGENTS.md + SKILL.md + justified maintenance/runtime resources
+
+portable Skill distribution
+= SKILL.md + only references/scripts/assets needed for operation
+```
+
+`AGENTS.md` persists as a maintenance constitution in the source repository; it is
+not a required portable Skill component and is not deleted merely because the Skill
+is mature.
 
 ## Delegation rule
 
@@ -81,7 +102,10 @@ determines completion.
   [project-agents-template.md](references/project-agents-template.md).
 - Creating or normalizing a project's root workflow `SKILL.md`: use
   [project-skill-template.md](references/project-skill-template.md).
-- Designing the package layout of an individual reusable Skill: read
+- Creating or normalizing the root `AGENTS.md` of a maintained standalone
+  first-party Skill repository: use
+  [skill-agents-template.md](references/skill-agents-template.md).
+- Designing the package/source layout of an individual reusable Skill: read
   [skill-package-architecture.md](references/skill-package-architecture.md), then
   choose a purpose-specific template from
   [skill-templates/README.md](references/skill-templates/README.md).
@@ -99,5 +123,6 @@ determines completion.
 - Creating, archiving, or maintaining `reports/chatgpt/`, `reports/codex/`, or
   durable `reports/concept/` assets: read
   [report-concept-policy.md](references/report-concept-policy.md).
-- Maintaining Skill repository ownership, naming, and first-/third-party placement:
-  read [skill-repository-policy.md](references/skill-repository-policy.md).
+- Maintaining Skill repository ownership, naming, source/distribution boundaries,
+  and first-/third-party placement: read
+  [skill-repository-policy.md](references/skill-repository-policy.md).
