@@ -1,11 +1,13 @@
 # Skill templates
 
-Use these templates after `../skill-package-architecture.md` and after the capability
-boundary/trigger are known.
+Use these templates after `../skill-package-architecture.md` and after the capability boundary and
+trigger are known.
 
-The profile files define only profile-specific package/resources. Use the common
-`SKILL.md` skeleton below instead of repeating the same progressive-disclosure,
-completion, stop, and boundary boilerplate in every profile.
+Read `../skill-writing-standard.md` first. It defines the collaboration-wide writing standard for all
+maintained `SKILL.md` files.
+
+The profile files below define profile-specific package/resources. They do not impose one universal
+body-section layout on every Skill.
 
 ## Profiles
 
@@ -16,63 +18,73 @@ completion, stop, and boundary boilerplate in every profile.
 | Asset-oriented | `asset-oriented-skill.md` | Reusable templates/static assets are central to artifact creation/manipulation. |
 | Composite/router | `composite-skill.md` | The Skill routes among bounded downstream Skills or workflow branches. |
 
-For a project-level workflow Skill, use `../project-skill-template.md` instead of the
-generic composite profile.
+For a project-level workflow Skill, use `../project-skill-template.md` instead of the generic
+composite profile.
 
-## Common `SKILL.md` skeleton
+## Required `SKILL.md` information
+
+Every maintained Skill must communicate:
+
+```text
+capability purpose/boundary
+activation condition
+minimum required input/state
+core procedure or routing logic
+completion/output state
+progressive-disclosure route
+```
+
+These are required information categories, not mandatory Markdown headings.
+
+A simple Skill may use:
 
 ```markdown
 ---
 name: <skill-name>
 description: >
-  <WHAT THE CAPABILITY DOES>. Use when <CONCRETE TRIGGER/INPUT>.
+  <WHAT THE CAPABILITY DOES>. Use when <CONCRETE TRIGGER OR INPUT STATE>.
 ---
 
 # <Skill title>
 
-## Role / purpose
+## Purpose
 
-<Capability boundary and stable outcome.>
-
-## When to use
-
-Use when:
-- <trigger>.
-
-Do not use for:
-- <non-goal>.
-
-## Required inputs / state
-
-- `<input>`: <meaning>.
+<Single responsibility and stable outcome.>
 
 ## Workflow
 
-1. <inspect/validate entry state>
-2. <perform capability-specific work>
-3. <load only resources needed by the active branch>
-4. <produce stable output>
+1. <action + result>
+2. <action + result>
+3. <verify completion>
 
-## Outputs
+## Completion
 
-- `<output/state>`: <meaning>.
+<Directly checkable completion state.>
 
-## Resources
+## References
 
-<Route only to references/scripts/assets actually needed by this Skill.>
-
-## Completion and stop conditions
-
-Complete when <directly checkable condition>.
-
-Stop rather than infer when required input/authority is missing, no defined route
-matches, or continuing would cross a human/trust boundary without authorization.
-
-## Boundaries
-
-- <capability-specific invariant>
-- <what this Skill does not own>
+<Route only to optional resources needed for specialized topics.>
 ```
+
+An executable Skill may need inputs, outputs, recovery, or tool-use sections. A router may need branch
+records and gates. A documentation Skill may need no procedural numbered workflow when another
+structure communicates its capability more directly.
+
+## Writing discipline
+
+Use the valid system and normal execution path as the main prose.
+
+Prefer:
+
+```text
+Exactly one route owns the active task.
+```
+
+over several equivalent negative statements.
+
+Use `MUST NOT` and explicit STOP behavior only for real hard boundaries. Keep detailed object
+contracts, large examples, and specialized rules in their owning references when progressive
+disclosure improves runtime clarity.
 
 ## `AGENTS.md` is an ownership decision
 
@@ -96,11 +108,10 @@ THIRD_PARTY
 
 ## Common rules
 
-- `SKILL.md` is the capability entry; `AGENTS.md` is repository/project maintenance
-  guidance when applicable.
+- `SKILL.md` is the capability entry; `AGENTS.md` is repository/project maintenance guidance when
+  applicable.
 - Keep `description` trigger-oriented.
-- Runtime progressive disclosure is `name + description → SKILL.md → only required
-  resources`.
-- Do not load project concepts by default.
-- Do not create empty optional directories.
-- Do not add runtime, scripts, tests, or assets without real consumers.
+- Runtime progressive disclosure is `name + description → SKILL.md → only required resources`.
+- Create optional directories/resources only for real consumers.
+- Treat document size as an architecture signal, not a fixed line-count requirement.
+- Keep scientific/project semantics in their owning authority rather than redefining them in a Skill.
