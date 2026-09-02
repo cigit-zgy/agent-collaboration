@@ -1,9 +1,9 @@
-# Asset-oriented Skill template
+# Asset-oriented Skill profile
 
-Use for a Skill whose main work is producing or manipulating artifacts with reusable
-static resources, templates, style files, or generation assets.
+Use with the common skeleton in `README.md` when reusable templates, style files,
+static resources, or artifact-generation assets are central to the capability.
 
-Recommended package:
+## Recommended source package
 
 ```text
 <skill-name>/
@@ -13,92 +13,24 @@ Recommended package:
 └── assets/
 ```
 
-Add tests or a runtime declaration only when the actual executable behavior warrants
-them.
+Add tests/runtime only when actual executable behavior warrants them. A standalone
+maintained first-party source repository additionally uses root `AGENTS.md` from
+`../skill-agents-template.md`.
 
-Suggested `SKILL.md`:
+## Profile-specific guidance
 
-```markdown
----
-name: <skill-name>
-description: >
-  <What artifact this Skill creates or manipulates>. Use when <concrete triggering
-  artifact request or input>.
----
+- `Workflow` should inspect the requested artifact/constraints, choose only the
+  relevant assets/references, generate or modify the artifact, and verify properties
+  that matter to the contract.
+- `Resources` should route to specific assets and deterministic helpers by condition;
+  do not preload every template/style/example.
+- Explanatory Markdown belongs in `references/`, not `assets/`.
+- `Outputs` should name the stable artifact type/path and any required derivative.
+- Verification may cover structure, rendering, geometry, formatting, required
+  content, or deterministic reproducibility when those properties are contractual.
+- Do not add scripts/tests merely because another asset Skill has them.
 
-# <Skill title>
+## Typical examples
 
-## Purpose
-
-<Define the artifact capability and expected deliverable.>
-
-## When to use
-
-Use this Skill when:
-
-- <trigger 1>;
-- <trigger 2>.
-
-Do not use it for:
-
-- <non-goal 1>;
-- <non-goal 2>.
-
-## Inputs
-
-- `<input artifact/context>`: <meaning>;
-- <required style/specification/state if any>.
-
-## Workflow
-
-1. <Inspect the requested artifact and constraints.>
-2. <Select only the relevant references/assets.>
-3. <Use deterministic helpers when they protect geometry, formatting, conversion,
-   or reproducibility.>
-4. <Generate or modify the artifact.>
-5. <Verify the artifact against the declared output contract.>
-
-## Asset routing
-
-Use only the assets required for the active request:
-
-- `<assets/template-a>` when <condition>;
-- `<assets/style-b>` when <condition>.
-
-Do not treat explanatory Markdown as an asset; place Agent-readable guidance under
-`references/`.
-
-## Progressive disclosure
-
-Read only the reference material relevant to the selected artifact path.
-Do not preload all templates, styles, examples, or sibling resources.
-
-## Outputs
-
-- `<artifact type/path>`: <stable meaning>;
-- <supporting derivative, if applicable>.
-
-## Verification
-
-Check only artifact properties that matter to the contract: structure, rendering,
-geometry, format, required content, or deterministic reproducibility as applicable.
-
-## Completion criteria
-
-The Skill completes when the requested artifact exists in the required form and the
-applicable artifact checks pass.
-
-## Stop conditions
-
-Stop rather than invent when:
-
-- required source content or style authority is missing;
-- an asset/template is required but unavailable;
-- a requested change would violate a protected project or scientific contract.
-
-## Boundaries
-
-- `assets/` stores reusable resources, not project history or instructions.
-- Keep artifact-generation logic separate from unrelated project workflows.
-- Do not create scripts or tests merely because other asset Skills have them.
-```
+Scientific figures, diagram generation, document templates, slide/document artifact
+production, and style-driven rendering workflows.
