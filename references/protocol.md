@@ -42,14 +42,50 @@ User requirement
 → durable concept update when needed
 → ChatGPT formal committed task in reports/chatgpt/
 → short Codex launch prompt
+→ Codex repository synchronization
 → Codex implementation
 → Codex verification
 → Codex report in reports/codex/ + commit/push
+→ Codex final synchronization check
 → ChatGPT independent audit
 → verdict
 → concept update when acceptance changes durable project truth
 → only then next task
 ```
+
+## Repository synchronization
+
+For a formal task, local state and the tracked remote branch must be explicit at
+both ends of the task.
+
+Before implementation Codex must:
+
+1. run `git fetch` for the task repository;
+2. inspect the current branch, `HEAD`, configured upstream, and `git status --short`;
+3. preserve pre-existing user changes; never discard, overwrite, or hide them;
+4. when the worktree is safe and the current branch is only behind its upstream,
+   fast-forward to the fetched upstream state;
+5. stop and report the conflict instead of inventing a merge/rebase when the branch
+   has diverged or existing user changes make synchronization unsafe;
+6. verify that the committed task source and stated baseline are consistent with
+   the synchronized repository before editing.
+
+A formal task does not authorize `reset --hard`, force-push, destructive cleanup,
+or an implicit merge/rebase. Automatic stashing is not a substitute for preserving
+user work.
+
+After implementation Codex must:
+
+1. commit all task-scoped repository changes required by the task;
+2. push the current branch to its configured upstream;
+3. fetch again;
+4. verify `HEAD` equals the fetched upstream branch tip;
+5. report the final worktree state and any intentionally preserved pre-existing
+   changes.
+
+`HEAD == upstream` is the normal completion condition for repository changes. If it
+cannot be achieved safely, the task report must state why and must not claim a clean
+Git synchronization PASS.
 
 ## Report ownership
 
