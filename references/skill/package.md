@@ -6,6 +6,8 @@ This contract defines the internal structure of a reusable Skill and the conditi
 
 Keep maintained source, Codex discovery exposure, and portable runtime/distribution distinct. Repository/discovery placement is governed by `repository.md`.
 
+AI-assisted executable implementation follows `../collaboration/implementation.md`; language-specific mechanical style and tooling remain owned by the Skill/project runtime configuration.
+
 ## Minimal package
 
 ```text
@@ -39,7 +41,7 @@ Primary output is durable guidance, analysis, review, or an edited artifact. Typ
 
 ### Executable
 
-Deterministic scripts/commands/validators/converters materially implement the capability. Normal flow validates entry state, invokes the smallest deterministic operation, inspects the result, and uses free-form Agent reasoning where deterministic logic is insufficient. Tests protect the executable contract at the smallest relevant scope.
+Deterministic scripts/commands/validators/converters materially implement the capability. Normal flow validates entry state, invokes the smallest deterministic operation, inspects the result, and uses free-form Agent reasoning where deterministic logic is insufficient. Tests protect the executable contract at the smallest relevant scope. AI-produced code must remain reviewable and transparent under the collaboration implementation contract.
 
 ### Asset-oriented
 
