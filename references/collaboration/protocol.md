@@ -107,42 +107,65 @@ Use for major architecture/cross-module work, scientific/product/trust/public-co
 
 ChatGPT completes the DIRECT partition first, then issues the LOCAL scope with `templates/chatgpt-task.md`.
 
-## FORMAL specification and handoff boundary
+## FORMAL specification and user-visible output boundary
 
 For a FORMAL task, the committed `reports/chatgpt/*.md` artifact is the sole task-specific execution specification.
 
-The User-visible launch message is a **non-semantic transport envelope**. It carries only the coordinates required to find and bind the committed task:
+User-visible FORMAL handoff and completion responses use a two-layer presentation model:
 
 ```text
-Repository
-Task path
-Task branch
-Task/handoff commit
-pinned collaboration commit
-immutable task URL
+1. concise human-readable synopsis
+2. boxed formal prompt/result locator
 ```
 
-The launch envelope MUST NOT duplicate, summarize, paraphrase, expand, or amend the task's mission, design semantics, required changes, non-goals, implementation procedure, verification plan, acceptance criteria, recovery behavior, or final-output schema.
+The synopsis exists for rapid human understanding. It may summarize the durable task/report at a high level, but it is not authority and MUST NOT add, remove, reinterpret, or amend task/report semantics.
 
-The exact launch-envelope format is owned by `templates/chatgpt-task.md`. This is a hard constraint, not a style preference.
-
-Why this boundary exists:
+Normal synopsis length is a hard presentation target:
 
 ```text
-committed task
-= durable auditable specification
-
-launch message
-= locator only
+8–12 short lines
 ```
 
-Allowing task semantics in both places creates two specification surfaces, makes later provenance ambiguous, and encourages semantic drift between the repository artifact and chat.
+The boxed block is the copyable/inspectable formal surface. For ChatGPT handoff it contains the short Codex launch prompt. For Codex completion it contains the verdict and immutable report locator.
 
-If a requirement changes after handoff preparation, update or supersede the committed task and issue a new handoff commit. Do not append a second specification in the launch message.
+The exact formats are owned by:
+
+```text
+templates/chatgpt-task.md
+templates/codex-report.md
+```
+
+This is a hard collaboration-output constraint, not a style preference.
+
+### What belongs where
+
+```text
+committed ChatGPT task
+= detailed durable execution specification
+
+ChatGPT synopsis
+= approximately ten lines of non-authoritative high-level orientation
+
+boxed ChatGPT launch prompt
+= short execution coordinates + pinned authority + immutable task URL
+
+Codex report
+= detailed durable implementation/verification evidence
+
+Codex synopsis
+= approximately ten lines of non-authoritative result orientation
+
+boxed Codex result locator
+= verdict + report path + report commit + immutable report URL
+```
+
+The synopsis may communicate purpose, main component, major boundary, verification level, key result, limitation, branch state, or readiness when useful. It MUST NOT become a second specification/report by reproducing command lists, detailed test matrices, validator/error strings, retry state machines, exhaustive acceptance tables, custom stdout fields, or long evidence dumps.
+
+If a task-specific requirement changes after handoff preparation, update or supersede the committed task and issue a new handoff commit. Do not use the synopsis or launch prompt to carry a substantive amendment.
 
 The User may immediately `STOP`, `PAUSE`, or `CANCEL` an execution. A substantive User amendment remains higher authority, but repository-changing execution must not continue from an ephemeral amendment alone: make the amended specification durable and re-bind the handoff first.
 
-Codex receiving a non-conforming launch message MUST use the committed task as the task-specific authority. It MUST NOT silently merge extra launch prose into the task. If extra prose merely duplicates the task, ignore it for execution semantics. If it adds, changes, or conflicts with task semantics, stop the affected work and require a durable amended/superseding task before continuing.
+If a synopsis conflicts with its durable task/report, the durable artifact wins. Codex MUST NOT silently merge task-specific requirements from handoff prose into the committed task.
 
 ## Semantic ownership
 
@@ -192,7 +215,7 @@ baseline_sha
 = task-branch commit after task-specific DIRECT inputs, before the task artifact
 
 task/handoff commit
-= commit containing the formal task; supplied in the launch envelope
+= commit containing the formal task; supplied in the boxed launch prompt
 ```
 
 Before FORMAL implementation Codex:
@@ -278,9 +301,9 @@ Independent work may run concurrently only when branches/worktrees and other mut
 
 ## Direct artifact-link output
 
-For every FORMAL task, user-visible handoff and completion output MUST surface the corresponding repository artifact as a directly openable HTTPS GitHub link. A repository-relative path alone is not sufficient.
+For every FORMAL task, the boxed handoff/completion block MUST surface the corresponding repository artifact as a directly openable HTTPS GitHub link. A repository-relative path alone is not sufficient.
 
-ChatGPT's fixed launch envelope MUST include:
+ChatGPT boxed launch prompt MUST include:
 
 ```text
 任务链接如下：
@@ -289,7 +312,7 @@ https://github.com/<OWNER>/<REPOSITORY>/blob/<TASK_HANDOFF_COMMIT>/reports/chatg
 
 Use the exact task/handoff commit so the link opens the immutable specification actually handed to Codex.
 
-Codex final console output, after the report-containing commit is pushed, MUST prominently show:
+Codex boxed result locator MUST include:
 
 ```text
 报告链接如下：
@@ -298,9 +321,9 @@ https://github.com/<OWNER>/<REPOSITORY>/blob/<REPORT_CONTAINING_COMMIT>/reports/
 
 Use the commit that actually contains the report. The report file itself does not need to contain its own commit SHA or self-link; the post-commit console output owns the immutable report link.
 
-This is a hard collaboration-output constraint. Do not replace the full HTTPS URL with only a local path, repository-relative path, commit SHA, Markdown filename, or prose such as `see report above`.
+Do not replace the full HTTPS URL with only a local path, repository-relative path, commit SHA, Markdown filename, or prose such as `see report above`.
 
-If the artifact cannot be pushed and therefore no truthful directly openable GitHub URL exists, do not fabricate one. The same prominent block MUST instead state `UNAVAILABLE` and the concrete push/publication blocker; the task/report remains incomplete with respect to this link requirement until publication succeeds.
+If the artifact cannot be pushed and therefore no truthful directly openable GitHub URL exists, do not fabricate one. The boxed block MUST state `UNAVAILABLE` and the concrete push/publication blocker.
 
 ## Stable artifacts
 
