@@ -46,6 +46,10 @@ codex_report: reports/codex/<YYMMDD_codex_NN.md>
 
 `baseline_sha` is the task-branch commit after task-specific DIRECT inputs and before the task artifact. Supply the commit containing the task separately in the launch prompt as the execution handoff.
 
+`codex_report` is the canonical expected report destination for this task. Codex MUST write the formal report at exactly that repository-relative path and push it on `task_branch`. Do not choose a different report filename/path after handoff unless the task is durably amended or superseded.
+
+This binding exists so ChatGPT can locate the report automatically from the committed task without requiring the User to paste a report URL or path after Codex finishes.
+
 ## Body
 
 ```markdown
@@ -91,7 +95,10 @@ Required evidence:
 
 ## Git handoff / integration
 
-<Task branch, same-branch exception if any, integration condition.>
+Task branch: <TASK_BRANCH>
+Target integration branch: <TARGET_BRANCH>
+Post-acceptance integration: AUTO | USER_CHECKPOINT
+<Any same-branch exception or repository-specific integration condition.>
 
 ## Codex report
 
@@ -103,6 +110,16 @@ List only verification categories actually required; no mandatory `N/A` matrix.
 For an upstream owner where downstream migration is out of scope, the task should state that stale consumers are reported rather than repaired and rejected upstream interfaces are not restored for compatibility.
 
 A narrowly mechanical projection edit is permitted only when the task names that permission and it cannot alter frozen semantics. A design conflict stops the affected implementation for User + ChatGPT adjudication.
+
+### Post-acceptance integration policy
+
+Use `AUTO` when the User has already accepted the governing design/task intent and integration is a mechanical repository operation with no new scientific/product/trust/release/destructive decision. `AUTO` is preferred for ordinary implementation tasks to avoid an unnecessary extra User confirmation.
+
+Use `USER_CHECKPOINT` when integration itself is a genuine human decision, for example publication/release authorization, destructive migration, externally visible product behavior, unresolved scientific choice, repository visibility/licensing change, or another project-declared checkpoint.
+
+When `AUTO` is declared and ChatGPT's acceptance verdict is `PASS` (or `PASS WITH LIMITATIONS` only when the task explicitly permits integration with those limitations), ChatGPT SHOULD perform the permitted remote integration with available connected repository tools and verify the resulting remote state without asking the User for another routine confirmation.
+
+If safe integration requires an unavailable local capability or non-trivial reconciliation not authorized by the task, report that concrete blocker instead of silently expanding authority.
 
 ## Task specification authority — hard requirement
 
@@ -142,7 +159,7 @@ high-level implementation direction
 verification level / major evidence category
 expected stable result
 expected Codex report path
-integration/readiness implication
+post-acceptance integration mode
 ```
 
 The synopsis MUST remain substantially shorter than the committed task. It MUST NOT reproduce detailed validator/error strings, command lists, test matrices, retry/recovery state machines, field-by-field acceptance criteria, long prohibitions, custom final-stdout schemas, or other low-level execution instructions.
