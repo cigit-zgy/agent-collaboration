@@ -116,3 +116,28 @@ pre-existing User state preserved
 ```
 
 Do not claim default-branch integration unless it actually occurred after acceptance. The task report may end with a validated task branch awaiting ChatGPT acceptance/integration.
+
+## Final console report link — hard requirement
+
+After the report-containing commit has been pushed, Codex MUST prominently print a directly openable immutable GitHub link in its final console response:
+
+```text
+报告链接如下：
+https://github.com/<OWNER>/<REPOSITORY>/blob/<REPORT_CONTAINING_COMMIT>/reports/codex/<REPORT_FILE>.md
+```
+
+Use the commit that actually contains the report. A repository-relative path, local filesystem path, commit SHA alone, or prose reference is not a substitute for the full HTTPS link.
+
+The report Markdown does not self-record this commit-pinned URL because the report cannot contain the SHA of the commit that contains itself. The post-commit console output is the authoritative place for this immutable report link.
+
+If the report cannot be pushed and no truthful directly openable GitHub URL exists, do not fabricate one. The final console response MUST instead prominently show:
+
+```text
+报告链接如下：
+UNAVAILABLE — <concrete publication/push blocker>
+
+本地报告路径：
+<LOCAL_OR_REPOSITORY_RELATIVE_REPORT_PATH>
+```
+
+A FORMAL task with an unpublished report may correctly be `BLOCKED` or `FAIL`, but it must never imply that a usable report link exists when it does not.
