@@ -63,6 +63,7 @@ Collaboration authority:
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/protocol.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/implementation.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/verification.md
+- cigit-zgy/agent-collaboration@<SHA>:references/collaboration/templates/codex-report.md
 
 <Frozen scientific/product/design contracts Codex must not reinterpret.>
 
@@ -103,9 +104,22 @@ For an upstream owner where downstream migration is out of scope, the task shoul
 
 A narrowly mechanical projection edit is permitted only when the task names that permission and it cannot alter frozen semantics. A design conflict stops the affected implementation for User + ChatGPT adjudication.
 
+## User-visible handoff link — hard requirement
+
+After the formal task is committed and pushed, ChatGPT MUST prominently surface a directly openable link to the exact committed task before or immediately adjacent to the Codex launch text:
+
+```text
+任务链接如下：
+https://github.com/<OWNER>/<REPOSITORY>/blob/<TASK_COMMIT>/reports/chatgpt/<TASK_FILE>.md
+```
+
+`<TASK_COMMIT>` is the execution handoff commit that contains the task. Use the full HTTPS GitHub URL, not only the repository-relative path or commit SHA. This link is part of the required User-facing handoff contract so the User can inspect the exact task without reconstructing a repository URL manually.
+
+If the task was not successfully pushed, do not fabricate the link. Show `任务链接如下：UNAVAILABLE` with the publication blocker and do not represent the formal handoff as complete.
+
 ## Launch block
 
-After committing/pushing the task:
+After committing/pushing the task, give the User the prominent task link above followed by this launch block:
 
 ```text
 执行正式任务：
@@ -133,5 +147,6 @@ cigit-zgy/agent-collaboration@<PINNED_AGENT_COLLABORATION_SHA>
 代码遵循 implementation.md：最小充分、可审查、透明，AI 代码与人工代码同一质量标准。
 按 verification level + required evidence 完成验证。
 完成 Codex report、task-scoped commit 和 task-branch push。
+最终控制台必须按 codex-report.md 显眼输出可直接打开的 immutable GitHub 报告链接，不能只给本地路径或仓库相对路径。
 ChatGPT acceptance review 后再集成 default branch。
 ```
