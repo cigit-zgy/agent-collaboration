@@ -287,6 +287,53 @@ Call this `acceptance review`, not independent review by default, because ChatGP
 
 Use an additional independent model/reviewer/human perspective only when LEVEL 2/3 scientific, architectural, trust, security, or release risk materially warrants it. The User retains final authority and designated human checkpoints.
 
+## Completion shorthand and automatic report lookup — hard requirement
+
+For a FORMAL task, the User is not required to paste back the Codex report URL, report path, report commit, task branch head, or console output when Codex finishes.
+
+Within an active conversation/project context, a short completion message such as:
+
+```text
+Codex 已完成
+Codex 完成了
+任务执行完了
+```
+
+is sufficient to trigger ChatGPT acceptance review for the most recent relevant FORMAL handoff unless the User explicitly identifies another task.
+
+ChatGPT MUST resolve the report from durable handoff state before asking the User for information that is already recoverable. Normal lookup is:
+
+```text
+most recent relevant FORMAL handoff
+→ exact committed task at task/handoff commit
+→ read repository + task_branch + task_id + codex_report
+→ resolve current remote task branch
+→ open codex_report at that branch state
+→ verify report task_id / task_source_sha / task_branch binding
+→ inspect task-branch commits/diff and required remote evidence
+→ perform acceptance review
+```
+
+The Codex console report link is a convenience for the User, not a prerequisite for ChatGPT lookup.
+
+If the expected report is absent, the task branch does not exist remotely, report metadata does not bind to the handoff, or multiple plausible unfinished FORMAL tasks remain genuinely ambiguous, ChatGPT reports the concrete unresolved state. Ask the User for clarification only when the conversation and repository cannot resolve which handoff is intended.
+
+Do not create a separate report registry, completion manifest, or status database for this lookup. The committed task plus repository branch/report state are sufficient authority.
+
+### Post-acceptance integration
+
+The committed task's `Git handoff / integration` section declares:
+
+```text
+Post-acceptance integration: AUTO | USER_CHECKPOINT
+```
+
+`AUTO` means that after an acceptance verdict permitting integration, ChatGPT SHOULD perform the authorized remote integration with available connected repository tools and verify the resulting remote state without requesting another routine User confirmation.
+
+`USER_CHECKPOINT` is reserved for a genuine human decision such as release/publication authorization, destructive migration, unresolved scientific/product choice, repository visibility/licensing change, or another project-declared checkpoint.
+
+If `AUTO` integration cannot be completed safely with available connected capabilities, ChatGPT reports the concrete blocker and only then delegates or asks for the minimum necessary User action.
+
 ## Lifecycle and concurrency
 
 Formal task lifecycle stays minimal:
