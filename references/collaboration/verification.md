@@ -147,7 +147,7 @@ concurrency/race testing
 benchmark/stress testing
 ```
 
-Use them only against a real risk. Coverage finds unexercised paths but is not correctness; mutation testing tests test sensitivity; fault injection is valuable at failure boundaries; concurrency tests require plausible concurrent access; benchmarks require a performance/scale claim.
+Use them only against a real risk. Coverage identifies unexercised paths but does not prove correctness; mutation testing checks whether tests detect meaningful implementation changes; fault injection is valuable at failure boundaries; concurrency tests require plausible concurrent access; benchmarks require a performance/scale claim.
 
 ## Security/dependency tools
 
