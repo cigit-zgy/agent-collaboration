@@ -18,7 +18,8 @@ A formal task is issued only after ChatGPT has:
 4. frozen those DIRECT artifacts as Codex read-only inputs;
 5. reduced Codex scope to the remaining `LOCAL` work;
 6. pinned the exact `agent-collaboration` GitHub authority used to author the task;
-7. established the design/projection baseline commit from which the task is issued.
+7. established the design/projection baseline commit from which the task is issued;
+8. selected one verification level and a risk-based evidence-layer plan under `../verification.md`.
 
 A task is invalid if it delegates a deliverable that ChatGPT can already complete through current connected capabilities without naming a concrete local-only dependency for that deliverable.
 
@@ -175,6 +176,35 @@ whole-pipeline compatibility
 
 A focused stage can pass while explicit downstream drift remains, provided whole-pipeline migration was not promised by the task.
 
+## Verification plan rules
+
+The `verification_level` metadata chooses **how rigorous the task must be**. The `## Verification` body chooses **which evidence layers are required to support that claim**. These are separate axes; see `../verification.md`.
+
+Every formal task must include an evidence-layer plan in `## Verification` using this form:
+
+```text
+Verification level: LEVEL 1 | LEVEL 2 | LEVEL 3
+
+Evidence-layer plan:
+- Layer 1 — Component/property: required | N/A — <concrete evidence or reason>
+- Layer 2 — Contract/invariant: required | N/A — <concrete evidence or reason>
+- Layer 3 — Integration: required | N/A — <concrete evidence or reason>
+- Layer 4 — Real-artifact regression: required | N/A — <concrete evidence or reason>
+- Layer 5 — E2E/recovery/repeatability: required | N/A — <concrete evidence or reason>
+- Layer 6 — Release/non-functional: required | N/A — <concrete evidence or reason>
+```
+
+Rules:
+
+- do not mark all six layers `required` mechanically;
+- do not omit a material layer merely because focused pytest is green;
+- use the lowest layer that proves a property, then add higher-layer evidence only for integration, real-artifact, end-to-end, recovery, repeatability, or release behavior;
+- for LEVEL 3, every layer material to the release claim must be covered; genuinely irrelevant layers may be `N/A` with a reason;
+- property/fuzz testing, coverage, mutation testing, fault injection, concurrency/race testing, and benchmarks are techniques within relevant layers, not standalone mandatory layers;
+- when one of those techniques attacks a concrete task risk, name it explicitly in the layer plan and acceptance criteria.
+
+The required evidence must be checkable. For example, write `real MinerU PDF smoke + inspect retained artifacts`, not merely `Layer 4 required`.
+
 ## Handoff and branch-freeze rules
 
 Commit and push the formal task before handoff. The committed task source is Codex's execution specification.
@@ -215,6 +245,7 @@ cigit-zgy/agent-collaboration@<PINNED_AGENT_COLLABORATION_SHA>
 Frozen DIRECT inputs 对 Codex 只读；若实现发现矛盾，停止相关工作并报告，不要改写这些文件。
 当前 handoff branch 在本任务执行期间视为冻结；若发现远端并发推进，不自行 merge/rebase/cherry-pick，按 protocol 停止并报告。
 发现 out-of-scope downstream drift 时只报告，不自行迁移或加 compatibility shim。
+按 task 的 verification level + evidence-layer plan 完成验证；不要用单一 pytest PASS 替代缺失的必需 Layer。
 完成实现、规定验证、Codex report、commit 和 push。
 最后输出 task 要求的固定 stdout。
 ```
