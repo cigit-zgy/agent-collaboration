@@ -2,6 +2,8 @@
 
 Reusable operating contracts for collaboration among the User, ChatGPT, and Codex.
 
+The framework supports a zero-human-coding workflow: the User owns scientific/product/design/tool decisions, ChatGPT owns design/direct work/acceptance review, Codex owns LOCAL implementation, and project tooling/CI provides mechanical evidence.
+
 ## Entry
 
 - `AGENTS.md` — maintenance constitution for this repository.
@@ -15,6 +17,7 @@ Reusable operating contracts for collaboration among the User, ChatGPT, and Code
 references/
 ├── collaboration/
 │   ├── protocol.md
+│   ├── implementation.md
 │   ├── verification.md
 │   ├── agents.md
 │   └── templates/
@@ -36,7 +39,7 @@ references/
         └── agents.md
 ```
 
-The three reference families answer different questions:
+The reference families answer different questions:
 
 ```text
 collaboration = how User, ChatGPT, and Codex work together
@@ -44,27 +47,44 @@ project       = how a maintained project is organized and connected
 skill         = how a Skill is owned, packaged, written, and maintained
 ```
 
-The tree above is the collaboration repository's own reference organization. `references/project/architecture.md` does not prescribe one canonical filesystem for downstream projects.
+Within collaboration:
+
+```text
+protocol       = authority, routing, Git/task boundaries, acceptance
+implementation = AI-code transparency + engineering discipline
+verification   = verification levels + required evidence categories
+```
 
 ## Authority model
 
-This repository's current operational authority lives in `references/`. Its `reports/concept/` directory records collaboration decision history/rationale rather than runtime policy.
+Current operational authority lives in `references/`. `reports/concept/` records this repository's decision history/rationale rather than runtime policy.
 
-Maintained scientific projects may use a different concept role: when their `AGENTS.md` declares `reports/concept/` as design authority, project Skills/references are operational projections of that accepted design. See `references/project/concept.md`.
+Maintained scientific projects may declare their own `reports/concept/` as canonical project design authority. Their model-specific scientific facts remain grounded in registered source/evidence rather than project governance documents.
 
-## Codex execution modes
+## Execution modes
 
-`references/collaboration/protocol.md` distinguishes:
+`references/collaboration/protocol.md` defines three routes:
 
 ```text
-routine local execution
-= bounded, ephemeral local inspection/test/diagnosis without repository mutation or durable audit artifacts
+DIRECT
+= ChatGPT completes work supported by connected capability
 
-formal delegated task
-= repository-changing, durable, long/multi-step, risk-sensitive, or audit-chain work
+LOCAL-QUICK
+= bounded low-risk local implementation/execution with focused verification and ChatGPT acceptance review
+
+FORMAL
+= major, long, risk-sensitive, trust/public-contract, persistent-state, or release work using a committed task and durable report
 ```
 
-Formal task launch text is part of `references/collaboration/templates/chatgpt-task.md`; it is not a separate contract.
+Repository-changing FORMAL work defaults to a dedicated task branch/worktree, so an isolated long task does not freeze the shared default branch.
+
+Formal task launch text lives in `references/collaboration/templates/chatgpt-task.md`.
+
+## AI-assisted implementation
+
+`references/collaboration/implementation.md` requires AI-generated implementation to be transparent, reviewable, maintainable, and held to the same quality standard as maintained human-authored code.
+
+The User is not required to write code or inspect every line. Material implementation decisions and verification evidence must instead remain auditable through bounded changes, clear contracts, tests/tooling, Codex execution evidence, and ChatGPT acceptance review.
 
 ## Normal reading path
 

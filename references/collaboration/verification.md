@@ -1,264 +1,196 @@
 # Verification contract
 
-Verification has two orthogonal dimensions:
+Verification has two dimensions:
 
 ```text
-verification level
-= how much rigor/cost the current task warrants
-
-verification evidence layer
-= at what system scale the required evidence is collected
+level    = how much rigor/cost the task warrants
+category = what evidence is needed for the specific claim
 ```
 
-A formal Codex task selects exactly one verification level and then selects only the evidence layers materially required by the task's risks and acceptance claim.
+A task selects one level and only the evidence categories material to its risks. Categories are not a second level system and need not all appear.
 
-The three levels are not test types. The six evidence layers are not a second level system. A LEVEL 3 task is therefore not automatically "run every possible test"; it must cover every evidence layer that is material to the release claim and explicitly mark genuinely inapplicable layers as such.
-
-## Verification levels
+## Levels
 
 ### LEVEL 1 — FOCUSED
 
-Default for ordinary development, one Skill/reference, small bugs, and small or medium implementations.
+Default for ordinary development and LOCAL-QUICK.
 
-Evidence normally includes directly affected tests/checks, relevant lint/type checks for touched code, the smallest useful smoke/integration check, and ChatGPT independent audit.
+Use directly affected tests/checks, relevant lint/type checks, and the smallest useful smoke/integration evidence. Optimize for fast feedback.
 
 ### LEVEL 2 — MAJOR
 
-Use when a task changes core architecture, scientific/product logic, a trust boundary, or important cross-module behavior.
+Use for core architecture, scientific/product behavior, important public contracts, trust boundaries, or material cross-module changes.
 
-Level 2 adds only evidence required by that risk, such as affected contract/integration checks, real-artifact validation, recovery/failure behavior, a materially useful independent second perspective, or targeted static/security analysis.
+Add only risk-relevant evidence such as stronger contract/integration checks, real artifacts, recovery behavior, targeted security/static analysis, or an additional adversarial review perspective.
 
 ### LEVEL 3 — RELEASE
 
-Use for formal release, component release qualification, open-source readiness, or security-sensitive release gates.
+Use for release qualification, open-source/release readiness, or security-sensitive release gates.
 
-Level 3 adds release/reproducibility evidence and the packaging, clean-install, environment, dependency, static/security, real-artifact, recovery, repeatability, and audit evidence required by the specific release target.
+Cover the reproducibility and non-functional evidence required by the actual release claim: packaging/install, environment matrix, dependencies, static/security, real artifacts, recovery/repeatability, and similar concerns when material.
 
-## Verification evidence layers
+LEVEL 3 does not mean every available test or scanner.
 
-The following six layers describe *where* evidence is collected. They complement rather than replace the three verification levels.
+## Evidence categories
 
-### LAYER 1 — Component / property
+### Component / property
 
-Checks small deterministic behavior and local invariants close to the implementation unit.
-
-Typical evidence includes:
+Small deterministic behavior and local invariants.
 
 ```text
-focused pytest
+focused tests
+boundary/parameterized cases
 pure-function checks
-boundary-value cases
-parameterized cases
-property-based or fuzz tests when input-space risk warrants them
+property/fuzz tests when input-space risk warrants them
 ```
 
-Use property/fuzz testing when many valid/invalid combinations matter more than a few hand-written examples. It is a technique inside this layer, not a universal requirement.
+### Contract / invariant
 
-### LAYER 2 — Contract / invariant
-
-Checks that stable public/project-facing behavior matches the accepted contract independently of implementation details.
-
-Typical targets include:
+Stable public/project-facing behavior independent of implementation details.
 
 ```text
-schemas and exact fields
-file/directory ownership
-state-transition rules
-trust-boundary invariants
-stable CLI/API behavior
+schema/fields
+file ownership
+state transitions
+trust boundaries
+CLI/API behavior
 fail-closed conditions
-serialization and provenance rules
+serialization/provenance
 ```
 
-Critical contract tests should avoid self-proof where possible: expected invariants should not be derived solely from the same production constants or code paths being tested.
+Avoid self-proof where practical: critical expected invariants should not be derived only from the same production constant/code path being tested.
 
-### LAYER 3 — Integration
+### Integration
 
-Checks interactions among multiple components inside one Skill/module or across explicitly in-scope adjacent boundaries.
-
-Typical evidence includes:
+Interactions among in-scope components or adjacent boundaries.
 
 ```text
-component A → component B
+component → component
 CLI → implementation
 registry → consumer
 adapter → orchestrator
-synthetic stage-to-stage filesystem handoff
+synthetic stage handoff
 ```
 
-Prefer small deterministic fixtures so interface failures remain diagnosable.
+### Real artifact / external tool
 
-### LAYER 4 — Real-artifact regression
-
-Checks the implementation against real scientific/domain artifacts or real external tools when mocks/synthetic inputs cannot represent the important behavior.
-
-Typical evidence includes:
+Behavior that mocks/synthetic inputs cannot establish reliably.
 
 ```text
-real PDFs/data/model files
-real parser/simulator/tool execution
-real package/resource layouts
-representative domain-specific edge cases
+real scientific PDF/data/model
+real parser/simulator/tool
+real package/resource layout
+representative domain edge case
 ```
 
-Reuse stable real artifacts when upstream behavior has not changed; rerun expensive upstream work only when the task needs fresh reconstruction evidence.
+Reuse stable expensive artifacts when fresh reconstruction adds no evidence.
 
-### LAYER 5 — End-to-end / recovery / repeatability
+### E2E / recovery / repeatability
 
-Checks the complete in-scope user-visible or trust-boundary flow from a fresh starting state to the stable result, including adverse transitions when they materially matter.
-
-Typical evidence includes:
+Complete in-scope flow and adverse transitions when material.
 
 ```text
-fresh source → final in-scope artifact
+fresh input → stable result
 failure → no partial authoritative state
-retry/recovery
-idempotent reuse
-independent fresh reconstructions
-cross-run integrity/repeatability
+retry/idempotency
+independent reconstruction/repeatability
 ```
 
-End-to-end evidence is intentionally sparse. Do not move every lower-level case into E2E merely for reassurance.
+Keep E2E sparse; lower-cost evidence should prove lower-level properties.
 
-### LAYER 6 — Release / non-functional
+### Release / non-functional risk
 
-Checks whether the release claim remains valid outside the developer's current worktree and happy-path runtime.
-
-Select the relevant release risks, for example:
+Evidence that a release claim survives outside the current worktree/happy path.
 
 ```text
-clean wheel/sdist or equivalent build
-non-editable clean installation
+build + clean/non-editable install
 package self-containment
-supported OS/Python/runtime matrix
-dependency vulnerability audit
-static/security analysis
-performance/scale/resource limits when claimed
-open-source/repository readiness
-branch/status-gate behavior when part of release governance
+supported runtime/OS matrix
+dependency/static/security checks
+performance/scale limits when claimed
+repository/open-source/status-gate readiness
 ```
 
-A release task does not need irrelevant non-functional tests. For example, do not invent load testing for a local file converter that makes no throughput claim.
+Do not invent irrelevant non-functional tests to fill the category.
 
-## Level × layer selection
-
-Use risk, not ceremony.
+## Level guidance
 
 ```text
 LEVEL 1
-→ normally Layer 1
-→ add Layer 2/3 when the touched behavior exposes a contract/interface
-→ Layers 4–6 only when directly implicated
+→ Component/property by default
+→ add Contract/Integration when touched
+→ higher-cost categories only when directly implicated
 
 LEVEL 2
-→ include affected Layer 1–3 evidence
-→ add Layer 4 when real scientific artifacts/external tools matter
-→ add Layer 5 when a trust boundary, transaction, recovery, or cross-stage flow changes
-→ add Layer 6 only for a concrete non-functional/security/dependency risk
+→ affected Component/Contract/Integration
+→ Real artifact when scientific/tool reality matters
+→ E2E/recovery/repeatability for trust/transaction/full-flow risk
+→ Release/non-functional only for concrete risk
 
 LEVEL 3
-→ cover every layer materially required by the release claim
-→ normally includes Layers 2, 4, 5, and 6 for executable scientific components
-→ include Layer 1/3 where they provide direct regression evidence
-→ explicitly state N/A for any omitted layer whose absence could otherwise be ambiguous
+→ every category material to the release claim
+→ commonly Contract + Real artifact + E2E/recovery/repeatability + Release/non-functional for executable scientific components
 ```
 
-Higher verification level does not mean duplicating the same assertion at every layer. Prefer the lowest layer that proves a property, then add higher-layer evidence only for behavior that emerges from integration, real artifacts, full flow, or release environment.
+Do not duplicate the same assertion across categories merely to increase evidence volume.
 
-## Test-strength techniques
+## Strengthening techniques
 
-The following techniques improve evidence quality but are not standalone verification layers and are not automatically mandatory:
+These are optional techniques inside the relevant category, not levels/categories themselves:
 
 ```text
-coverage measurement
-branch coverage
-property-based testing
-fuzzing
+coverage / branch coverage
+property testing / fuzzing
 mutation testing
 fault injection
 concurrency/race testing
 benchmark/stress testing
 ```
 
-Select them when they attack a real risk:
+Use them only against a real risk. Coverage finds unexercised paths but is not correctness; mutation testing tests test sensitivity; fault injection is valuable at failure boundaries; concurrency tests require plausible concurrent access; benchmarks require a performance/scale claim.
 
-- coverage identifies unexercised code paths but does not by itself prove correctness;
-- mutation testing checks whether tests actually detect meaningful implementation changes;
-- fault injection is high-value for transactional/filesystem/network failure boundaries;
-- concurrency testing is justified only when concurrent access is supported or plausible;
-- benchmarks/stress tests are required only when performance, scale, or resource limits are part of the claim.
+## Security/dependency tools
 
-Do not inflate test counts or coverage percentages with redundant cases merely to reach a number.
-
-## Verification tools
-
-Verification tools cover a defined risk; installation alone never makes a tool mandatory.
-
-### Semgrep
-
-Use as a fast static/security layer for meaningful attack or misuse surfaces such as filesystem/path handling, subprocess execution, network input, untrusted parsing, serialization, authentication, authorization, secrets, or credential handling.
-
-Typical targeted use:
+Select by risk:
 
 ```text
-semgrep scan --config auto <TARGET>
+Semgrep  → targeted source/static security analysis
+CodeQL   → deeper semantic/data-flow analysis when justified and supported
+pip-audit→ Python dependency-vulnerability evidence
 ```
 
-### CodeQL
+Tool installation does not make a tool mandatory, and a finding is evidence to investigate rather than automatic proof of a defect.
 
-Use for deeper semantic/data-flow analysis when supported, permitted, and justified by an explicit security/release risk. Prefer an existing repository code-scanning workflow when available.
+## Planning
 
-### pip-audit
+LOCAL-QUICK normally uses LEVEL 1 and records only the focused evidence needed for acceptance review.
 
-Use for Python dependency-vulnerability coverage when dependency risk is in scope.
-
-## Formal task verification plan
-
-A formal task's `## Verification` section must state:
+A FORMAL task states:
 
 ```text
 Verification level: LEVEL 1 | LEVEL 2 | LEVEL 3
 
-Evidence-layer plan:
-- Layer 1 — Component/property: required | N/A — <reason>
-- Layer 2 — Contract/invariant: required | N/A — <reason>
-- Layer 3 — Integration: required | N/A — <reason>
-- Layer 4 — Real-artifact regression: required | N/A — <reason>
-- Layer 5 — E2E/recovery/repeatability: required | N/A — <reason>
-- Layer 6 — Release/non-functional: required | N/A — <reason>
+Required evidence:
+- <category>: <concrete check>
+- <category>: <concrete check>
 ```
 
-For each required layer, name the concrete evidence expected rather than merely repeating the layer title.
+List only required categories; do not add `N/A` rows.
 
-The task author may group clearly related checks, but the intended coverage must remain auditable.
+Example:
+
+```text
+Verification level: LEVEL 2
+Required evidence:
+- Contract / invariant: registry schema + fail-closed path checks
+- Real artifact / external tool: real MinerU PDF retained-artifact check
+- E2E / recovery / repeatability: parser failure leaves no partial final package; retry succeeds
+```
 
 ## Reporting and acceptance
 
-Codex reports what was actually executed under each required layer, including failures, skips, environmental limitations, and deviations from the planned evidence.
+Codex reports what actually ran for each required category, including failures, skips, environment limits, and plan deviations.
 
-A nominal `pytest PASS` does not substitute for a missing real-artifact, E2E, recovery, or release layer when the task required that evidence.
+A `pytest PASS`, coverage number, scanner result, or CI badge does not substitute for another required evidence category.
 
-Likewise, a failed out-of-scope repository-wide check does not automatically invalidate an in-scope layer if the task explicitly separates that downstream drift and the current acceptance claim does not include it.
-
-ChatGPT independently evaluates whether the selected level was appropriate, whether the layer plan matched the task risk, and whether the reported evidence actually supports the acceptance verdict.
-
-## Selection summary
-
-```text
-LEVEL 1
-→ focused evidence; no adversarial scanner by default
-
-LEVEL 2
-→ risk-driven multi-layer evidence
-→ Semgrep when attack/misuse surface warrants it
-→ CodeQL only for justified deep security analysis
-→ pip-audit when dependency risk is in scope
-
-LEVEL 3
-→ release-claim-driven evidence across all materially relevant layers
-→ select source/dependency/security/reproducibility tools according to release risk
-```
-
-Machine-wide developer tools remain separate from project runtime dependencies. A tool finding is evidence to investigate, not automatic proof of a defect.
-
-A clean environment rebuild is verification only when environment reproducibility is itself under test, the current environment is invalid, or a release gate requires it.
+ChatGPT acceptance review asks whether the chosen level and evidence were sufficient and whether the evidence establishes the claim. Add a second reviewer/model/human perspective for LEVEL 2/3 only when scientific, architectural, trust, security, or release risk materially warrants it.

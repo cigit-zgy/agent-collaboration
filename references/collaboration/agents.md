@@ -11,11 +11,12 @@ This is the collaboration-wide house standard for maintained `AGENTS.md` files. 
 It is distinct from:
 
 ```text
-SKILL.md        = capability/workflow execution
-references/     = bounded detailed contracts
-reports/concept = accepted project design when declared
-README.md       = human-facing orientation
-CI/tool config  = mechanical formatting/lint/build enforcement
+SKILL.md                                  capability/workflow execution
+references/collaboration/implementation.md AI-assisted implementation/engineering policy
+other references/                         bounded detailed contracts
+reports/concept                           accepted project design when declared
+README.md                                 human-facing orientation
+CI/tool config                            mechanical formatting/lint/build enforcement
 ```
 
 ## Core principles
@@ -30,7 +31,7 @@ Include rules likely to remain relevant across tasks: identity, authority, owner
 
 ### State authority before procedure
 
-An unfamiliar Agent should quickly know which files own design, scientific facts, operational workflow, implementation, tests, and mutable state. Routing depends on that precedence.
+An unfamiliar Agent should quickly know which files own design, scientific facts, operational workflow, implementation policy, implementation, tests, and mutable state. Routing depends on that precedence.
 
 ### Describe the valid behavior first
 
@@ -38,7 +39,7 @@ Use positive contracts as the default. Reserve `MUST NOT` or explicit prohibitio
 
 ### One rule, one owner, one statement
 
-Do not duplicate a workflow manual, design specification, coding standard, global collaboration policy, or installation profile inside `AGENTS.md`. Point to the owning artifact.
+Do not duplicate a workflow manual, design specification, coding/implementation standard, global collaboration policy, or installation profile inside `AGENTS.md`. Point to the owning artifact.
 
 ### Prefer concrete instructions
 
@@ -61,8 +62,9 @@ A maintained `AGENTS.md` should make the applicable items easy to recover:
 3. ownership boundaries that affect Agent behavior;
 4. workflow/Skill entry and reading route;
 5. runtime/tooling/verification authority when relevant;
-6. human/scientific/trust checkpoints when relevant;
-7. a short set of real hard invariants or escalation conditions.
+6. implementation-policy route when code is produced;
+7. human/scientific/trust checkpoints when relevant;
+8. a short set of real hard invariants or escalation conditions.
 
 These are information categories, not mandatory headings.
 
@@ -91,11 +93,11 @@ These are information categories, not mandatory headings.
 
 ## Runtime and verification
 
-<Runtime/tooling authority and stable common commands, only when real.>
+<Runtime/tooling authority and stable common commands, only when real. Route AI-assisted implementation to the collaboration implementation contract rather than duplicating it.>
 
 ## Human / trust checkpoints
 
-<Only genuine decisions or trust transitions.>
+<Only genuine decisions or trust transitions. Human decision authority does not imply human code authorship.>
 
 ## Hard invariants
 
@@ -110,7 +112,7 @@ Omit or rename sections when the same required information is communicated more 
 user/global instructions
 → repository root AGENTS.md
 → nested AGENTS.md only for real subtree-specific rules
-→ SKILL.md / references for capability details
+→ SKILL.md / references for capability and implementation details
 ```
 
 Repository `AGENTS.md` should route to the nearest owner instead of copying that owner's content.
@@ -119,8 +121,8 @@ Repository `AGENTS.md` should route to the nearest owner instead of copying that
 
 The standard draws on recurring practices from OpenAI Codex, OpenAI model guidance, Anthropic project-instruction guidance, and scientific-agent repositories reviewed for this collaboration. The common pattern is concise scope-local context, clear authority, concrete routing, progressive disclosure, and separation of prompts/configuration/logs rather than one monolithic instruction file.
 
-Platform-specific discovery and precedence facts should be rechecked against the current vendor documentation when they materially affect routing.
+Platform-specific discovery and precedence facts should be rechecked against current vendor documentation when they materially affect routing.
 
 ## Review checklist
 
-An `AGENTS.md` is ready when an unfamiliar Agent can identify the applicable scope, authority, owner paths, workflow entry, runtime/verification authority, and any genuine human/trust boundary without loading unrelated manuals or installation-specific detail owned elsewhere.
+An `AGENTS.md` is ready when an unfamiliar Agent can identify the applicable scope, authority, owner paths, workflow entry, implementation/runtime/verification authority, and any genuine human/trust boundary without loading unrelated manuals or installation-specific detail owned elsewhere.

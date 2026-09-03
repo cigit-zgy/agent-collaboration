@@ -20,7 +20,7 @@ references/  Skill-specific operational contracts
 reports/     collaboration/history assets when this repository owns them
 ```
 
-User + ChatGPT maintain Skill design. ChatGPT independently reviews execution evidence; the User retains final decision/override authority. Codex executes approved local work.
+User + ChatGPT maintain Skill design. ChatGPT performs connected DIRECT work and acceptance review; the User retains final decision/override authority and designated human checkpoints. Codex executes approved LOCAL implementation/execution. Zero-human-coding is permitted.
 
 ## Repository ownership
 
@@ -42,11 +42,11 @@ Use `agent-collaboration/references/skill/repository.md` as the owner of maintai
 
 ## Workflow
 
-Use `SKILL.md` for capability operation and `references/skill/*` from agent-collaboration for repository/package/writing policy when maintaining the Skill itself.
+Use `SKILL.md` for capability operation and `references/skill/*` from agent-collaboration for repository/package/writing policy when maintaining the Skill itself. AI-assisted implementation follows `agent-collaboration/references/collaboration/implementation.md`.
 
 ## Runtime and verification
 
-<No independent runtime | runtime authority + stable verification route.>
+<No independent runtime | runtime authority + mechanical style/verification route.>
 
 ## Hard invariants
 
