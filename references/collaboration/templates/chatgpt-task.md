@@ -44,7 +44,7 @@ codex_report: reports/codex/<YYMMDD_codex_NN.md>
 ---
 ```
 
-`baseline_sha` is the task-branch commit after task-specific DIRECT inputs and before the task artifact. Supply the commit containing the task separately in the launch envelope as the execution handoff.
+`baseline_sha` is the task-branch commit after task-specific DIRECT inputs and before the task artifact. Supply the commit containing the task separately in the launch prompt as the execution handoff.
 
 ## Body
 
@@ -108,32 +108,50 @@ A narrowly mechanical projection edit is permitted only when the task names that
 
 The committed task file is the **sole task-specific execution specification** for a FORMAL handoff.
 
-The User-facing launch message is only a transport/locator envelope. It MUST NOT duplicate, summarize, paraphrase, expand, or amend task semantics.
-
-The launch envelope MUST NOT contain any of the following task-specific content:
+The User-facing response has two layers:
 
 ```text
-mission or diagnosed problem
-scientific/product/design semantics
-required changes or non-goals
-validator/error-specific behavior
-implementation instructions
-verification commands or test matrix
-acceptance criteria
-recovery/retry semantics
-Git procedure already owned by the pinned collaboration contract
-custom final-stdout schema
+1. concise human-readable synopsis
+2. boxed formal launch prompt
 ```
 
-All such information belongs in the committed task and, after execution, in the Codex report.
+The synopsis is informational only. It may summarize the committed task, but it MUST NOT add, remove, reinterpret, or amend task semantics. If the synopsis and committed task differ, the committed task is authoritative.
 
-If any task-specific requirement must change after the task is committed, update or supersede the task, commit/push the revised specification, and issue a new handoff commit. Do not append a second specification in chat.
+If any task-specific requirement must change after the task is committed, update or supersede the task, commit/push the revised specification, and issue a new handoff commit. Do not create a second specification in chat.
 
 A chat-only emergency `STOP`, `PAUSE`, or `CANCEL` from the User may take effect immediately. A substantive amendment must be made durable in the task before repository-changing execution continues.
 
+## User-visible synopsis — hard requirement
+
+After the task is committed and pushed, ChatGPT MUST provide a short synopsis of approximately ten lines before the formal launch prompt.
+
+Normal conformance target:
+
+```text
+8–12 short lines
+```
+
+Each line should communicate at most one high-level fact. The synopsis should normally cover only the most useful items, for example:
+
+```text
+task purpose
+main affected component or workflow
+why LOCAL/Codex execution is needed
+main frozen boundary or important non-goal
+high-level implementation direction
+verification level / major evidence category
+expected stable result
+expected Codex report path
+integration/readiness implication
+```
+
+The synopsis MUST remain substantially shorter than the committed task. It MUST NOT reproduce detailed validator/error strings, command lists, test matrices, retry/recovery state machines, field-by-field acceptance criteria, long prohibitions, custom final-stdout schemas, or other low-level execution instructions.
+
+The synopsis is allowed to summarize those concerns at a high level when that helps the User understand the task. Summary is not specification.
+
 ## User-visible task link — hard requirement
 
-After the formal task is committed and pushed, ChatGPT MUST surface a directly openable immutable link to the exact committed task:
+The formal launch prompt MUST include a directly openable immutable link to the exact committed task:
 
 ```text
 任务链接如下：
@@ -144,21 +162,28 @@ https://github.com/<OWNER>/<REPOSITORY>/blob/<TASK_COMMIT>/reports/chatgpt/<TASK
 
 If the task was not successfully pushed, do not fabricate the link. Show `任务链接如下：UNAVAILABLE — <blocker>` and do not represent the FORMAL handoff as complete.
 
-## Launch envelope — exact fixed format
+## Formal launch prompt — boxed exact format
 
-After committing/pushing the task, give the User **only** the following launch envelope. Do not add task semantics before or after it.
+After the synopsis, ChatGPT MUST place the complete copyable Codex launch prompt in one fenced plain-text code block. The prompt itself stays intentionally short and contains only durable coordinates plus one authority sentence:
 
 ```text
 执行正式任务：
+
 Repository: <LOCAL_REPOSITORY>
 Task: reports/chatgpt/<TASK_FILE>.md
 Task branch: <TASK_BRANCH>
 Task commit: <TASK_COMMIT>
 Collaboration: cigit-zgy/agent-collaboration@<PINNED_AGENT_COLLABORATION_SHA>
+
 任务链接如下：
 https://github.com/<OWNER>/<REPOSITORY>/blob/<TASK_COMMIT>/reports/chatgpt/<TASK_FILE>.md
+
+以 committed task 为唯一 task-specific 执行规范；使用 pinned collaboration authority 执行协作、Git、实现与验证规则。
 ```
 
-This fixed envelope is intentionally short. Its only purpose is to locate and bind the durable specification. The task file and pinned collaboration authority contain the execution rules.
+Do not append task-specific implementation detail after the code block. The surrounding synopsis may explain the task at high level, but the boxed prompt must not become a second detailed specification.
 
-A FORMAL handoff that repeats task-specific semantics outside this envelope is non-conforming, even when the repeated text is identical to the committed task.
+A FORMAL handoff is non-conforming when either of these occurs:
+
+- no 8–12-line concise synopsis is provided without a concrete reason;
+- the boxed prompt contains substantive task-specific requirements that belong in the committed task.
