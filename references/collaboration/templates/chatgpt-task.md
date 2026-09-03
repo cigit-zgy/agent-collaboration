@@ -1,8 +1,8 @@
 # ChatGPT formal task template
 
-Use this template only for the **formal delegated task** path defined in `../protocol.md`.
+Use this template only for the FORMAL route in `../protocol.md`.
 
-Routine local execution does not require a committed task/report ceremony.
+LOCAL-QUICK work does not require a committed task/report ceremony.
 
 Formal Codex tasks live at:
 
@@ -10,18 +10,20 @@ Formal Codex tasks live at:
 reports/chatgpt/YYMMDD_chatgpt_NN.md
 ```
 
-A formal task is issued only after ChatGPT has:
+## Before issuing
 
-1. identified the concrete local/unavailable capability that requires Codex;
-2. partitioned every requested deliverable into `DIRECT` or `LOCAL`;
-3. completed and committed/pushed all `DIRECT` deliverables that are in scope;
-4. frozen those DIRECT artifacts as Codex read-only inputs;
-5. reduced Codex scope to the remaining `LOCAL` work;
-6. pinned the exact `agent-collaboration` GitHub authority used to author the task;
-7. established the design/projection baseline commit from which the task is issued;
-8. selected one verification level and a risk-based evidence-layer plan under `../verification.md`.
+ChatGPT must have:
 
-A task is invalid if it delegates a deliverable that ChatGPT can already complete through current connected capabilities without naming a concrete local-only dependency for that deliverable.
+1. inspected current project/repository authority and evidence;
+2. partitioned deliverables into DIRECT and LOCAL;
+3. completed task-specific DIRECT work that can be completed through connected capability;
+4. identified the semantic contracts/invariants Codex may not reinterpret;
+5. reduced Codex scope to the remaining LOCAL implementation/execution;
+6. selected a dedicated task branch unless the task explicitly justifies same-branch execution;
+7. pinned the exact `agent-collaboration` commit used to author the task;
+8. selected one verification level and concrete required evidence under `../verification.md`.
+
+A formal task should remain small enough that its mission, implementation boundary, and acceptance claim can be reviewed coherently. Split independent responsibilities into separate tasks rather than using AI generation capacity to create one oversized task.
 
 ## Metadata
 
@@ -33,195 +35,143 @@ title: <SHORT_TITLE>
 status: issued
 date: <YYYY-MM-DD>
 repository: <OWNER/REPOSITORY>
-branch: <BRANCH>
-baseline_sha: <DIRECT_DESIGN_PROJECTION_BASELINE_SHA>
+task_branch: <DEDICATED_TASK_BRANCH>
+baseline_sha: <DIRECT_TASK_BASELINE_SHA>
 verification_level: <level_1 | level_2 | level_3>
-collaboration_repository: cigit-zgy/agent-collaboration
 collaboration_commit: <PINNED_AGENT_COLLABORATION_SHA>
-collaboration_entry: SKILL.md
 summary: >
   <PURPOSE/SCOPE>
-tags: []
-concepts: []
 codex_report: reports/codex/<YYMMDD_codex_NN.md>
 ---
 ```
 
-`baseline_sha` is the commit after the task's DIRECT design/projection inputs are complete and before the formal task artifact is committed. It is **not** the execution handoff commit.
+`baseline_sha` is the task-branch commit after task-specific DIRECT inputs are complete and before the task artifact is added.
 
-The task/handoff commit is the commit containing this task file. Because a file cannot contain the SHA of the commit that contains itself, the exact task/handoff commit is supplied in the launch block after the task has been committed and pushed.
-
-The collaboration commit is required for formal tasks. Do not encode a machine-local `agent-collaboration` path as the authority source.
+The task/handoff commit is the commit containing this task file. Because a file cannot contain its own SHA, provide that SHA in the launch block after committing/pushing the task.
 
 ## Required body
+
+Use the smallest body that makes the implementation boundary auditable:
 
 ```markdown
 # <Task title>
 
 ## Mission
 
-## Delegation partition
+## Authority and frozen semantics
 
-### ChatGPT-completed before handoff
+<Project authority + exact design/operational contracts Codex must implement without reinterpretation.>
 
-<List every DIRECT deliverable completed before this task was issued, with paths/commits when relevant.>
+Pinned collaboration authority:
 
-### Frozen DIRECT inputs — Codex read-only
+- cigit-zgy/agent-collaboration@<SHA>:SKILL.md
+- cigit-zgy/agent-collaboration@<SHA>:references/collaboration/protocol.md
+- cigit-zgy/agent-collaboration@<SHA>:references/collaboration/implementation.md
+- cigit-zgy/agent-collaboration@<SHA>:references/collaboration/verification.md
 
-<List the exact files/directories Codex may read but MUST NOT substantively edit, delete, rename, reformat, regenerate, or replace.>
+## LOCAL scope
 
-If local implementation exposes a defect in one of these artifacts, stop the affected work and report the conflict to ChatGPT. Do not repair the frozen artifact locally.
+<What Codex owns and the concrete local/runtime capability that makes it LOCAL.>
 
-### Codex-owned local work
-
-<For each LOCAL deliverable, state the concrete local/unavailable capability that makes Codex necessary.>
-
-If a requested deliverable has no concrete local-only reason, it does not belong here.
-
-## Why Codex is required
-
-<Summarize the remaining local-only capability requirement after the partition.>
-
-## Current evidence / diagnosed problem
-
-## Authoritative sources
-
-Identify project authorities normally, and identify collaboration authorities by pinned GitHub coordinates, for example:
-
-```text
-cigit-zgy/agent-collaboration@<PINNED_SHA>:SKILL.md
-cigit-zgy/agent-collaboration@<PINNED_SHA>:references/collaboration/protocol.md
-cigit-zgy/agent-collaboration@<PINNED_SHA>:references/collaboration/verification.md
-cigit-zgy/agent-collaboration@<PINNED_SHA>:references/skill/writing.md
-```
-
-Codex resolves these exact files from GitHub unless an already-existing local checkout is verified to be the same repository at the same pinned commit. Do not substitute similarly named local files or another Skill.
-
-## Scope
 ## Required changes
-## Non-goals
-## Upstream/downstream ownership boundary
-## Scientific / product boundaries
-## Engineering constraints
-## Verification
+
+## Non-goals / ownership boundary
+
+## Engineering and AI-implementation constraints
+
 ## Acceptance criteria
-## Git requirements
+
+## Verification
+
+Verification level: LEVEL 1 | LEVEL 2 | LEVEL 3
+
+Required evidence:
+- <category>: <concrete check/evidence>
+- ...
+
+## Git handoff and integration
+
 ## Codex report
-## Final stdout
 ```
 
-## Partition rules
+Omit a subsection only when its information is genuinely inapplicable; do not replace omitted substance with boilerplate.
 
-The task-level need for Codex does not grant Codex ownership of all files in the task area.
+## Authority and semantic-freeze rules
 
-When ChatGPT has repository write access, substantive authoring of these artifacts is presumed `DIRECT` and should normally be completed before handoff:
+Codex may read all relevant authority but must not reinterpret accepted scientific/product/design semantics.
+
+Freeze the named semantic contracts/invariants rather than every DIRECT file by default.
+
+If local implementation reveals a conflict in a frozen semantic contract:
 
 ```text
-reports/concept/*.md
-AGENTS.md
-SKILL.md
-references/*.md
-substantive design/projection documentation
+stop affected work
+→ report exact conflict
+→ do not silently redesign
 ```
 
-Codex consumes those artifacts as frozen authority/operational inputs.
+A mechanical projection correction is allowed only when the task explicitly defines the permitted class of change and it cannot introduce new design semantics.
 
-Unless the task explicitly declares a narrowly mechanical exception, Codex must not modify any frozen DIRECT input. A discovered conflict is reported upward; it is not fixed by Codex through design/projection edits.
-
-Codex may edit a normally `DIRECT` artifact only when the task states an inseparable local-only dependency, names the exact file and permitted transformation, and constrains the edit mechanically so that no new design semantics are introduced.
-
-Examples of valid Codex-owned work:
+For an upstream-stage task where downstream migration is not in scope, state concisely:
 
 ```text
-Python implementation
-CLI behavior
-packaging/import integration
-local filesystem/worktree migration
-focused/full tests
-build/render/runtime verification
-machine-local diagnostics
-Codex execution report
+Make the current owner conform to its accepted contract.
+Report stale downstream consumers precisely.
+Do not restore rejected upstream interfaces or add compatibility shims merely to make unrelated tests pass.
 ```
 
-Examples that should normally be completed by ChatGPT before handoff:
+## Engineering and AI-transparency rules
+
+Every implementation task is governed by `../implementation.md`.
+
+Acceptance should require, when material:
 
 ```text
-canonical design decisions
-AGENTS.md governance authoring
-SKILL.md workflow authoring
-references/*.md contract authoring
-acceptance-criteria design
+smallest sufficient implementation
+existing patterns/mature tools before new infrastructure
+bounded/reviewable logical change
+no speculative abstraction/dependency/compatibility layer
+same quality standard for AI-produced and human-produced code
+implementation rationale and limitations in the Codex result/report
 ```
 
-## Required upstream/downstream boundary statement
-
-For a task that changes or re-establishes an upstream contract/stage, the task must state whether downstream migration is in scope.
-
-Default wording when downstream migration is **not** in scope:
-
-```text
-Make the current owner conform to its frozen contract.
-If downstream consumers still depend on the old contract, report the exact drift.
-Do not modify those consumers, reintroduce rejected interfaces, or add compatibility
-shims merely to make unrelated repository-wide tests pass.
-```
-
-Acceptance criteria should distinguish:
-
-```text
-current owner conformance
-from
-whole-pipeline compatibility
-```
-
-A focused stage can pass while explicit downstream drift remains, provided whole-pipeline migration was not promised by the task.
+Project mechanical style remains owned by project tooling/CI rather than repeated in prose.
 
 ## Verification plan rules
 
-The `verification_level` metadata chooses **how rigorous the task must be**. The `## Verification` body chooses **which evidence layers are required to support that claim**. These are separate axes; see `../verification.md`.
+The metadata chooses the verification level. The body lists only evidence categories actually required to establish the claim.
 
-Every formal task must include an evidence-layer plan in `## Verification` using this form:
+Do not include a mandatory six-row `required | N/A` matrix.
+
+Examples:
 
 ```text
-Verification level: LEVEL 1 | LEVEL 2 | LEVEL 3
+Verification level: LEVEL 2
 
-Evidence-layer plan:
-- Layer 1 — Component/property: required | N/A — <concrete evidence or reason>
-- Layer 2 — Contract/invariant: required | N/A — <concrete evidence or reason>
-- Layer 3 — Integration: required | N/A — <concrete evidence or reason>
-- Layer 4 — Real-artifact regression: required | N/A — <concrete evidence or reason>
-- Layer 5 — E2E/recovery/repeatability: required | N/A — <concrete evidence or reason>
-- Layer 6 — Release/non-functional: required | N/A — <concrete evidence or reason>
+Required evidence:
+- Contract / invariant: registry schema and fail-closed path checks
+- Integration: CLI → registry consumer handoff
+- Real artifact / external tool: one real scientific PDF through the parser
+- E2E / recovery / repeatability: parser failure leaves no partial final state and retry succeeds
 ```
 
-Rules:
+Techniques such as coverage, fuzzing, mutation testing, fault injection, concurrency testing, or benchmarking are named only when they attack a concrete risk.
 
-- do not mark all six layers `required` mechanically;
-- do not omit a material layer merely because focused pytest is green;
-- use the lowest layer that proves a property, then add higher-layer evidence only for integration, real-artifact, end-to-end, recovery, repeatability, or release behavior;
-- for LEVEL 3, every layer material to the release claim must be covered; genuinely irrelevant layers may be `N/A` with a reason;
-- property/fuzz testing, coverage, mutation testing, fault injection, concurrency/race testing, and benchmarks are techniques within relevant layers, not standalone mandatory layers;
-- when one of those techniques attacks a concrete task risk, name it explicitly in the layer plan and acceptance criteria.
+## Task branch and integration
 
-The required evidence must be checkable. For example, write `real MinerU PDF smoke + inspect retained artifacts`, not merely `Layer 4 required`.
+Repository-changing FORMAL work defaults to a dedicated task branch/worktree.
 
-## Handoff and branch-freeze rules
+The task branch is the active execution boundary. The default branch may continue independently when mutable resources do not interfere.
 
-Commit and push the formal task before handoff. The committed task source is Codex's execution specification.
+Codex verifies and pushes the task branch; ChatGPT performs acceptance review before integration.
 
-The launch block must provide the exact task/handoff commit. Codex must reach and verify that commit before LOCAL implementation begins.
+If the default branch advances during execution, that is not by itself a task failure. Reconcile once at integration using the repository's permitted fast-forward/merge/PR policy. Conflicts or design changes remain explicit decisions.
 
-Once the User launches the task or Codex reports execution has begun, the handed-off branch is frozen for overlapping ChatGPT/User repository writes until Codex finishes or the task is explicitly aborted/superseded.
-
-Do not advance the same branch with frozen-input or task-relevant changes during active Codex execution. If a DIRECT artifact must change, stop/supersede the task, commit the new DIRECT state, and issue a new coordinated handoff rather than forcing avoidable Git reconciliation.
-
-Independent concurrent work belongs on a separate branch/worktree with proven non-interference.
-
-Use the task-pinned `agent-collaboration` commit for collaboration/Git/concurrency/verification rules. Required changes and acceptance criteria should be directly checkable.
+Same-branch formal execution is an exception and must be named in the task with its concurrency constraints.
 
 ## Launch block
 
-After the formal task is committed and pushed, give the User only this launch block rather than repeating the full specification:
+After the task is committed and pushed, give the User a compact launch block:
 
 ```text
 执行正式任务：
@@ -232,20 +182,22 @@ Repository:
 Task:
 reports/chatgpt/<TASK_FILE>.md
 
+Task branch:
+<TASK_BRANCH>
+
 Task commit / execution handoff:
 <TASK_COMMIT>
 
 Collaboration authority:
 cigit-zgy/agent-collaboration@<PINNED_AGENT_COLLABORATION_SHA>
 
-先 fetch 并确认当前仓库状态、baseline 和 exact task/handoff commit。
-安全同步到 task/handoff commit 后才开始实现。
-严格执行 committed task，不依据聊天补充或扩大 scope。
-需要 collaboration 规则时读取上面 pinned GitHub authority；不要用未验证的本地副本替代。
-Frozen DIRECT inputs 对 Codex 只读；若实现发现矛盾，停止相关工作并报告，不要改写这些文件。
-当前 handoff branch 在本任务执行期间视为冻结；若发现远端并发推进，不自行 merge/rebase/cherry-pick，按 protocol 停止并报告。
-发现 out-of-scope downstream drift 时只报告，不自行迁移或加 compatibility shim。
-按 task 的 verification level + evidence-layer plan 完成验证；不要用单一 pytest PASS 替代缺失的必需 Layer。
-完成实现、规定验证、Codex report、commit 和 push。
-最后输出 task 要求的固定 stdout。
+先 fetch，并检查 branch / HEAD / upstream / worktree。
+安全到达 exact task branch + handoff commit 后才开始实现。
+严格执行 committed task，不依据聊天扩大 scope。
+需要 collaboration 规则时读取 pinned GitHub authority，不用未验证的本地副本替代。
+冻结的是 task 明确列出的 design semantics / contracts；发现设计冲突时停止相关实现并报告，不自行改写语义。
+代码实现遵循 implementation.md：最小充分实现、可审查增量、AI 代码与人工代码同一质量标准，并在 report 中说明关键实现理由与限制。
+按 task 的 verification level + required evidence 完成验证，不用单一 pytest PASS 替代其他必需证据。
+完成实现、验证、Codex report、task-scoped commit 和 task-branch push。
+ChatGPT acceptance review 后再集成 default branch。
 ```
