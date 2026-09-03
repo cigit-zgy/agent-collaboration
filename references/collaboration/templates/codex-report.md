@@ -8,6 +8,23 @@ reports/codex/YYMMDD_codex_NN.md
 
 A report records implementation/execution evidence. It does not redefine project design or collaboration policy, and its verdict is not final acceptance.
 
+## Report destination binding — hard requirement
+
+For a FORMAL task, the owning committed task metadata field `codex_report` is the canonical report destination.
+
+Codex MUST:
+
+```text
+read codex_report from the committed task
+→ write the formal report at exactly that repository-relative path
+→ commit it on the task branch
+→ push the task branch
+```
+
+Do not choose another report path or filename after handoff merely for convenience. If the declared path is unusable, report the conflict rather than silently relocating the report.
+
+This binding allows ChatGPT to locate and audit the report automatically from the prior handoff context. The User is not required to paste the report path, report URL, report commit, or Codex console output back to ChatGPT after completion.
+
 ## Metadata
 
 ```yaml
@@ -27,6 +44,8 @@ summary: >
 limitations: []
 ---
 ```
+
+`task_id`, `task_branch`, and `task_source_sha` bind this report back to the exact formal handoff. They must agree with the committed task and execution handoff used by Codex.
 
 ## Body
 
