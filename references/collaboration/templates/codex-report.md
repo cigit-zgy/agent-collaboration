@@ -117,27 +117,35 @@ pre-existing User state preserved
 
 Do not claim default-branch integration unless it actually occurred after acceptance. The task report may end with a validated task branch awaiting ChatGPT acceptance/integration.
 
-## Final console report link — hard requirement
+## Final console output — hard requirement
 
-After the report-containing commit has been pushed, Codex MUST prominently print a directly openable immutable GitHub link in its final console response:
+Detailed implementation, verification, acceptance evidence, hashes, test matrices, recovery behavior, and limitations belong in this report. Do not duplicate them into the terminal response.
+
+After the report-containing commit has been pushed, Codex's normal final console response MUST use this minimal fixed format:
 
 ```text
+VERDICT: <PASS | PASS_WITH_LIMITATIONS | BLOCKED | FAIL>
 报告链接如下：
 https://github.com/<OWNER>/<REPOSITORY>/blob/<REPORT_CONTAINING_COMMIT>/reports/codex/<REPORT_FILE>.md
 ```
+
+This console block is a result locator, not a second report.
+
+FORMAL tasks MUST NOT define a custom verbose final-stdout schema that repeats report fields such as test-by-test PASS/FAIL, implementation SHAs, recovery counters, validator states, acceptance matrices, or detailed blockers. Those facts belong in the durable report.
+
+If immediate operator action genuinely requires one short value that cannot reasonably wait for opening the report, the task MAY add at most one concise line after the link. This exception must not become a second evidence summary.
 
 Use the commit that actually contains the report. A repository-relative path, local filesystem path, commit SHA alone, or prose reference is not a substitute for the full HTTPS link.
 
 The report Markdown does not self-record this commit-pinned URL because the report cannot contain the SHA of the commit that contains itself. The post-commit console output is the authoritative place for this immutable report link.
 
-If the report cannot be pushed and no truthful directly openable GitHub URL exists, do not fabricate one. The final console response MUST instead prominently show:
+If the report cannot be pushed and no truthful directly openable GitHub URL exists, do not fabricate one. The final console response MUST instead use:
 
 ```text
+VERDICT: <BLOCKED | FAIL>
 报告链接如下：
 UNAVAILABLE — <concrete publication/push blocker>
-
-本地报告路径：
-<LOCAL_OR_REPOSITORY_RELATIVE_REPORT_PATH>
+本地报告路径： <LOCAL_OR_REPOSITORY_RELATIVE_REPORT_PATH>
 ```
 
-A FORMAL task with an unpublished report may correctly be `BLOCKED` or `FAIL`, but it must never imply that a usable report link exists when it does not.
+An unpublished report must never be represented as remotely inspectable.
