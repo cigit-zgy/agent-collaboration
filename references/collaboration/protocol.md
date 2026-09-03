@@ -223,7 +223,7 @@ Codex supplies implementation/execution evidence; ChatGPT performs acceptance re
 PASS | PASS WITH LIMITATIONS | BLOCKED | FAIL
 ```
 
-Call this `acceptance review`, not independent review by default, because ChatGPT may also have designed/specifed the work.
+Call this `acceptance review`, not independent review by default, because ChatGPT may also have designed/specified the work.
 
 Use an additional independent model/reviewer/human perspective only when LEVEL 2/3 scientific, architectural, trust, security, or release risk materially warrants it. The User retains final authority and designated human checkpoints.
 
