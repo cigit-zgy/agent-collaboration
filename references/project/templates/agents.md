@@ -11,14 +11,14 @@ Read `../../collaboration/agents.md` first. This template specializes that writi
 
 ## Authority
 
-User + ChatGPT develop and adjudicate project design. The User retains final design acceptance/override authority. ChatGPT acts as the design partner and independent technical reviewer. Codex executes approved local work and supplies evidence.
+User + ChatGPT develop and adjudicate project design. The User retains final design acceptance/override authority and designated human decision checkpoints. ChatGPT acts as design partner, connected executor, and acceptance reviewer. Codex executes approved LOCAL implementation/execution and supplies evidence; zero-human-coding is permitted.
 
 ```text
-reports/concept/                 canonical accepted design, when declared
-<workflow>/SKILL.md + references operational projection
-scripts/code/schemas             implementation
-tests                            conformance verification
-registered source/evidence       model-specific scientific fact authority
+reports/concept/                  canonical accepted design, when declared
+<workflow>/SKILL.md + references  operational projection
+scripts/code/schemas              implementation
+tests                             conformance verification
+registered source/evidence        model-specific scientific fact authority
 ```
 
 ## Repository ownership
@@ -54,15 +54,15 @@ AGENTS.md
 
 ## Runtime and verification
 
-<Runtime/tooling authority and stable common commands, if any.>
+<Runtime/tooling authority and stable common commands, if any. Mechanical code style belongs here/tooling rather than in collaboration prose.>
 
 ## Human / trust checkpoints
 
-<Only genuine project-specific decisions or trust transitions. Preserve the User's final decision authority where a human decision is required.>
+<Only genuine project-specific decisions or trust transitions. Preserve the User's final decision authority where a human decision is required; do not require human code authorship or line-by-line review unless the project explicitly chooses that policy.>
 
 ## Hard invariants
 
 <Short project-wide hard boundaries.>
 ````
 
-A project `AGENTS.md` routes to `agent-collaboration` for global collaboration/Git/verification mechanics rather than copying those manuals.
+A project `AGENTS.md` routes to `agent-collaboration` for global collaboration, AI-assisted implementation, Git, and verification policy rather than copying those manuals.
