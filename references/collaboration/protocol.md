@@ -107,6 +107,43 @@ Use for major architecture/cross-module work, scientific/product/trust/public-co
 
 ChatGPT completes the DIRECT partition first, then issues the LOCAL scope with `templates/chatgpt-task.md`.
 
+## FORMAL specification and handoff boundary
+
+For a FORMAL task, the committed `reports/chatgpt/*.md` artifact is the sole task-specific execution specification.
+
+The User-visible launch message is a **non-semantic transport envelope**. It carries only the coordinates required to find and bind the committed task:
+
+```text
+Repository
+Task path
+Task branch
+Task/handoff commit
+pinned collaboration commit
+immutable task URL
+```
+
+The launch envelope MUST NOT duplicate, summarize, paraphrase, expand, or amend the task's mission, design semantics, required changes, non-goals, implementation procedure, verification plan, acceptance criteria, recovery behavior, or final-output schema.
+
+The exact launch-envelope format is owned by `templates/chatgpt-task.md`. This is a hard constraint, not a style preference.
+
+Why this boundary exists:
+
+```text
+committed task
+= durable auditable specification
+
+launch message
+= locator only
+```
+
+Allowing task semantics in both places creates two specification surfaces, makes later provenance ambiguous, and encourages semantic drift between the repository artifact and chat.
+
+If a requirement changes after handoff preparation, update or supersede the committed task and issue a new handoff commit. Do not append a second specification in the launch message.
+
+The User may immediately `STOP`, `PAUSE`, or `CANCEL` an execution. A substantive User amendment remains higher authority, but repository-changing execution must not continue from an ephemeral amendment alone: make the amended specification durable and re-bind the handoff first.
+
+Codex receiving a non-conforming launch message MUST use the committed task as the task-specific authority. It MUST NOT silently merge extra launch prose into the task. If extra prose merely duplicates the task, ignore it for execution semantics. If it adds, changes, or conflicts with task semantics, stop the affected work and require a durable amended/superseding task before continuing.
+
 ## Semantic ownership
 
 User + ChatGPT own accepted scientific/product/design semantics; Codex owns implementation within scope.
@@ -155,7 +192,7 @@ baseline_sha
 = task-branch commit after task-specific DIRECT inputs, before the task artifact
 
 task/handoff commit
-= commit containing the formal task; supplied in the launch block
+= commit containing the formal task; supplied in the launch envelope
 ```
 
 Before FORMAL implementation Codex:
@@ -243,7 +280,7 @@ Independent work may run concurrently only when branches/worktrees and other mut
 
 For every FORMAL task, user-visible handoff and completion output MUST surface the corresponding repository artifact as a directly openable HTTPS GitHub link. A repository-relative path alone is not sufficient.
 
-ChatGPT handoff output, after the formal task is committed and pushed, MUST prominently show:
+ChatGPT's fixed launch envelope MUST include:
 
 ```text
 任务链接如下：
