@@ -1,12 +1,12 @@
 # Codex report template
 
-Codex reports live at:
+Formal Codex reports live at:
 
 ```text
 reports/codex/YYMMDD_codex_NN.md
 ```
 
-A report records execution evidence; it does not redefine project design or operational policy. Its `verdict` is Codex's execution-status claim and is evidence for ChatGPT's independent acceptance review, not final acceptance by itself.
+A report records implementation/execution evidence. It does not redefine project design or collaboration policy, and its verdict is not final acceptance.
 
 ## Metadata
 
@@ -18,55 +18,101 @@ title: <SHORT_TITLE>
 verdict: <PASS | PASS_WITH_LIMITATIONS | BLOCKED | FAIL>
 date: <YYYY-MM-DD>
 repository: <OWNER/REPOSITORY>
-branch: <BRANCH>
+task_branch: <TASK_BRANCH>
 task_source_sha: <TASK_SOURCE_SHA>
 baseline_sha: <BASELINE_SHA>
 verification_level: <level_1 | level_2 | level_3>
 summary: >
   <IMPLEMENTATION/RESULT SUMMARY>
-tags: []
-concepts: []
 limitations: []
 ---
 ```
 
 ## Body
 
+Use a concise structure:
+
 ```markdown
 # <Task title> — Codex report
 
-## Changes actually made
-## Verification actually run
-### Layer 1 — Component / property
-### Layer 2 — Contract / invariant
-### Layer 3 — Integration
-### Layer 4 — Real-artifact regression
-### Layer 5 — E2E / recovery / repeatability
-### Layer 6 — Release / non-functional
-## Acceptance criteria
-## Limitations
-## Remaining blockers
-## Explicit non-goals
-## Git state
+## Changes
+
+## AI-assisted implementation transparency
+
+## Verification evidence
+
+## Acceptance criteria / blockers
+
+## Git result
 ```
 
-Under `## Verification actually run`, report each evidence layer required by the task's verification plan.
+## Changes
 
-For every required layer, record concrete evidence such as commands, test counts, artifacts, environments, run IDs, hashes, or observed failure/recovery behavior as appropriate. If a planned check was skipped, unavailable, or materially changed, state that explicitly rather than silently omitting it.
+State what was actually changed, including material files/modules/artifacts. Do not restate the full task specification.
 
-Layers marked `N/A` by the task do not need fabricated evidence; retain them only when useful for making the report's scope unambiguous.
+## AI-assisted implementation transparency
 
-Do not treat a single `pytest PASS`, coverage percentage, scanner result, or CI badge as a substitute for a different required evidence layer. The report should make clear which acceptance claim each result supports.
+For material implementation work, make these items recoverable when applicable:
 
-Techniques such as property/fuzz testing, branch coverage, mutation testing, fault injection, concurrency/race testing, and benchmarking should be reported inside the relevant evidence layer rather than as additional pseudo-levels.
+```text
+implementation generated/modified by Codex or other AI tooling
+key implementation choice and why it was selected
+main data/control flow affected
+important invariants/failure boundaries
+new or removed dependency/abstraction and why
+known limitations/deviations/non-goals
+```
+
+Keep this section concise. It exists so the implementation can be audited without requiring the User to read every line of code or reconstruct the generation conversation.
+
+Do not expose private chain-of-thought. Report design-relevant rationale and observable engineering decisions only.
+
+## Verification evidence
+
+Report each evidence category required by the task using concrete evidence such as commands, test counts, artifacts, environments, run IDs, hashes, or observed failure/recovery behavior.
+
+Only required categories need headings. For example:
+
+```markdown
+### Contract / invariant
+...
+
+### Real artifact / external tool
+...
+
+### E2E / recovery / repeatability
+...
+```
+
+If a planned check was skipped, unavailable, or materially changed, state that explicitly.
+
+Do not treat a single `pytest PASS`, coverage percentage, scanner result, or CI badge as a substitute for another required evidence category.
+
+Strengthening techniques such as fuzzing, mutation testing, fault injection, concurrency testing, or benchmarking are reported under the evidence category whose risk they address.
+
+## Acceptance criteria / blockers
+
+Map the reported evidence to the task's acceptance criteria. State remaining blockers or material limitations directly.
 
 Execution-verdict meanings:
 
-- `PASS`: Codex found every task acceptance criterion and every required verification layer satisfied by the reported evidence.
-- `PASS_WITH_LIMITATIONS`: Codex found the goal satisfied with material non-blocking limitations; the affected evidence layer(s) must be named.
-- `BLOCKED`: completion requires a genuine human decision or unavailable external prerequisite.
-- `FAIL`: acceptance criteria or required evidence remain unsatisfied and machine-solvable work remains.
+- `PASS`: every in-scope acceptance criterion and required evidence claim is satisfied;
+- `PASS_WITH_LIMITATIONS`: the goal is satisfied with material non-blocking limitations that are explicitly named;
+- `BLOCKED`: completion requires an unavailable prerequisite or genuine higher-authority decision;
+- `FAIL`: in-scope acceptance criteria remain unsatisfied and machine-solvable work remains.
 
-ChatGPT independently reviews the report and underlying evidence, including whether the selected verification level and evidence-layer plan were appropriate. The User retains final decision/override authority.
+ChatGPT performs the acceptance review. The User retains final decision/override authority and designated human decision checkpoints.
 
-For repository-changing tasks, report initial/final branch, HEAD, upstream, worktree state, and whether final `HEAD == upstream` was safely achieved.
+## Git result
+
+For repository-changing FORMAL tasks, report:
+
+```text
+initial task branch / HEAD / upstream / worktree condition
+final task branch HEAD
+pushed upstream HEAD
+whether task-branch local HEAD == tracked upstream
+pre-existing User state preserved
+```
+
+Do not claim default-branch integration unless it actually occurred after acceptance. The task report may end with a validated task branch awaiting ChatGPT acceptance/integration.
