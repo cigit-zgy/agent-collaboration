@@ -239,6 +239,32 @@ An interrupted session may resume the same verified task branch when task semant
 
 Independent work may run concurrently only when branches/worktrees and other mutable resources do not interfere. If non-interference cannot be established, serialize it.
 
+## Direct artifact-link output
+
+For every FORMAL task, user-visible handoff and completion output MUST surface the corresponding repository artifact as a directly openable HTTPS GitHub link. A repository-relative path alone is not sufficient.
+
+ChatGPT handoff output, after the formal task is committed and pushed, MUST prominently show:
+
+```text
+任务链接如下：
+https://github.com/<OWNER>/<REPOSITORY>/blob/<TASK_HANDOFF_COMMIT>/reports/chatgpt/<TASK_FILE>.md
+```
+
+Use the exact task/handoff commit so the link opens the immutable specification actually handed to Codex.
+
+Codex final console output, after the report-containing commit is pushed, MUST prominently show:
+
+```text
+报告链接如下：
+https://github.com/<OWNER>/<REPOSITORY>/blob/<REPORT_CONTAINING_COMMIT>/reports/codex/<REPORT_FILE>.md
+```
+
+Use the commit that actually contains the report. The report file itself does not need to contain its own commit SHA or self-link; the post-commit console output owns the immutable report link.
+
+This is a hard collaboration-output constraint. Do not replace the full HTTPS URL with only a local path, repository-relative path, commit SHA, Markdown filename, or prose such as `see report above`.
+
+If the artifact cannot be pushed and therefore no truthful directly openable GitHub URL exists, do not fabricate one. The same prominent block MUST instead state `UNAVAILABLE` and the concrete push/publication blocker; the task/report remains incomplete with respect to this link requirement until publication succeeds.
+
 ## Stable artifacts
 
 FORMAL tasks/reports live at:
