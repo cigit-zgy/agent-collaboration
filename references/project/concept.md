@@ -38,6 +38,26 @@ model scientific facts = registered source + evidence/provenance
 
 A concept defines how the project represents, validates, or operates on scientific information. Model-specific values, equations, symbols, and claims remain grounded in the registered source/evidence chain.
 
+## External prior-art gate — hard requirement
+
+Before freezing a concept for a new maintained project, new core subsystem, major algorithm/modeling method, major architecture redesign, important trust/provenance mechanism, or substantial framework/tool choice, User + ChatGPT MUST complete the external prior-art gate in `prior-art.md`.
+
+The gate requires both:
+
+```text
+authoritative literature → linked/open implementation
+AND
+GitHub/source implementation → scientific/institutional provenance
+```
+
+The concept MUST record a compact prior-art basis: the search scope, strongest materially relevant candidates, their provenance/source coordinates, `REUSE | ADAPT | REFERENCE_ONLY | REJECT` disposition, and the remaining project-specific gap that justifies custom design.
+
+External prior art is evidence, not project authority. User + ChatGPT decide what to adopt; the accepted concept remains the project design authority.
+
+If the gate applies but the prior-art basis is not recoverable, the concept is not ready to freeze and substantial custom implementation must not begin merely because an internal solution can be imagined quickly.
+
+Routine bug fixes, small bounded refactors, and implementation under an unchanged accepted design do not repeat the full gate.
+
 ## Concept writing standard
 
 ### Core objective
@@ -53,7 +73,8 @@ The following information should be recoverable when applicable:
 5. its lifecycle or state transitions when these are part of the design;
 6. ownership and downstream consumers;
 7. the condition under which the designed stage/object is considered valid or complete;
-8. the interface or handoff to adjacent stages or concerns.
+8. the interface or handoff to adjacent stages or concerns;
+9. for gate-triggered design, the external prior-art basis and reuse/custom-gap decision.
 
 These are information requirements, not mandatory Markdown headings.
 
@@ -124,6 +145,10 @@ Use the smallest structure that communicates the accepted design. A common stage
 
 <Only design-relevant prerequisites.>
 
+## Prior-art basis
+
+<For gate-triggered design: strongest relevant external precedents, dispositions, and design consequence.>
+
 ## Accepted design
 
 <Objects, states, relationships, semantics, and invariants.>
@@ -164,12 +189,15 @@ Metadata should remain minimal and should not duplicate body semantics.
 
 ## Review, adjudication, freeze, and projection
 
-External review is evidence, not design authority.
+External review and prior art are evidence, not design authority.
 
-The normal design lifecycle is:
+For a gate-triggered concern, the normal design lifecycle is:
 
 ```text
-current canonical concept
+problem / design concern
+→ prior-art.md search + candidate inspection
+→ reuse/adapt/reference/reject dispositions
+→ current canonical concept
 → adversarial / expert / implementation review
 → findings
 → User + ChatGPT adjudication
@@ -182,11 +210,13 @@ current canonical concept
 → conformance verification
 ```
 
-Reviewers, Codex, tests, and existing implementation may expose defects, contradictions, or missing requirements. They do not directly redefine the canonical design.
+For routine redesign where the prior-art gate is not triggered, the lifecycle may begin at the current canonical concept.
+
+Reviewers, prior-art sources, Codex, tests, and existing implementation may expose defects, contradictions, missing requirements, or proven patterns. They do not directly redefine the canonical design.
 
 ### Adjudication
 
-User + ChatGPT review and adjudicate whether a finding should change the accepted solution. The User retains final acceptance/override authority. A proposed change becomes design only after the User accepts it and the governing concept is updated.
+User + ChatGPT review and adjudicate whether a finding or external precedent should change the accepted solution. The User retains final acceptance/override authority. A proposed change becomes design only after the User accepts it and the governing concept is updated.
 
 An implementation mismatch is therefore handled as:
 
@@ -207,6 +237,7 @@ A design concern is frozen when:
 
 ```text
 its responsibility and boundary are clear
+AND any applicable prior-art gate is complete and recorded
 AND the current solution has been reviewed/adjudicated by User + ChatGPT
 AND the current solution is accepted by the User
 AND blocking design ambiguities for the intended scope are resolved
@@ -219,7 +250,7 @@ Freeze means the current design is stable enough to project and implement. It do
 
 ### Reopening a frozen design
 
-A frozen concept is reopened only when new evidence or a new User requirement materially changes the accepted design. User + ChatGPT adjudicate the change; the User decides whether to accept it. The concept is updated first, then re-frozen for the revised scope, and only then are Skills/references/code/tests updated.
+A frozen concept is reopened only when new evidence or a new User requirement materially changes the accepted design. When the reopening introduces a new major design concern or substantially changes method/tool choice, repeat the relevant prior-art gate. User + ChatGPT adjudicate the change; the User decides whether to accept it. The concept is updated first, then re-frozen for the revised scope, and only then are Skills/references/code/tests updated.
 
 Routine implementation discoveries that do not change design remain downstream implementation work.
 
@@ -234,15 +265,19 @@ AGENTS.md
 → required reference/script
 ```
 
-Design, redesign, adversarial design review, stage reconstruction, or conformance audit begins from the governing concept:
+New project design or gate-triggered redesign begins with:
 
 ```text
 AGENTS.md
 → reports/concept/README.md
+→ references/project/prior-art.md
+→ external evidence + strongest implementation precedents
 → relevant concept topic(s)
 → affected SKILL/reference projection
 → implementation/tests as needed
 ```
+
+Design/redesign/adversarial review that does not trigger a new prior-art search may begin from the governing concept directly.
 
 ## Collaboration-repository exception
 
