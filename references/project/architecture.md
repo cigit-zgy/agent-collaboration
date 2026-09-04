@@ -31,8 +31,9 @@ Create only responsibilities that have a real owner, artifact, and consumer. Com
 | accepted project design | `reports/concept/` | canonical design only when the project declares it |
 | formal delegated tasks | `reports/chatgpt/` | committed FORMAL local-execution specifications |
 | Codex execution evidence | `reports/codex/` | FORMAL implementation/verification reports |
+| Agent-local temporary state | `tmp/` | sole project-local scratch/test/worktree/download/cache/render/disposable-env boundary |
 
-These are examples, not required directories. Equivalent ownership is valid when the project `AGENTS.md` makes it explicit.
+These are examples, not required directories. Equivalent ownership is valid when the project `AGENTS.md` makes it explicit, except that Agent-created ephemeral local state follows the `tmp/` boundary below unless the User explicitly authorizes another location.
 
 ## Design authority
 
@@ -65,9 +66,67 @@ model-specific durable object → model-artifact owner
 canonical reusable dataset    → data owner
 mutable current run state      → workspace owner
 controlled investigation      → experiment owner
+Agent-created ephemeral state → tmp owner
 ```
 
 Promotion between responsibilities is explicit. Experiment outputs become canonical data/model artifacts only after project adoption with provenance. Exploratory code becomes reusable implementation only when a real reusable consumer and stable contract exist. Live workspace state remains mutable even when captured as an experiment input/snapshot.
+
+## Project-local ephemeral workspace — hard boundary
+
+For LOCAL execution, every temporary artifact intentionally created by ChatGPT/Codex tooling on the User machine MUST remain inside the target project's root `tmp/` tree unless the User explicitly names another location.
+
+Default task isolation:
+
+```text
+<PROJECT_ROOT>/tmp/<TASK_ID>/
+```
+
+Create only the subdirectories actually needed, for example:
+
+```text
+worktree/   linked FORMAL worktree when needed
+run/        scratch execution/test/E2E output
+downloads/  disposable downloads
+cache/      task-local cache
+renders/    temporary render artifacts
+env/        disposable environment only when explicitly justified
+```
+
+The boundary covers Agent-chosen linked worktrees, scratch repositories, temporary downloads, test outputs, render outputs, caches, intermediate files, and disposable environments. Agents MUST NOT create persistent sibling project directories, Desktop test folders, Documents-root scratch directories, ad-hoc global temporary workspaces, or similarly scattered task state merely for convenience.
+
+Examples of non-conforming Agent-created paths include:
+
+```text
+../<project>-<sha>/
+../<project>-<task>/
+~/Desktop/tests/
+~/Documents/<project>-scratch/
+/tmp/<project>-persistent-test/
+```
+
+System/runtime caches whose location is controlled by the operating system or an external tool and cannot reasonably be redirected are outside this ownership rule; the Agent must not deliberately choose them as project scratch space.
+
+When `tmp/` exists in a maintained repository, it should normally be excluded from version control with a root-scoped ignore such as `/tmp/`. Do not commit task scratch state.
+
+Cleanup lifecycle:
+
+```text
+completed + no recovery value
+→ remove task tmp immediately
+
+BLOCKED/FAIL + deliberate recovery value
+→ retain only the minimum needed state and report why
+
+superseded/cancelled + no recovery value
+→ remove task tmp
+
+active/dirty/unpushed/uncertain state
+→ preserve until safety is established
+```
+
+No age threshold alone authorizes deletion. A retained recovery workspace should normally be reconsidered on the next local task in that project; stale task state with no recovery value should be removed rather than accumulated.
+
+Git linked worktrees are removed through Git-aware operations (`git worktree remove` followed by `git worktree prune` when appropriate), not by blind filesystem deletion. Never destroy dirty, unpushed, active, or ambiguous User state merely to satisfy cleanup.
 
 ## External tool integration boundary
 
@@ -142,4 +201,4 @@ Project collaboration routes to `../collaboration/protocol.md`, `../collaboratio
 
 ## Review criterion
 
-A project architecture is sufficient when an unfamiliar Agent can determine the real owners, authority sources, workflow entry, mutable-state boundaries, design/scientific-fact distinction, implementation/tooling authority, and external-tool adapter boundaries without inferring a canonical directory tree or hidden compatibility behavior.
+A project architecture is sufficient when an unfamiliar Agent can determine the real owners, authority sources, workflow entry, mutable-state boundaries, ephemeral-state boundary, design/scientific-fact distinction, implementation/tooling authority, and external-tool adapter boundaries without inferring a canonical directory tree or hidden compatibility behavior.
