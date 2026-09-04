@@ -39,6 +39,10 @@ These are examples, not required directories. Equivalent ownership is valid when
 
 When a scientific project declares `reports/concept/` as canonical design authority, `concept.md` owns the writing, review, adjudication, freeze, and projection lifecycle.
 
+Before a new project, new core subsystem, major algorithm/architecture, or comparable gate-triggered design is frozen, `prior-art.md` MUST be completed. The prior-art review searches authoritative literature and linked/mature open-source implementations before User + ChatGPT settle the project-specific design.
+
+External prior art informs design but does not replace project authority. The accepted concept remains the design source of truth.
+
 Model-specific scientific facts remain grounded in the project's registered source/evidence chain rather than repository-architecture documents.
 
 ## Runtime reading route
@@ -52,7 +56,17 @@ AGENTS.md
 → required reference/script
 ```
 
-Design/redesign/conformance work follows the design-authority route in `concept.md` when applicable.
+New project/core design follows:
+
+```text
+AGENTS.md
+→ ../project/prior-art.md
+→ authoritative literature + strongest relevant open-source precedents
+→ reports/concept/README.md
+→ governing concept
+```
+
+Routine design/redesign/conformance work follows the design-authority route in `concept.md` when the prior-art gate is not newly triggered.
 
 AI-assisted executable implementation follows `../collaboration/implementation.md`; project tooling/CI remains the owner of language-specific mechanical style and checks.
 
@@ -196,7 +210,9 @@ Exact version pinning is not universal. Use a fixed version for exact-environmen
 inspect actual repository
 → establish project AGENTS.md
 → declare real ownership + runtime/tooling boundaries
-→ define accepted design authority when needed
+→ run prior-art.md gate for substantial new design
+→ inspect strongest paper-linked/mature open-source precedents
+→ define and accept project design authority/concept
 → expose workflow Skill only when a repeatable Agent workflow exists
 → project Skills/references operationalize accepted design
 → AI-assisted implementation follows implementation.md + project tooling
@@ -204,8 +220,10 @@ inspect actual repository
 → route LOCAL work through LOCAL-QUICK or FORMAL according to protocol risk
 ```
 
-Project collaboration routes to `../collaboration/protocol.md`, `../collaboration/implementation.md`, and `../collaboration/verification.md` rather than copying those manuals into every repository.
+Do not create a custom subsystem before the applicable prior-art gate merely because an internal design can be produced quickly.
+
+Project collaboration routes to `../collaboration/protocol.md`, `../collaboration/implementation.md`, `prior-art.md`, `concept.md`, and `../collaboration/verification.md` rather than copying those manuals into every repository.
 
 ## Review criterion
 
-A project architecture is sufficient when an unfamiliar Agent can determine the real owners, authority sources, workflow entry, mutable-state boundaries, ephemeral-state boundary, design/scientific-fact distinction, implementation/tooling authority, and external-tool adapter boundaries without inferring a canonical directory tree or hidden compatibility behavior.
+A project architecture is sufficient when an unfamiliar Agent can determine the real owners, authority sources, workflow entry, prior-art/reuse basis for substantial new design, mutable-state boundaries, ephemeral-state boundary, design/scientific-fact distinction, implementation/tooling authority, and external-tool adapter boundaries without inferring a canonical directory tree or hidden compatibility behavior.
