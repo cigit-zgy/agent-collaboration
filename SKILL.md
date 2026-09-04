@@ -72,6 +72,8 @@ For executable implementation quality and AI-code transparency, read `references
 
 For shared third-party coding-Skill authority and local alignment, read `references/collaboration/shared-coding-skills.md`.
 
+For new project/core design or major redesign, complete the mandatory external prior-art/reuse gate in `references/project/prior-art.md` before freezing a concept or starting substantial custom implementation.
+
 ## Execution routes
 
 Use the lightest route that preserves the required trust/evidence:
@@ -104,7 +106,7 @@ Detailed routing, Git safety, authority refresh, project-local temporary-state b
 ### Collaboration
 
 - `references/collaboration/protocol.md` — roles, authority refresh, DIRECT/LOCAL partition, DIRECT/LOCAL-QUICK/FORMAL routes, local tmp boundary, Git/task-branch workflow, trust boundaries, concurrency, report lookup, integration, acceptance;
-- `references/collaboration/implementation.md` — ChatGPT-first code authoring, AI-assisted implementation transparency, reviewability, engineering discipline, code-quality expectations;
+- `references/collaboration/implementation.md` — ChatGPT-first code authoring, prior-art reuse enforcement, AI-assisted implementation transparency, reviewability, engineering discipline, code-quality expectations;
 - `references/collaboration/shared-coding-skills.md` — immutable cross-Agent coding-Skill profile, precedence, activation, local alignment, update policy;
 - `references/collaboration/verification.md` — verification levels, evidence categories, online/local placement, risk-based tools and strengthening techniques;
 - `references/collaboration/agents.md` — maintained `AGENTS.md` writing standard;
@@ -115,7 +117,8 @@ Detailed routing, Git safety, authority refresh, project-local temporary-state b
 Use `references/project/` when a scientific/software project joins the collaboration:
 
 - `architecture.md` — project entry, responsibility-based ownership, and project-local `tmp/` ephemeral boundary;
-- `concept.md` — project `reports/concept/` design-authority lifecycle;
+- `concept.md` — project `reports/concept/` design-authority lifecycle and prior-art freeze gate;
+- `prior-art.md` — mandatory literature↔open-source search, candidate inspection, reuse/adapt/reject decision, and concept-recording contract for substantial new design;
 - `templates/agents.md` — project root `AGENTS.md` specialization;
 - `templates/skill.md` — project workflow `SKILL.md`.
 
@@ -151,7 +154,13 @@ local verification/repair
 formal release task
 → protocol.md + implementation.md + shared-coding-skills.md + verification.md + task template
 
-project redesign
+new project / major new design
+→ project/prior-art.md
+→ strongest external literature/open-source precedents
+→ target project concept authority
+→ project/concept.md
+
+routine project redesign without a new major design concern
 → target project design authority + project/concept.md
 ```
 
@@ -159,4 +168,4 @@ Do not preload the whole collaboration repository or every installed Skill.
 
 ## Completion
 
-Collaboration work is complete when the selected route has completed all authoring and LOCAL execution deliverables, ChatGPT and Codex used the same applicable shared coding-Skill authorities, Agent-created local temporary state is cleaned or explicitly retained for a concrete recovery reason, required evidence exists, material limitations are disclosed, and the applicable ChatGPT acceptance review/human decision gate is satisfied.
+Collaboration work is complete when the selected route has completed all authoring and LOCAL execution deliverables, any applicable prior-art gate is complete and respected, ChatGPT and Codex used the same applicable shared coding-Skill authorities, Agent-created local temporary state is cleaned or explicitly retained for a concrete recovery reason, required evidence exists, material limitations are disclosed, and the applicable ChatGPT acceptance review/human decision gate is satisfied.
