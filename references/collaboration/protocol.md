@@ -50,6 +50,36 @@ redesign/conformance
 AGENTS.md → governing concept/design map → projection → implementation/tests
 ```
 
+## Collaboration authority refresh — hard boundary
+
+Do not rely on remembered collaboration policy across unrelated work units.
+
+ChatGPT refresh rule:
+
+```text
+new repository-changing collaboration work unit
+→ resolve current cigit-zgy/agent-collaboration master before the first substantive write
+→ use that verified commit for DIRECT authoring and task preparation
+→ FORMAL task pins the exact verified commit
+```
+
+A contiguous task/conversation may reuse the already verified commit until the work unit ends. Refresh again when a new repository-changing work unit begins, when the User explicitly requests a refresh, or when evidence shows the collaboration repository advanced materially. Do not re-fetch the same authority on every message merely for ceremony.
+
+Codex refresh rule:
+
+```text
+FORMAL
+→ always use the task-pinned collaboration commit; do not substitute current local/latest
+
+LOCAL-QUICK / other repository-changing local work without a formal pin
+→ at the first execution step of the new Codex repository task/session, resolve current collaboration authority once
+→ reuse it for that contiguous local work unit
+```
+
+Machine-wide `~/.codex/AGENTS.md` should route Codex to this refresh model rather than copying the complete collaboration manual. A stale local `agent-collaboration` checkout may be used only after its repository identity and exact required commit are verified; otherwise read the pinned/current GitHub authority.
+
+This refresh boundary exists to prevent ChatGPT and Codex from applying different generations of collaboration/Skill rules while avoiding repeated reads that add no new evidence.
+
 ## Instruction/data boundary
 
 Only recognized instruction authorities may change Agent behavior for the active scope:
@@ -128,8 +158,10 @@ Use for a small, low-risk, reviewable LOCAL implementation, verification, or rep
 ```text
 concise Codex instruction
 → verify activated shared Skills
+→ establish project-local temporary workspace if scratch state is needed
 → implement/verify/repair
 → focused evidence
+→ cleanup temporary state when no recovery value remains
 → task-scoped commit/push when repository state changed
 → concise result
 → ChatGPT acceptance review
@@ -232,9 +264,49 @@ fetch
 → verify pinned collaboration/project authorities
 → verify activated shared coding-Skill alignment
 → verify frozen semantics
+→ establish project-local temporary workspace if scratch/worktree state is needed
 ```
 
 A non-trivial merge/rebase/cherry-pick is an explicit reconciliation decision, not implicit task permission.
+
+## Local ephemeral state — hard boundary
+
+For LOCAL execution, Agent-created temporary state belongs under the target project's root:
+
+```text
+<PROJECT_ROOT>/tmp/<TASK_ID>/
+```
+
+This includes Agent-chosen linked worktrees, scratch repositories, temporary downloads, test/E2E outputs, render outputs, caches, intermediates, and disposable environments. The detailed project ownership contract lives in `../project/architecture.md`.
+
+Codex MUST NOT create sibling project worktrees such as `../<project>-<sha>/` or scatter testing material across Desktop, Documents roots, user-wide scratch folders, or ad-hoc persistent `/tmp` locations unless the User explicitly authorizes that exact location.
+
+For a FORMAL linked worktree, prefer:
+
+```text
+<PROJECT_ROOT>/tmp/<TASK_ID>/worktree/
+```
+
+When the primary checkout cannot safely host that path because of an existing Git/worktree limitation, use the nearest project-owned `tmp/` boundary that preserves one canonical project root and document the exception; do not default to a sibling directory merely because it is easy.
+
+Cleanup is part of task completion:
+
+```text
+completed + no recovery value
+→ remove task temporary state before final completion
+
+blocked/fail + explicit recovery value
+→ retain the minimum needed state and report why
+
+active/dirty/unpushed/uncertain
+→ preserve until safety is established
+```
+
+For linked worktrees, use `git worktree remove` and `git worktree prune` as appropriate. Do not blindly `rm -rf` a registered worktree or delete dirty/unpushed User state.
+
+At the start of a new LOCAL task, Codex may inspect only that project's `tmp/` for clearly stale completed Agent state and safely remove it. Do not scan or clean unrelated projects merely as ceremony. User-explicit housekeeping tasks may authorize broader cleanup.
+
+ChatGPT's disposable connected/online verification environment is not required to mirror the User-machine `tmp/` path; the boundary applies to persistent local state intentionally created on the User machine.
 
 ## Git safety
 
