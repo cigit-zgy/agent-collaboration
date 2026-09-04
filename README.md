@@ -28,6 +28,7 @@ references/
 ├── project/
 │   ├── architecture.md
 │   ├── concept.md
+│   ├── prior-art.md
 │   └── templates/
 │       ├── agents.md
 │       └── skill.md
@@ -44,7 +45,7 @@ The reference families answer different questions:
 
 ```text
 collaboration = how User, ChatGPT, and Codex work together
-project       = how a maintained project is organized and connected
+project       = how a maintained project is designed, organized, and connected
 skill         = how a Skill is owned, packaged, written, and maintained
 ```
 
@@ -57,11 +58,21 @@ shared-coding-skills = common immutable Skill authorities + ChatGPT/Codex alignm
 verification         = verification levels + evidence categories + online/local placement
 ```
 
+Within project:
+
+```text
+architecture = repository ownership, runtime boundaries, project-local tmp state
+concept      = accepted design authority and freeze/adjudication lifecycle
+prior-art    = mandatory literature↔open-source search and reuse/adapt/custom-gap gate for substantial new design
+```
+
 ## Authority model
 
 Current operational authority lives in `references/`. `reports/concept/` records this repository's decision history/rationale rather than runtime policy.
 
 Maintained scientific projects may declare their own `reports/concept/` as canonical project design authority. Their model-specific scientific facts remain grounded in registered source/evidence rather than project governance documents.
+
+External prior art informs project design but does not become project authority. For new projects, core subsystems, major algorithms/architectures, and substantial tool/framework choices, the project must inspect authoritative literature and linked/mature open-source implementations before freezing a custom concept.
 
 A local `.agents/skills` entry is discovery, not cross-Agent authority. Coding Skills that constrain both ChatGPT and Codex are identified by immutable repository/commit/path coordinates under `references/collaboration/shared-coding-skills.md` or an explicit project/task profile.
 
@@ -90,6 +101,8 @@ Formal task launch text lives in `references/collaboration/templates/chatgpt-tas
 
 `references/collaboration/implementation.md` requires AI-generated implementation to be transparent, reviewable, maintainable, and held to the same quality standard as maintained human-authored code.
 
+Before substantial custom implementation of a gate-triggered design, `references/project/prior-art.md` requires a prior-art review and a concept-level `REUSE | ADAPT | REFERENCE_ONLY | REJECT` decision. Existing strong implementations are understood first; custom code is reserved for the remaining justified gap.
+
 The User is not required to write code or inspect every line. Material implementation decisions and verification evidence instead remain auditable through bounded changes, shared Skill authorities, clear contracts, tests/tooling, Codex local evidence, and ChatGPT acceptance review.
 
 ## Normal reading path
@@ -98,6 +111,15 @@ The User is not required to write code or inspect every line. Material implement
 AGENTS.md
 → SKILL.md
 → one owning reference
+```
+
+For new project/core design:
+
+```text
+AGENTS.md
+→ SKILL.md
+→ references/project/prior-art.md
+→ governing project concept
 ```
 
 Do not load the whole reference tree or every installed Skill for ordinary work.
