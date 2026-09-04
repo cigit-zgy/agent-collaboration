@@ -13,13 +13,14 @@ reports/chatgpt/YYMMDD_chatgpt_NN.md
 ChatGPT must have:
 
 ```text
-inspected current authority/evidence
+refreshed current collaboration authority for this new repository-changing work unit
+→ inspected current project authority/evidence
 → partitioned authoring and verification separately
 → completed task-specific DIRECT design and code/test authoring it can perform
 → resolved the shared coding-Skill profile and activated Skill authorities
 → identified frozen semantic contracts/invariants
 → selected a dedicated task branch unless explicitly excepted
-→ pinned the collaboration commit
+→ pinned the verified collaboration commit
 → selected verification level + concrete remaining evidence
 ```
 
@@ -74,6 +75,7 @@ Collaboration authority:
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/implementation.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/shared-coding-skills.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/verification.md
+- cigit-zgy/agent-collaboration@<SHA>:references/project/architecture.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/templates/codex-report.md
 
 <Frozen scientific/product/design contracts Codex must not reinterpret.>
@@ -108,7 +110,7 @@ Remaining Codex-local work:
 
 ## Engineering constraints
 
-<Only task-specific constraints. General AI implementation policy comes from implementation.md; cross-Agent coding rules come from shared-coding-skills.md; mechanical style comes from project tooling.>
+<Only task-specific constraints. General AI implementation policy comes from implementation.md; cross-Agent coding rules come from shared-coding-skills.md; project-local temporary-state rules come from project/architecture.md; mechanical style comes from project tooling.>
 
 ## Acceptance criteria
 
@@ -126,12 +128,16 @@ Remaining Codex-local evidence:
 Shared coding-Skill alignment:
 - verify every activated Skill against the task-pinned profile before local code work
 
+Temporary-state closure:
+- temporary workspace cleaned, or exact retained recovery state + reason reported
+
 ## Git handoff / integration
 
 Task branch: <TASK_BRANCH>
 Target integration branch: <TARGET_BRANCH>
 Post-acceptance integration: AUTO | USER_CHECKPOINT
-<Any same-branch exception or repository-specific integration condition.>
+Local temporary workspace: <PROJECT_ROOT>/tmp/<TASK_ID>/
+<Any explicitly User-authorized temporary-path exception, same-branch exception, or repository-specific integration condition.>
 
 ## Codex report
 
@@ -173,6 +179,20 @@ unresolvable or dirty/conflicting source
 ```
 
 Do not update all installed Skills and do not adopt upstream latest during a running task. See `../shared-coding-skills.md`.
+
+### Local temporary-state rule
+
+Unless the User explicitly authorizes another location, all Agent-created local scratch state for the task is confined to:
+
+```text
+<PROJECT_ROOT>/tmp/<TASK_ID>/
+```
+
+This includes linked worktrees, scratch/test/E2E outputs, downloads, renders, caches, intermediates, and disposable environments. Do not create sibling project worktrees or Desktop/Documents-root test folders.
+
+At completion, clean temporary state that has no recovery value. Preserve dirty, unpushed, active, or ambiguous state. Git linked worktrees must be removed with Git-aware worktree commands rather than blind filesystem deletion. The owning rules are in `../protocol.md` and `../../project/architecture.md`.
+
+A housekeeping task may explicitly authorize cleanup of legacy Agent-created state outside the current project `tmp/` boundary. Such an exception must name the cleanup scope and preserve canonical project/source directories.
 
 ### Post-acceptance integration policy
 
@@ -269,4 +289,5 @@ A FORMAL handoff is non-conforming when any of these occurs:
 - no 8–12-line concise synopsis is provided without a concrete reason;
 - the boxed prompt contains substantive task-specific requirements that belong in the committed task;
 - a material coding Skill is referenced only by a local path/name rather than a shared immutable authority;
-- all implementation is delegated solely because remaining verification requires the local environment.
+- all implementation is delegated solely because remaining verification requires the local environment;
+- Agent-created local temporary state is intentionally placed outside the project `tmp/` boundary without an explicit User-authorized exception.
