@@ -274,10 +274,10 @@ A non-trivial merge/rebase/cherry-pick is an explicit reconciliation decision, n
 For LOCAL execution, Agent-created temporary state belongs under the target project's root:
 
 ```text
-<PROJECT_ROOT>/tmp/<TASK_ID>/
+<PROJECT_ROOT>/tmp/<WORK_ID>/
 ```
 
-This includes Agent-chosen linked worktrees, scratch repositories, temporary downloads, test/E2E outputs, render outputs, caches, intermediates, and disposable environments. The detailed project ownership contract lives in `../project/architecture.md`.
+`WORK_ID` is the exact `task_id` for FORMAL work and a short local work/session label for LOCAL-QUICK. This includes Agent-chosen linked worktrees, scratch repositories, temporary downloads, test/E2E outputs, render outputs, caches, intermediates, and disposable environments. The detailed project ownership contract lives in `../project/architecture.md`.
 
 Codex MUST NOT create sibling project worktrees such as `../<project>-<sha>/` or scatter testing material across Desktop, Documents roots, user-wide scratch folders, or ad-hoc persistent `/tmp` locations unless the User explicitly authorizes that exact location.
 
@@ -293,7 +293,7 @@ Cleanup is part of task completion:
 
 ```text
 completed + no recovery value
-→ remove task temporary state before final completion
+→ remove work temporary state before final completion
 
 blocked/fail + explicit recovery value
 → retain the minimum needed state and report why
