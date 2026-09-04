@@ -43,6 +43,8 @@ Use a concise structure:
 
 ## Verification evidence
 
+## Local temporary state
+
 ## Acceptance criteria / blockers
 
 ## Git result
@@ -118,6 +120,20 @@ Do not treat a single `pytest PASS`, coverage percentage, scanner result, or CI 
 
 Strengthening techniques such as fuzzing, mutation testing, fault injection, concurrency testing, or benchmarking are reported under the evidence category whose risk they address.
 
+## Local temporary state
+
+For LOCAL work, record the task scratch boundary and its final disposition:
+
+```text
+Temporary workspace: <PROJECT_ROOT>/tmp/<TASK_ID>/ | NONE | <explicit User-authorized exception>
+Final state: CLEANED | RETAINED
+Reason: <none | concrete recovery/safety reason>
+```
+
+If a linked worktree was used, state whether it was removed through Git-aware worktree cleanup and whether `git worktree prune` was needed. Do not claim cleanup when dirty, unpushed, active, or uncertain state was deleted blindly.
+
+Legacy housekeeping tasks may remove old Agent-created sibling worktrees/scratch state outside the new project `tmp/` boundary when the task explicitly authorizes that cleanup; list what was removed and what was preserved.
+
 ## Acceptance criteria / blockers
 
 Map the reported evidence to the task's acceptance criteria. State remaining blockers or material limitations directly.
@@ -175,7 +191,7 @@ what ChatGPT had authored before handoff
 what Codex repaired or added
 shared coding-Skill alignment result
 most important verification result
-real-artifact/E2E result when material
+local temporary-state cleanup result
 material limitation or blocker
 Git/task-branch state
 readiness/integration implication
@@ -222,4 +238,5 @@ A FORMAL completion response is non-conforming when any of these occurs:
 - no 8–12-line concise synopsis is provided without a concrete reason;
 - the boxed locator is replaced by a long custom stdout/evidence dump;
 - activated shared coding-Skill alignment is omitted from the durable report;
-- the report conflates ChatGPT-authored implementation with Codex-local repair/verification.
+- the report conflates ChatGPT-authored implementation with Codex-local repair/verification;
+- required temporary-state cleanup/disposition is omitted for LOCAL work.
