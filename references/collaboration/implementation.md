@@ -56,6 +56,28 @@ Codex becomes the primary implementation author only when correct implementation
 
 Do not delegate an entire implementation merely because one verification step is local.
 
+## External prior-art before custom implementation — hard boundary
+
+For a new project, new core subsystem, major algorithm/architecture, substantial framework/tool choice, or another gate-triggered design concern, do not begin substantial custom implementation until the project prior-art gate in `../project/prior-art.md` has been completed and the governing concept records the reuse/adaptation/custom-gap decision.
+
+The implementation order is:
+
+```text
+existing project implementation
+→ accepted REUSE candidate from prior-art review
+→ accepted ADAPT pattern/component
+→ mature library/tool consistent with project constraints
+→ smallest custom implementation for the remaining proven gap
+```
+
+Do not reimplement a capability merely because writing new code is faster than understanding an existing strong implementation.
+
+When a paper-linked or mature open-source project is used as precedent, inspect enough of its actual architecture, interfaces, tests/examples, provenance, license, and limitations to understand what is being reused or deliberately rejected. Surface-level similarity, GitHub popularity, or a high-impact publication alone is insufficient.
+
+If implementation discovers that an accepted external candidate no longer fits, return the design consequence to User + ChatGPT for concept adjudication rather than silently replacing it with a new internal architecture.
+
+Routine fixes and implementation under an unchanged accepted design do not repeat the full prior-art search.
+
 ## Shared coding-Skill authority
 
 ChatGPT-authored and Codex-authored code in one task must follow the same applicable coding-Skill revisions and modes.
@@ -126,6 +148,7 @@ Prefer, in order:
 
 ```text
 existing project implementation/pattern
+→ prior-art-approved reusable/adaptable implementation
 → mature existing library/tool
 → direct local implementation
 → new abstraction only when a real current responsibility and consumer require it
@@ -135,7 +158,7 @@ Do not add abstractions, dependencies, manifests, state files, registries, cache
 
 A shared abstraction needs a real current owner and real current consumers. A persistent integrity mechanism needs an identifiable trust/provenance boundary and a current consumer.
 
-Scientific correctness, product semantics, security, data-loss prevention, reproducibility, and trust boundaries take precedence over implementation minimalism.
+Scientific correctness, product semantics, security, data-loss prevention, reproducibility, and trust boundaries take precedence over implementation minimalism or external-project similarity.
 
 ## Existing patterns and mechanical style
 
@@ -175,7 +198,7 @@ Avoid comments or docstrings that merely narrate obvious code, repeat types, res
 
 ## Dependencies and external tools
 
-Add a dependency only when the current task has a concrete need that is better served by that dependency than by an existing project capability or a small direct implementation.
+Add a dependency only when the current task has a concrete need that is better served by that dependency than by an existing project capability, an accepted prior-art candidate, or a small direct implementation for a proven gap.
 
 For evolving external CLIs/APIs/schemas, follow the owning project's adapter boundary. Do not guess renamed flags, silently substitute tools, or infer semantic compatibility from successful execution alone.
 
@@ -191,6 +214,7 @@ Implementation work is complete only when:
 
 ```text
 accepted semantics are implemented
+AND any applicable prior-art/reuse decision was respected
 AND the applicable shared coding Skills were resolved consistently
 AND the change is reviewable and maintainable
 AND required mechanical checks pass
