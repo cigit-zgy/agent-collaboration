@@ -14,18 +14,63 @@ User
 
 ChatGPT
 = design partner and acceptance reviewer
-= completes connected DIRECT work
-= specifies and reviews delegated implementation
+= completes connected DIRECT design and implementation work
+= authors code/tests when repository context and shared coding-Skill authority are sufficient
 
 Codex
-= implementation executor for LOCAL work
-= may write, modify, test, debug, and refactor the code in scope
+= LOCAL execution agent
+= performs environment-bound implementation, verification, debugging, and bounded repair
 
 project tooling / CI
 = mechanical enforcement and reproducible evidence
 ```
 
 Human accountability therefore means accountability for designated human decisions and acceptance boundaries, not an obligation for the User to author or manually inspect every line of implementation.
+
+## ChatGPT-first code authoring
+
+ChatGPT should implement every bounded code/test change it can correctly author from:
+
+```text
+accepted project design
++ current repository content
++ project tooling/configuration
++ applicable shared coding Skills
++ available connected repository write capability
+```
+
+The need for later local execution or expensive verification does **not** by itself transfer code authorship to Codex.
+
+Preferred flow:
+
+```text
+ChatGPT writes implementation + tests
+→ ChatGPT runs only cheap supported checks
+→ commit/push task branch
+→ Codex runs remaining local/environment-bound verification
+→ Codex performs bounded implementation repair when evidence requires it
+→ ChatGPT acceptance review
+```
+
+Codex becomes the primary implementation author only when correct implementation materially depends on an iterative local feedback loop that ChatGPT cannot access, such as browser/runtime behavior, compiled/native dependencies, machine-local services, credentials, proprietary data, hardware, or another local-only interface.
+
+Do not delegate an entire implementation merely because one verification step is local.
+
+## Shared coding-Skill authority
+
+ChatGPT-authored and Codex-authored code in one task must follow the same applicable coding-Skill revisions and modes.
+
+Use:
+
+```text
+shared-coding-skills.md
+```
+
+for immutable Skill coordinates, precedence, task activation, local alignment, and update policy.
+
+A machine-local discovery path or Skill name alone is not enough. ChatGPT must be able to resolve the actual Skill content it claims to follow. Codex's locally discovered copy must not silently override the task-pinned shared authority.
+
+Project `AGENTS.md`, accepted scientific/product design, and project tooling remain higher authority than generic coding Skills.
 
 ## Equal quality standard
 
@@ -40,8 +85,10 @@ AI-assisted implementation must leave enough information for another maintainer 
 For a material implementation change, the execution result or formal Codex report should make the following recoverable when applicable:
 
 ```text
-what changed
-why this implementation was chosen
+what ChatGPT authored before local handoff
+what Codex added or repaired after local execution
+which shared coding Skills and revisions governed the work
+why the implementation was chosen
 main data/control flow affected
 important invariants or failure boundaries
 new or removed dependencies/abstractions
@@ -108,6 +155,18 @@ Do not duplicate a language-specific style manual in this collaboration contract
 
 If the project has no mechanical style authority, use the language ecosystem's conventional maintained style and keep the implementation internally consistent rather than inventing a project-specific framework.
 
+## Verification placement for speed
+
+Implementation authorship and verification location are separate decisions.
+
+ChatGPT performs checks that are cheap and directly available without substantial environment setup, for example structural/diff inspection, syntax checks, small pure tests in an available online runtime, or reading existing remote CI results.
+
+Codex performs checks whose cost or evidentiary value depends on the User's local environment, including project environments, full suites, builds, browsers, external CLIs/services, proprietary data, hardware, large artifacts, or long-running E2E/recovery work.
+
+Do not duplicate an expensive check remotely and locally unless the second environment provides a distinct required claim. The detailed placement rules are in `verification.md`.
+
+Code that ChatGPT has written but that has not yet received required execution evidence must be described as implemented but awaiting local verification; it is not accepted merely by inspection.
+
 ## Documentation and comments
 
 Document public behavior and non-obvious scientific, algorithmic, trust, or failure semantics when future maintainers need that information.
@@ -132,6 +191,7 @@ Implementation work is complete only when:
 
 ```text
 accepted semantics are implemented
+AND the applicable shared coding Skills were resolved consistently
 AND the change is reviewable and maintainable
 AND required mechanical checks pass
 AND required risk-based evidence is available
