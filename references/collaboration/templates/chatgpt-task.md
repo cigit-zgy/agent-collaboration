@@ -14,12 +14,13 @@ ChatGPT must have:
 
 ```text
 inspected current authority/evidence
-→ partitioned DIRECT | LOCAL
-→ completed task-specific DIRECT work
+→ partitioned authoring and verification separately
+→ completed task-specific DIRECT design and code/test authoring it can perform
+→ resolved the shared coding-Skill profile and activated Skill authorities
 → identified frozen semantic contracts/invariants
 → selected a dedicated task branch unless explicitly excepted
 → pinned the collaboration commit
-→ selected verification level + concrete required evidence
+→ selected verification level + concrete remaining evidence
 ```
 
 Keep one formal task to one reviewable logical responsibility; split independent concerns.
@@ -38,13 +39,18 @@ task_branch: <TASK_BRANCH>
 baseline_sha: <DIRECT_TASK_BASELINE_SHA>
 verification_level: <level_1 | level_2 | level_3>
 collaboration_commit: <PINNED_AGENT_COLLABORATION_SHA>
+coding_skill_profile: >
+  cigit-zgy/agent-collaboration@<PINNED_AGENT_COLLABORATION_SHA>:
+  references/collaboration/shared-coding-skills.md
 summary: >
   <PURPOSE/SCOPE>
 codex_report: reports/codex/<YYMMDD_codex_NN.md>
 ---
 ```
 
-`baseline_sha` is the task-branch commit after task-specific DIRECT inputs and before the task artifact. Supply the commit containing the task separately in the launch prompt as the execution handoff.
+`baseline_sha` is the task-branch commit after task-specific DIRECT design/authoring inputs and before the task artifact. Supply the commit containing the task separately in the launch prompt as the execution handoff.
+
+`coding_skill_profile` binds the cross-Agent coding rules used by ChatGPT and Codex. Additional project/task-specific Skill authorities are stated in the body using immutable repository/commit/path coordinates.
 
 `codex_report` is the canonical expected report destination for this task. Codex MUST write the formal report at exactly that repository-relative path and push it on `task_branch`. Do not choose a different report filename/path after handoff unless the task is durably amended or superseded.
 
@@ -66,14 +72,35 @@ Collaboration authority:
 - cigit-zgy/agent-collaboration@<SHA>:SKILL.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/protocol.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/implementation.md
+- cigit-zgy/agent-collaboration@<SHA>:references/collaboration/shared-coding-skills.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/verification.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/templates/codex-report.md
 
 <Frozen scientific/product/design contracts Codex must not reinterpret.>
 
+## Shared coding Skills and authoring state
+
+Shared profile:
+- cigit-zgy/agent-collaboration@<SHA>:references/collaboration/shared-coding-skills.md
+
+Activated shared Skills:
+- <SKILL_NAME> — <MODE/ACTIVATION>
+
+Additional project/task Skill authorities:
+- <NONE OR OWNER/REPO@COMMIT:PATH/TO/SKILL.md — ACTIVATION/MODE>
+
+ChatGPT-authored before handoff:
+- <IMPLEMENTATION/TEST PATHS OR NONE + REASON>
+
+ChatGPT checks already completed:
+- <CHECK + RESULT OR NONE>
+
+Remaining Codex-local work:
+- <LOCAL VERIFICATION, BOUNDED REPAIR, OR LOCAL-FEEDBACK-DEPENDENT IMPLEMENTATION>
+
 ## LOCAL scope
 
-<What Codex owns and why local/runtime capability is required.>
+<What Codex owns and why local/runtime capability is required. Do not delegate code authoring merely because final verification is local.>
 
 ## Required changes
 
@@ -81,7 +108,7 @@ Collaboration authority:
 
 ## Engineering constraints
 
-<Only task-specific constraints. General AI implementation policy comes from implementation.md; mechanical style comes from project tooling.>
+<Only task-specific constraints. General AI implementation policy comes from implementation.md; cross-Agent coding rules come from shared-coding-skills.md; mechanical style comes from project tooling.>
 
 ## Acceptance criteria
 
@@ -89,9 +116,15 @@ Collaboration authority:
 
 Verification level: LEVEL 1 | LEVEL 2 | LEVEL 3
 
-Required evidence:
+ChatGPT checks already completed:
+- <check>: <result>
+
+Remaining Codex-local evidence:
 - <category>: <concrete check>
 - ...
+
+Shared coding-Skill alignment:
+- verify every activated Skill against the task-pinned profile before local code work
 
 ## Git handoff / integration
 
@@ -107,9 +140,39 @@ reports/codex/<YYMMDD_codex_NN.md>
 
 List only verification categories actually required; no mandatory `N/A` matrix.
 
+Do not repeat a check ChatGPT already completed unless rerunning it is required against Codex's final branch state or supplies a distinct local-environment claim.
+
 For an upstream owner where downstream migration is out of scope, the task should state that stale consumers are reported rather than repaired and rejected upstream interfaces are not restored for compatibility.
 
 A narrowly mechanical projection edit is permitted only when the task names that permission and it cannot alter frozen semantics. A design conflict stops the affected implementation for User + ChatGPT adjudication.
+
+### ChatGPT-first authoring rule
+
+ChatGPT completes code/tests it can correctly author from repository content, accepted design, project tooling, and the shared coding-Skill authorities before handoff.
+
+The task may delegate initial code authorship to Codex only when an iterative local feedback loop is materially required for correctness. Name that dependency concretely.
+
+ChatGPT-authored code is not frozen merely because ChatGPT wrote it. Codex may make bounded implementation repairs supported by local evidence, while frozen scientific/product/design semantics remain unchanged.
+
+### Shared coding-Skill alignment rule
+
+At task start, Codex checks only the activated Skills listed above.
+
+```text
+exact local revision/path match
+→ use local content
+
+mismatch with readable pinned source
+→ use the pinned source as authority
+
+local scripts/assets required
+→ align a clean local cache to the exact pinned revision when safely authorized
+
+unresolvable or dirty/conflicting source
+→ report/block rather than silently use another revision
+```
+
+Do not update all installed Skills and do not adopt upstream latest during a running task. See `../shared-coding-skills.md`.
 
 ### Post-acceptance integration policy
 
@@ -153,10 +216,11 @@ Each line should communicate at most one high-level fact. The synopsis should no
 ```text
 task purpose
 main affected component or workflow
-why LOCAL/Codex execution is needed
+what ChatGPT already authored
+why remaining LOCAL/Codex execution is needed
+activated shared coding Skills
 main frozen boundary or important non-goal
-high-level implementation direction
-verification level / major evidence category
+verification level / major remaining evidence
 expected stable result
 expected Codex report path
 post-acceptance integration mode
@@ -195,12 +259,14 @@ Collaboration: cigit-zgy/agent-collaboration@<PINNED_AGENT_COLLABORATION_SHA>
 任务链接如下：
 https://github.com/<OWNER>/<REPOSITORY>/blob/<TASK_COMMIT>/reports/chatgpt/<TASK_FILE>.md
 
-以 committed task 为唯一 task-specific 执行规范；使用 pinned collaboration authority 执行协作、Git、实现与验证规则。
+以 committed task 为唯一 task-specific 执行规范；使用 pinned collaboration、shared coding-Skill profile 和 project authority 执行实现与验证。
 ```
 
 Do not append task-specific implementation detail after the code block. The surrounding synopsis may explain the task at high level, but the boxed prompt must not become a second detailed specification.
 
-A FORMAL handoff is non-conforming when either of these occurs:
+A FORMAL handoff is non-conforming when any of these occurs:
 
 - no 8–12-line concise synopsis is provided without a concrete reason;
-- the boxed prompt contains substantive task-specific requirements that belong in the committed task.
+- the boxed prompt contains substantive task-specific requirements that belong in the committed task;
+- a material coding Skill is referenced only by a local path/name rather than a shared immutable authority;
+- all implementation is delegated solely because remaining verification requires the local environment.
