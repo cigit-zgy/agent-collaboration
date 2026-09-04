@@ -75,10 +75,17 @@ Promotion between responsibilities is explicit. Experiment outputs become canoni
 
 For LOCAL execution, every temporary artifact intentionally created by ChatGPT/Codex tooling on the User machine MUST remain inside the target project's root `tmp/` tree unless the User explicitly names another location.
 
-Default task isolation:
+Default work isolation:
 
 ```text
-<PROJECT_ROOT>/tmp/<TASK_ID>/
+<PROJECT_ROOT>/tmp/<WORK_ID>/
+```
+
+`WORK_ID` means:
+
+```text
+FORMAL      → exact task_id
+LOCAL-QUICK → short local work/session label that is unique enough within the project
 ```
 
 Create only the subdirectories actually needed, for example:
@@ -112,13 +119,13 @@ Cleanup lifecycle:
 
 ```text
 completed + no recovery value
-→ remove task tmp immediately
+→ remove work tmp immediately
 
 BLOCKED/FAIL + deliberate recovery value
 → retain only the minimum needed state and report why
 
 superseded/cancelled + no recovery value
-→ remove task tmp
+→ remove work tmp
 
 active/dirty/unpushed/uncertain state
 → preserve until safety is established
