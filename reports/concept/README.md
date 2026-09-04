@@ -11,5 +11,6 @@
 | 04 | `04_skill_package_architecture.md` | Skill source, discovery, package decisions | active history | `references/skill/repository.md`, `references/skill/package.md`, `references/skill/writing.md` |
 | 05 | `05_water_research_project_architecture.md` | Water research project architecture decisions | active history | `references/project/architecture.md` |
 | 06 | `06_ai_assisted_implementation_and_governance_simplification.md` | Zero-human-coding, AI transparency, LOCAL-QUICK, task-branch and verification simplification decisions | active history | `references/collaboration/protocol.md`, `references/collaboration/implementation.md`, `references/collaboration/verification.md`, task/report templates |
+| 07 | `07_shared_coding_skill_alignment_and_verification_placement.md` | Shared immutable coding-Skill authorities, ChatGPT-first authoring, and online/local verification placement | active history | `references/collaboration/shared-coding-skills.md`, `references/collaboration/implementation.md`, `references/collaboration/verification.md`, task/report templates, `references/skill/repository.md` |
 
 Historical concept files are not rewritten merely because current policy evolves. If a historical concept and current operational authority differ, follow the current operational authority.
