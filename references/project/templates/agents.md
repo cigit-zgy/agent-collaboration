@@ -42,7 +42,21 @@ AGENTS.md
 → required reference/script
 ```
 
-Design/redesign/conformance:
+New project / new core subsystem / major algorithm or architecture design:
+
+```text
+AGENTS.md
+→ agent-collaboration references/project/prior-art.md
+→ authoritative literature + linked/mature open-source precedents
+→ reports/concept/README.md
+→ governing concept
+→ affected Skill/reference
+→ implementation/tests
+```
+
+The prior-art gate is mandatory for substantial new design. Search both literature→code and GitHub/source→scientific provenance; record the reuse/adapt/reference/reject result in the governing concept before freeze.
+
+Routine design/redesign/conformance that does not introduce a new major design concern:
 
 ```text
 AGENTS.md
@@ -74,7 +88,7 @@ ChatGPT authors code/tests it can correctly produce from repository/design/share
 
 ## Hard invariants
 
-<Short project-wide hard boundaries.>
+<Short project-wide hard boundaries. Include the prior-art gate when this project creates or materially redesigns core capabilities.>
 ````
 
-A project `AGENTS.md` routes to `agent-collaboration` for global collaboration, AI-assisted implementation, shared coding-Skill alignment, Git, and verification policy rather than copying those manuals.
+A project `AGENTS.md` routes to `agent-collaboration` for global collaboration, prior-art/reuse policy, AI-assisted implementation, shared coding-Skill alignment, Git, and verification policy rather than copying those manuals.
