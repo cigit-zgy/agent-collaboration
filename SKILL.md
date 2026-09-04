@@ -22,6 +22,8 @@ Canonical maintained source:
 GitHub repository: cigit-zgy/agent-collaboration
 ```
 
+Do not rely on remembered collaboration policy across unrelated repository-changing work. At the first substantive write of a new ChatGPT work unit, verify current `agent-collaboration` authority once; FORMAL tasks then pin that exact commit. Codex uses the task pin for FORMAL work and refreshes current authority once at the start of a new unpinned LOCAL repository task/session. See `references/collaboration/protocol.md`.
+
 Formal delegated tasks pin the exact collaboration commit they use. No machine-local installation is assumed; a verified local checkout at the same repository/commit is only a cache.
 
 Load only the reference that owns the active concern.
@@ -81,24 +83,27 @@ DIRECT
 LOCAL-QUICK
 → bounded low-risk local verification/repair or implementation
 → concise Codex instruction
-→ focused verification + commit/push when needed
+→ project-local tmp scratch boundary when needed
+→ focused verification + cleanup + commit/push when needed
 → ChatGPT acceptance review
 
 FORMAL
 → major/long/risk-sensitive/release/trust/public-contract work
 → committed task on a dedicated task branch by default
+→ local scratch/worktree state under <PROJECT_ROOT>/tmp/<TASK_ID>/ by default
 → Codex local implementation and/or remaining verification + report
+→ cleanup or explicit retained-recovery state
 → ChatGPT acceptance review
 → integration
 ```
 
-Detailed routing, Git safety, authority resolution, instruction/data trust boundary, concurrency, ownership boundaries, report lookup, and acceptance live in `references/collaboration/protocol.md`.
+Detailed routing, Git safety, authority refresh, project-local temporary-state boundary, instruction/data trust boundary, concurrency, ownership boundaries, report lookup, and acceptance live in `references/collaboration/protocol.md`.
 
 ## Reference routing
 
 ### Collaboration
 
-- `references/collaboration/protocol.md` — roles, authority, DIRECT/LOCAL partition, DIRECT/LOCAL-QUICK/FORMAL routes, Git/task-branch workflow, trust boundaries, concurrency, report lookup, integration, acceptance;
+- `references/collaboration/protocol.md` — roles, authority refresh, DIRECT/LOCAL partition, DIRECT/LOCAL-QUICK/FORMAL routes, local tmp boundary, Git/task-branch workflow, trust boundaries, concurrency, report lookup, integration, acceptance;
 - `references/collaboration/implementation.md` — ChatGPT-first code authoring, AI-assisted implementation transparency, reviewability, engineering discipline, code-quality expectations;
 - `references/collaboration/shared-coding-skills.md` — immutable cross-Agent coding-Skill profile, precedence, activation, local alignment, update policy;
 - `references/collaboration/verification.md` — verification levels, evidence categories, online/local placement, risk-based tools and strengthening techniques;
@@ -109,7 +114,7 @@ Detailed routing, Git safety, authority resolution, instruction/data trust bound
 
 Use `references/project/` when a scientific/software project joins the collaboration:
 
-- `architecture.md` — project entry and responsibility-based ownership;
+- `architecture.md` — project entry, responsibility-based ownership, and project-local `tmp/` ephemeral boundary;
 - `concept.md` — project `reports/concept/` design-authority lifecycle;
 - `templates/agents.md` — project root `AGENTS.md` specialization;
 - `templates/skill.md` — project workflow `SKILL.md`.
@@ -154,4 +159,4 @@ Do not preload the whole collaboration repository or every installed Skill.
 
 ## Completion
 
-Collaboration work is complete when the selected route has completed all authoring and LOCAL execution deliverables, ChatGPT and Codex used the same applicable shared coding-Skill authorities, required evidence exists, material limitations are disclosed, and the applicable ChatGPT acceptance review/human decision gate is satisfied.
+Collaboration work is complete when the selected route has completed all authoring and LOCAL execution deliverables, ChatGPT and Codex used the same applicable shared coding-Skill authorities, Agent-created local temporary state is cleaned or explicitly retained for a concrete recovery reason, required evidence exists, material limitations are disclosed, and the applicable ChatGPT acceptance review/human decision gate is satisfied.
