@@ -8,23 +8,6 @@ reports/codex/YYMMDD_codex_NN.md
 
 A report records implementation/execution evidence. It does not redefine project design or collaboration policy, and its verdict is not final acceptance.
 
-## Report destination binding — hard requirement
-
-For a FORMAL task, the owning committed task metadata field `codex_report` is the canonical report destination.
-
-Codex MUST:
-
-```text
-read codex_report from the committed task
-→ write the formal report at exactly that repository-relative path
-→ commit it on the task branch
-→ push the task branch
-```
-
-Do not choose another report path or filename after handoff merely for convenience. If the declared path is unusable, report the conflict rather than silently relocating the report.
-
-This binding allows ChatGPT to locate and audit the report automatically from the prior handoff context. The User is not required to paste the report path, report URL, report commit, or Codex console output back to ChatGPT after completion.
-
 ## Metadata
 
 ```yaml
@@ -45,8 +28,6 @@ limitations: []
 ---
 ```
 
-`task_id`, `task_branch`, and `task_source_sha` bind this report back to the exact formal handoff. They must agree with the committed task and execution handoff used by Codex.
-
 ## Body
 
 Use a concise structure:
@@ -57,6 +38,8 @@ Use a concise structure:
 ## Changes
 
 ## AI-assisted implementation transparency
+
+## Shared coding-Skill alignment
 
 ## Verification evidence
 
@@ -69,12 +52,19 @@ Use a concise structure:
 
 State what was actually changed, including material files/modules/artifacts. Do not restate the full task specification.
 
+Distinguish:
+
+```text
+implementation/tests already authored by ChatGPT before handoff
+implementation added or repaired by Codex after local execution
+```
+
 ## AI-assisted implementation transparency
 
 For material implementation work, make these items recoverable when applicable:
 
 ```text
-implementation generated/modified by Codex or other AI tooling
+implementation generated/modified by ChatGPT, Codex, or other AI tooling
 key implementation choice and why it was selected
 main data/control flow affected
 important invariants/failure boundaries
@@ -86,9 +76,28 @@ Keep this section concise. It exists so the implementation can be audited withou
 
 Do not expose private chain-of-thought. Report design-relevant rationale and observable engineering decisions only.
 
+## Shared coding-Skill alignment
+
+When the task activates cross-Agent coding Skills, record:
+
+```text
+shared profile coordinate
+activated Skill names/modes
+immutable authority coordinates
+local discovered/cache revision
+MATCH | ALIGNED_TO_PIN | REMOTE_PIN_USED | BLOCKED
+any safe alignment action actually performed
+```
+
+Check only Skills activated by the task. Do not report or update the complete machine Skill inventory merely for ceremony.
+
+A local Skill name/path without a verified source revision is not alignment evidence. If Codex used a local-only helper, state that it did not override the shared coding contract.
+
 ## Verification evidence
 
-Report each evidence category required by the task using concrete evidence such as commands, test counts, artifacts, environments, run IDs, hashes, or observed failure/recovery behavior.
+Report each remaining evidence category required by the task using concrete evidence such as commands, test counts, artifacts, environments, run IDs, hashes, or observed failure/recovery behavior.
+
+Separate checks already completed by ChatGPT from checks run locally by Codex. Rerun a prior check only when it is needed against the final branch state or proves a distinct local-environment claim.
 
 Only required categories need headings. For example:
 
@@ -161,15 +170,15 @@ Each line should communicate at most one high-level fact. The synopsis should no
 
 ```text
 verdict
-overall implementation result
-main files/component changed
-key behavior or boundary established
+overall implementation/local-verification result
+what ChatGPT had authored before handoff
+what Codex repaired or added
+shared coding-Skill alignment result
 most important verification result
 real-artifact/E2E result when material
 material limitation or blocker
 Git/task-branch state
 readiness/integration implication
-report availability
 ```
 
 The synopsis MUST remain substantially shorter than the report. It MUST NOT dump command output, full test matrices, recovery counters, validator-message cases, acceptance tables, hashes for every artifact, or detailed implementation chronology.
@@ -208,7 +217,9 @@ UNAVAILABLE — <concrete publication/push blocker>
 
 An unpublished report must never be represented as remotely inspectable.
 
-A FORMAL completion response is non-conforming when either of these occurs:
+A FORMAL completion response is non-conforming when any of these occurs:
 
 - no 8–12-line concise synopsis is provided without a concrete reason;
-- the boxed locator is replaced by a long custom stdout/evidence dump.
+- the boxed locator is replaced by a long custom stdout/evidence dump;
+- activated shared coding-Skill alignment is omitted from the durable report;
+- the report conflates ChatGPT-authored implementation with Codex-local repair/verification.
