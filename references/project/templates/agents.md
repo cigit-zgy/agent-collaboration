@@ -11,7 +11,7 @@ Read `../../collaboration/agents.md` first. This template specializes that writi
 
 ## Authority
 
-User + ChatGPT develop and adjudicate project design. The User retains final design acceptance/override authority and designated human decision checkpoints. ChatGPT acts as design partner, connected author/executor, and acceptance reviewer. Codex executes approved LOCAL implementation/execution and supplies evidence; zero-human-coding is permitted.
+User + ChatGPT develop and adjudicate project design. The User retains final design acceptance/override authority and designated human decision checkpoints. ChatGPT acts as design partner, connected author/executor, conversation-handoff author, and acceptance reviewer. Codex executes approved LOCAL implementation/execution and supplies evidence; zero-human-coding is permitted.
 
 ```text
 reports/concept/                  canonical accepted design, when declared
@@ -19,6 +19,7 @@ reports/concept/                  canonical accepted design, when declared
 scripts/code/schemas              implementation
 tests                             conformance verification
 registered source/evidence        model-specific scientific fact authority
+reports/handoff/                  conversation continuity/context only; not authority
 ```
 
 ## Repository ownership
@@ -41,6 +42,18 @@ AGENTS.md
 → owning sub-Skill
 → required reference/script
 ```
+
+Context recovery after conversation/session migration, when `reports/handoff/README.md` exists:
+
+```text
+AGENTS.md
+→ reports/handoff/README.md
+→ current handoff only
+→ re-resolve current project/collaboration authority and current repository state
+→ continue through the relevant routine/design route
+```
+
+Do not preload all historical handoffs. Handoffs are context snapshots only and never override current concept/task/source authority.
 
 New project / new core subsystem / major algorithm or architecture design:
 
@@ -66,6 +79,8 @@ AGENTS.md
 → implementation/tests
 ```
 
+Conversation migration itself follows `agent-collaboration:references/project/handoff.md`. ChatGPT creates the new handoff and updates `reports/handoff/README.md`; Codex is not the primary handoff author.
+
 ## Shared coding Skills
 
 Global profile:
@@ -88,7 +103,7 @@ ChatGPT authors code/tests it can correctly produce from repository/design/share
 
 ## Hard invariants
 
-<Short project-wide hard boundaries. Include the prior-art gate when this project creates or materially redesigns core capabilities.>
+<Short project-wide hard boundaries. Include the prior-art gate when this project creates or materially redesigns core capabilities. When conversation handoff artifacts exist, keep `reports/handoff/README.md` current and treat handoffs as context-only snapshots.>
 ````
 
-A project `AGENTS.md` routes to `agent-collaboration` for global collaboration, prior-art/reuse policy, AI-assisted implementation, shared coding-Skill alignment, Git, and verification policy rather than copying those manuals.
+A project `AGENTS.md` routes to `agent-collaboration` for global collaboration, prior-art/reuse policy, conversation handoff/context recovery, AI-assisted implementation, shared coding-Skill alignment, Git, and verification policy rather than copying those manuals.
