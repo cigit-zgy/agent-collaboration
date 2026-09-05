@@ -36,7 +36,11 @@ references/collaboration/shared-coding-skills.md  cross-Agent coding-Skill autho
 references/collaboration/verification.md          verification levels, evidence categories, online/local placement, risk-based tools
 references/collaboration/agents.md                AGENTS.md writing standard
 references/collaboration/templates/               formal task/report formats
-references/project/                               project integration and concept policy
+references/project/architecture.md                project ownership, runtime and local-tmp boundaries
+references/project/concept.md                     project concept authority/freeze lifecycle
+references/project/prior-art.md                   external prior-art/reuse gate before substantial new design
+references/project/handoff.md                     conversation migration, context-recovery artifact and handoff-index contract
+references/project/templates/                     project AGENTS/workflow templates
 references/skill/                                 Skill repository/package/writing policy
 reports/concept/                                  collaboration decision history/rationale
 reports/chatgpt/                                  historical formal local-execution specifications
@@ -54,7 +58,9 @@ collaboration routing/Git/acceptance → references/collaboration/protocol.md
 AI-assisted implementation          → references/collaboration/implementation.md
 shared coding-Skill alignment       → references/collaboration/shared-coding-skills.md
 verification                        → references/collaboration/verification.md
-project integration                 → references/project/
+project prior-art/reuse             → references/project/prior-art.md
+conversation/context handoff        → references/project/handoff.md
+project integration/concept         → references/project/
 Skill design/maintenance            → references/skill/
 ```
 
@@ -78,5 +84,7 @@ ChatGPT authors code/tests it can correctly produce from repository context and 
 - Local Skill discovery is a cache/convenience, not proof of cross-Agent version alignment.
 - AI-produced implementation is held to the same maintained-code quality standard as human-produced implementation.
 - Local verification need alone does not transfer all code authorship from ChatGPT to Codex.
+- Conversation handoff artifacts preserve context only; they never override current AGENTS/concept/task/scientific authority or current repository state.
+- A current handoff must be directly discoverable through the project handoff index when that project uses conversation handoffs.
 - Repository restructuring preserves active routing and concern ownership.
 - Installation-specific source/discovery paths have one owner in `references/skill/repository.md`.
