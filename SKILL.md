@@ -3,7 +3,7 @@ name: agent-collaboration
 description: >
   Coordinate User, ChatGPT, and Codex for repository work involving design, direct remote action,
   AI-assisted implementation, shared coding-Skill alignment, local execution, verification,
-  acceptance review, project integration, or Skill maintenance.
+  acceptance review, project integration, conversation handoff/context recovery, or Skill maintenance.
 ---
 
 # Agent Collaboration
@@ -40,6 +40,7 @@ ChatGPT
 = design partner
 + connected DIRECT executor
 + primary author of code/tests it can correctly write from repository context and shared Skills
++ primary author of project conversation handoffs
 + formal task author when local execution/verification remains
 + acceptance reviewer
 
@@ -47,6 +48,7 @@ Codex
 = LOCAL implementation/execution agent
 = local verification, debugging, and bounded repair
 = primary code author only when implementation materially requires a local feedback loop
+= may use current handoff as background when routed there, but does not treat it as authority
 = does not self-accept
 
 project tooling / CI
@@ -73,6 +75,8 @@ For executable implementation quality and AI-code transparency, read `references
 For shared third-party coding-Skill authority and local alignment, read `references/collaboration/shared-coding-skills.md`.
 
 For new project/core design or major redesign, complete the mandatory external prior-art/reuse gate in `references/project/prior-art.md` before freezing a concept or starting substantial custom implementation.
+
+For conversation migration or context recovery in an existing project, use `references/project/handoff.md`.
 
 ## Execution routes
 
@@ -116,9 +120,10 @@ Detailed routing, Git safety, authority refresh, project-local temporary-state b
 
 Use `references/project/` when a scientific/software project joins the collaboration:
 
-- `architecture.md` — project entry, responsibility-based ownership, and project-local `tmp/` ephemeral boundary;
+- `architecture.md` — project entry, responsibility-based ownership, report families, and project-local `tmp/` ephemeral boundary;
 - `concept.md` — project `reports/concept/` design-authority lifecycle and prior-art freeze gate;
 - `prior-art.md` — mandatory literature↔open-source search, candidate inspection, reuse/adapt/reject decision, and concept-recording contract for substantial new design;
+- `handoff.md` — conversation migration artifact, `reports/handoff/README.md` current-pointer index, handoff metadata/body, and fast context-recovery route;
 - `templates/agents.md` — project root `AGENTS.md` specialization;
 - `templates/skill.md` — project workflow `SKILL.md`.
 
@@ -160,12 +165,24 @@ new project / major new design
 → target project concept authority
 → project/concept.md
 
+conversation migration
+→ project/handoff.md
+→ create reports/handoff/<handoff>.md + update reports/handoff/README.md
+
+new conversation/context recovery
+→ project AGENTS.md
+→ reports/handoff/README.md
+→ current handoff only
+→ current project/collaboration authorities
+
 routine project redesign without a new major design concern
 → target project design authority + project/concept.md
 ```
 
-Do not preload the whole collaboration repository or every installed Skill.
+Do not preload the whole collaboration repository, every installed Skill, or every historical handoff for ordinary work.
 
 ## Completion
 
 Collaboration work is complete when the selected route has completed all authoring and LOCAL execution deliverables, any applicable prior-art gate is complete and respected, ChatGPT and Codex used the same applicable shared coding-Skill authorities, Agent-created local temporary state is cleaned or explicitly retained for a concrete recovery reason, required evidence exists, material limitations are disclosed, and the applicable ChatGPT acceptance review/human decision gate is satisfied.
+
+A conversation migration is complete when the new committed handoff is substantially self-contained, `reports/handoff/README.md` points to it, source/evidence pointers are recoverable, and the next context can resume by reconciling the handoff against current authority rather than rereading the entire prior conversation.
