@@ -4,7 +4,7 @@ This contract governs how a maintained scientific/software project joins `agent-
 
 ## Project entry
 
-Root `AGENTS.md` is the project-local constitution. It identifies project identity, authority, ownership boundaries, workflow entry, runtime/tooling authority, and genuine human/trust checkpoints. Use `../collaboration/agents.md` plus `templates/agents.md` when authoring it.
+Root `AGENTS.md` is the project-local constitution. It identifies project identity, authority, ownership boundaries, workflow entry, runtime/tooling authority, context-recovery route when used, and genuine human/trust checkpoints. Use `../collaboration/agents.md` plus `templates/agents.md` when authoring it.
 
 A project workflow Skill may live at any project-declared path; it is not required to be repository-root `SKILL.md`.
 
@@ -31,9 +31,12 @@ Create only responsibilities that have a real owner, artifact, and consumer. Com
 | accepted project design | `reports/concept/` | canonical design only when the project declares it |
 | formal delegated tasks | `reports/chatgpt/` | committed FORMAL local-execution specifications |
 | Codex execution evidence | `reports/codex/` | FORMAL implementation/verification reports |
+| conversation continuity | `reports/handoff/` | context-recovery snapshots + current-handoff navigation index; never design/task authority |
 | Agent-local temporary state | `tmp/` | sole project-local scratch/test/worktree/download/cache/render/disposable-env boundary |
 
 These are examples, not required directories. Equivalent ownership is valid when the project `AGENTS.md` makes it explicit, except that Agent-created ephemeral local state follows the `tmp/` boundary below unless the User explicitly authorizes another location.
+
+Do not pre-create `reports/handoff/` merely because a project might someday use multiple conversations. Create it on the first real migration under `handoff.md`.
 
 ## Design authority
 
@@ -42,6 +45,8 @@ When a scientific project declares `reports/concept/` as canonical design author
 Before a new project, new core subsystem, major algorithm/architecture, or comparable gate-triggered design is frozen, `prior-art.md` MUST be completed. The prior-art review searches authoritative literature and linked/mature open-source implementations before User + ChatGPT settle the project-specific design.
 
 External prior art informs design but does not replace project authority. The accepted concept remains the design source of truth.
+
+Conversation handoffs are context-recovery artifacts. They may summarize accepted decisions and current repository state, but they do not become design authority and do not supersede current `AGENTS.md`, concept, committed task, registered scientific source/evidence, or current repository state. See `handoff.md`.
 
 Model-specific scientific facts remain grounded in the project's registered source/evidence chain rather than repository-architecture documents.
 
@@ -55,6 +60,23 @@ AGENTS.md
 → owning sub-Skill
 → required reference/script
 ```
+
+### Conversation/context recovery
+
+When a new ChatGPT conversation/session resumes an existing project and `reports/handoff/README.md` exists:
+
+```text
+AGENTS.md
+→ reports/handoff/README.md
+→ current handoff only
+→ re-resolve current collaboration/project authorities
+→ inspect current repository HEAD/state relevant to the resumed work
+→ continue through the normal workflow/design route
+```
+
+Do not read every historical handoff by default. Older handoffs are history drill-down only.
+
+Codex reads the current handoff only when a FORMAL task, project `AGENTS.md`, or the User routes it there for additional context. Task/project authority remains primary.
 
 New project/core design follows:
 
@@ -80,10 +102,11 @@ model-specific durable object → model-artifact owner
 canonical reusable dataset    → data owner
 mutable current run state      → workspace owner
 controlled investigation      → experiment owner
+conversation continuity       → handoff owner
 Agent-created ephemeral state → tmp owner
 ```
 
-Promotion between responsibilities is explicit. Experiment outputs become canonical data/model artifacts only after project adoption with provenance. Exploratory code becomes reusable implementation only when a real reusable consumer and stable contract exist. Live workspace state remains mutable even when captured as an experiment input/snapshot.
+Promotion between responsibilities is explicit. Experiment outputs become canonical data/model artifacts only after project adoption with provenance. Exploratory code becomes reusable implementation only when a real reusable consumer and stable contract exist. Live workspace state remains mutable even when captured as an experiment input/snapshot. Handoff summaries do not promote themselves into concept/task/source authority merely because they are committed.
 
 ## Project-local ephemeral workspace — hard boundary
 
@@ -220,10 +243,19 @@ inspect actual repository
 → route LOCAL work through LOCAL-QUICK or FORMAL according to protocol risk
 ```
 
+Conversation handoff support is added only when the first real context migration occurs:
+
+```text
+first migration
+→ create reports/handoff/README.md
+→ create first YYMMDD_handoff_NN.md
+→ thereafter update the index current pointer on each migration
+```
+
 Do not create a custom subsystem before the applicable prior-art gate merely because an internal design can be produced quickly.
 
-Project collaboration routes to `../collaboration/protocol.md`, `../collaboration/implementation.md`, `prior-art.md`, `concept.md`, and `../collaboration/verification.md` rather than copying those manuals into every repository.
+Project collaboration routes to `../collaboration/protocol.md`, `../collaboration/implementation.md`, `prior-art.md`, `concept.md`, `handoff.md`, and `../collaboration/verification.md` rather than copying those manuals into every repository.
 
 ## Review criterion
 
-A project architecture is sufficient when an unfamiliar Agent can determine the real owners, authority sources, workflow entry, prior-art/reuse basis for substantial new design, mutable-state boundaries, ephemeral-state boundary, design/scientific-fact distinction, implementation/tooling authority, and external-tool adapter boundaries without inferring a canonical directory tree or hidden compatibility behavior.
+A project architecture is sufficient when an unfamiliar Agent can determine the real owners, authority sources, workflow entry, context-recovery route when handoffs exist, prior-art/reuse basis for substantial new design, mutable-state boundaries, ephemeral-state boundary, design/scientific-fact distinction, implementation/tooling authority, and external-tool adapter boundaries without inferring a canonical directory tree or hidden compatibility behavior.
