@@ -2,14 +2,14 @@
 
 Reusable operating contracts for collaboration among the User, ChatGPT, and Codex.
 
-The framework supports a zero-human-coding workflow: the User owns scientific/product/design/tool decisions, ChatGPT owns design/direct authoring/acceptance review, Codex owns LOCAL execution and environment-bound verification/repair, and project tooling/CI provides mechanical evidence.
+The framework supports a zero-human-coding workflow: the User owns scientific/product/design/tool decisions, ChatGPT owns design/direct authoring/conversation handoff/acceptance review, Codex owns LOCAL execution and environment-bound verification/repair, and project tooling/CI provides mechanical evidence.
 
 ## Entry
 
 - `AGENTS.md` — maintenance constitution for this repository.
 - `SKILL.md` — top-level collaboration router.
 - `references/` — current operational policy, organized by owner.
-- `reports/` — decision history, formal tasks, and execution evidence.
+- `reports/` — decision history, formal tasks, execution evidence, and project conversation handoffs when enabled by a target project.
 
 ## Reference architecture
 
@@ -29,6 +29,7 @@ references/
 │   ├── architecture.md
 │   ├── concept.md
 │   ├── prior-art.md
+│   ├── handoff.md
 │   └── templates/
 │       ├── agents.md
 │       └── skill.md
@@ -45,7 +46,7 @@ The reference families answer different questions:
 
 ```text
 collaboration = how User, ChatGPT, and Codex work together
-project       = how a maintained project is designed, organized, and connected
+project       = how a maintained project is designed, organized, recovered across conversations, and connected
 skill         = how a Skill is owned, packaged, written, and maintained
 ```
 
@@ -61,9 +62,10 @@ verification         = verification levels + evidence categories + online/local 
 Within project:
 
 ```text
-architecture = repository ownership, runtime boundaries, project-local tmp state
+architecture = repository ownership, runtime boundaries, project-local tmp state, handoff placement
 concept      = accepted design authority and freeze/adjudication lifecycle
 prior-art    = mandatory literature↔open-source search and reuse/adapt/custom-gap gate for substantial new design
+handoff      = conversation migration, context snapshot schema, current-handoff index, and fast recovery route
 ```
 
 ## Authority model
@@ -73,6 +75,8 @@ Current operational authority lives in `references/`. `reports/concept/` records
 Maintained scientific projects may declare their own `reports/concept/` as canonical project design authority. Their model-specific scientific facts remain grounded in registered source/evidence rather than project governance documents.
 
 External prior art informs project design but does not become project authority. For new projects, core subsystems, major algorithms/architectures, and substantial tool/framework choices, the project must inspect authoritative literature and linked/mature open-source implementations before freezing a custom concept.
+
+Project conversation handoffs are also non-authoritative: they preserve a high-information snapshot of the prior ChatGPT conversation and repository state, but current `AGENTS.md`, concept/task/source authority, and current repository state always win.
 
 A local `.agents/skills` entry is discovery, not cross-Agent authority. Coding Skills that constrain both ChatGPT and Codex are identified by immutable repository/commit/path coordinates under `references/collaboration/shared-coding-skills.md` or an explicit project/task profile.
 
@@ -105,6 +109,32 @@ Before substantial custom implementation of a gate-triggered design, `references
 
 The User is not required to write code or inspect every line. Material implementation decisions and verification evidence instead remain auditable through bounded changes, shared Skill authorities, clear contracts, tests/tooling, Codex local evidence, and ChatGPT acceptance review.
 
+## Conversation handoff and recovery
+
+When a project conversation is intentionally migrated or has become too large to continue reliably, `references/project/handoff.md` defines a DIRECT ChatGPT handoff artifact under:
+
+```text
+reports/handoff/YYMMDD_handoff_NN.md
+```
+
+The project also keeps a small navigation file:
+
+```text
+reports/handoff/README.md
+```
+
+which points to the current handoff. The normal recovery route is:
+
+```text
+project AGENTS.md
+→ reports/handoff/README.md
+→ current handoff only
+→ current project/collaboration authority + current repository state
+→ continue
+```
+
+Older handoffs are historical drill-down only; do not preload them all.
+
 ## Normal reading path
 
 ```text
@@ -122,4 +152,18 @@ AGENTS.md
 → governing project concept
 ```
 
-Do not load the whole reference tree or every installed Skill for ordinary work.
+For conversation migration/recovery:
+
+```text
+AGENTS.md
+→ SKILL.md
+→ references/project/handoff.md  # when authoring/migrating
+
+or
+
+AGENTS.md
+→ reports/handoff/README.md
+→ current handoff                # when resuming
+```
+
+Do not load the whole reference tree, every installed Skill, or every historical handoff for ordinary work.
