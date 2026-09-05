@@ -8,10 +8,11 @@ This contract governs formal collaboration reports and `reports/concept/` for ma
 reports/
 ├── concept/   current accepted project design
 ├── chatgpt/   committed local-execution specifications
-└── codex/     execution and verification evidence
+├── codex/     execution and verification evidence
+└── handoff/   conversation continuity/context recovery; not design/task authority
 ```
 
-Formal task/report paths remain stable after issue.
+Formal task/report paths remain stable after issue. Conversation handoff artifact/index semantics are owned by `handoff.md`.
 
 ## Concept responsibility
 
@@ -37,6 +38,8 @@ model scientific facts = registered source + evidence/provenance
 ```
 
 A concept defines how the project represents, validates, or operates on scientific information. Model-specific values, equations, symbols, and claims remain grounded in the registered source/evidence chain.
+
+Conversation handoffs may summarize the design and project state for migration, but they are reconstruction context only. A handoff never becomes a substitute for the governing concept, task, or scientific source/evidence.
 
 ## External prior-art gate — hard requirement
 
@@ -104,6 +107,7 @@ Each concept topic owns one coherent design concern. Cross-topic relationships m
 A canonical concept contains the current accepted solution. It does not serve as:
 
 - chat or decision chronology;
+- conversation-migration/context summary;
 - implementation journal;
 - Codex task/report;
 - test-result store;
@@ -111,7 +115,7 @@ A canonical concept contains the current accepted solution. It does not serve as
 - backlog of unaccepted alternatives;
 - container for model-specific scientific facts copied from sources.
 
-Historical evolution is preserved by Git history and formal collaboration reports.
+Historical evolution is preserved by Git history and formal collaboration reports. Conversation continuity belongs in `reports/handoff/` under `handoff.md`.
 
 ### Design-level specificity
 
@@ -120,10 +124,11 @@ Include enough detail to constrain downstream projections and make conformance a
 A useful distinction is:
 
 ```text
-Design consequence     → concept
-Agent execution detail → SKILL/reference
-Code mechanism         → implementation
-Observed evidence      → test/report/runtime artifact
+Design consequence       → concept
+Conversation continuity  → handoff
+Agent execution detail   → SKILL/reference
+Code mechanism           → implementation
+Observed evidence        → test/report/runtime artifact
 ```
 
 ### Recommended shape
@@ -170,7 +175,7 @@ The headings are optional. Structure follows the design concern rather than a fi
 
 ## Concept index
 
-`reports/concept/README.md` is the design map. It identifies active design topics and the downstream operational files that project each topic. It is not an implementation-status board.
+`reports/concept/README.md` is the design map. It identifies active design topics and the downstream operational files that project each topic. It is not an implementation-status board or conversation-handoff index.
 
 A topic may use minimal metadata:
 
@@ -212,7 +217,7 @@ problem / design concern
 
 For routine redesign where the prior-art gate is not triggered, the lifecycle may begin at the current canonical concept.
 
-Reviewers, prior-art sources, Codex, tests, and existing implementation may expose defects, contradictions, missing requirements, or proven patterns. They do not directly redefine the canonical design.
+Reviewers, prior-art sources, Codex, tests, existing implementation, and conversation handoffs may expose defects, contradictions, missing requirements, proven patterns, or historical rationale. They do not directly redefine the canonical design.
 
 ### Adjudication
 
@@ -265,6 +270,16 @@ AGENTS.md
 → required reference/script
 ```
 
+Context recovery after conversation migration uses the navigation owner in `handoff.md`:
+
+```text
+AGENTS.md
+→ reports/handoff/README.md
+→ current handoff only
+→ current project/collaboration authority
+→ then the relevant routine/design route
+```
+
 New project design or gate-triggered redesign begins with:
 
 ```text
@@ -283,4 +298,4 @@ Design/redesign/adversarial review that does not trigger a new prior-art search 
 
 `agent-collaboration` itself is a protocol/Skill repository. Its active policy lives in `references/`; its existing `reports/concept/` files are decision history/rationale rather than canonical project design.
 
-Task/report metadata formats live in `../collaboration/templates/chatgpt-task.md` and `../collaboration/templates/codex-report.md`.
+Task/report metadata formats live in `../collaboration/templates/chatgpt-task.md` and `../collaboration/templates/codex-report.md`. Conversation handoff artifacts are governed by `handoff.md`.
