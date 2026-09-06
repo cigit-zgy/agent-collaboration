@@ -81,6 +81,91 @@ Do not run the same expensive check in both places unless the second environment
 
 A verification plan must state the remaining evidence, not repeat checks that ChatGPT already completed unless rerun is needed for final-state integrity.
 
+## GitHub Actions / CI execution boundary — hard requirement
+
+GitHub Actions is an **independent hosted evidence environment**, not the default place to repeat development checks already proven by ChatGPT or Codex.
+
+The governing rule is claim-based:
+
+```text
+same verification claim
++ already proven in an appropriate environment
+→ do not repeat it in GitHub Actions
+
+distinct hosted-environment claim
+→ GitHub Actions may be justified
+```
+
+Examples of distinct GitHub-hosted claims include:
+
+```text
+clean-room build/install independent of the User machine
+supported OS/Python/runtime matrix
+PR/merge status gate that must exist on GitHub
+release/tag/package/publish automation
+open-source reproducibility visible to external contributors
+release/security evidence that intentionally requires an independent environment
+```
+
+Running `ruff`, `pytest`, type checking, build, LaTeX rendering, or another command in Actions is not justified merely because the command can run there. If Codex already proves the same claim locally and no independent hosted claim remains, the Actions run is redundant.
+
+### Private repositories
+
+For private repositories, ordinary development defaults to:
+
+```text
+ChatGPT authoring / cheap connected checks
+→ Codex local verification
+→ ChatGPT acceptance
+```
+
+Automatic `push`/`pull_request` GitHub Actions SHOULD be absent by default. Enable private-repository Actions only when the workflow owns a concrete distinct claim that is worth the account's current Actions budget.
+
+When private-repository Actions are justified, prefer the narrowest trigger and matrix that proves the claim:
+
+```text
+workflow_dispatch for milestone / clean-room checks
+release/tag trigger for release qualification
+path filters when only a bounded area matters
+concurrency + cancel-in-progress when repeated automatic runs are genuinely required
+smallest supported runtime/OS matrix sufficient for the claim
+```
+
+Do not maintain a broad multi-OS/multi-version matrix on every private-repository push merely for reassurance.
+
+### Public repositories
+
+Public repositories may retain standard GitHub-hosted CI when it materially improves public reproducibility, contributor feedback, status checks, packaging, or release confidence.
+
+Budget pressure alone is not a reason to remove standard public-repository CI when GitHub's current billing model does not charge the account's included private-repository minutes for those standard public runs. Billing and runner pricing are external platform facts and MUST be rechecked against current official GitHub documentation when they materially affect a decision.
+
+Public status does **not** waive the claim-deduplication rule. Free redundant CI is still redundant engineering work.
+
+Special/larger runners, storage, artifacts, caches, and other billable platform resources are separate concerns; do not infer their cost from standard-runner policy.
+
+### Actions review trigger
+
+Review a repository's Actions configuration when:
+
+```text
+repository visibility changes
+Actions usage/budget becomes material
+new automatic workflow is introduced
+runtime matrix grows
+Codex begins proving the same claims locally
+release/publication workflow changes
+```
+
+The review asks:
+
+1. What exact claim does each workflow/job prove?
+2. Is that claim already proven by ChatGPT/Codex/project tooling?
+3. Does GitHub-hosted execution provide a distinct environment/status/release property?
+4. Is the trigger frequency proportional to the claim?
+5. For private repositories, is the expected budget cost justified?
+
+If a workflow cannot answer those questions, remove, narrow, or make it manual.
+
 ## Evidence categories
 
 ### Component / property
@@ -253,6 +338,6 @@ Codex reports what actually ran for each required category, including failures, 
 
 A `pytest PASS`, coverage number, scanner result, or CI badge does not substitute for another required evidence category.
 
-ChatGPT acceptance review asks whether the chosen level and evidence were sufficient, whether verification was placed efficiently, whether the same shared coding-Skill authorities governed both Agents, and whether the evidence establishes the claim.
+ChatGPT acceptance review asks whether the chosen level and evidence were sufficient, whether verification was placed efficiently, whether GitHub Actions proved distinct claims rather than duplicating Codex/ChatGPT evidence, whether the same shared coding-Skill authorities governed both Agents, and whether the evidence establishes the claim.
 
 Add a second reviewer/model/human perspective for LEVEL 2/3 only when scientific, architectural, trust, security, or release risk materially warrants it.
