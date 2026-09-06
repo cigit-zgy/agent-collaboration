@@ -56,7 +56,7 @@ Within collaboration:
 protocol             = authority, routing, Git/task boundaries, report lookup, acceptance
 implementation       = ChatGPT-first/AI-assisted code authoring + engineering discipline
 shared-coding-skills = common immutable Skill authorities + ChatGPT/Codex alignment
-verification         = verification levels + evidence categories + online/local placement
+verification         = verification levels + online/local/Actions placement + CI claim deduplication
 ```
 
 Within project:
@@ -101,6 +101,21 @@ Repository-changing FORMAL work defaults to a dedicated task branch/worktree, so
 
 Formal task launch text lives in `references/collaboration/templates/chatgpt-task.md`.
 
+## Verification and GitHub Actions
+
+`references/collaboration/verification.md` treats GitHub Actions as an independent hosted evidence environment, not a mandatory duplicate test layer.
+
+```text
+Codex already proves claim X
++ Actions would only prove X again
+→ do not run Actions
+
+Actions proves clean-room / matrix / status / release / public-reproducibility claim Y
+→ Actions may run for Y
+```
+
+Private repositories default to ChatGPT + Codex local verification with automatic Actions off unless a distinct hosted claim justifies the account budget. Public repositories may retain standard hosted CI when it materially improves external reproducibility, contributor/status feedback, packaging, or release confidence. Current GitHub billing/runner pricing is external platform state and is rechecked against official GitHub documentation when it affects the decision.
+
 ## AI-assisted implementation
 
 `references/collaboration/implementation.md` requires AI-generated implementation to be transparent, reviewable, maintainable, and held to the same quality standard as maintained human-authored code.
@@ -141,6 +156,14 @@ Older handoffs are historical drill-down only; do not preload them all.
 AGENTS.md
 → SKILL.md
 → one owning reference
+```
+
+For CI/Actions placement or budget review:
+
+```text
+AGENTS.md
+→ SKILL.md
+→ references/collaboration/verification.md
 ```
 
 For new project/core design:
