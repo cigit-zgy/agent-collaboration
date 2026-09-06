@@ -66,11 +66,17 @@ cheap checks already supported online
 
 environment-bound or time-consuming checks
 → Codex verifies locally and repairs when required
+
+GitHub-hosted CI
+→ only distinct clean-room / matrix / status / release / public-reproducibility claims
+→ never a mandatory duplicate of Codex verification
 ```
 
 Repository mutation or later local verification alone does not make the original authoring deliverable LOCAL.
 
 For executable implementation quality and AI-code transparency, read `references/collaboration/implementation.md`.
+
+For verification level/placement, GitHub Actions claim deduplication, and private/public CI defaults, read `references/collaboration/verification.md`.
 
 For shared third-party coding-Skill authority and local alignment, read `references/collaboration/shared-coding-skills.md`.
 
@@ -110,9 +116,9 @@ Detailed routing, Git safety, authority refresh, project-local temporary-state b
 ### Collaboration
 
 - `references/collaboration/protocol.md` — roles, authority refresh, DIRECT/LOCAL partition, DIRECT/LOCAL-QUICK/FORMAL routes, local tmp boundary, Git/task-branch workflow, trust boundaries, concurrency, report lookup, integration, acceptance;
-- `references/collaboration/implementation.md` — ChatGPT-first code authoring, prior-art reuse enforcement, AI-assisted implementation transparency, reviewability, engineering discipline, code-quality expectations;
+- `references/collaboration/implementation.md` — ChatGPT-first code authoring, prior-art reuse enforcement, Codex/Actions deduplication, AI-assisted implementation transparency, reviewability, engineering discipline, code-quality expectations;
 - `references/collaboration/shared-coding-skills.md` — immutable cross-Agent coding-Skill profile, precedence, activation, local alignment, update policy;
-- `references/collaboration/verification.md` — verification levels, evidence categories, online/local placement, risk-based tools and strengthening techniques;
+- `references/collaboration/verification.md` — verification levels, evidence categories, online/local placement, GitHub Actions private/public defaults and claim-dedup policy, risk-based tools and strengthening techniques;
 - `references/collaboration/agents.md` — maintained `AGENTS.md` writing standard;
 - `references/collaboration/templates/` — formal ChatGPT task and Codex report formats.
 
@@ -156,6 +162,11 @@ ChatGPT authors ordinary code
 local verification/repair
 → protocol.md + implementation.md + verification.md + activated Skill authorities
 
+GitHub Actions / CI design or budget review
+→ verification.md
+→ identify distinct hosted claims
+→ remove/narrow/manualize redundant private workflows
+
 formal release task
 → protocol.md + implementation.md + shared-coding-skills.md + verification.md + task template
 
@@ -183,6 +194,6 @@ Do not preload the whole collaboration repository, every installed Skill, or eve
 
 ## Completion
 
-Collaboration work is complete when the selected route has completed all authoring and LOCAL execution deliverables, any applicable prior-art gate is complete and respected, ChatGPT and Codex used the same applicable shared coding-Skill authorities, Agent-created local temporary state is cleaned or explicitly retained for a concrete recovery reason, required evidence exists, material limitations are disclosed, and the applicable ChatGPT acceptance review/human decision gate is satisfied.
+Collaboration work is complete when the selected route has completed all authoring and LOCAL execution deliverables, any applicable prior-art gate is complete and respected, ChatGPT and Codex used the same applicable shared coding-Skill authorities, Agent-created local temporary state is cleaned or explicitly retained for a concrete recovery reason, required evidence exists without unjustified GitHub Actions duplication, material limitations are disclosed, and the applicable ChatGPT acceptance review/human decision gate is satisfied.
 
 A conversation migration is complete when the new committed handoff is substantially self-contained, `reports/handoff/README.md` points to it, source/evidence pointers are recoverable, and the next context can resume by reconciling the handoff against current authority rather than rereading the entire prior conversation.
