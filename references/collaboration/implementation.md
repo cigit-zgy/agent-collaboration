@@ -188,6 +188,23 @@ Codex performs checks whose cost or evidentiary value depends on the User's loca
 
 Do not duplicate an expensive check remotely and locally unless the second environment provides a distinct required claim. The detailed placement rules are in `verification.md`.
 
+### Codex / GitHub Actions deduplication — hard boundary
+
+Treat GitHub Actions as a separate evidence environment, not a mandatory second copy of Codex verification.
+
+```text
+Codex already proves claim X in an appropriate environment
++ GitHub-hosted execution would only prove claim X again
+→ do not run Actions for claim X
+
+GitHub-hosted execution proves independent clean-room / matrix / status / release property Y
+→ Actions may run for Y
+```
+
+Do not add or retain CI simply because the commands are easy to express in YAML. A repository should have no automatic Actions workflow when local/connected verification already covers all required claims and no GitHub-hosted property is needed.
+
+Private-repository automatic CI is off by default under `verification.md`; public-repository CI may remain when it provides public reproducibility, contributor/status, or release value. Current GitHub billing facts are external platform state and are rechecked when they materially affect the decision.
+
 Code that ChatGPT has written but that has not yet received required execution evidence must be described as implemented but awaiting local verification; it is not accepted merely by inspection.
 
 ## Documentation and comments
@@ -218,7 +235,7 @@ AND any applicable prior-art/reuse decision was respected
 AND the applicable shared coding Skills were resolved consistently
 AND the change is reviewable and maintainable
 AND required mechanical checks pass
-AND required risk-based evidence is available
+AND required risk-based evidence is available without unjustified ChatGPT/Codex/Actions duplication
 AND material limitations/deviations are disclosed
 AND ChatGPT acceptance review is completed when the collaboration route requires it
 ```
