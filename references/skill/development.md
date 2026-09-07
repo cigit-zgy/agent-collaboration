@@ -4,25 +4,29 @@ This contract governs design, implementation, and testing of maintained first-pa
 
 ## Core authority order — hard boundary
 
-A Skill is developed from durable design semantics downward:
+A Skill is developed from durable current design semantics downward:
 
 ```text
-accepted Skill/project concept or design authority
+reports/concept/ design exploration/history when useful
+→ User + ChatGPT adjudication
+→ current project/Skill design authority
 → SKILL.md + references/
 → scripts/code/schema/config
 → tests/evaluation
 → runtime artifacts
 ```
 
+For projects using the collaboration living-design model, current authority is the single `design/` tree under `../project/design.md`; `reports/concept/` is history/input only.
+
 Code and tests are projections/evidence of the Skill design. They do not independently define Skill behavior.
 
-When a Skill task exposes a capability-semantic, workflow, state, trust, routing, recovery, or completion-design problem, User + ChatGPT MUST resolve the design first and make that decision durable in the governing concept/design authority. ChatGPT then updates the owning `SKILL.md` / `references/*.md` projection before implementation is changed.
+When a Skill task exposes a capability-semantic, workflow, state, trust, routing, recovery, or completion-design problem, User + ChatGPT MUST resolve the design first and make the accepted current result durable in the governing design authority. ChatGPT then updates the owning `SKILL.md` / `references/*.md` projection before implementation is changed.
 
 Codex implements and verifies the committed Markdown contract. Codex MUST NOT resolve a design deficiency by inventing task-local behavior in code.
 
-## When concept-first is mandatory
+## When design-first is mandatory
 
-Use the concept-first path when work changes or questions any of the following:
+Use the design-first path when work changes or questions any of the following:
 
 ```text
 Skill purpose or capability boundary
@@ -42,44 +46,45 @@ Normal path:
 
 ```text
 observe problem / new requirement
-→ inspect governing concept + current Skill Markdown
-→ test whether the defect is design or implementation drift
+→ record a concept note when the exploration is worth preserving
+→ inspect current design + current Skill Markdown
+→ determine whether the defect is design or implementation drift
 → if design: User + ChatGPT adjudicate
-→ update/freeze concept
+→ update current design/ into one coherent state
 → project design into SKILL.md/references
 → implement code to conform
 → test the resulting design
-→ if tests expose a new design defect, return to concept
+→ if tests expose a new design defect, return upstream
 ```
 
-Do not begin by patching production code when the intended behavior is not yet explicit in the durable Skill contract.
+Do not begin by patching production code when intended behavior is not yet explicit in the durable current design/Skill contract.
 
 ## Pure implementation drift exception
 
-Do not edit concept merely for ceremony.
+Do not edit design merely for ceremony.
 
 If all of the following are true:
 
 ```text
-intended behavior is already explicit and internally consistent in concept/Skill Markdown
-AND the implementation clearly violates that existing contract
+intended behavior is already explicit and internally consistent in current design/Skill Markdown
+AND implementation clearly violates that existing contract
 AND no new semantic choice is required
 ```
 
-then repair the implementation directly and add/adjust only the smallest contract-level regression evidence needed.
+then repair implementation directly and add/adjust only the smallest contract-level regression evidence needed.
 
 A bug report or failing example does not automatically prove this exception. First determine whether the existing contract truly resolves the case without interpretation.
 
 ## Markdown projection before code — hard boundary
 
-For a design-bearing Skill change, ChatGPT must make the operational contract readable before Codex receives implementation work.
+For a design-bearing Skill change, ChatGPT must make the accepted current design and operational projection readable before Codex receives implementation work.
 
 Preferred handoff state:
 
 ```text
-governing concept updated/accepted
+current design updated/accepted
 → SKILL.md / references updated
-→ task points Codex to exact committed Markdown authority
+→ task points Codex to exact committed design + Markdown authority
 → Codex modifies implementation to conform
 ```
 
@@ -91,7 +96,7 @@ Forbidden pattern:
 failing task/example
 → add task-specific branch/flag/special case in code
 → tests pass
-→ Skill Markdown remains unchanged/ambiguous
+→ current design/Skill Markdown remains unchanged or ambiguous
 ```
 
 Required pattern:
@@ -99,14 +104,14 @@ Required pattern:
 ```text
 failing task/example
 → identify general design consequence
-→ update concept/Skill contract when needed
+→ update current design and Skill contract when needed
 → implement the general rule once at the correct owner
 → verify representative cases
 ```
 
 ## No task-local patching
 
-A maintained Skill MUST NOT accumulate code that exists only to make one current task, fixture, paper, repository, model, or sample pass unless that behavior is explicitly part of the accepted Skill contract.
+A maintained Skill MUST NOT accumulate code that exists only to make one current task, fixture, paper, repository, model, or sample pass unless that behavior is explicitly part of the accepted current Skill contract.
 
 Reject or redesign implementation patterns such as:
 
@@ -119,7 +124,7 @@ encode User-chat wording directly into production branches
 weaken validation because a current example fails
 ```
 
-A concrete case may reveal a general missing rule. Generalize the design consequence at the concept/Skill owner, not by generalizing the patch mechanically.
+A concrete case may reveal a general missing rule. Generalize the design consequence at the design/Skill owner, not by generalizing the patch mechanically.
 
 ## Testing purpose — hard boundary
 
@@ -130,7 +135,7 @@ Tests are not a contest to make one task perfect.
 The testing question is:
 
 ```text
-Given the accepted Skill design,
+Given the accepted current Skill design,
 does representative execution expose missing, contradictory, over-specific,
 non-generalizable, or unimplementable semantics?
 ```
@@ -155,26 +160,27 @@ When a Skill test fails, classify the failure before changing code:
 
 ```text
 DESIGN_GAP
-= contract does not determine correct behavior, or current design is scientifically/product-wise inadequate
+= current design/contract does not determine correct behavior, or is scientifically/product-wise inadequate
 → stop implementation patching
-→ return to User + ChatGPT concept/design adjudication
+→ return to User + ChatGPT adjudication
+→ update design/ if a new solution is accepted
 
 PROJECTION_DRIFT
-= concept is clear but SKILL.md/reference projection is missing/inconsistent
+= current design is clear but SKILL.md/reference projection is missing/inconsistent
 → fix Markdown projection first
 → then implementation
 
 IMPLEMENTATION_DRIFT
-= concept + Skill Markdown are clear and code violates them
+= current design + Skill Markdown are clear and code violates them
 → repair code
 
 TEST_DEFECT
-= test encodes behavior not required by the accepted contract, or overfits a fixture/task
+= test encodes behavior not required by accepted design, or overfits a fixture/task
 → repair/remove test
 
 ENVIRONMENT / TOOL DEFECT
 = failure comes from runtime/tool/external interface rather than Skill semantics
-→ repair adapter/environment handling at its owner; do not redefine Skill design without evidence
+→ repair adapter/environment handling at its owner; do not redefine design without evidence
 ```
 
 Codex reports the classification and evidence. It does not silently convert a `DESIGN_GAP` into `IMPLEMENTATION_DRIFT` to finish the task.
@@ -195,9 +201,11 @@ Did implementation remove rather than add sample-specific branching where possib
 
 When the answer is no, the work is not ready even if the original failing case is green.
 
-## Relationship to prior art
+## Relationship to concept history and prior art
 
-For a new Skill, major new capability, or substantial redesign, use `../project/prior-art.md` before freezing a custom design when that gate applies. Strong external Skills/projects may provide design precedent, but the accepted first-party concept and Skill Markdown remain the project's authority.
+`reports/concept/` may preserve the exploration that led to a Skill change, but it is not current authority.
+
+For a new Skill, major new capability, or substantial redesign, use `../project/prior-art.md` before accepting a custom design when that gate applies. Strong external Skills/projects may provide design precedent, but the accepted first-party living design and Skill Markdown remain authoritative.
 
 ## Relationship to writing and implementation standards
 
@@ -208,7 +216,10 @@ writing.md
 = how SKILL.md/references are written and owned
 
 development.md
-= concept → Markdown → implementation → design-probing-test lifecycle
+= current design → Markdown → implementation → design-probing-test lifecycle
+
+../project/design.md
+= living-design ownership + dynamic topic decomposition
 
 ../collaboration/implementation.md
 = AI-assisted code quality, authorship, engineering discipline
@@ -224,7 +235,7 @@ Do not duplicate those manuals here.
 When FORMAL work changes a maintained first-party Skill's behavior or implementation, the committed task should identify:
 
 ```text
-governing concept/design authority
+governing current design authority
 exact committed SKILL.md / references that define intended behavior
 whether the task is DESIGN_PROJECTION or IMPLEMENTATION_DRIFT
 remaining local implementation/verification only
@@ -237,7 +248,7 @@ If Codex discovers a new design gap, it stops the affected code path and reports
 Skill development is complete only when:
 
 ```text
-any design-bearing change is durable in the governing concept
+any design-bearing change is durable in the current design authority
 AND SKILL.md/references faithfully project that design
 AND implementation conforms without task-specific semantic patches
 AND tests probe the general contract rather than only the triggering task
