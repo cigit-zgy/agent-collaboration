@@ -12,11 +12,12 @@ The default direction is:
 search credible prior art
 → inspect the strongest relevant implementations and design rationale
 → decide REUSE | ADAPT | REFERENCE_ONLY | REJECT
-→ write or revise the project concept
+→ record the exploration in reports/concept/ when useful
+→ reduce the accepted consequence into the current design/
 → implement only the remaining project-specific gap
 ```
 
-External prior art is design evidence, not project authority. User + ChatGPT remain the project design decision-makers, and the accepted project concept remains the canonical design authority when the project declares one.
+External prior art is design evidence, not project authority. User + ChatGPT remain the project design decision-makers. Current accepted design lives in the repository-root `design/` tree under `design.md`.
 
 ## Trigger — hard gate
 
@@ -34,7 +35,7 @@ custom implementation of a capability likely to exist in mature open source
 
 The gate is not required for ordinary bug fixes, typo/documentation edits, small bounded refactors, or direct implementation of an already accepted design unless the change exposes a genuine new design choice.
 
-If the gate applies and has not been completed, ChatGPT MUST NOT freeze a new concept or begin substantial custom implementation. Search first.
+If the gate applies and has not been completed, ChatGPT MUST NOT accept the new design into `design/` or begin substantial custom implementation. Search first.
 
 ## Mandatory two-way search
 
@@ -145,38 +146,39 @@ REJECT
 = not suitable; record the decisive reason when the candidate was otherwise strong
 ```
 
-Prefer REUSE or ADAPT over a new custom implementation when they satisfy the accepted scientific/product/trust requirements and licensing/runtime constraints.
+Prefer REUSE or ADAPT over a new custom implementation when they satisfy accepted scientific/product/trust requirements and licensing/runtime constraints.
 
-A custom implementation is justified only when the prior-art review identifies a concrete gap, incompatibility, trust/reproducibility requirement, or project-specific scientific contract that existing implementations do not satisfy.
+A custom implementation is justified only when the review identifies a concrete gap, incompatibility, trust/reproducibility requirement, or project-specific scientific contract that existing implementations do not satisfy.
 
-## Concept recording — hard requirement
+## Recording and reduction — hard requirement
 
-For every gate-triggered project concept, the accepted concept MUST make the prior-art basis recoverable without becoming a literature review.
+For gate-triggered design, keep the prior-art reasoning recoverable without turning living design into a literature review.
 
-Use a compact section or table such as:
+Detailed exploration may be recorded in `reports/concept/`, for example:
 
 ```text
-Prior-art basis
-
-Search scope:
-- literature channels / key terms
-- GitHub/source channels / key terms
-
-Candidate | Scientific/source provenance | Repository/version | Disposition | Design consequence
-...
-
-Result:
-- what is reused
-- what architecture/pattern is adapted
-- what is deliberately not adopted
-- the exact remaining gap that justifies custom design
+Search scope
+Candidate | provenance | repository/version | disposition | design consequence
+What is reused
+What pattern is adapted
+What is deliberately rejected
+Remaining project-specific gap
+Open questions
 ```
 
-Record only the strongest materially relevant candidates. Do not pad the table to an arbitrary count. If no credible candidate exists, record the search scope and that result explicitly.
+Record only materially relevant candidates. Do not pad to an arbitrary count.
 
-When exact code is reused or inspected for implementation-level decisions, preserve repository/version/license coordinates sufficient to recover the source. When a paper materially shapes the design, preserve a stable citation/DOI or equivalent source identity.
+After adjudication, write only the accepted current consequence into `design/`:
 
-The concept should cite prior art for the design consequence it supports; it must not copy external project rules wholesale or let external documentation become project authority.
+```text
+reports/concept/ = search/reasoning/history
+
+design/          = current accepted semantics resulting from that reasoning
+```
+
+Do not copy rejected alternatives or chronological search narrative into living design.
+
+When exact code is reused or inspected for implementation-level decisions, preserve repository/version/license coordinates sufficient to recover the source. When a paper materially shapes the design, preserve a stable citation/DOI in the concept/evidence trail as appropriate.
 
 ## Licensing and scientific integrity
 
@@ -190,12 +192,12 @@ Repeat the prior-art gate when:
 
 ```text
 a new major design concern is introduced
-an accepted design is materially reopened
+a current design concern is materially reopened
 an important tool/dependency is being replaced
 new evidence suggests a substantially better established solution exists
 ```
 
-Do not repeat the full search for routine implementation work under an unchanged accepted concept.
+Do not repeat the full search for routine implementation work under unchanged current design.
 
 ## Completion
 
@@ -203,10 +205,11 @@ The prior-art gate is complete only when:
 
 ```text
 both search directions were performed
-AND strong relevant candidates were actually inspected beyond titles/README summaries
+AND strong relevant candidates were inspected beyond titles/README summaries
 AND provenance + license/reuse boundaries are understood at the level needed for the decision
 AND each serious candidate has a disposition
-AND the accepted concept records the resulting reuse/adaptation/custom-gap decision
+AND the reasoning is recoverable in the concept/evidence trail when material
+AND the accepted current consequence is represented in design/
 ```
 
-Until then, a gate-triggered concept is not ready to freeze.
+Until then, gate-triggered custom design is not ready for implementation.
