@@ -64,6 +64,9 @@ references/collaboration/templates/
 references/project/architecture.md
 = project ownership/integration responsibility map
 
+references/project/migration.md
+= existing-project migration to current collaboration architecture with low-context bootstrap
+
 references/project/reports.md
 = report families, filenames/metadata, archive placement
 
@@ -83,7 +86,7 @@ references/project/handoff.md
 = conversation migration/recovery contract
 
 references/project/templates/
-= cold authoring templates for project AGENTS/Skill/concept/design/handoff
+= cold authoring templates for project AGENTS/Skill/concept/design/handoff/migration bootstrap
 ```
 
 ### Skill
@@ -117,6 +120,7 @@ change local execution/Git/tmp         → execution.md
 change FORMAL task/acceptance          → formal.md + exact template if needed
 change Actions policy                  → actions.md
 change verification model              → verification.md
+change existing-project migration      → project/migration.md
 change report/archive contract         → project/reports.md
 change concept-journal semantics       → project/concept.md
 change current living-design semantics → project/design.md
@@ -142,6 +146,7 @@ ChatGPT authors code/tests it can correctly produce from repository context/shar
 - Normal runtime routing is one reference hop from `SKILL.md` to the primary owner, with at most one explicitly necessary secondary owner.
 - Current operational policy has one owner under `references/`; summaries route but do not redefine.
 - Templates and historical reports are cold paths unless the active task creates/reviews that artifact.
+- Existing-project migration uses repository-native current state plus a compact bootstrap; do not require old-conversation reconstruction.
 - `reports/concept/` is design history/input; project current design authority lives in one `design/` tree when that model is used.
 - A project `design/` tree contains current accepted semantics only; no old/draft/versioned parallel designs.
 - Historical concept files are not rewritten merely to match newer policy.
