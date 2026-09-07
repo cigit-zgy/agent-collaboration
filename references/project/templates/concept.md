@@ -2,7 +2,7 @@
 
 Cold path: load this file only when creating or materially rewriting a project's canonical concept topic.
 
-Concept authority/freeze/reopen/adjudication semantics are owned by `../concept.md`.
+Concept authority/freeze/reopen/adjudication semantics are owned by `../concept.md`; report filenames and common metadata by `../reports.md`.
 
 ## Writing objective
 
@@ -24,40 +24,19 @@ These are information requirements, not mandatory headings.
 
 ## Declarative design
 
-Write accepted system state and semantics declaratively.
-
-Preferred:
-
-```text
-A registered artifact has one canonical identity within its owning scope.
-A preserved source artifact remains byte-identical across downstream read-only use.
-```
-
-Use procedural wording only when ordering, interaction, or transition is itself part of accepted design.
-
-Detailed Agent instructions belong to `SKILL.md`; operational contracts belong to references; implementation mechanics belong to code/schema; observed evidence belongs to tests/reports/runtime artifacts.
+Write accepted system state and semantics declaratively. Detailed Agent instructions belong to `SKILL.md`; operational contracts belong to references; implementation mechanics belong to code/schema; observed evidence belongs to tests/reports/runtime artifacts.
 
 ## One topic, one design owner
 
 Each concept topic owns one coherent design concern. Cross-topic relationships may be stated at interfaces, but the same design rule should not be independently redefined in several concept files.
 
-`reports/concept/README.md` maps active design topics and downstream projections. It is a design map, not an implementation-status board.
+Concept discovery uses canonical filename chronology plus YAML `concept_id`, title, status and summary. Do not create `README.md` or semantic-filename exceptions under `reports/concept/`.
 
 ## Current solution only
 
-A canonical concept contains the current accepted solution. It is not:
+A canonical concept contains the current accepted solution. It is not a chat chronology, implementation journal, Codex task/report, test-result store, transient filesystem state, backlog of unaccepted alternatives, or a container for model-specific scientific facts copied from sources.
 
-```text
-chat/decision chronology
-implementation journal
-Codex task/report
-test-result store
-transient filesystem/worktree state
-backlog of unaccepted alternatives
-container for model-specific scientific facts copied from sources
-```
-
-Historical evolution is preserved by Git history and formal collaboration reports.
+Historical evolution is preserved by Git history and formal collaboration artifacts; displaced legacy files follow the root `00_archive/` policy in `../reports.md`.
 
 ## Design-level specificity
 
@@ -72,18 +51,7 @@ Observed evidence      → test/report/runtime artifact
 
 ## Prior-art basis
 
-For gate-triggered design, include a compact basis containing:
-
-```text
-search scope
-strongest materially relevant precedents
-source/repository coordinates
-REUSE | ADAPT | REFERENCE_ONLY | REJECT disposition
-design consequence
-remaining project-specific gap
-```
-
-Do not turn the concept into a literature review. Detailed search policy is owned by `../prior-art.md`.
+For gate-triggered design, include a compact basis containing search scope, strongest relevant precedents, source/repository coordinates, `REUSE | ADAPT | REFERENCE_ONLY | REJECT` disposition, design consequence, and remaining project-specific gap. Do not turn the concept into a literature review.
 
 ## Recommended shape
 
@@ -93,58 +61,41 @@ Use the smallest structure that communicates the accepted design. A common stage
 # <Design topic>
 
 ## Purpose
-<Why this concern exists and the stable outcome it establishes.>
-
 ## Boundary
-<What this topic owns and where adjacent ownership begins.>
-
 ## Inputs / upstream state
-<Only design-relevant prerequisites.>
-
 ## Prior-art basis
-<Only for gate-triggered design.>
-
 ## Accepted design
-<Objects, states, relationships, semantics, invariants.>
-
 ## Lifecycle / transitions
-<Only when lifecycle is part of the design.>
-
 ## Ownership and interfaces
-<Producer/owner/consumer and adjacent-stage handoff.>
-
 ## Design acceptance
-<Directly assessable conditions showing internal completeness for projection.>
 ```
 
 Headings are optional; structure follows the concern.
 
-## Minimal metadata
+## Required metadata
 
-A topic may use:
+Every concept file begins with:
 
 ```yaml
 ---
-id: <ID>
+artifact_type: project_concept
+artifact_id: <YYMMDD_concept_NN>
 title: <TITLE>
-status: active
+date: <YYYY-MM-DD>
+project: <PROJECT_NAME>
+repository: <OWNER/REPOSITORY>
+status: <active | frozen | designing | superseded>
+summary: >
+  <compact searchable summary>
+concept_id: <STABLE_SEMANTIC_CONCERN_ID>
 role: design_authority
 operational_projection:
   - <path>
 ---
 ```
 
-Metadata stays minimal and does not duplicate body semantics.
+`artifact_id` equals the filename stem. `concept_id` is the stable semantic identity and may remain unchanged across later revisions. Additional topic-specific metadata is allowed when it carries real navigation/authority value, but metadata must not duplicate the body.
 
 ## Authoring quality check
 
-A concept is well written when:
-
-```text
-accepted design is recoverable without chat reconstruction
-one topic has one owner
-current solution is separated from history/backlog
-prior-art basis is compact but recoverable when required
-scientific facts remain source-grounded
-projection can be written without inventing missing semantics
-```
+A concept is well written when accepted design is recoverable without chat reconstruction, one topic has one owner, current solution is separated from history/backlog, scientific facts remain source-grounded, and projection can be written without inventing missing semantics.
