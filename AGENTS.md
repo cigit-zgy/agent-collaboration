@@ -37,7 +37,7 @@ references/collaboration/protocol.md
 = roles, authority, refresh, instruction/data trust, semantic ownership
 
 references/collaboration/execution.md
-= DIRECT/LOCAL-QUICK/FORMAL route selection, durable Codex-task handoff, Git/worktree/tmp/concurrency
+= DIRECT/LOCAL-QUICK/FORMAL route selection, durable Codex-task handoff, remote synchronization, Git/worktree/tmp/concurrency
 
 references/collaboration/formal.md
 = FORMAL task/report lifecycle, acceptance, report lookup, integration
@@ -116,7 +116,7 @@ Read `SKILL.md` first for runtime intent routing. For repository maintenance, se
 
 ```text
 change roles/authority/trust           → protocol.md
-change Codex delegation/Git/tmp        → execution.md
+change Codex delegation/Git/tmp/sync   → execution.md
 change FORMAL task/acceptance          → formal.md + exact template if needed
 change Actions policy                  → actions.md
 change verification model              → verification.md
@@ -144,6 +144,8 @@ ChatGPT authors code/tests it can correctly produce from repository context/shar
 - Every repository task delegated to Codex, including LOCAL-QUICK, MUST be committed/pushed first under `reports/chatgpt/YYMMDD_chatgpt_NN.md`.
 - The committed ChatGPT task is the sole task-specific execution specification; detailed task bodies MUST NOT be pasted into chat.
 - User-visible Codex handoff is locator-only: at most one short sentence plus one fenced `text` block with task coordinates and immutable link.
+- Every repository-changing Codex task MUST fresh-fetch before mutation, prove local execution HEAD equals the authorized fetched remote baseline, then after commit/push fresh-fetch again and prove local task HEAD equals fetched upstream HEAD. Without final equality, PASS is forbidden.
+- Remote synchronization does not authorize blind `git pull`, reset, rebase, stash, force checkout, or force push; preserve pre-existing User state and use a safe task branch/worktree.
 - LOCAL-QUICK creates no `reports/codex/` report; FORMAL does.
 - If a task artifact cannot be pushed, do not substitute a long chat-only task.
 - Templates and historical reports are cold paths unless the active task creates/reviews that artifact.
