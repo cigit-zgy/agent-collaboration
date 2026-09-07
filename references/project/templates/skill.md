@@ -74,7 +74,9 @@ description: >
 <Templates/examples/history that are loaded only for the branch that needs them.>
 ````
 
-When the project uses design-authority concepts, identify the governing concept without copying it into the Skill.
+When the project uses `design/`, identify the governing current `design_id`/topic without copying its design semantics into the Skill.
+
+Do not treat `reports/concept/` as runtime authority. Concept notes are historical/exploratory input only.
 
 Optional sections such as trust/lifecycle, runtime, human checkpoints, recovery, or STOP exist only when they change routing/execution.
 
@@ -83,10 +85,12 @@ Optional sections such as trust/lifecycle, runtime, human checkpoints, recovery,
 A design-bearing workflow change follows:
 
 ```text
-accepted concept/design
+reports/concept/ exploration when useful
+→ User + ChatGPT adjudication
+→ current design/
 → workflow/stage SKILL.md + references
 → implementation
 → design-probing tests
 ```
 
-Do not encode a new workflow semantic only in a FORMAL task or implementation patch.
+Do not encode a new workflow semantic only in a concept note, FORMAL task, test fixture, or implementation patch.
