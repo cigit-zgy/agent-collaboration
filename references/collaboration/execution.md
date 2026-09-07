@@ -16,6 +16,10 @@ ChatGPT authors/executes
 → completes
 ```
 
+Repository-only work remains DIRECT when connected ChatGPT capability can perform and verify the required changes itself. Do not delegate to Codex merely because a change spans many repository files, uses a task branch, or benefits from an auditable commit. Typical DIRECT examples include GitHub-side file moves/renames, report or metadata normalization, connected repository cleanup, Markdown/reference repair, and other deterministic repository mutations that require no User-machine filesystem, runtime, environment, browser, external CLI, or local execution evidence.
+
+Codex is justified only by a genuinely local requirement or evidence dependency. A pre-existing FORMAL task does not by itself convert otherwise connected/DIRECT work into LOCAL work; when execution ownership was misclassified, durably amend/supersede the task if needed and let ChatGPT complete the repository-connected portion directly.
+
 If local evidence remains, DIRECT authoring may feed LOCAL-QUICK or FORMAL rather than transferring the whole deliverable.
 
 ### LOCAL-QUICK
