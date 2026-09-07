@@ -36,7 +36,7 @@ Use one primary owner plus at most one explicitly necessary secondary owner.
 | Active concern | Primary owner | Secondary only when needed |
 |---|---|---|
 | roles, authority, refresh, instruction/data trust, unresolved design | `references/collaboration/protocol.md` | none |
-| DIRECT/LOCAL-QUICK/FORMAL route selection, local Git/worktree/tmp/concurrency | `references/collaboration/execution.md` | exact LOCAL-QUICK task template when delegating |
+| DIRECT/LOCAL-QUICK/FORMAL route selection, remote sync, local Git/worktree/tmp/concurrency | `references/collaboration/execution.md` | exact LOCAL-QUICK task template when delegating |
 | FORMAL task/report binding, acceptance, report lookup, integration | `references/collaboration/formal.md` | exact FORMAL task/report template when creating/reviewing |
 | executable implementation quality, ChatGPT-first authoring, engineering discipline | `references/collaboration/implementation.md` | `verification.md` for evidence planning |
 | verification level, evidence categories, ChatGPT-vs-Codex placement | `references/collaboration/verification.md` | none |
@@ -85,6 +85,35 @@ FORMAL
 The committed task is the sole task-specific execution specification. Chat MUST NOT repeat the detailed task as a long prompt.
 
 If the task cannot be committed/pushed, do not fall back to a chat-only long instruction; report the blocker.
+
+### Codex remote synchronization — hard boundary
+
+Every repository-changing Codex task, LOCAL-QUICK or FORMAL, executes against the latest **authorized fetched remote state**, never an assumed local checkout.
+
+Before repository mutation:
+
+```text
+fresh fetch
+→ resolve exact committed task + authorized remote baseline
+→ inspect local branch/HEAD/upstream/worktrees/User state
+→ establish safe task branch/worktree
+→ prove local execution HEAD == authorized fetched remote baseline
+→ mutate only after equality is established
+```
+
+After repository mutation:
+
+```text
+commit task-scoped changes
+→ push owning branch
+→ fresh fetch again
+→ prove local task HEAD == fetched upstream HEAD
+→ only then report PASS/completion
+```
+
+A successful push command alone is insufficient. If final local/upstream equality is not established, PASS is forbidden.
+
+Synchronization does not mean blind `git pull`. Do not use reset, rebase, stash, force checkout, or force push merely to align local state; preserve pre-existing User state and use a safe task branch/worktree.
 
 ### Existing-project migration
 
@@ -169,4 +198,4 @@ If an Agent must read several large files before discovering the correct owner, 
 
 ## Completion
 
-Work is complete when the selected route satisfies its durable design/implementation/execution/evidence requirements, material limitations are disclosed, temporary local state is cleaned or deliberately retained for recovery, and the applicable ChatGPT acceptance/User checkpoint is satisfied.
+Work is complete when the selected route satisfies its durable design/implementation/execution/evidence requirements, material limitations are disclosed, remote synchronization evidence is complete for repository-changing Codex work, temporary local state is cleaned or deliberately retained for recovery, and the applicable ChatGPT acceptance/User checkpoint is satisfied.
