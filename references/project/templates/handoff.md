@@ -2,6 +2,8 @@
 
 Load this template only when ChatGPT is creating a new project conversation handoff. Context recovery does not need this file.
 
+Handoff lifecycle is owned by `../handoff.md`; report filename/common metadata/archive rules are owned by `../reports.md`.
+
 ## Size guidance
 
 The handoff should be information-dense enough to reconstruct the project but much shorter than the source conversation.
@@ -12,23 +14,24 @@ complex project migration 400–600 lines
 major architecture phase  600–800 lines
 ```
 
-The usual target is 300–600 lines. This is guidance, not a parser-enforced line limit.
+The usual target is 300–600 lines. A handoff above roughly 800 lines is a signal to inspect whether concept/task/report text, command logs, or transcript material has been copied unnecessarily.
 
-A handoff above roughly 800 lines is a signal to inspect whether concept/task/report text, command logs, or conversation transcript material has been copied unnecessarily.
-
-Do not shorten so aggressively that accepted rationale, rejected alternatives, unresolved decisions, or next-action state becomes unrecoverable.
-
-## Metadata
+## Required metadata
 
 Use compact YAML front matter:
 
 ```yaml
 ---
 artifact_type: conversation_handoff
-handoff_id: <YYMMDD_handoff_NN>
+artifact_id: <YYMMDD_handoff_NN>
+title: <SHORT_RECOVERY_TITLE>
 date: <YYYY-MM-DD>
 project: <PROJECT_NAME>
 repository: <OWNER/REPOSITORY>
+status: current_snapshot
+summary: >
+  <compact searchable recovery summary>
+handoff_id: <YYMMDD_handoff_NN>
 source_conversation_title: <TITLE_OR_SHORT_IDENTIFIER>
 source_period:
   start: <YYYY-MM-DD_OR_UNKNOWN>
@@ -36,18 +39,20 @@ source_period:
 repository_head: <SHA_AT_HANDOFF_CREATION>
 default_branch: <BRANCH>
 collaboration_authority: cigit-zgy/agent-collaboration@<SHA>
-previous_handoff: <NONE_OR_reports/handoff/...>
+previous_handoff: <NONE_OR_reports/handoff/YYMMDD_handoff_NN.md>
 source_conversation_url: <OPTIONAL_IF_TRUTHFULLY_AVAILABLE>
 ---
 ```
 
-Rules:
+`artifact_id` and `handoff_id` both equal the filename stem. Omit `source_conversation_url` when no stable truthful URL is available. Do not invent conversation IDs or URLs. `repository_head` anchors the repository state understood by the snapshot. `previous_handoff` supports history navigation but does not create a required reading chain.
 
-- omit `source_conversation_url` when no stable truthful URL is available;
-- do not invent conversation IDs or URLs;
-- `repository_head` anchors the repository state understood by the snapshot;
-- `previous_handoff` supports history navigation but does not create a required reading chain;
-- do not add metadata inventories that duplicate the body.
+Handoffs live only at:
+
+```text
+reports/handoff/YYMMDD_handoff_NN.md
+```
+
+Do not create a repository-root `handoff/` or `reports/handoff/README.md`.
 
 ## Default body
 
@@ -55,199 +60,46 @@ Rules:
 # Conversation handoff — <project / phase>
 
 ## 1. Project objective
-
 ## 2. Current system / architecture
-
 ## 3. Authority map
-
 ## 4. Accepted decisions
-
 ## 5. Rejected / superseded directions
-
 ## 6. Current repository state
-
 ## 7. Implementation status
-
 ## 8. Known problems and unresolved decisions
-
 ## 9. Current evidence / important artifacts
-
 ## 10. Next actions
-
 ## 11. Project-specific User constraints
-
 ## 12. Source pointers / raw provenance
 ```
 
 A section may be short or omitted only when it genuinely has no useful content. Do not fill empty sections with `N/A` ceremony.
 
-## Section requirements
+## Section guidance
 
-### 1. Project objective
+The authority map identifies current project `AGENTS.md`, relevant concept artifacts by `concept_id`/path, workflow Skill/reference owners, scientific source/evidence authority, current collaboration authority, and active FORMAL task when any. State explicitly that the handoff is context, not design/task/scientific authority.
 
-Capture the stable project goal, scientific/product/software objective, intended consumers when relevant, and current high-level success condition. Do not copy the full proposal when the concept already owns it.
+Accepted decisions should preserve rationale expensive to reconstruct and point to the owning authority rather than copying concept text. Rejected/superseded directions preserve only materially important alternatives and decisive reasons.
 
-### 2. Current system / architecture
+Current repository state records the default branch/HEAD, important task branches, latest relevant task/report, important changed/new files and known unintegrated work. Prefer immutable links for committed artifacts.
 
-Provide the smallest useful system map. For material stages, summarize only what a new context needs to navigate:
+Implementation status separates design maturity from implementation maturity. Known problems classify at least `BLOCKER`, `OPEN DESIGN`, `IMPLEMENTATION ISSUE`, `EVIDENCE / VERIFICATION GAP`, or `OPTIONAL / FUTURE` when applicable.
 
-```text
-owner
-input
-output
-key trust/interface boundary
-current state
-```
-
-Use Mermaid or tables only when they materially improve recovery.
-
-### 3. Authority map
-
-Mandatory for maintained projects. Identify the current owning sources needed to resume correctly, such as:
-
-```text
-project AGENTS.md
-reports/concept/README.md + governing concept topics
-workflow SKILL.md / owning references
-registered scientific source/evidence authority
-current collaboration authority
-active FORMAL task, if any
-```
-
-State explicitly that the handoff is context, not design/task/scientific authority.
-
-### 4. Accepted decisions
-
-Record decisions expensive to reconstruct or likely to be re-litigated after migration.
-
-Preferred compact shape:
-
-```text
-Decision
-Current conclusion
-Why it was accepted
-Rejected alternative(s), when important
-Owning authority / source pointer
-```
-
-Summarize the design consequence and link to the owner; do not copy the whole concept.
-
-### 5. Rejected / superseded directions
-
-Preserve materially rejected or superseded approaches that a new context might otherwise propose again, including decisive reason.
-
-### 6. Current repository state
-
-Record only resumption-relevant state:
-
-```text
-default branch + HEAD
-important active task branches
-latest accepted task/report relevant to current work
-important changed/new files
-known unintegrated work
-```
-
-Prefer immutable links for committed artifacts. Do not paste complete task/report bodies.
-
-### 7. Implementation status
-
-Separate design maturity from implementation maturity. Use explicit states such as:
-
-```text
-implemented + verified
-implemented + awaiting local verification
-accepted design + not implemented
-in progress
-blocked
-rejected / removed
-```
-
-### 8. Known problems and unresolved decisions
-
-Classify so the next context knows the owner:
-
-```text
-BLOCKER
-OPEN DESIGN — User + ChatGPT decision required
-IMPLEMENTATION ISSUE — design fixed; execution remains
-EVIDENCE / VERIFICATION GAP
-OPTIONAL / FUTURE
-```
-
-Do not resolve an open design question inside the handoff.
-
-### 9. Current evidence / important artifacts
-
-List only materially useful artifacts:
-
-```text
-concept files
-ChatGPT task(s)
-Codex report(s)
-important commit(s)/PR(s)/issue(s)
-scientific paper DOI/source
-external repository + commit/release
-important user-provided source filenames
-```
-
-Prefer stable identifiers/links over copied content.
-
-### 10. Next actions
-
-Give an executable continuation order and distinguish ChatGPT DIRECT work from genuinely local Codex work. Include `Do not start yet` only when it prevents a likely sequencing error.
-
-### 11. Project-specific User constraints
-
-Record only project-relevant constraints that materially change future decisions or execution. Do not copy global collaboration policy already recoverable from current authority.
-
-### 12. Source pointers / raw provenance
-
-Preserve enough raw provenance to trace the summary back to durable material without copying the full conversation:
-
-```text
-source conversation title/time range/URL when available
-repository + branch + handoff HEAD
-collaboration commit
-concept/task/report immutable links
-important PR/issue/commit links
-paper DOI / stable citation
-external repository + revision/release
-important user-provided source filenames
-previous handoff path
-```
-
-A full chat transcript is not required.
+Evidence lists only materially useful concepts/tasks/reports/commits/PRs/issues/scientific sources/external repositories/user-provided source filenames. Next actions give an executable continuation order and distinguish ChatGPT DIRECT work from genuinely local Codex work.
 
 ## Authoring procedure
-
-When producing a handoff, ChatGPT should:
 
 ```text
 1. resolve current project/collaboration authority;
 2. inspect current repository state + relevant concept/task/report artifacts;
-3. summarize the source conversation independently rather than copying long stretches verbatim;
-4. distinguish accepted design, implementation state, evidence, and unresolved decisions;
-5. create the new handoff;
-6. update reports/handoff/README.md current pointer/history;
+3. resolve the newest existing handoff, if any, only for `previous_handoff`/continuity needs;
+4. summarize the source conversation independently rather than copying long stretches verbatim;
+5. distinguish accepted design, implementation state, evidence, and unresolved decisions;
+6. create reports/handoff/YYMMDD_handoff_NN.md with canonical metadata;
 7. commit/push;
 8. give the User the committed path/link and minimal new-conversation start instruction when useful.
 ```
 
 ## Quality check
 
-A fresh Agent should be able to recover:
-
-```text
-project objective
-current architecture/state
-authoritative files
-settled decisions + rationale
-rejected directions
-implemented versus only designed state
-unresolved decisions + owners
-next actions
-underlying evidence pointers
-```
-
-If this requires several older handoffs or reconstruction of the source conversation, the new handoff is insufficient.
+A fresh Agent should be able to recover project objective, current architecture/state, authoritative files, settled decisions/rationale, rejected directions, implemented versus designed state, unresolved decisions/owners, next actions and underlying evidence pointers from the newest handoff plus current authority.
