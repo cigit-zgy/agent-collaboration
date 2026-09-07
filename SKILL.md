@@ -9,188 +9,114 @@ description: >
 
 # Agent Collaboration
 
-Canonical maintained source:
+Canonical source: `cigit-zgy/agent-collaboration`.
+
+This file is the **sole runtime routing index**. Read only the owner(s) selected for the active concern; do not preload the repository.
+
+## Operating model
 
 ```text
-cigit-zgy/agent-collaboration
-```
-
-This file is the **sole runtime routing index** for collaboration policy. Read only the owner(s) selected for the active concern; do not preload the repository.
-
-## Minimal operating model
-
-```text
-User
-= goals + genuine scientific/product/design/tool decisions
-= final decision/override authority
-
-ChatGPT
-= design partner
-= connected DIRECT author/executor
-= primary author of code/tests it can correctly produce
-= primary conversation-handoff author
-= FORMAL task author
-= acceptance reviewer
-
-Codex
-= LOCAL implementation/execution agent
-= environment-bound verification/debugging/bounded repair
-= primary code author only when correctness materially needs a local feedback loop
-= does not self-accept
+User    = goals + genuine scientific/product/design/tool decisions + final override
+ChatGPT = design partner + connected author/executor + FORMAL task author + acceptance reviewer
+Codex   = LOCAL implementation/execution + environment-bound verification/repair; never self-accepts
 ```
 
 At the first substantive write of a new repository-changing ChatGPT work unit, verify current collaboration authority once. FORMAL tasks pin that exact commit. Codex uses the task pin for FORMAL work and refreshes current authority once at the start of a new unpinned local repository task/session.
 
-## Direct routing table
+## Direct routing
 
-Normal route depth is:
+Normal route depth:
 
 ```text
 SKILL.md → owning reference
 ```
 
-Use at most one primary owner plus one explicitly necessary secondary owner. Do not follow mandatory reference chains.
+Use one primary owner plus at most one explicitly necessary secondary owner. Avoid mandatory reference chains.
 
-| Active concern | Primary owner | Also read only when needed |
+| Active concern | Primary owner | Secondary only when needed |
 |---|---|---|
 | roles, authority, refresh, instruction/data trust, unresolved design | `references/collaboration/protocol.md` | none |
-| DIRECT / LOCAL-QUICK / FORMAL route selection, local Git/worktree/tmp/concurrency | `references/collaboration/execution.md` | `formal.md` only when FORMAL lifecycle is needed |
+| DIRECT/LOCAL-QUICK/FORMAL route selection, local Git/worktree/tmp/concurrency | `references/collaboration/execution.md` | `formal.md` for FORMAL lifecycle |
 | FORMAL task/report binding, handoff, acceptance, report lookup, integration | `references/collaboration/formal.md` | exact task/report template being created/reviewed |
-| executable implementation quality, ChatGPT-first authoring, engineering discipline | `references/collaboration/implementation.md` | `verification.md` when evidence planning is also required |
+| executable implementation quality, ChatGPT-first authoring, engineering discipline | `references/collaboration/implementation.md` | `verification.md` for evidence planning |
 | verification level, evidence categories, ChatGPT-vs-Codex placement | `references/collaboration/verification.md` | none |
-| GitHub Actions / CI design, private/public defaults, claim deduplication, budget | `references/collaboration/actions.md` | `verification.md` only when verification level/evidence design is also needed |
+| GitHub Actions/CI design, private/public defaults, claim deduplication, budget | `references/collaboration/actions.md` | `verification.md` for level/evidence design |
 | shared coding-Skill authority/alignment | `references/collaboration/shared-coding-skills.md` | none |
 | author/review `AGENTS.md` | `references/collaboration/agents.md` | relevant project/Skill AGENTS template |
 | project ownership/integration/report-family placement | `references/project/architecture.md` | none |
 | external CLI/API/schema/parser/simulator adapter/profile/reproducibility | `references/project/external-tools.md` | none |
-| project concept authority/freeze/reopen/projection | `references/project/concept.md` | none |
+| project concept authority/freeze/reopen/projection | `references/project/concept.md` | `references/project/templates/concept.md` only when authoring/materially rewriting concept content |
 | new project/core design or major architecture/tool choice | `references/project/prior-art.md` | target project concept authority |
 | conversation migration/recovery semantics | `references/project/handoff.md` | `references/project/templates/handoff.md` only when authoring a new handoff |
-| maintained first-party Skill design, implementation, testing lifecycle | `references/skill/development.md` | target concept/design authority when declared |
-| Skill Markdown/reference writing quality | `references/skill/writing.md` | `development.md` only when behavior/design is changing |
+| maintained first-party Skill design/implementation/testing lifecycle | `references/skill/development.md` | target concept/design authority when declared |
+| Skill Markdown/reference writing quality | `references/skill/writing.md` | `development.md` when behavior/design is changing |
 | Skill maintained source/discovery/distribution | `references/skill/repository.md` | none |
 | Skill package/resources/runtime ownership | `references/skill/package.md` | none |
 
-## High-frequency routes
+## Hard routing rules
 
-### Ordinary implementation
-
-```text
-project AGENTS.md
-→ collaboration/implementation.md
-→ activated coding Skill(s)
-→ verification.md only if evidence planning is needed
-```
-
-Do not load FORMAL, prior-art, handoff, Actions, or history merely because code is being changed.
-
-### Skill design or Skill testing
+### Skill behavior changes
 
 ```text
-target concept/design authority
-→ skill/development.md
-→ target SKILL.md / relevant target reference
+accepted concept/design
+→ target SKILL.md + references
+→ implementation
+→ design-probing tests
 ```
 
-Testing primarily probes general Skill design/contract insufficiency. If tests expose a `DESIGN_GAP`, return to concept/design and Skill Markdown before code repair. Do not optimize production code around one task fixture.
+Use `skill/development.md`. If tests expose `DESIGN_GAP`, return to design/Skill Markdown before code repair. Do not optimize production code around one task fixture.
 
-Load `skill/writing.md` only when editing/reviewing Skill Markdown structure or language.
+### New project / major design
 
-### New project / major new design
+Use `project/prior-art.md` before concept freeze. Substantial custom implementation begins only after the reuse/adapt/custom-gap decision is durable.
 
-```text
-project/prior-art.md
-→ strongest authoritative literature/open-source precedents
-→ target project concept authority
-```
+### FORMAL work
 
-Do not begin substantial custom implementation before the applicable prior-art/reuse decision is durable.
+Use `formal.md`; add `execution.md` only for local Git/worktree mechanics and `verification.md` only for required evidence design. Load the exact task/report template only while creating/reviewing that artifact.
 
-### LOCAL execution
-
-```text
-collaboration/execution.md
-→ project/local runtime
-```
-
-Agent-created persistent local scratch belongs under the target project `tmp/` boundary. Do not create sibling project worktrees for convenience.
-
-### FORMAL delegation
-
-```text
-collaboration/formal.md
-+ collaboration/execution.md when local Git/worktree mechanics matter
-+ verification.md only for the required evidence plan
-+ templates/chatgpt-task.md only while creating/reviewing the task
-```
-
-The committed task is the sole task-specific execution specification. User-visible Codex launch text is emitted in a fenced `text` code block with a Copy control.
-
-### FORMAL completion
-
-```text
-collaboration/formal.md
-+ expected Codex report
-+ templates/codex-report.md only when validating report format
-```
-
-A short User message such as `Codex 已完成` is enough when the active context resolves the latest relevant FORMAL task.
-
-### GitHub Actions review
-
-```text
-collaboration/actions.md
-```
-
-Add `verification.md` only when the task also asks which verification level/evidence categories are needed. Do not duplicate a Codex-proven claim in Actions without a distinct hosted-environment reason.
+The committed task is the sole task-specific execution specification. User-visible Codex launch text is a fenced `text` block with a Copy control.
 
 ### Conversation migration
 
-Authoring:
+Authoring reads `project/handoff.md` + `project/templates/handoff.md`.
 
-```text
-project/handoff.md
-+ project/templates/handoff.md
-```
-
-Recovery:
+Recovery reads:
 
 ```text
 project AGENTS.md
 → reports/handoff/README.md
 → current handoff only
-→ current project/collaboration authority + repository state
+→ current authority + repository state
 ```
 
-Do not preload old handoffs.
+Do not preload older handoffs.
 
-## Cold-path discipline
+## Cold paths
 
-Do not preload these merely because they exist:
+Do not preload:
 
 ```text
-references/**/templates/       unless creating/reviewing that artifact
-reports/concept/               collaboration decision history
-reports/chatgpt/               except the active FORMAL task
-reports/codex/                 except the active expected report
-older reports/handoff/         except explicit historical reconstruction
-README.md                      human orientation, not runtime policy
+references/**/templates/   unless creating/reviewing that artifact
+reports/concept/           collaboration decision history
+reports/chatgpt/           except active FORMAL task
+reports/codex/             except expected active report
+older reports/handoff/     except explicit historical reconstruction
+README.md                  human orientation only
 ```
 
-Historical collaboration concepts are rationale/history; current operational authority lives in `references/` and applicable `AGENTS.md` / `SKILL.md` files.
+## Context target
 
-## Context-efficiency target
-
-The normal collaboration read set is:
+Normal collaboration context is:
 
 ```text
-this thin router
-+ one primary owning reference
+this router
++ one primary owner
 + zero or one necessary secondary owner
++ zero historical preload
 ```
 
 If an Agent must read several large collaboration files before discovering the correct owner, treat that as a routing/design defect.
 
 ## Completion
 
-Collaboration work is complete when the selected route has satisfied its durable design/implementation/execution/evidence requirements, material limitations are disclosed, temporary local state is cleaned or deliberately retained for recovery, and the applicable ChatGPT acceptance/User checkpoint is satisfied.
+Work is complete when the selected route satisfies its durable design/implementation/execution/evidence requirements, material limitations are disclosed, temporary local state is cleaned or deliberately retained for recovery, and the applicable ChatGPT acceptance/User checkpoint is satisfied.
