@@ -1,6 +1,8 @@
-# ChatGPT formal task template
+# ChatGPT FORMAL task template
 
-Use only for the FORMAL route in `../protocol.md`. LOCAL-QUICK does not require a committed task/report.
+Cold path: load this file only when creating or reviewing a FORMAL task artifact.
+
+FORMAL lifecycle/acceptance/integration is owned by `../formal.md`; local Git/worktree/tmp mechanics by `../execution.md`; verification evidence design by `../verification.md`.
 
 Formal tasks live at:
 
@@ -14,16 +16,18 @@ ChatGPT must have:
 
 ```text
 refreshed current collaboration authority for this repository-changing work unit
-→ inspected current project/design authority and repository state
-→ completed DIRECT design / Markdown projection / code / tests it can correctly author
-→ for Skill work, applied references/skill/development.md
+→ inspected current project authority/evidence
+→ completed design-bearing decisions before task issue
+→ for Skill behavior changes: updated governing concept/design + SKILL.md/references first
+→ partitioned ChatGPT-authorable work from genuinely local work
+→ completed DIRECT code/tests/checks it can correctly perform
 → resolved activated shared coding-Skill authorities
-→ identified frozen semantics and genuine remaining LOCAL work
-→ selected task branch + verification level
-→ pinned collaboration and task authority
+→ selected verification level + remaining evidence
+→ selected dedicated task branch unless explicitly excepted
+→ pinned the exact collaboration revision
 ```
 
-Keep one formal task to one reviewable logical responsibility.
+Keep one FORMAL task to one reviewable logical responsibility.
 
 ## Metadata
 
@@ -48,37 +52,36 @@ codex_report: reports/codex/<YYMMDD_codex_NN.md>
 ---
 ```
 
-`baseline_sha` is the task-branch commit after ChatGPT's task-specific DIRECT authoring and before the task artifact.
+`baseline_sha` is the task-branch commit after task-specific ChatGPT DIRECT inputs and before the task artifact. The launch locator separately supplies the commit containing the task.
 
-`codex_report` is the canonical expected report path. Codex MUST use it exactly unless the task is durably superseded/amended.
+`codex_report` is the exact expected report path. Codex MUST publish there on `task_branch`; changing it requires a durable amendment/superseding task.
 
 ## Body
 
-Use the smallest body that makes the LOCAL work deterministic:
-
-```markdown
+````markdown
 # <Task title>
 
 ## Mission
 
 ## Authority and frozen semantics
 
-Project/design authority:
-- <governing concept/design files>
-
-Operational authority:
-- <governing SKILL.md / references when applicable>
+Project authority:
+- <governing project files>
 
 Collaboration authority:
 - cigit-zgy/agent-collaboration@<SHA>:SKILL.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/protocol.md
+- cigit-zgy/agent-collaboration@<SHA>:references/collaboration/execution.md
+- cigit-zgy/agent-collaboration@<SHA>:references/collaboration/formal.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/implementation.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/shared-coding-skills.md
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/verification.md
-- cigit-zgy/agent-collaboration@<SHA>:references/project/architecture.md
+- <ACTIONS OWNER ONLY IF THIS TASK ACTUALLY USES/CHANGES GITHUB ACTIONS>
 - cigit-zgy/agent-collaboration@<SHA>:references/collaboration/templates/codex-report.md
 
-<Frozen scientific/product/design contracts Codex must not reinterpret.>
+<Frozen scientific/product/design/Skill contracts Codex must not reinterpret.>
+
+For Skill behavior changes, also bind exact governing concept/design + committed SKILL.md/reference owners.
 
 ## Shared coding Skills and authoring state
 
@@ -89,24 +92,28 @@ Activated shared Skills:
 - <SKILL_NAME> — <MODE/ACTIVATION>
 
 Additional project/task Skill authorities:
-- <NONE OR OWNER/REPO@COMMIT:PATH — ACTIVATION/MODE>
+- <NONE OR OWNER/REPO@COMMIT:PATH — MODE>
 
 ChatGPT-authored before handoff:
-- <CONCEPT / SKILL MARKDOWN / IMPLEMENTATION / TEST PATHS OR NONE + REASON>
+- <PATHS OR NONE + REASON>
 
 ChatGPT checks already completed:
 - <CHECK + RESULT OR NONE>
 
 Remaining Codex-local work:
-- <LOCAL VERIFICATION, BOUNDED REPAIR, OR LOCAL-FEEDBACK-DEPENDENT IMPLEMENTATION>
+- <LOCAL VERIFICATION / BOUNDED REPAIR / LOCAL-FEEDBACK-DEPENDENT IMPLEMENTATION>
 
 ## LOCAL scope
+
+<What Codex owns and why local/runtime capability is required.>
 
 ## Required changes
 
 ## Non-goals / ownership boundary
 
 ## Engineering constraints
+
+<Only task-specific constraints; do not copy global collaboration manuals.>
 
 ## Acceptance criteria
 
@@ -121,10 +128,10 @@ Remaining Codex-local evidence:
 - <category>: <concrete check>
 
 Shared coding-Skill alignment:
-- verify every activated Skill against the task-pinned profile
+- verify only activated Skills against the task-pinned profile
 
 Temporary-state closure:
-- temporary workspace cleaned, or exact retained recovery state + reason reported
+- clean task-local temporary state, or report exact retained recovery state + reason
 
 ## Git handoff / integration
 
@@ -132,19 +139,20 @@ Task branch: <TASK_BRANCH>
 Target integration branch: <TARGET_BRANCH>
 Post-acceptance integration: AUTO | USER_CHECKPOINT
 Local temporary workspace: <PROJECT_ROOT>/tmp/<TASK_ID>/
+<Any explicitly User-authorized exception.>
 
 ## Codex report
 
 reports/codex/<YYMMDD_codex_NN.md>
-```
+````
 
-List only evidence categories actually needed. Do not create an `N/A` matrix.
+List only verification categories actually required; no mandatory `N/A` matrix.
 
-## Skill-development task — hard requirement
+## Skill behavior tasks — hard requirement
 
-When a FORMAL task touches a maintained first-party Skill, apply `../../skill/development.md`.
+A FORMAL task is an execution specification, not a substitute for the Skill contract.
 
-If the task changes or questions Skill semantics, workflow, routing, state, trust, recovery, completion, or public behavior:
+Before handing Codex a Skill behavior change:
 
 ```text
 User + ChatGPT concept/design adjudication
@@ -155,90 +163,38 @@ User + ChatGPT concept/design adjudication
 → tests probe the general Skill contract
 ```
 
-The task file is an execution specification. It MUST NOT be the sole owner of new Skill semantics.
+Codex MUST NOT create a task-specific production patch merely to satisfy one triggering example when the durable Skill contract is missing/ambiguous.
 
-Codex MUST NOT make a task-specific code patch merely to satisfy the triggering example/test when the durable Skill contract is missing or ambiguous.
-
-If Codex discovers a new design gap:
-
-```text
-stop affected implementation path
-→ classify/report DESIGN_GAP
-→ return to User + ChatGPT
-```
-
-If concept + Skill Markdown already determine the expected behavior without interpretation, a pure `IMPLEMENTATION_DRIFT` repair may proceed without unnecessary concept edits.
-
-Testing of a Skill is aimed at finding design/contract insufficiency and generality failures, not maximizing one task fixture. A task-specific regression test is valid only when it encodes a general accepted invariant.
+If local execution discovers a new design gap, classify/report `DESIGN_GAP` and stop the affected implementation path. Pure `IMPLEMENTATION_DRIFT` may proceed when the durable contract already determines expected behavior without interpretation.
 
 ## ChatGPT-first authoring
 
-ChatGPT completes code/tests it can correctly author from repository content, accepted design, project tooling, and shared coding-Skill authorities before handoff.
+ChatGPT completes code/tests it can correctly author before handoff. Local verification need alone does not transfer all implementation authorship to Codex.
 
-Do not delegate all implementation merely because final verification is local. Codex becomes primary implementation author only when correctness materially requires a local feedback loop unavailable to ChatGPT.
-
-## Shared coding-Skill alignment
-
-At task start, Codex checks only activated Skills:
-
-```text
-exact local revision/path match
-→ use local content
-
-mismatch + readable pinned source
-→ use pinned source as authority
-
-local scripts/assets required
-→ safely align a clean cache to the exact pin when authorized
-
-unresolvable / dirty / conflicting
-→ report or block; never silently substitute another revision
-```
-
-Do not update all installed Skills or adopt upstream latest during a running task.
-
-## Local temporary-state boundary
-
-Unless the User explicitly authorizes another location, Agent-created local scratch state is confined to:
-
-```text
-<PROJECT_ROOT>/tmp/<TASK_ID>/
-```
-
-This includes linked worktrees, test/E2E outputs, downloads, renders, caches, intermediates, and disposable environments.
-
-Do not create sibling project worktrees or Desktop/Documents-root test folders. Clean temporary state with no recovery value at completion. Remove linked worktrees through Git-aware worktree operations.
-
-## Post-acceptance integration
-
-Use `AUTO` for mechanical integration after an accepted ordinary implementation task.
-
-Use `USER_CHECKPOINT` only when integration itself requires a genuine User decision, such as release/publication authorization, destructive migration, unresolved scientific/product choice, repository visibility/licensing, or another declared checkpoint.
-
-## Task specification authority — hard requirement
+## Task-specific authority
 
 The committed task file is the sole task-specific execution specification.
 
-The User-facing handoff has exactly two semantic layers:
+The User-facing response has:
 
 ```text
 1. concise informational synopsis
 2. copyable task locator
 ```
 
-The synopsis MUST NOT introduce task requirements absent from the committed task.
+The synopsis MUST NOT introduce requirements absent from the committed task. If task semantics change, amend/supersede the task before repository-changing execution continues.
 
-If task semantics change, amend/supersede the committed task before repository-changing execution continues.
+A User `STOP`, `PAUSE`, or `CANCEL` may take effect immediately.
 
 ## User-visible synopsis
 
-After the task is committed/pushed, provide approximately 8–12 short lines summarizing only high-level facts such as purpose, what ChatGPT already authored, why LOCAL execution remains, main boundary, verification level, report path, and integration mode.
+After commit/push, provide approximately 8–12 short lines covering only high-level facts such as purpose, ChatGPT-authored state, why LOCAL work remains, main boundary, verification level, report path, and integration mode.
 
-Do not dump command lists, test matrices, retry logic, or acceptance tables into the synopsis.
+Do not dump commands, test matrices, retry logic, or acceptance tables into the synopsis.
 
 ## Copyable Codex launch block — hard UI requirement
 
-After the synopsis, the complete Codex launch prompt MUST be emitted as a Markdown fenced code block whose opening fence is **exactly**:
+After the synopsis, emit the complete launch prompt as a Markdown fenced code block whose opening fence is exactly:
 
 ````text
 ```text
@@ -246,23 +202,9 @@ After the synopsis, the complete Codex launch prompt MUST be emitted as a Markdo
 
 and whose closing fence is exactly three backticks.
 
-This requirement exists so the ChatGPT UI renders a code block with a direct **Copy** control.
+Do not use a blockquote/callout/writing block/list/inline code/ordinary paragraph or another fence language. Do not wrap the fence inside another container.
 
-MUST NOT use any of these for the launch prompt:
-
-```text
-Markdown blockquote lines beginning with >
-callout / quote / citation block
-writing block
-bulleted or numbered list
-inline code
-ordinary paragraph text
-another fence language such as markdown, yaml, bash, shell, or plaintext
-```
-
-Do not wrap the `text` fence inside another quote/callout/container.
-
-The content inside the block is exactly this shape:
+Exact block shape:
 
 ````text
 ```text
@@ -281,16 +223,6 @@ https://github.com/<OWNER>/<REPOSITORY>/blob/<TASK_COMMIT>/reports/chatgpt/<TASK
 ```
 ````
 
-The task link must be an immutable HTTPS link to the exact task-containing commit. If the task was not pushed, show `UNAVAILABLE — <blocker>` and do not claim the handoff is complete.
+The task URL uses the exact handoff commit. If the task was not successfully pushed, show `UNAVAILABLE — <blocker>` and do not represent the handoff as complete.
 
-Do not append task-specific implementation instructions after the fenced block.
-
-A FORMAL handoff is non-conforming when:
-
-- the launch prompt is not in the exact `text` fenced code block;
-- no concise synopsis is provided without a concrete reason;
-- the launch block carries new task semantics not present in the committed task;
-- a material coding Skill is referenced only by local name/path instead of immutable authority;
-- Skill behavior is implemented from task prose while concept/Skill Markdown remains ambiguous;
-- all implementation is delegated solely because final verification is local;
-- local temporary state is deliberately placed outside project `tmp/` without explicit User authorization.
+Do not append task-specific implementation detail after the code block.
