@@ -36,11 +36,13 @@ Do not preload the collaboration reference tree. Resolve the active intent throu
 
 ```text
 design/             current living design, when used
+reports/chatgpt/    durable Codex task specifications: LOCAL-QUICK + FORMAL
+reports/codex/      FORMAL Codex execution reports only
 reports/concept/    chronological design history/input
 <path>              <responsibility>
 ```
 
-List only boundaries that materially affect Agent behavior.
+Every repository task delegated to Codex is first committed under `reports/chatgpt/`. Chat carries only the short immutable task locator; detailed task instructions do not live in the conversation.
 
 `tmp/` is the project-local Agent ephemeral boundary; detailed local execution/Git/worktree semantics come from the collaboration `execution.md` owner selected through `SKILL.md`.
 
@@ -75,15 +77,7 @@ current design topic
 
 For a new project/core subsystem or major algorithm/architecture/tool choice, use the current collaboration prior-art route before accepting the change into `design/`.
 
-For an evolving external CLI/API/schema/parser/simulator concern, use the collaboration external-tool route directly; do not copy adapter policy here.
-
-When `reports/handoff/` exists, context recovery is:
-
-```text
-AGENTS.md
-→ newest valid reports/handoff/YYMMDD_handoff_NN.md
-→ re-resolve current authority/state
-```
+When `reports/handoff/` exists, context recovery reads only the newest valid handoff, then re-resolves current authority/state.
 
 ## Runtime and tooling
 
@@ -92,7 +86,7 @@ AGENTS.md
 Project-specific shared coding-Skill additions:
 `<NONE OR PROJECT-OWNED IMMUTABLE COORDINATES>`
 
-Global implementation, verification, Actions, Git/local execution, FORMAL delegation, prior-art, living-design, external-tool, report, and handoff policy is discovered through the current/pinned collaboration `SKILL.md` direct routing table.
+Global implementation, verification, Actions, Git/local execution, Codex delegation, prior-art, living-design, external-tool, report, and handoff policy is discovered through the current/pinned collaboration `SKILL.md`.
 
 ## Human / trust checkpoints
 
@@ -101,6 +95,8 @@ Global implementation, verification, Actions, Git/local execution, FORMAL delega
 ## Hard invariants
 
 - `design/` contains one current accepted design set only; no old/draft/versioned alternatives.
+- Every Codex repository task is specified durably under `reports/chatgpt/`; no long chat-only task body.
+- LOCAL-QUICK creates no `reports/codex/` report; FORMAL does.
 - <Short project-wide boundary.>
 ````
 
