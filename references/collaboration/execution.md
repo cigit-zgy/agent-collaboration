@@ -16,35 +16,72 @@ ChatGPT authors/executes
 → completes
 ```
 
-Repository-only work remains DIRECT when connected ChatGPT capability can perform and verify the required changes itself. Do not delegate to Codex merely because a change spans many repository files, uses a task branch, or benefits from an auditable commit. Typical DIRECT examples include GitHub-side file moves/renames, report or metadata normalization, connected repository cleanup, Markdown/reference repair, and other deterministic repository mutations that require no User-machine filesystem, runtime, environment, browser, external CLI, or local execution evidence.
+Repository-only work remains DIRECT when connected ChatGPT capability can perform and verify the required changes itself. Do not delegate to Codex merely because a change spans many repository files, uses a task branch, or benefits from an auditable commit.
 
-Codex is justified only by a genuinely local requirement or evidence dependency. A pre-existing FORMAL task does not by itself convert otherwise connected/DIRECT work into LOCAL work; when execution ownership was misclassified, durably amend/supersede the task if needed and let ChatGPT complete the repository-connected portion directly.
+Codex is justified only by a genuinely local requirement or evidence dependency. If local evidence remains, DIRECT authoring may feed LOCAL-QUICK or FORMAL rather than transferring the whole deliverable.
 
-If local evidence remains, DIRECT authoring may feed LOCAL-QUICK or FORMAL rather than transferring the whole deliverable.
+## Durable Codex-task specification — hard boundary
+
+Every repository task delegated to Codex, whether `LOCAL-QUICK` or `FORMAL`, MUST first be written, committed, and pushed as:
+
+```text
+reports/chatgpt/YYMMDD_chatgpt_NN.md
+```
+
+The committed task artifact is the sole task-specific execution specification.
+
+Chat MUST NOT carry the detailed task body. Do not paste or paraphrase command sequences, path inventories, prohibitions, acceptance criteria, verification matrices, branch rules, or long safety instructions into the User-visible Codex prompt.
+
+User-visible delegation contains only a very short locator to the committed task. Exact LOCAL-QUICK and FORMAL locator formats live in their templates.
+
+If ChatGPT cannot commit/push the task artifact, do not substitute a long chat-only prompt; report the repository-write blocker.
 
 ### LOCAL-QUICK
 
-Use for small, low-risk, reviewable local implementation, verification, or bounded repair when there is no unresolved scientific/product/design decision, destructive/shared-state migration, material security/credential change, public/trust contract, or need for a durable task/report audit chain.
+Use for bounded, low-risk, reviewable local implementation, verification, filesystem work, or repair when there is no unresolved scientific/product/design decision, material destructive/shared-state migration, security/credential change, public/trust contract, release qualification, or other FORMAL trigger.
+
+LOCAL-QUICK still uses a durable `reports/chatgpt/` task artifact, but it does **not** create a `reports/codex/` report.
 
 ```text
-concise Codex instruction
-→ verify activated shared Skills
+committed LOCAL-QUICK task
+→ short copyable locator
+→ verify activated shared Skills when applicable
 → establish project-local temporary workspace if needed
 → implement/verify/repair
 → focused evidence
 → clean temporary state with no recovery value
-→ task-scoped commit/push when repository state changed
-→ concise result
-→ ChatGPT acceptance review
+→ task-scoped commit/push when required
+→ return only the task's compact Result contract
+→ ChatGPT acceptance review when needed
 ```
 
-Escalate if execution exposes design ambiguity, material risk, or scope growth.
+The LOCAL-QUICK task template is:
+
+```text
+templates/local-quick-task.md
+```
+
+If execution exposes unresolved design, material scope/risk growth, destructive/shared-state behavior, release/public-contract work, or another FORMAL boundary:
+
+```text
+STOP affected execution
+→ return BLOCKED with the escalation reason
+→ do not extend the task through chat instructions
+→ ChatGPT issues a new FORMAL task if continuation is approved
+```
 
 ### FORMAL
 
-Use for major architecture/cross-module work, scientific/product/trust/public-contract migration, persistent/destructive shared state, long multi-step local work, high security/data-loss/reproducibility risk, release qualification, or work needing durable audit evidence.
+Use for major architecture/cross-module work, scientific/product/trust/public-contract migration, persistent/destructive shared state, long multi-step local work, high security/data-loss/reproducibility risk, release qualification, or work needing durable execution evidence.
 
-FORMAL uses a committed task/report lifecycle owned by `formal.md`. Route directly to that owner from `SKILL.md` when FORMAL semantics are needed.
+FORMAL uses both:
+
+```text
+reports/chatgpt/YYMMDD_chatgpt_NN.md
+reports/codex/YYMMDD_codex_NN.md
+```
+
+FORMAL lifecycle is owned by `formal.md`.
 
 ## Authoring versus execution
 
@@ -65,40 +102,28 @@ Detailed implementation quality belongs to `implementation.md`; verification lev
 
 ## Local ephemeral state — hard boundary
 
-All Agent-created persistent local scratch state on the User machine belongs under the target project's root:
+All Agent-created persistent local scratch state on the User machine belongs under:
 
 ```text
 <PROJECT_ROOT>/tmp/<WORK_ID>/
 ```
 
-`WORK_ID` is:
-
-```text
-FORMAL      → exact task_id
-LOCAL-QUICK → short local work/session label unique enough within the project
-```
-
-This boundary covers Agent-chosen linked worktrees, scratch repositories, temporary downloads, test/E2E outputs, render outputs, caches, intermediates, and disposable environments.
+`WORK_ID` is the task's durable `task_id` when one exists; otherwise use a short project-local work label. This boundary covers linked worktrees, scratch repositories, temporary downloads, test/E2E outputs, renders, caches, intermediates, and disposable environments.
 
 Agents MUST NOT create persistent sibling project worktrees, Desktop test folders, Documents-root scratch directories, or ad-hoc persistent `/tmp/<project>-...` workspaces merely for convenience unless the User explicitly authorizes that exact location.
 
-Typical task-local layout is created only as needed:
+Create only needed subdirectories, for example:
 
 ```text
-<PROJECT_ROOT>/tmp/<WORK_ID>/
-├── worktree/
-├── run/
-├── downloads/
-├── cache/
-├── renders/
-└── env/
+worktree/
+run/
+downloads/
+cache/
+renders/
+env/
 ```
 
-Do not create unused ceremonial subdirectories.
-
-System/runtime caches whose path is controlled by the OS or an external tool and cannot reasonably be redirected are outside this Agent-chosen boundary; do not deliberately select them as project scratch space.
-
-A maintained repository should normally ignore its root `tmp/` path. Task scratch state is not committed.
+Task scratch state is not committed.
 
 ## Cleanup lifecycle
 
@@ -118,19 +143,15 @@ active/dirty/unpushed/uncertain
 
 Age alone never authorizes deletion.
 
-At the start of a new local task, Codex may inspect only the active project's `tmp/` for clearly stale completed Agent state. Do not scan unrelated projects merely as ceremony. A User-explicit housekeeping task may authorize broader cleanup.
-
 ## Linked worktrees
 
-For FORMAL work that needs a linked worktree, default to:
+When a delegated task needs a linked worktree, prefer:
 
 ```text
 <PROJECT_ROOT>/tmp/<TASK_ID>/worktree/
 ```
 
 Registered worktrees are removed through Git-aware operations such as `git worktree remove`, followed by `git worktree prune` when appropriate. Do not blindly `rm -rf` a registered worktree.
-
-If the primary checkout cannot safely host the default path because of a real Git/worktree limitation, use the nearest project-owned `tmp/` boundary that preserves one canonical project root and report the exception. Do not default to a sibling directory.
 
 ## Git safety
 
@@ -148,8 +169,6 @@ fetch
 
 Do not infer permission for destructive reset, force-push, hidden automatic stash, or non-trivial conflict reconciliation.
 
-A merge/rebase/cherry-pick that changes task ancestry is an explicit reconciliation decision, not implicit execution permission.
-
 ## Ownership boundary
 
 If the in-scope owner is correct while an out-of-scope downstream consumer remains stale:
@@ -163,10 +182,6 @@ make current owner conform
 
 Do not restore rejected upstream interfaces merely to make unrelated downstream tests green.
 
-Component/stage acceptance is not the same as default-branch/full-system acceptance.
-
 ## Concurrency
 
-Independent work may run concurrently only when branches/worktrees and other mutable resources do not interfere.
-
-A FORMAL task branch has one active execution owner. The default branch is not frozen merely because an isolated task branch exists. If non-interference cannot be established, serialize the work.
+Independent work may run concurrently only when branches/worktrees and other mutable resources do not interfere. A delegated task branch has one active execution owner. If non-interference cannot be established, serialize the work.
