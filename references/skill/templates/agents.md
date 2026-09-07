@@ -14,15 +14,36 @@ This repository is the maintained first-party source for the `<SKILL_NAME>` Skil
 ## Authority
 
 ```text
-<governing reports/concept/... or other accepted design authority>  Skill design semantics
-SKILL.md                                                        Agent-facing capability/workflow entry
-references/                                                     Skill-specific operational contracts
-scripts/code/schema                                             implementation
- tests/evaluation                                               conformance + design-probing evidence
-reports/                                                        collaboration/history assets when this repository owns them
+<governing concept/design authority>  accepted Skill semantics, when declared
+SKILL.md                              Agent-facing trigger/workflow/router
+references/                           bounded specialized Skill contracts
+scripts/code/schema                   implementation
+Tests/evaluation                      design/conformance evidence
 ```
 
-User + ChatGPT maintain Skill design. ChatGPT performs connected DIRECT design/Markdown/code work and acceptance review; the User retains final decision/override authority and designated human checkpoints. Codex executes approved LOCAL implementation/execution and does not invent unresolved Skill semantics. Zero-human-coding is permitted.
+User + ChatGPT maintain Skill design. The User retains final decision/override authority and designated human checkpoints. ChatGPT performs connected DIRECT design/Markdown/code/test authoring and acceptance review. Codex executes approved LOCAL implementation/verification/repair and does not self-accept.
+
+## Collaboration entry
+
+Global collaboration authority:
+`cigit-zgy/agent-collaboration@<COLLABORATION_REVISION>`
+
+Runtime collaboration entry:
+`SKILL.md`
+
+Do not preload the collaboration repository. Resolve the maintenance concern through its direct routing table.
+
+Skill behavior/design/testing lifecycle:
+`references/skill/development.md`
+
+Skill Markdown/reference writing:
+`references/skill/writing.md`
+
+Maintained source/discovery/distribution:
+`references/skill/repository.md`
+
+Package/resources/runtime ownership:
+`references/skill/package.md`
 
 ## Repository ownership
 
@@ -38,48 +59,26 @@ README.md       <if present>
 
 List only real paths.
 
-## Skill development lifecycle — hard boundary
+## Development workflow
 
-Use `agent-collaboration/references/skill/development.md` as the owner of the Skill development lifecycle.
-
-For a design-bearing change:
+Design-bearing changes:
 
 ```text
-governing concept/design
-→ SKILL.md + references/
+accepted concept/design
+→ SKILL.md + owning references
 → implementation
-→ tests/evaluation
+→ design-probing tests
 ```
 
-When a failing task/test exposes a design gap, update/adjudicate the governing concept first, then update Skill Markdown, then code. Do not patch production code merely to make the current task/example pass while the durable contract remains ambiguous.
+If tests expose a capability/workflow/routing/trust/recovery/completion design gap, return to concept/design and Skill Markdown before implementation repair.
 
-Pure implementation drift may be repaired directly only when concept + Skill Markdown already determine the expected behavior without interpretation.
+Pure implementation drift may be repaired directly only when the durable concept/Skill contract already determines expected behavior without interpretation.
 
-Testing primarily challenges whether the Skill design is sufficient, coherent, general, and implementable. Tests are not optimized around one task fixture. Classify failures as `DESIGN_GAP | PROJECTION_DRIFT | IMPLEMENTATION_DRIFT | TEST_DEFECT | ENVIRONMENT/TOOL_DEFECT` before changing code.
+## Progressive disclosure
 
-## Source / discovery / distribution
+The maintained Skill should route directly from `SKILL.md` to the relevant specialized owner. Avoid mandatory second indexes and reference chains.
 
-Use `agent-collaboration/references/skill/repository.md` as the owner of maintained-source location, Codex discovery exposure, and external distribution policy. State repository-local exceptions here only when this Skill genuinely differs from that policy.
-
-## Workflow
-
-Use `SKILL.md` for capability operation.
-
-When maintaining the Skill itself, use:
-
-```text
-agent-collaboration/references/skill/development.md
-→ concept-first development lifecycle
-
-agent-collaboration/references/skill/writing.md
-→ SKILL.md/reference writing quality
-
-agent-collaboration/references/collaboration/implementation.md
-→ AI-assisted code quality and engineering discipline
-
-agent-collaboration/references/collaboration/verification.md
-→ verification level/evidence/placement
-```
+Templates/examples/history remain cold unless the active branch needs them.
 
 ## Runtime and verification
 
@@ -87,11 +86,10 @@ agent-collaboration/references/collaboration/verification.md
 
 ## Hard invariants
 
-- New/changed Skill semantics live in the governing concept/design and operational Skill Markdown before implementation.
-- FORMAL task prose is not the sole owner of Skill behavior.
-- Codex does not introduce task-specific semantic branches absent from the Skill contract.
-- Tests probe the general design and its boundaries; a green triggering fixture is insufficient evidence by itself.
-- <Other real source/discovery/ownership boundaries specific to this repository.>
+- Skill semantics are not invented only in code/tests/task prose.
+- `SKILL.md` is the capability runtime entry/router.
+- References have bounded owners and are loaded on demand.
+- <Additional repository-specific source/discovery/ownership boundaries.>
 ````
 
 Embedded sub-Skills normally inherit the nearest project `AGENTS.md`; a separate local file is justified only by real subtree-specific maintenance rules.
