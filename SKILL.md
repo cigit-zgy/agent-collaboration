@@ -4,7 +4,7 @@ description: >
   Coordinate User, ChatGPT, and Codex for repository work involving project or Skill design,
   prior-art research, direct authoring, local execution, verification, GitHub Actions, FORMAL
   delegation/acceptance, shared coding-Skill alignment, project integration, conversation
-  handoff/context recovery, or Skill maintenance.
+  handoff/context recovery, report/archive governance, or Skill maintenance.
 ---
 
 # Agent Collaboration
@@ -43,7 +43,8 @@ Use one primary owner plus at most one explicitly necessary secondary owner. Avo
 | GitHub Actions/CI design, private/public defaults, claim deduplication, budget | `references/collaboration/actions.md` | `verification.md` for level/evidence design |
 | shared coding-Skill authority/alignment | `references/collaboration/shared-coding-skills.md` | none |
 | author/review `AGENTS.md` | `references/collaboration/agents.md` | relevant project/Skill AGENTS template |
-| project ownership/integration/report-family placement | `references/project/architecture.md` | none |
+| project ownership/integration architecture | `references/project/architecture.md` | none |
+| reports layout, naming/metadata, archive placement, report cleanup | `references/project/reports.md` | family-specific owner/template only when needed |
 | external CLI/API/schema/parser/simulator adapter/profile/reproducibility | `references/project/external-tools.md` | none |
 | project concept authority/freeze/reopen/projection | `references/project/concept.md` | `references/project/templates/concept.md` only when authoring/materially rewriting concept content |
 | new project/core design or major architecture/tool choice | `references/project/prior-art.md` | target project concept authority |
@@ -70,6 +71,10 @@ Use `skill/development.md`. If tests expose `DESIGN_GAP`, return to design/Skill
 
 Use `project/prior-art.md` before concept freeze. Substantial custom implementation begins only after the reuse/adapt/custom-gap decision is durable.
 
+### Reports / archive
+
+Use `project/reports.md`. If `reports/` exists, its active surface is limited to `chatgpt/`, `codex/`, `concept/`, and `handoff/`; every report Markdown file follows the canonical dated family filename and required YAML metadata. Historical retention uses the single repository-root `00_archive/`, never `archive/` or nested `00_archive/`.
+
 ### FORMAL work
 
 Use `formal.md`; add `execution.md` only for local Git/worktree mechanics and `verification.md` only for required evidence design. Load the exact task/report template only while creating/reviewing that artifact.
@@ -84,8 +89,7 @@ Recovery reads:
 
 ```text
 project AGENTS.md
-→ reports/handoff/README.md
-→ current handoff only
+→ newest valid reports/handoff/YYMMDD_handoff_NN.md
 → current authority + repository state
 ```
 
@@ -97,11 +101,12 @@ Do not preload:
 
 ```text
 references/**/templates/   unless creating/reviewing that artifact
-reports/concept/           collaboration decision history
+reports/concept/           except active design/conformance concern
 reports/chatgpt/           except active FORMAL task
 reports/codex/             except expected active report
 older reports/handoff/     except explicit historical reconstruction
-README.md                  human orientation only
+00_archive/                historical only
+README.md                   human orientation only
 ```
 
 ## Context target
