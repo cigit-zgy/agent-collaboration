@@ -2,19 +2,21 @@
 
 Load this template only when ChatGPT is creating a new project conversation handoff. Context recovery does not need this file.
 
-Handoff lifecycle is owned by `../handoff.md`; report filename/common metadata/archive rules are owned by `../reports.md`.
+Handoff lifecycle is owned by `../handoff.md`; project-policy migration is owned by `../migration.md`; report filename/common metadata/archive rules are owned by `../reports.md`.
 
 ## Size guidance
 
-The handoff should be information-dense enough to reconstruct the project but much shorter than the source conversation.
+The handoff is a pointer-first continuity artifact. Repository-native current state should remain the main source of truth.
 
 ```text
-simple migration          250–400 lines
-complex project migration 400–600 lines
-major architecture phase  600–800 lines
+simple conversation handoff   100–180 lines
+complex active project        180–300 lines
+major unresolved design phase 300–400 lines
 ```
 
-The usual target is 300–600 lines. A handoff above roughly 800 lines is a signal to inspect whether concept/task/report text, command logs, or transcript material has been copied unnecessarily.
+The normal target is **120–250 lines**. A handoff above roughly 400 lines is a signal to inspect whether current design, concept history, task/report text, logs, or transcript material has been duplicated instead of referenced.
+
+Do not create a long handoff merely to migrate a project to a new collaboration policy. Use `migration.md` and `templates/migration-bootstrap.md` for that purpose.
 
 ## Required metadata
 
@@ -44,7 +46,7 @@ source_conversation_url: <OPTIONAL_IF_TRUTHFULLY_AVAILABLE>
 ---
 ```
 
-`artifact_id` and `handoff_id` both equal the filename stem. Omit `source_conversation_url` when no stable truthful URL is available. Do not invent conversation IDs or URLs. `repository_head` anchors the repository state understood by the snapshot. `previous_handoff` supports history navigation but does not create a required reading chain.
+`artifact_id` and `handoff_id` both equal the filename stem. Omit `source_conversation_url` when no stable truthful URL is available. Do not invent conversation IDs or URLs.
 
 Handoffs live only at:
 
@@ -56,50 +58,53 @@ Do not create a repository-root `handoff/` or `reports/handoff/README.md`.
 
 ## Default body
 
+Use only sections carrying continuity that is not already cheap to recover from current repository-native owners:
+
 ```markdown
 # Conversation handoff — <project / phase>
 
-## 1. Project objective
-## 2. Current system / architecture
-## 3. Authority map
-## 4. Accepted decisions
-## 5. Rejected / superseded directions
-## 6. Current repository state
-## 7. Implementation status
-## 8. Known problems and unresolved decisions
-## 9. Current evidence / important artifacts
-## 10. Next actions
-## 11. Project-specific User constraints
-## 12. Source pointers / raw provenance
+## 1. Project objective / current work edge
+## 2. Current authority pointers
+## 3. Current repository and active task state
+## 4. Settled decisions / rejected directions that remain expensive to reconstruct
+## 5. Unresolved decisions / blockers
+## 6. Next actions
+## 7. Source pointers / raw provenance
 ```
 
-A section may be short or omitted only when it genuinely has no useful content. Do not fill empty sections with `N/A` ceremony.
+A section may be omitted when it has no useful content. Do not fill empty sections with `N/A` ceremony.
 
 ## Section guidance
 
-The authority map identifies current project `AGENTS.md`, relevant concept artifacts by `concept_id`/path, workflow Skill/reference owners, scientific source/evidence authority, current collaboration authority, and active FORMAL task when any. State explicitly that the handoff is context, not design/task/scientific authority.
+Current authority pointers should normally identify:
 
-Accepted decisions should preserve rationale expensive to reconstruct and point to the owning authority rather than copying concept text. Rejected/superseded directions preserve only materially important alternatives and decisive reasons.
+```text
+project AGENTS.md
+current design/README.md + directly relevant design topic(s)
+workflow Skill/reference owners
+scientific source/evidence authority
+active FORMAL task when any
+```
 
-Current repository state records the default branch/HEAD, important task branches, latest relevant task/report, important changed/new files and known unintegrated work. Prefer immutable links for committed artifacts.
+`reports/concept/` is design history, not current design authority. Include concept-note pointers only when a specific rationale remains relevant.
 
-Implementation status separates design maturity from implementation maturity. Known problems classify at least `BLOCKER`, `OPEN DESIGN`, `IMPLEMENTATION ISSUE`, `EVIDENCE / VERIFICATION GAP`, or `OPTIONAL / FUTURE` when applicable.
+Do not copy current design text into the handoff. Do not reproduce a Codex report body; link it and summarize only the active consequence.
 
-Evidence lists only materially useful concepts/tasks/reports/commits/PRs/issues/scientific sources/external repositories/user-provided source filenames. Next actions give an executable continuation order and distinguish ChatGPT DIRECT work from genuinely local Codex work.
+The current work edge should make clear what is actually unresolved now, not narrate every completed task.
 
 ## Authoring procedure
 
 ```text
 1. resolve current project/collaboration authority;
-2. inspect current repository state + relevant concept/task/report artifacts;
-3. resolve the newest existing handoff, if any, only for `previous_handoff`/continuity needs;
-4. summarize the source conversation independently rather than copying long stretches verbatim;
-5. distinguish accepted design, implementation state, evidence, and unresolved decisions;
-6. create reports/handoff/YYMMDD_handoff_NN.md with canonical metadata;
+2. make material accepted session-only state durable in repository-native owners when possible;
+3. inspect current repository state + directly relevant active task/report/design artifacts;
+4. resolve the newest existing handoff only for previous_handoff/continuity needs;
+5. summarize only non-redundant continuity from the source conversation;
+6. create reports/handoff/YYMMDD_handoff_NN.md;
 7. commit/push;
-8. give the User the committed path/link and minimal new-conversation start instruction when useful.
+8. give the User the committed path/link and a minimal new-conversation start instruction when useful.
 ```
 
 ## Quality check
 
-A fresh Agent should be able to recover project objective, current architecture/state, authoritative files, settled decisions/rationale, rejected directions, implemented versus designed state, unresolved decisions/owners, next actions and underlying evidence pointers from the newest handoff plus current authority.
+A fresh Agent should be able to resume the current work edge from this handoff plus current repository-native authority without reading several older handoffs or reconstructing the prior conversation.
