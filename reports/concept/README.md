@@ -15,5 +15,7 @@
 | 08 | `08_external_prior_art_and_reuse_gate.md` | Mandatory external prior-art search and reuse/adapt/custom-gap decisions before substantial new design | active history | `references/project/prior-art.md`, `references/project/concept.md`, `references/project/architecture.md`, `references/collaboration/implementation.md` |
 | 09 | `09_conversation_handoff_and_context_recovery.md` | Project conversation migration, high-information handoff snapshots, current-handoff index, and fast context recovery | active history | `references/project/handoff.md`, `references/project/architecture.md`, `references/project/concept.md`, project AGENTS template |
 | 10 | `10_github_actions_budget_and_verification_placement.md` | GitHub Actions claim deduplication, private/public repository defaults, and budget-aware verification placement | active history | `references/collaboration/verification.md`, `references/collaboration/implementation.md` |
+| 11 | `11_copyable_codex_launch_prompt.md` | User-facing FORMAL Codex launch prompt must be a directly copyable fenced `text` block | active history | `references/collaboration/templates/chatgpt-task.md` |
+| 12 | `12_skill_concept_first_development.md` | Concept-first Skill design/projection/implementation lifecycle and design-probing tests | active history | `references/skill/development.md`, Skill/project templates |
 
 Historical concept files are not rewritten merely because current policy evolves. If a historical concept and current operational authority differ, follow the current operational authority.
