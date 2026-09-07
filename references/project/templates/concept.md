@@ -1,101 +1,98 @@
-# Project concept authoring template
+# Project concept-journal authoring template
 
-Cold path: load this file only when creating or materially rewriting a project's canonical concept topic.
+Cold path: load this file only when creating or materially editing a chronological concept note under `reports/concept/`.
 
-Concept authority/freeze/reopen/adjudication semantics are owned by `../concept.md`; report filenames and common metadata by `../reports.md`.
-
-## Writing objective
-
-A concept topic should let an unfamiliar reader recover the accepted design without reconstructing prior discussion or reading current implementation.
-
-Make these recoverable when applicable:
-
-1. why the design object/stage/concern exists;
-2. responsibility and boundary;
-3. required inputs/upstream state;
-4. state/object/interface/architecture established;
-5. lifecycle/state transitions when design-relevant;
-6. ownership and downstream consumers;
-7. validity/completion condition;
-8. interface/handoff to adjacent concerns;
-9. for prior-art-gated design, external precedent and reuse/custom-gap decision.
-
-These are information requirements, not mandatory headings.
-
-## Declarative design
-
-Write accepted system state and semantics declaratively. Detailed Agent instructions belong to `SKILL.md`; operational contracts belong to references; implementation mechanics belong to code/schema; observed evidence belongs to tests/reports/runtime artifacts.
-
-## One topic, one design owner
-
-Each concept topic owns one coherent design concern. Cross-topic relationships may be stated at interfaces, but the same design rule should not be independently redefined in several concept files.
-
-Concept discovery uses canonical filename chronology plus YAML `concept_id`, title, status and summary. Do not create `README.md` or semantic-filename exceptions under `reports/concept/`.
-
-## Current solution only
-
-A canonical concept contains the current accepted solution. It is not a chat chronology, implementation journal, Codex task/report, test-result store, transient filesystem state, backlog of unaccepted alternatives, or a container for model-specific scientific facts copied from sources.
-
-Historical evolution is preserved by Git history and formal collaboration artifacts; displaced legacy files follow the root `00_archive/` policy in `../reports.md`.
-
-## Design-level specificity
-
-Include enough detail to constrain downstream projections and make conformance auditable. Avoid implementation detail without design consequence.
-
-```text
-Design consequence     → concept
-Agent execution detail → SKILL/reference
-Code mechanism         → implementation
-Observed evidence      → test/report/runtime artifact
-```
-
-## Prior-art basis
-
-For gate-triggered design, include a compact basis containing search scope, strongest relevant precedents, source/repository coordinates, `REUSE | ADAPT | REFERENCE_ONLY | REJECT` disposition, design consequence, and remaining project-specific gap. Do not turn the concept into a literature review.
-
-## Recommended shape
-
-Use the smallest structure that communicates the accepted design. A common stage-oriented shape is:
-
-```markdown
-# <Design topic>
+Concept-journal semantics are owned by `../concept.md`; current accepted design is owned by `../design.md`; report filenames/common metadata are owned by `../reports.md`.
 
 ## Purpose
-## Boundary
-## Inputs / upstream state
-## Prior-art basis
-## Accepted design
-## Lifecycle / transitions
-## Ownership and interfaces
-## Design acceptance
-```
 
-Headings are optional; structure follows the concern.
+A concept note preserves a meaningful piece of design thinking so future work can recover what was considered without contaminating the current living design.
+
+It may contain incomplete ideas, competing alternatives, unresolved questions, design attacks, prior-art findings, or adjudication results.
+
+It is not design authority.
 
 ## Required metadata
-
-Every concept file begins with:
 
 ```yaml
 ---
 artifact_type: project_concept
 artifact_id: <YYMMDD_concept_NN>
-title: <TITLE>
+title: <short title>
 date: <YYYY-MM-DD>
 project: <PROJECT_NAME>
 repository: <OWNER/REPOSITORY>
-status: <active | frozen | designing | superseded>
+status: <open | incorporated | rejected | superseded | recorded>
 summary: >
   <compact searchable summary>
-concept_id: <STABLE_SEMANTIC_CONCERN_ID>
-role: design_authority
-operational_projection:
-  - <path>
+design_topics:
+  - <design_id>   # optional
 ---
 ```
 
-`artifact_id` equals the filename stem. `concept_id` is the stable semantic identity and may remain unchanged across later revisions. Additional topic-specific metadata is allowed when it carries real navigation/authority value, but metadata must not duplicate the body.
+`artifact_id` equals the filename stem.
 
-## Authoring quality check
+Do not add `role: design_authority`, version numbers, or implementation projections to concept notes.
 
-A concept is well written when accepted design is recoverable without chat reconstruction, one topic has one owner, current solution is separated from history/backlog, scientific facts remain source-grounded, and projection can be written without inventing missing semantics.
+## Flexible body shape
+
+Use only the sections useful for the actual idea. A common shape is:
+
+```markdown
+# <Concept title>
+
+## Context / problem
+
+## Current observation
+
+## Candidate ideas
+
+## Evidence / prior art
+
+## Attack / counterexamples
+
+## Adjudication
+
+## Design consequence
+
+## Open questions
+```
+
+Not every note needs every section.
+
+## Content rules
+
+Good concept-journal material includes:
+
+```text
+why a current design became questionable
+candidate alternatives and trade-offs
+important User constraints or preferences for the decision
+external precedent and source pointers
+counterexamples that exposed a design gap
+what was accepted/rejected/unresolved
+which current design topic(s) may need change
+```
+
+Do not rewrite the note into a polished description of the final system after the fact. The accepted current result belongs in `design/`.
+
+## Design consequence
+
+When adjudication is sufficiently clear, end with a compact consequence such as:
+
+```text
+NO_CHANGE
+UPDATE design_id=<...>
+NEW_TOPIC <proposed design_id>
+SPLIT <design_id>
+MERGE <design_id...>
+REMOVE <design_id>
+REORDER
+OPEN — further adjudication required
+```
+
+This notation is navigational only. `design.md` owns the actual living-design transformation rules.
+
+## Quality check
+
+A concept note is useful when an unfamiliar future reader can understand the design question, material evidence/alternatives, and disposition without mistaking the note for current authority.
