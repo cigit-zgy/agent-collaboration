@@ -37,25 +37,48 @@ default branch
 → ChatGPT DIRECT design/code/test inputs
 → FORMAL task commit
 → short Codex locator
+→ fresh-fetch + exact authorized-baseline synchronization
 → remaining local implementation/verification + report
 → push task branch
+→ fresh-fetch + exact local/upstream equality verification
 → ChatGPT acceptance review
 → integration when permitted
 ```
 
-Detailed local worktree/tmp/Git safety belongs to `execution.md`.
+Detailed local worktree/tmp/Git safety and the mandatory two-sided synchronization handshake belong to `execution.md`.
 
 ## Handoff coordinates
 
 ```text
 baseline_sha
-= task-branch commit after ChatGPT DIRECT inputs and before the task artifact
+= exact authorized task-branch repository baseline after ChatGPT DIRECT inputs and before the task artifact
 
 task/handoff commit
 = commit containing the FORMAL task; supplied in the locator
 ```
 
-Before implementation, Codex verifies the exact task branch/handoff commit, pinned collaboration/project authorities, activated shared coding Skills, and frozen semantics from the task.
+Before any repository mutation, Codex fresh-fetches the remote and verifies the exact task branch/handoff coordinate, pinned collaboration/project authorities, activated shared coding Skills, and local execution baseline.
+
+A stale local checkout is never an acceptable execution baseline. If fetched remote task state differs unexpectedly from the issued task coordinate/baseline, Codex stops rather than silently choosing a new baseline.
+
+## Final publication boundary — hard requirement
+
+Repository-changing FORMAL work is not complete merely because `git push` returns success.
+
+Before reporting PASS/completion Codex MUST:
+
+```text
+commit task-scoped changes
+→ push task branch
+→ fresh-fetch remote refs again
+→ resolve fetched upstream task-branch HEAD
+→ prove local task HEAD == fetched upstream HEAD
+→ record that evidence in the Codex report
+```
+
+If final local/upstream equality is not established, Codex MUST NOT report PASS.
+
+Do not use blind `git pull`, destructive reset, rebase, stash, force checkout, or force push merely to synchronize local state.
 
 ## Skill-development FORMAL tasks
 
@@ -89,6 +112,8 @@ If more task detail seems necessary in chat, the committed task is insufficient:
 
 Codex writes the report at the exact `codex_report` path bound by the committed task and pushes it on the task branch. The report records implementation/execution evidence; it does not redefine design and is not final acceptance.
 
+For repository-changing work, the report must include the final fresh-fetch upstream equality evidence required by `execution.md`.
+
 LOCAL-QUICK does not create a formal Codex report; that distinction is owned by `execution.md` and `templates/local-quick-task.md`.
 
 ## Acceptance review
@@ -103,7 +128,7 @@ Use an additional independent model/reviewer/human perspective only when LEVEL 2
 
 ## Completion shorthand and automatic report lookup
 
-For the most recent relevant FORMAL task, the User may simply say `Codex 已完成`. ChatGPT resolves the expected report, current task branch, task/report binding, and evidence, then performs acceptance review.
+For the most recent relevant FORMAL task, the User may simply say `Codex 已完成`. ChatGPT resolves the expected report, current task branch, task/report binding, remote task-branch state, and evidence, then performs acceptance review.
 
 Do not create a separate completion registry/status database.
 
@@ -122,12 +147,15 @@ Post-acceptance integration: AUTO | USER_CHECKPOINT
 ```text
 issued + locator
 → one active execution owner
+→ pre-execution remote synchronization
+→ local implementation/verification
 → report / BLOCKED / FAIL
+→ pushed + post-push fresh-fetch equality
 → ChatGPT acceptance
 → permitted integration
 ```
 
-An interrupted session may resume the same verified task branch when task semantics are unchanged. Semantic changes require a superseding task.
+An interrupted session may resume the same verified task branch when task semantics are unchanged, but before any new repository mutation it repeats the pre-execution remote synchronization handshake. Semantic changes require a superseding task.
 
 ## Stable artifact paths
 
