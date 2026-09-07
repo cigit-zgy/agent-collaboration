@@ -31,7 +31,16 @@ collaboration_commit: <PINNED_AGENT_COLLABORATION_SHA>
 ---
 ```
 
-Add task branch, baseline SHA, local root, shared coding-Skill coordinates, or other metadata only when the actual task needs them. Do not copy FORMAL-only fields merely for symmetry.
+For a **repository-changing** LOCAL-QUICK task, also record:
+
+```yaml
+task_branch: <TASK_OR_WORK_BRANCH>
+baseline_sha: <AUTHORIZED_REMOTE_BASELINE_SHA>
+```
+
+The task locator commit remains the durable task-spec coordinate. `baseline_sha` identifies the repository state from which mutation is authorized; do not infer it from a stale local checkout.
+
+Add local root, shared coding-Skill coordinates, or other metadata only when the actual task needs them.
 
 ## Body
 
@@ -46,11 +55,46 @@ Use the smallest body that makes execution deterministic. Common sections are:
 ## Required changes
 ## Hard boundaries
 ## Verification
-## Git / push
+## Git / synchronization
 ## Result contract
 ```
 
 Sections are optional when unnecessary. Detailed commands, byte-integrity rules, path constraints, branch rules, stop boundaries, and exact final-output fields belong here rather than in chat.
+
+## Remote synchronization — hard requirement for repository-changing tasks
+
+The task MUST inherit the two-sided synchronization handshake from `../execution.md` and may not weaken it.
+
+Before mutation:
+
+```text
+fresh fetch
+→ resolve authorized remote branch/task/baseline
+→ prove local execution HEAD == authorized fetched remote baseline
+```
+
+After mutation:
+
+```text
+commit
+→ push owning branch
+→ fresh fetch again
+→ prove local HEAD == fetched upstream HEAD
+```
+
+Do not require blind `git pull`, reset, rebase, stash, or force operations merely to synchronize.
+
+If either equality cannot be established, the task cannot return PASS.
+
+For repository-changing LOCAL-QUICK Result contracts, include at least:
+
+```text
+TASK_BRANCH: <branch>
+TASK_HEAD: <sha>
+TASK_HEAD_EQUALS_UPSTREAM: YES | NO
+```
+
+Add `REMOTE_BASELINE`, `BASELINE_MATCHED`, or another concrete synchronization field when the task's risk/structure makes it useful.
 
 ## Mode boundary
 
@@ -99,6 +143,7 @@ The task itself defines the shortest sufficient final result, for example:
 VERDICT: PASS | BLOCKED | FAIL
 TASK_BRANCH: <branch>
 TASK_HEAD: <sha>
+TASK_HEAD_EQUALS_UPSTREAM: YES | NO
 <task-specific critical evidence fields only>
 ```
 
