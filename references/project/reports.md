@@ -29,6 +29,21 @@ reports/handoff/ = conversation migration/context-recovery snapshots only
 
 A roadmap, backlog, discussion diary, review log, integration note, qualification note, or historical implementation record is not a fifth report family. Current accepted design belongs in `concept/`; task-specific execution intent belongs in `chatgpt/`; execution evidence belongs in `codex/`; migration continuity belongs in `handoff/`. Historical or superseded material that is not part of the current four-family surface belongs in the repository root archive when retention is justified.
 
+## Execution ownership for report normalization
+
+Report/archive normalization follows the collaboration execution route rather than defaulting to Codex merely because many files move.
+
+```text
+connected repository capability is sufficient
+AND no User-machine/runtime evidence is required
+-> DIRECT: ChatGPT performs the repository migration and connected verification
+
+local filesystem/runtime/tool evidence is genuinely required
+-> LOCAL-QUICK or FORMAL as selected by execution.md
+```
+
+Bulk Git renames, metadata backfill, path repair, archive relocation, and remote tree verification are still DIRECT when ChatGPT can perform them safely through connected repository capabilities. Do not create a Codex handoff solely for mechanical repository restructuring that does not require local execution.
+
 ## Filename contract — hard constraint
 
 Every Markdown artifact under `reports/` uses exactly:
