@@ -45,12 +45,14 @@ LOCAL-QUICK still uses a durable `reports/chatgpt/` task artifact, but it does *
 ```text
 committed LOCAL-QUICK task
 → short copyable locator
+→ pre-execution remote synchronization handshake
 → verify activated shared Skills when applicable
 → establish project-local temporary workspace if needed
 → implement/verify/repair
 → focused evidence
 → clean temporary state with no recovery value
 → task-scoped commit/push when required
+→ post-execution remote synchronization handshake
 → return only the task's compact Result contract
 → ChatGPT acceptance review when needed
 ```
@@ -153,21 +155,72 @@ When a delegated task needs a linked worktree, prefer:
 
 Registered worktrees are removed through Git-aware operations such as `git worktree remove`, followed by `git worktree prune` when appropriate. Do not blindly `rm -rf` a registered worktree.
 
-## Git safety
+## Remote synchronization handshake — hard boundary
 
-For repository-changing LOCAL work:
+Every **repository-changing** Codex task, whether `LOCAL-QUICK` or `FORMAL`, MUST prove that Codex starts from the same authorized remote state that ChatGPT/task authority published and ends with the same task state visible remotely.
+
+### Before any repository mutation
+
+Codex MUST:
 
 ```text
-fetch
-→ inspect branch / HEAD / upstream / worktree
-→ preserve pre-existing User state
-→ reach the authorized task/work branch safely
-→ commit only task-scoped changes
-→ push the owning branch
-→ fetch/verify pushed state when practical
+fresh-fetch the authorized remote refs
+→ inspect repository identity / branch / HEAD / upstream / worktrees / pre-existing User changes
+→ resolve the exact authorized task/baseline coordinate from the committed task + remote branch
+→ establish the task checkout/worktree safely
+→ prove local execution HEAD == authorized fetched remote baseline
+→ only then mutate repository state
 ```
 
-Do not infer permission for destructive reset, force-push, hidden automatic stash, or non-trivial conflict reconciliation.
+The fetched remote state, not a stale local checkout, is the synchronization reference.
+
+For a pinned task branch, an unexpected remote branch head or a mismatch between the committed task coordinate and fetched remote state is a synchronization conflict. Do not silently adopt a different baseline or keep working from the stale local copy. Stop and report the conflict unless the committed task explicitly defines the reconciliation.
+
+This rule does **not** require blind `git pull` on the primary checkout. Prefer `git fetch` plus a safe branch/worktree arrangement. Do not use reset, rebase, stash, force checkout, force push, or destructive reconciliation merely to make local state match remote.
+
+### After repository changes
+
+Before reporting repository-changing task completion, Codex MUST:
+
+```text
+commit task-scoped changes
+→ push the owning task/work branch
+→ fresh-fetch the remote again after push
+→ resolve fetched upstream task/work branch HEAD
+→ prove local task HEAD == fetched upstream HEAD
+→ confirm any required task worktree cleanliness
+→ only then report PASS/completion
+```
+
+A successful `git push` exit status alone is insufficient evidence. Post-push equality is mandatory, not `when practical`.
+
+If the post-push fresh fetch shows:
+
+```text
+local task HEAD != fetched upstream task/work branch HEAD
+```
+
+then Codex MUST NOT report PASS. Preserve local/User state and return `BLOCKED` or `FAIL` according to the concrete cause.
+
+A read-only/local-only Codex task that intentionally makes no repository change does not need a push step, but it still resolves current remote/project authority when repository state materially affects the result.
+
+## Git safety
+
+For repository-changing LOCAL work, the synchronization handshake and task-scoped Git rules combine as:
+
+```text
+fresh fetch
+→ inspect branch / HEAD / upstream / worktrees / User state
+→ prove exact authorized remote baseline locally
+→ preserve pre-existing User state
+→ perform task work
+→ commit only task-scoped changes
+→ push owning branch
+→ fresh fetch again
+→ prove local HEAD == upstream HEAD
+```
+
+Do not infer permission for destructive reset, force-push, hidden automatic stash, non-trivial conflict reconciliation, or direct mutation of a stale primary checkout.
 
 ## Ownership boundary
 
