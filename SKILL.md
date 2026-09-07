@@ -49,6 +49,7 @@ Codex
 = local verification, debugging, and bounded repair
 = primary code author only when implementation materially requires a local feedback loop
 = may use current handoff as background when routed there, but does not treat it as authority
+= for first-party Skill work, implements the committed concept/Skill Markdown rather than inventing task-local semantics
 = does not self-accept
 
 project tooling / CI
@@ -83,6 +84,8 @@ For shared third-party coding-Skill authority and local alignment, read `referen
 For new project/core design or major redesign, complete the mandatory external prior-art/reuse gate in `references/project/prior-art.md` before freezing a concept or starting substantial custom implementation.
 
 For conversation migration or context recovery in an existing project, use `references/project/handoff.md`.
+
+For maintained first-party Skill design, implementation, or testing, use `references/skill/development.md` before `references/skill/writing.md` or code/test changes.
 
 ## Execution routes
 
@@ -120,7 +123,8 @@ Detailed routing, Git safety, authority refresh, project-local temporary-state b
 - `references/collaboration/shared-coding-skills.md` — immutable cross-Agent coding-Skill profile, precedence, activation, local alignment, update policy;
 - `references/collaboration/verification.md` — verification levels, evidence categories, online/local placement, GitHub Actions private/public defaults and claim-dedup policy, risk-based tools and strengthening techniques;
 - `references/collaboration/agents.md` — maintained `AGENTS.md` writing standard;
-- `references/collaboration/templates/` — formal ChatGPT task and Codex report formats.
+- `references/collaboration/templates/chatgpt-task.md` — FORMAL task contract and exact copyable fenced-`text` Codex launch block;
+- `references/collaboration/templates/codex-report.md` — FORMAL Codex report/result format.
 
 ### Project
 
@@ -131,12 +135,13 @@ Use `references/project/` when a scientific/software project joins the collabora
 - `prior-art.md` — mandatory literature↔open-source search, candidate inspection, reuse/adapt/reject decision, and concept-recording contract for substantial new design;
 - `handoff.md` — conversation migration artifact, `reports/handoff/README.md` current-pointer index, handoff metadata/body, and fast context-recovery route;
 - `templates/agents.md` — project root `AGENTS.md` specialization;
-- `templates/skill.md` — project workflow `SKILL.md`.
+- `templates/skill.md` — project workflow `SKILL.md` projection template.
 
 ### Skill
 
-Use `references/skill/` for Skill ownership/package/writing:
+Use `references/skill/` for Skill design/development/source/package/writing:
 
+- `development.md` — **concept-first hard lifecycle**: design authority → `SKILL.md`/references → implementation → design-probing tests; failure classification and no task-local semantic patching;
 - `repository.md` — canonical source modes, discovery, distribution, cross-Agent authority resolution;
 - `package.md` — package resources, profiles, runtime/environment ownership;
 - `writing.md` — maintained `SKILL.md` and `references/*.md` writing standard;
@@ -167,6 +172,18 @@ GitHub Actions / CI design or budget review
 → identify distinct hosted claims
 → remove/narrow/manualize redundant private workflows
 
+first-party Skill design/change
+→ skill/development.md
+→ governing concept/design
+→ SKILL.md + references
+→ implementation
+→ tests as design probes
+
+Skill test failure
+→ skill/development.md
+→ classify DESIGN_GAP / PROJECTION_DRIFT / IMPLEMENTATION_DRIFT / TEST_DEFECT / ENVIRONMENT-TOOL
+→ change the correct owner; never patch merely for the fixture
+
 formal release task
 → protocol.md + implementation.md + shared-coding-skills.md + verification.md + task template
 
@@ -194,6 +211,6 @@ Do not preload the whole collaboration repository, every installed Skill, or eve
 
 ## Completion
 
-Collaboration work is complete when the selected route has completed all authoring and LOCAL execution deliverables, any applicable prior-art gate is complete and respected, ChatGPT and Codex used the same applicable shared coding-Skill authorities, Agent-created local temporary state is cleaned or explicitly retained for a concrete recovery reason, required evidence exists without unjustified GitHub Actions duplication, material limitations are disclosed, and the applicable ChatGPT acceptance review/human decision gate is satisfied.
+Collaboration work is complete when the selected route has completed all authoring and LOCAL execution deliverables, any applicable prior-art gate is complete and respected, first-party Skill work follows the concept→Markdown→implementation→design-probing-test lifecycle, ChatGPT and Codex used the same applicable shared coding-Skill authorities, Agent-created local temporary state is cleaned or explicitly retained for a concrete recovery reason, required evidence exists without unjustified GitHub Actions duplication, material limitations are disclosed, and the applicable ChatGPT acceptance review/human decision gate is satisfied.
 
 A conversation migration is complete when the new committed handoff is substantially self-contained, `reports/handoff/README.md` points to it, source/evidence pointers are recoverable, and the next context can resume by reconciling the handoff against current authority rather than rereading the entire prior conversation.
