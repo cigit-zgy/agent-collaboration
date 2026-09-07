@@ -32,13 +32,14 @@ references/
 │
 ├── project/
 │   ├── architecture.md         # project ownership/integration
+│   ├── migration.md            # existing-project migration + low-context bootstrap
 │   ├── reports.md              # report families / naming / archive
 │   ├── concept.md              # chronological design exploration/history
 │   ├── design.md               # current canonical living design + dynamic decomposition
 │   ├── prior-art.md            # literature↔open-source reuse gate
 │   ├── external-tools.md       # external CLI/API/schema adapters/profiles
 │   ├── handoff.md              # conversation migration/recovery
-│   └── templates/              # cold: AGENTS/Skill/concept/design/handoff authoring
+│   └── templates/              # cold: AGENTS/Skill/concept/design/handoff/migration-bootstrap
 │
 └── skill/
     ├── development.md          # current design → Skill Markdown → code → tests
@@ -69,6 +70,27 @@ design/
 A material concept is reduced into the living design only after User + ChatGPT adjudication.
 
 The `design/` file set is dynamic: topics are added, updated, split, merged, removed, or reordered according to real current design responsibilities. File count is not fixed by a universal project template.
+
+## Existing-project migration
+
+Migration to a newer collaboration model is repository-native and delta-based:
+
+```text
+old conversation
+→ make important session-only state durable when possible
+→ short migration bootstrap only if a new conversation is taking over
+
+new/current conversation
+→ current collaboration SKILL.md
+→ project/migration.md
+→ target repository AGENTS + branch/HEAD/state
+→ current design/ and only relevant history/evidence
+→ migrate only drifted surfaces
+```
+
+Do not paste the whole project history into the migration prompt. Do not require the new conversation to understand the old conversation before it can inspect the repository.
+
+Project-policy migration and conversation handoff are separate concerns. A large handoff is not a prerequisite for project migration.
 
 ## Hot / warm / cold context
 
@@ -102,6 +124,7 @@ Ordinary use should never require browsing the whole repository before discoveri
 | GitHub Actions | `SKILL.md` → `collaboration/actions.md` |
 | local Git/tmp/worktree | `SKILL.md` → `collaboration/execution.md` |
 | FORMAL task/report/acceptance | `SKILL.md` → `collaboration/formal.md` + exact template only when needed |
+| existing-project collaboration migration | `SKILL.md` → `project/migration.md` (+ bootstrap template only when an old conversation is generating the handoff prompt) |
 | current project design | `SKILL.md` → `project/design.md` + target `design/` topic |
 | design-history / new concept note | `SKILL.md` → `project/concept.md` |
 | Skill design/testing | `SKILL.md` → `skill/development.md` |
@@ -121,6 +144,10 @@ Within project `design/`, one current semantic concern has exactly one owner fil
 ### Direct progressive disclosure
 
 Normal reference depth is one hop from `SKILL.md`. A reference is substantially self-contained for its concern; mandatory reference chains are avoided.
+
+### Repository-native migration
+
+Give the next Agent a map, not a transcript. The target repository is the system of record; migration prompts carry only coordinates and non-recoverable session delta.
 
 ### Current design separate from history
 
@@ -158,7 +185,7 @@ Codex/ChatGPT/Actions do not repeat the same expensive verification claim unless
 
 ### Context handoff
 
-When a project conversation is intentionally migrated, the current handoff is a high-information context snapshot, not design authority. Recovery reconciles it against current design/authority/state.
+When a project conversation is intentionally migrated, the current handoff is a compact continuity snapshot, not design authority. Recovery reconciles it against current design/authority/state.
 
 ## Reports
 
