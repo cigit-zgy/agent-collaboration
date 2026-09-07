@@ -2,7 +2,7 @@
 
 Load this reference for project repository ownership, authority surfaces, runtime reading routes, onboarding, and responsibility placement.
 
-Report-family/archive layout is owned by `reports.md`. Concept-journal semantics are owned by `concept.md`. Current living-design structure is owned by `design.md`. External CLI/API/schema integration is owned by `external-tools.md`. Detailed local Git/worktree/tmp execution is owned by `../collaboration/execution.md`.
+Existing-project migration to current collaboration policy is owned by `migration.md`. Report-family/archive layout is owned by `reports.md`. Concept-journal semantics are owned by `concept.md`. Current living-design structure is owned by `design.md`. External CLI/API/schema integration is owned by `external-tools.md`. Detailed local Git/worktree/tmp execution is owned by `../collaboration/execution.md`.
 
 ## Project entry
 
@@ -80,6 +80,23 @@ AGENTS.md
 ```
 
 Do not force ordinary execution through project design/history files when the operational projection is already stable.
+
+### Existing-project migration
+
+When a repository must be migrated to a newer collaboration model:
+
+```text
+current collaboration SKILL.md
+→ migration.md
+→ target project AGENTS.md + current branch/HEAD/state
+→ design/README.md when present
+→ only directly relevant current design/history/task/report anchors
+→ migrate only drifted surfaces
+```
+
+Do not start by rereading the old conversation, all concept notes, all reports, or the complete collaboration reference tree. If another conversation is taking over, the old conversation supplies only the compact bootstrap defined by `templates/migration-bootstrap.md`.
+
+Project-policy migration does not require a conversation handoff unless meaningful non-repository continuity would otherwise be lost.
 
 ### Current design / conformance
 
@@ -172,6 +189,8 @@ inspect actual repository
 → route local execution through DIRECT / LOCAL-QUICK / FORMAL as appropriate
 ```
 
+This onboarding route is for establishing a project model. Existing repositories upgrading from an earlier collaboration model use `migration.md` instead of replaying onboarding from scratch.
+
 Conversation handoff support is added only on first real context migration by creating the first canonically named file under `reports/handoff/`; no separate root `handoff/` or handoff `README.md` is created.
 
 ## Review criterion
@@ -182,6 +201,7 @@ A project architecture is sufficient when an unfamiliar Agent can determine:
 project authority
 current design entry + topic ownership
 design-history route when needed
+existing-project migration route when applicable
 real artifact owners
 runtime/workflow entry
 prior-art route for major redesign
