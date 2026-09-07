@@ -13,12 +13,14 @@ Read `../../collaboration/agents.md` first. Keep project `AGENTS.md` concise and
 
 ```text
 explicit User instruction
-→ reports/concept/                         accepted project design, when declared
-→ <workflow>/SKILL.md + references         operational workflow
-→ <implementation paths>                   implementation
-→ tests                                    conformance/design evidence
-→ <registered source/evidence path>         model/domain-specific scientific facts, when applicable
+→ design/                                current accepted project design, when used
+→ <workflow>/SKILL.md + references       operational workflow
+→ <implementation paths>                 implementation
+→ tests                                  conformance/design evidence
+→ <registered source/evidence path>       model/domain-specific scientific facts, when applicable
 ```
+
+`reports/concept/` is chronological design exploration/history only; it does not override current `design/`.
 
 `reports/handoff/`, when present, is conversation context only and never overrides current design/task/source authority.
 
@@ -33,7 +35,9 @@ Do not preload the collaboration reference tree. Resolve the active intent throu
 ## Ownership
 
 ```text
-<path>  <responsibility>
+design/             current living design, when used
+reports/concept/    chronological design history/input
+<path>              <responsibility>
 ```
 
 List only boundaries that materially affect Agent behavior.
@@ -50,26 +54,34 @@ AGENTS.md
 → owning project reference/script
 ```
 
-Design / conformance:
+Current design / conformance:
 
 ```text
 AGENTS.md
-→ reports/concept/README.md
-→ governing concept
+→ design/README.md
+→ directly relevant current design topic(s)
 → projection
 → implementation/tests
 ```
 
-For a new project/core subsystem or major algorithm/architecture/tool choice, use the current collaboration prior-art route before concept freeze.
+Historical rationale or new design exploration:
+
+```text
+current design topic
++ only relevant reports/concept/YYMMDD_concept_NN.md
+→ User + ChatGPT adjudication
+→ update design/ if accepted
+```
+
+For a new project/core subsystem or major algorithm/architecture/tool choice, use the current collaboration prior-art route before accepting the change into `design/`.
 
 For an evolving external CLI/API/schema/parser/simulator concern, use the collaboration external-tool route directly; do not copy adapter policy here.
 
-When `reports/handoff/README.md` exists, context recovery is:
+When `reports/handoff/` exists, context recovery is:
 
 ```text
 AGENTS.md
-→ reports/handoff/README.md
-→ current handoff only
+→ newest valid reports/handoff/YYMMDD_handoff_NN.md
 → re-resolve current authority/state
 ```
 
@@ -80,7 +92,7 @@ AGENTS.md
 Project-specific shared coding-Skill additions:
 `<NONE OR PROJECT-OWNED IMMUTABLE COORDINATES>`
 
-Global implementation, verification, Actions, Git/local execution, FORMAL delegation, prior-art, external-tool, and handoff policy is discovered through the current/pinned collaboration `SKILL.md` direct routing table.
+Global implementation, verification, Actions, Git/local execution, FORMAL delegation, prior-art, living-design, external-tool, report, and handoff policy is discovered through the current/pinned collaboration `SKILL.md` direct routing table.
 
 ## Human / trust checkpoints
 
@@ -88,8 +100,8 @@ Global implementation, verification, Actions, Git/local execution, FORMAL delega
 
 ## Hard invariants
 
-- <Short project-wide boundary.>
+- `design/` contains one current accepted design set only; no old/draft/versioned alternatives.
 - <Short project-wide boundary.>
 ````
 
-Do not expand this template with task plans, implementation history, global collaboration rules, detailed verification policy, or copied prior-art/handoff manuals. Point to the owning project artifact or collaboration route instead.
+Do not expand this template with task plans, implementation history, global collaboration rules, detailed verification policy, or copied concept/design/handoff manuals. Point to the owning project artifact or collaboration route instead.
