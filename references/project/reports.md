@@ -14,6 +14,8 @@ reports/
 └── handoff/
 ```
 
+Each family directory is flat and contains only canonical Markdown artifacts. Do not create nested directories, evidence bundles, images, JSON/YAML sidecars, indexes, or other non-Markdown files under active `reports/`. Supporting task evidence that must be retained belongs in the single repository-root `00_archive/` or another non-report project artifact owner explicitly defined by the project; the report links to that evidence when needed.
+
 No Markdown file or other artifact lives directly under `reports/`. Do not create `reports/archive/`, `reports/00_archive/`, `reports/agent/`, `reports/discussion/`, `reports/integration/`, `reports/review/`, `reports/qualification/`, `reports/pdf2md/`, or another report family. If one of the four families is not used, it may be absent.
 
 Responsibilities are fixed:
@@ -56,7 +58,7 @@ Navigation comes from compact YAML metadata and stable links, not special index 
 
 ## Common metadata envelope — required
 
-Every `reports/**/*.md` file begins with YAML front matter containing at least:
+Every report Markdown file begins with YAML front matter containing at least:
 
 ```yaml
 ---
@@ -125,6 +127,7 @@ Do not create a directory named `archive` anywhere. Do not create nested `*/00_a
 
 ```text
 00_archive/reports/<former-family>/...
+00_archive/reports/codex_evidence/<artifact-id>/...
 ```
 
 The `00_` prefix is intentional so the archive sorts first in ordinary filesystem views.
@@ -145,9 +148,9 @@ When normalizing an existing project:
 3. rename current report files to the canonical filename form and add/repair required metadata;
 4. move repository-root `handoff/` content into `reports/handoff/`;
 5. delete obsolete duplicate status/roadmap files when their responsibility is already owned elsewhere;
-6. move report-history families that should be retained into root `00_archive/reports/...`;
-7. remove all nested `archive` / `00_archive` report directories;
-8. verify `reports/` has only the four allowed families and every Markdown file satisfies filename + metadata rules.
+6. move report-history families and active-report sidecar/evidence bundles that should be retained into root `00_archive/reports/...`;
+7. remove all nested directories/non-Markdown sidecars from active report families and remove all nested `archive` / `00_archive` report directories;
+8. verify `reports/` has only the four allowed flat families and every Markdown file satisfies filename + metadata rules.
 ```
 
 Do not rewrite historical scientific/task conclusions merely to modernize formatting. When metadata must be backfilled, preserve body semantics and derive only factual metadata recoverable from the file path/content/Git history; uncertain metadata is stated conservatively rather than invented.
