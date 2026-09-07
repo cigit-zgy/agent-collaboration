@@ -39,7 +39,7 @@ cigit-zgy/agent-collaboration
 
 Formal tasks pin repository + commit SHA + repository-relative paths. Resolve pinned authority from an already verified exact checkout or directly from GitHub; otherwise stop. A stale/similarly named local copy is not authority.
 
-Project precedence comes from the applicable project `AGENTS.md`. Scientific projects may declare `reports/concept/` as design authority; model-specific scientific facts remain grounded in registered source/evidence.
+Project precedence comes from the applicable project `AGENTS.md`. Projects using the living-design model keep current accepted design under `design/`; `reports/concept/` is chronological design history/input only. Model-specific scientific facts remain grounded in registered source/evidence.
 
 ## Collaboration authority refresh — hard boundary
 
@@ -115,11 +115,11 @@ If implementation exposes a design conflict:
 stop the affected path
 → report the exact conflict
 → User + ChatGPT adjudicate/reopen design
-→ update durable design/Skill contract
+→ update current design/ + Skill contract
 → resume from updated authority
 ```
 
-For maintained Skills, use `../skill/development.md`: design-bearing changes flow from concept/design → Skill Markdown → implementation → design-probing tests. A task is never the sole owner of new Skill semantics.
+For maintained Skills, use `../skill/development.md`: design-bearing changes flow from current design → Skill Markdown → implementation → design-probing tests. Concept notes may preserve the reasoning but are not current authority. A task is never the sole owner of new Skill semantics.
 
 ## Ownership boundary
 
