@@ -1,6 +1,23 @@
 # Project workflow SKILL.md template
 
-Read `../../skill/writing.md` first. This template applies when a project exposes an Agent-operable multi-stage or composite workflow.
+Read `../../skill/writing.md` for Markdown quality. When maintaining or changing Skill behavior/implementation, also read `../../skill/development.md` first.
+
+This template applies when a project exposes an Agent-operable multi-stage or composite workflow.
+
+## Development authority
+
+For a design-bearing Skill change, the maintained order is:
+
+```text
+governing project/Skill concept
+→ project workflow SKILL.md + owning sub-Skill/references
+→ implementation
+→ tests/evaluation
+```
+
+A project workflow Skill is an operational projection of accepted design; it is not the place to invent semantics after code/test failures.
+
+If testing exposes missing or ambiguous workflow semantics, return to the governing concept/design and update the Skill Markdown before implementation repair. Pure implementation drift may be repaired directly only when the existing design + Skill Markdown already determine behavior without interpretation.
 
 ## Required information
 
@@ -54,3 +71,9 @@ description: >
 ````
 
 When the project uses design-authority concepts, identify the governing concept without copying it into the Skill. Optional sections such as trust/lifecycle, runtime, human checkpoints, recovery, or STOP exist only when they change routing or execution.
+
+## Test interpretation
+
+Project Skill tests are evidence about the general workflow contract. They should probe representative flows, boundaries, stage handoffs, recovery/failure semantics, and previously clarified invariants.
+
+Do not tune the workflow Skill or implementation around one task fixture. Classify a failure using `../../skill/development.md` before changing code.
