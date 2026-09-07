@@ -2,9 +2,9 @@
 name: agent-collaboration
 description: >
   Coordinate User, ChatGPT, and Codex for repository work involving project or Skill design,
-  prior-art research, direct authoring, local execution, verification, GitHub Actions, FORMAL
-  delegation/acceptance, shared coding-Skill alignment, project integration, conversation
-  handoff/context recovery, report/archive governance, or Skill maintenance.
+  prior-art research, existing-project migration, direct authoring, local execution, verification,
+  GitHub Actions, FORMAL delegation/acceptance, shared coding-Skill alignment, project integration,
+  conversation handoff/context recovery, report/archive governance, or Skill maintenance.
 ---
 
 # Agent Collaboration
@@ -44,6 +44,7 @@ Use one primary owner plus at most one explicitly necessary secondary owner. Avo
 | shared coding-Skill authority/alignment | `references/collaboration/shared-coding-skills.md` | none |
 | author/review `AGENTS.md` | `references/collaboration/agents.md` | relevant project/Skill AGENTS template |
 | project ownership/integration architecture | `references/project/architecture.md` | none |
+| migrate an existing project to current collaboration policy/architecture | `references/project/migration.md` | `references/project/templates/migration-bootstrap.md` only when an old conversation must generate a copyable bootstrap |
 | reports layout, naming/metadata, archive placement, report cleanup | `references/project/reports.md` | family-specific owner/template only when needed |
 | chronological design exploration/history in `reports/concept/` | `references/project/concept.md` | `references/project/templates/concept.md` only when authoring a concept note |
 | current canonical project design under `design/`, dynamic topic decomposition | `references/project/design.md` | `references/project/templates/design.md` only when creating/restructuring living design |
@@ -56,6 +57,24 @@ Use one primary owner plus at most one explicitly necessary secondary owner. Avo
 | Skill package/resources/runtime ownership | `references/skill/package.md` | none |
 
 ## Hard routing rules
+
+### Existing-project migration
+
+Project-policy migration is not a request to reread the old conversation.
+
+```text
+old conversation
+→ make important non-repository state durable when possible
+→ emit short migration bootstrap only if a new conversation is taking over
+
+new/current conversation
+→ project/migration.md
+→ current target repository state
+→ only directly relevant current owners/history
+→ delta migration
+```
+
+Do not preload all concept notes, Codex reports, handoffs, or collaboration references. Repository-native current state is the system of record; the bootstrap carries only coordinates and session delta that cannot be recovered cheaply.
 
 ### Project design model
 
