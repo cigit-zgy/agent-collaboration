@@ -1,8 +1,8 @@
 # Project architecture and integration contract
 
-Load this reference for project repository ownership, authority surfaces, runtime reading routes, project onboarding, and report-family placement.
+Load this reference for project repository ownership, authority surfaces, runtime reading routes, onboarding, and responsibility placement.
 
-External CLI/API/schema integration is owned by `external-tools.md`. Detailed local Git/worktree/tmp execution is owned by `../collaboration/execution.md`.
+Report-family/archive layout is owned by `reports.md`. External CLI/API/schema integration is owned by `external-tools.md`. Detailed local Git/worktree/tmp execution is owned by `../collaboration/execution.md`.
 
 ## Project entry
 
@@ -14,7 +14,7 @@ A project workflow Skill may live at any project-declared path; it is not requir
 
 ## Responsibility-based architecture
 
-There is no universal canonical project filesystem.
+There is no universal canonical project filesystem beyond collaboration-wide hard contracts such as the project `reports/` and root `00_archive/` rules in `reports.md`.
 
 Create only responsibilities with a real owner, artifact, and consumer. Common patterns include:
 
@@ -35,12 +35,11 @@ Create only responsibilities with a real owner, artifact, and consumer. Common p
 | accepted project design | `reports/concept/` | canonical design only when declared |
 | formal delegated tasks | `reports/chatgpt/` | committed FORMAL specifications |
 | Codex execution evidence | `reports/codex/` | FORMAL execution/verification reports |
-| conversation continuity | `reports/handoff/` | context-recovery snapshots + current-handoff index; never design/task authority |
-| Agent-local temporary state | `tmp/` | project-owned ephemeral boundary; execution rules live in collaboration `execution.md` |
+| conversation continuity | `reports/handoff/` | context-recovery snapshots; never design/task authority |
+| historical retention | `00_archive/` | single repository-root history boundary; never active authority |
+| Agent-local temporary state | `tmp/` | project-owned ephemeral boundary |
 
-These are examples, not required directories. Equivalent ownership is valid when project `AGENTS.md` makes it explicit.
-
-Do not pre-create `reports/handoff/` merely because a project might someday use multiple conversations. Create it on the first real migration under `handoff.md`.
+If `reports/` exists, its only allowed direct children, filename contract, common metadata envelope, handoff placement, and archive rules are defined by `reports.md` and are not project-optional variants.
 
 ## Design authority
 
@@ -59,7 +58,7 @@ registered source/evidence
 = model-specific scientific fact authority
 ```
 
-Conversation handoffs are context-recovery artifacts only. They may summarize accepted decisions and repository state, but they never supersede current `AGENTS.md`, concept, committed task, registered scientific source/evidence, or current repository state.
+Conversation handoffs are context-recovery artifacts only. They may summarize accepted decisions and repository state, but they never supersede current `AGENTS.md`, concept, committed task, registered scientific source/evidence, or repository state.
 
 ## Runtime reading routes
 
@@ -77,21 +76,19 @@ Do not force ordinary execution through project design/history files when the op
 
 ```text
 AGENTS.md
-→ current agent-collaboration SKILL route for prior art
+→ current agent-collaboration prior-art route
 → strongest relevant external precedents
-→ reports/concept/README.md
-→ governing concept
+→ relevant reports/concept artifact(s)
 → operational projection
 ```
 
 ### Conversation/context recovery
 
-When `reports/handoff/README.md` exists:
+When `reports/handoff/` exists:
 
 ```text
 AGENTS.md
-→ reports/handoff/README.md
-→ current handoff only
+→ newest valid reports/handoff/YYMMDD_handoff_NN.md
 → re-resolve current collaboration/project authority
 → inspect current repository state
 → continue through normal workflow/design route
@@ -101,7 +98,7 @@ Do not read every historical handoff by default.
 
 ### External tool integration
 
-When the active concern is an evolving external CLI/API/schema/parser/simulator interface, route directly from collaboration `SKILL.md` to `external-tools.md`; do not load the whole project architecture merely to recover adapter rules.
+When the active concern is an evolving external CLI/API/schema/parser/simulator interface, route directly from collaboration `SKILL.md` to `external-tools.md`.
 
 ## Ownership boundaries
 
@@ -114,20 +111,15 @@ canonical reusable dataset    → data owner
 mutable current run state      → workspace owner
 controlled investigation      → experiment owner
 conversation continuity       → handoff owner
+historical retained state     → root 00_archive owner
 Agent-created ephemeral state → project tmp boundary + collaboration execution owner
 ```
 
-Promotion between responsibilities is explicit.
-
-Experiment outputs become canonical data/model artifacts only after project adoption with provenance. Exploratory code becomes reusable implementation only when a real reusable consumer and stable contract exist. Live workspace state remains mutable. Handoff summaries do not promote themselves into concept/task/source authority merely because they are committed.
+Promotion between responsibilities is explicit. Experiment outputs become canonical data/model artifacts only after project adoption with provenance. Exploratory code becomes reusable implementation only when a real reusable consumer and stable contract exist. Live workspace state remains mutable. Handoff summaries do not promote themselves into concept/task/source authority merely because they are committed.
 
 ## Project-local ephemeral boundary
 
-`tmp/` is the canonical project-owned location for Agent-created local ephemeral state.
-
-Detailed placement, `WORK_ID`, linked-worktree, cleanup, and Git-safety semantics are owned by `../collaboration/execution.md` so local tasks need only one operational execution owner.
-
-Project `AGENTS.md` should route to that owner rather than copy the full tmp/worktree manual.
+`tmp/` is the canonical project-owned location for Agent-created local ephemeral state. Detailed placement, `WORK_ID`, linked-worktree, cleanup, and Git-safety semantics are owned by `../collaboration/execution.md`.
 
 ## Project onboarding
 
@@ -135,6 +127,7 @@ Project `AGENTS.md` should route to that owner rather than copy the full tmp/wor
 inspect actual repository
 → establish concise project AGENTS.md
 → declare real ownership + runtime/tooling boundaries
+→ apply reports/archive hard contract if those surfaces exist
 → run prior-art gate for substantial new design
 → inspect strongest paper-linked/mature open-source precedents
 → define/accept project concept when needed
@@ -145,16 +138,7 @@ inspect actual repository
 → route local execution through DIRECT / LOCAL-QUICK / FORMAL as appropriate
 ```
 
-Conversation handoff support is added only on first real context migration:
-
-```text
-first migration
-→ create reports/handoff/README.md
-→ create first YYMMDD_handoff_NN.md
-→ update the current pointer on later migrations
-```
-
-Do not create a custom subsystem before an applicable prior-art gate merely because an internal design can be produced quickly.
+Conversation handoff support is added only on first real context migration by creating the first canonically named file under `reports/handoff/`; no separate root `handoff/` or handoff `README.md` is created.
 
 ## Review criterion
 
@@ -168,8 +152,9 @@ prior-art/design route when needed
 context-recovery route when handoffs exist
 mutable versus durable state
 project tmp ownership
+archive boundary
 scientific-fact versus design authority
 implementation/tooling authority
 ```
 
-without inferring a canonical directory tree or reading unrelated collaboration manuals.
+without inferring an undocumented filesystem contract or reading unrelated collaboration manuals.
