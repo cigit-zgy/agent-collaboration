@@ -1,5 +1,11 @@
 # Verification contract
 
+Load this reference for verification level, evidence-category, or ChatGPT-versus-Codex placement decisions.
+
+GitHub-hosted CI/Actions claim deduplication and private/public workflow policy are owned separately by `actions.md`; `SKILL.md` routes there directly when that is the active concern.
+
+## Model
+
 Verification has two dimensions:
 
 ```text
@@ -31,38 +37,38 @@ Cover the reproducibility and non-functional evidence required by the actual rel
 
 LEVEL 3 does not mean every available test or scanner.
 
-## Verification placement for speed
+## Placement for speed
 
 Choose both the evidence and the cheapest reliable place to obtain it.
 
-### ChatGPT / connected online verification
+### ChatGPT / connected verification
 
-ChatGPT runs checks when they are directly supported by its current connected environment and do not require substantial setup or long execution. Typical examples are:
+Use ChatGPT when the check is directly supported by the current connected environment and does not require substantial setup or long execution, for example:
 
 ```text
 repository/diff/contract inspection
 syntax or structural checks
 small pure-function/unit checks in an already available runtime
 remote file/link/schema inspection
-existing GitHub CI/status evidence
+existing CI/status evidence
 small deterministic checks cheaper than a local handoff
 ```
 
-Do not create a large temporary environment, duplicate the project's dependency stack, or launch an expensive remote workflow merely to avoid local verification.
+Do not create a large temporary environment or duplicate the project's dependency stack merely to avoid local verification.
 
 ### Codex local verification
 
-Codex runs checks when the User's machine or project runtime materially provides the required evidence, including:
+Use Codex when the User machine/project runtime materially provides the required evidence, including:
 
 ```text
 project Conda/venv/runtime
 full or long test suites
 native/compiled dependencies
 browser automation
-external CLI, service, credential, or entitlement
+external CLI/service/credential/entitlement
 proprietary/local datasets and artifacts
 hardware-specific behavior
-large builds, rendering, benchmarks, stress, or E2E/recovery work
+large builds, rendering, benchmarks, stress, E2E/recovery work
 ```
 
 ### Placement rule
@@ -71,106 +77,21 @@ large builds, rendering, benchmarks, stress, or E2E/recovery work
 cheap + already available online
 → ChatGPT verifies before handoff
 
-setup-heavy, time-consuming, environment-bound, or local-evidence-bearing
+setup-heavy / time-consuming / environment-bound / local-evidence-bearing
 → Codex verifies locally
 ```
 
-Implementation authorship and verification placement are independent. ChatGPT may author code and tests first, then delegate only the remaining local verification and bounded repair.
+Implementation authorship and verification placement are independent. ChatGPT may author code/tests first, then delegate only remaining local verification and bounded repair.
 
-Do not run the same expensive check in both places unless the second environment proves a distinct claim, such as portability versus the User's real production-like environment.
+Do not run the same expensive check in two environments unless the second environment proves a distinct claim.
 
-A verification plan must state the remaining evidence, not repeat checks that ChatGPT already completed unless rerun is needed for final-state integrity.
-
-## GitHub Actions / CI execution boundary — hard requirement
-
-GitHub Actions is an **independent hosted evidence environment**, not the default place to repeat development checks already proven by ChatGPT or Codex.
-
-The governing rule is claim-based:
-
-```text
-same verification claim
-+ already proven in an appropriate environment
-→ do not repeat it in GitHub Actions
-
-distinct hosted-environment claim
-→ GitHub Actions may be justified
-```
-
-Examples of distinct GitHub-hosted claims include:
-
-```text
-clean-room build/install independent of the User machine
-supported OS/Python/runtime matrix
-PR/merge status gate that must exist on GitHub
-release/tag/package/publish automation
-open-source reproducibility visible to external contributors
-release/security evidence that intentionally requires an independent environment
-```
-
-Running `ruff`, `pytest`, type checking, build, LaTeX rendering, or another command in Actions is not justified merely because the command can run there. If Codex already proves the same claim locally and no independent hosted claim remains, the Actions run is redundant.
-
-### Private repositories
-
-For private repositories, ordinary development defaults to:
-
-```text
-ChatGPT authoring / cheap connected checks
-→ Codex local verification
-→ ChatGPT acceptance
-```
-
-Automatic `push`/`pull_request` GitHub Actions SHOULD be absent by default. Enable private-repository Actions only when the workflow owns a concrete distinct claim that is worth the account's current Actions budget.
-
-When private-repository Actions are justified, prefer the narrowest trigger and matrix that proves the claim:
-
-```text
-workflow_dispatch for milestone / clean-room checks
-release/tag trigger for release qualification
-path filters when only a bounded area matters
-concurrency + cancel-in-progress when repeated automatic runs are genuinely required
-smallest supported runtime/OS matrix sufficient for the claim
-```
-
-Do not maintain a broad multi-OS/multi-version matrix on every private-repository push merely for reassurance.
-
-### Public repositories
-
-Public repositories may retain standard GitHub-hosted CI when it materially improves public reproducibility, contributor feedback, status checks, packaging, or release confidence.
-
-Budget pressure alone is not a reason to remove standard public-repository CI when GitHub's current billing model does not charge the account's included private-repository minutes for those standard public runs. Billing and runner pricing are external platform facts and MUST be rechecked against current official GitHub documentation when they materially affect a decision.
-
-Public status does **not** waive the claim-deduplication rule. Free redundant CI is still redundant engineering work.
-
-Special/larger runners, storage, artifacts, caches, and other billable platform resources are separate concerns; do not infer their cost from standard-runner policy.
-
-### Actions review trigger
-
-Review a repository's Actions configuration when:
-
-```text
-repository visibility changes
-Actions usage/budget becomes material
-new automatic workflow is introduced
-runtime matrix grows
-Codex begins proving the same claims locally
-release/publication workflow changes
-```
-
-The review asks:
-
-1. What exact claim does each workflow/job prove?
-2. Is that claim already proven by ChatGPT/Codex/project tooling?
-3. Does GitHub-hosted execution provide a distinct environment/status/release property?
-4. Is the trigger frequency proportional to the claim?
-5. For private repositories, is the expected budget cost justified?
-
-If a workflow cannot answer those questions, remove, narrow, or make it manual.
+A verification plan states the remaining evidence; it does not repeat checks already completed unless rerun is needed for final-state integrity.
 
 ## Evidence categories
 
 ### Component / property
 
-Small deterministic behavior and local invariants.
+Small deterministic behavior and local invariants:
 
 ```text
 focused tests
@@ -181,7 +102,7 @@ property/fuzz tests when input-space risk warrants them
 
 ### Contract / invariant
 
-Stable public/project-facing behavior independent of implementation details.
+Stable public/project-facing behavior independent of implementation details:
 
 ```text
 schema/fields
@@ -197,7 +118,7 @@ Avoid self-proof where practical: critical expected invariants should not be der
 
 ### Integration
 
-Interactions among in-scope components or adjacent boundaries.
+Interactions among in-scope components or adjacent boundaries:
 
 ```text
 component → component
@@ -209,7 +130,7 @@ synthetic stage handoff
 
 ### Real artifact / external tool
 
-Behavior that mocks/synthetic inputs cannot establish reliably.
+Behavior that mocks/synthetic inputs cannot establish reliably:
 
 ```text
 real scientific PDF/data/model
@@ -222,7 +143,7 @@ Reuse stable expensive artifacts when fresh reconstruction adds no evidence.
 
 ### E2E / recovery / repeatability
 
-Complete in-scope flow and adverse transitions when material.
+Complete in-scope flow and adverse transitions when material:
 
 ```text
 fresh input → stable result
@@ -235,7 +156,7 @@ Keep E2E sparse; lower-cost evidence should prove lower-level properties.
 
 ### Release / non-functional risk
 
-Evidence that a release claim survives outside the current worktree/happy path.
+Evidence that a release claim survives outside the current worktree/happy path:
 
 ```text
 build + clean/non-editable install
@@ -294,7 +215,7 @@ CodeQL    → deeper semantic/data-flow analysis when justified and supported
 pip-audit → Python dependency-vulnerability evidence
 ```
 
-Tool installation does not make a tool mandatory, and a finding is evidence to investigate rather than automatic proof of a defect.
+Tool installation does not make a tool mandatory. A finding is evidence to investigate, not automatic proof of a defect.
 
 ## Planning
 
@@ -314,23 +235,13 @@ Remaining Codex-local evidence:
 
 List only required categories; do not add `N/A` rows.
 
-Example:
+When coding Skills materially govern implementation, the task/report identifies the shared profile and activated Skills. Alignment checks are scoped to activated Skills and are not a reason to update every installed Skill before every run.
 
-```text
-Verification level: LEVEL 2
-ChatGPT checks already completed:
-- Structural review: task-branch diff and schema references are internally consistent
-Remaining Codex-local evidence:
-- Contract / invariant: registry schema + fail-closed path checks
-- Real artifact / external tool: real MinerU PDF retained-artifact check
-- E2E / recovery / repeatability: parser failure leaves no partial final package; retry succeeds
-```
+## Skill testing
 
-## Shared coding-Skill alignment evidence
+For maintained Skill development, tests primarily probe the general Skill design/contract rather than optimizing one current fixture. Classification of `DESIGN_GAP`, `PROJECTION_DRIFT`, `IMPLEMENTATION_DRIFT`, `TEST_DEFECT`, and environment/tool defects is owned by `../skill/development.md`.
 
-When coding Skills materially govern implementation, the task and report identify the shared profile and activated Skills under `shared-coding-skills.md`.
-
-The local alignment check should be cheap and scoped to activated Skills. It is not a reason to update or reinstall every local Skill before every test run.
+Load that owner directly from `SKILL.md` when the active concern is Skill design/testing; do not load it for ordinary software verification.
 
 ## Reporting and acceptance
 
@@ -338,6 +249,6 @@ Codex reports what actually ran for each required category, including failures, 
 
 A `pytest PASS`, coverage number, scanner result, or CI badge does not substitute for another required evidence category.
 
-ChatGPT acceptance review asks whether the chosen level and evidence were sufficient, whether verification was placed efficiently, whether GitHub Actions proved distinct claims rather than duplicating Codex/ChatGPT evidence, whether the same shared coding-Skill authorities governed both Agents, and whether the evidence establishes the claim.
+ChatGPT acceptance review asks whether the chosen level/evidence were sufficient, whether placement was efficient, whether the same shared coding-Skill authorities governed both Agents, and whether the evidence establishes the claim.
 
 Add a second reviewer/model/human perspective for LEVEL 2/3 only when scientific, architectural, trust, security, or release risk materially warrants it.
