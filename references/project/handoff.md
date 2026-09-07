@@ -2,12 +2,15 @@
 
 Load this reference for conversation migration/recovery semantics, handoff authority, chronology, and staleness reconciliation. Report/archive placement and filename/metadata rules are owned by `reports.md`. When authoring a new handoff, also load `templates/handoff.md`.
 
+Project-policy migration to a newer collaboration architecture is a different concern owned by `migration.md`.
+
 ## Purpose and authority
 
-A handoff preserves enough project state that a new ChatGPT context can resume work without reconstructing the entire prior conversation. It is a context-recovery artifact, not design authority, task authority, scientific source authority, or implementation evidence.
+A handoff preserves enough non-repository continuity that a new ChatGPT context can resume work without reconstructing the entire prior conversation. It is a context-recovery artifact, not design authority, task authority, scientific source authority, implementation evidence, or a substitute for project-policy migration.
 
 ```text
-reports/concept/ = accepted project design authority, when declared
+design/          = current accepted project design authority, when used
+reports/concept/ = chronological design exploration/history
 reports/chatgpt/ = committed FORMAL specification
 reports/codex/   = FORMAL execution/verification evidence
 reports/handoff/ = conversation continuity/context
@@ -23,14 +26,18 @@ Create a handoff only when materially true:
 User explicitly requests conversation migration
 current conversation is becoming too large to continue reliably
 work intentionally moves to a new conversation/session
-future resume would otherwise require substantial reconstruction
+future resume would otherwise lose meaningful non-repository context
 ```
 
-It is a migration checkpoint, not a running diary.
+It is a conversation checkpoint, not a running diary and not a mandatory prerequisite for project-policy migration.
+
+If the repository already contains enough current authority/state for a new conversation and only collaboration-policy migration is needed, use `migration.md` + the compact migration bootstrap instead of manufacturing a large handoff.
 
 ## Ownership
 
-ChatGPT is the primary handoff author because the source conversation contains User + ChatGPT rationale, rejected directions, unresolved decisions, and continuity state. For repository-backed projects, ChatGPT should create/commit the handoff directly when connected capability is sufficient. Codex may read it for background but never treats it as current design/task/scientific authority.
+ChatGPT is the primary handoff author because the source conversation may contain User + ChatGPT rationale, rejected directions, unresolved decisions, and continuity state not yet recoverable elsewhere. For repository-backed projects, ChatGPT should make durable state repository-native first when connected capability is sufficient, then keep the handoff focused on remaining continuity.
+
+Codex may read a handoff for background but never treats it as current design/task/scientific authority.
 
 ## Stable layout and filename
 
@@ -67,18 +74,17 @@ handoff.md
 + templates/handoff.md
 ```
 
-Do not load old handoffs unless current migration evidence genuinely depends on them.
+Do not load old handoffs unless current recovery genuinely depends on them.
 
 ## Recovery validation
 
-A current handoff plus current project authority should let a fresh Agent recover:
+A current handoff plus current project authority should let a fresh Agent recover only the continuity that is not already cheap to obtain from repository-native owners, including when relevant:
 
 ```text
 project objective
-current architecture/state
-authoritative files
-settled decisions + rationale
-rejected directions
+current active work edge
+authoritative current files
+settled decisions/rationale not obvious from current design
 implemented versus only designed state
 unresolved decisions + owners
 next actions
@@ -95,7 +101,7 @@ Do not silently assume:
 
 ```text
 handoff repository_head == current HEAD
-handoff concept pointers are still current
+handoff design pointers are still current
 handoff open questions are still unresolved
 handoff task branch is still active
 ```
