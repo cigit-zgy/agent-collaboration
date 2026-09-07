@@ -1,22 +1,23 @@
-# Project concept and report policy
+# Project concept authority and lifecycle
 
-This contract governs formal collaboration reports and `reports/concept/` for maintained scientific/research projects.
+Load this reference for project design authority, adjudication, freeze/reopen, projection, and concept reading routes.
 
-## Stable report layout
+When **authoring or materially rewriting** a concept topic, `SKILL.md` also routes directly to `templates/concept.md`. The authoring template is cold for routine conformance/review.
+
+## Stable report roles
 
 ```text
-reports/
-├── concept/   current accepted project design
-├── chatgpt/   committed local-execution specifications
-├── codex/     execution and verification evidence
-└── handoff/   conversation continuity/context recovery; not design/task authority
+reports/concept/   = current accepted project design, when declared
+reports/chatgpt/   = committed FORMAL local-execution specifications
+reports/codex/     = FORMAL execution/verification evidence
+reports/handoff/   = conversation context only, when used
 ```
 
-Formal task/report paths remain stable after issue. Conversation handoff artifact/index semantics are owned by `handoff.md`.
+Formal task/report paths remain stable after issue.
 
 ## Concept responsibility
 
-When a project declares `reports/concept/` as design authority, each concept topic is the canonical design for one bounded concern after User + ChatGPT design/adjudication and User acceptance.
+When a project declares `reports/concept/` as design authority, each concept topic is the canonical design for one bounded concern after User + ChatGPT adjudication and User acceptance.
 
 The authority chain is:
 
@@ -24,11 +25,11 @@ The authority chain is:
 reports/concept/
 → SKILL.md + references/
 → scripts/code/schemas
-→ tests/
+→ tests
 → runtime artifacts
 ```
 
-Downstream artifacts conform to the governing concept. A mismatch is projection or implementation drift unless a design change is reviewed/adjudicated by User + ChatGPT and accepted by the User first.
+Downstream artifacts conform to the governing concept. A mismatch is projection/implementation drift unless User + ChatGPT adjudicate and the User accepts a design change first.
 
 Scientific fact authority remains separate:
 
@@ -37,265 +38,144 @@ project design truth   = reports/concept/
 model scientific facts = registered source + evidence/provenance
 ```
 
-A concept defines how the project represents, validates, or operates on scientific information. Model-specific values, equations, symbols, and claims remain grounded in the registered source/evidence chain.
+A concept defines how the project represents, validates, or operates on scientific information. Model-specific values/equations/symbols/claims remain source-grounded.
 
-Conversation handoffs may summarize the design and project state for migration, but they are reconstruction context only. A handoff never becomes a substitute for the governing concept, task, or scientific source/evidence.
+Conversation handoffs may summarize design but never become design authority.
 
 ## External prior-art gate — hard requirement
 
-Before freezing a concept for a new maintained project, new core subsystem, major algorithm/modeling method, major architecture redesign, important trust/provenance mechanism, or substantial framework/tool choice, User + ChatGPT MUST complete the external prior-art gate in `prior-art.md`.
+Before freezing a concept for a new maintained project, core subsystem, major algorithm/modeling method, major architecture redesign, important trust/provenance mechanism, or substantial framework/tool choice, User + ChatGPT MUST complete the applicable prior-art gate in `prior-art.md`.
 
-The gate requires both:
+The concept records a compact basis containing the search scope, strongest materially relevant candidates, provenance/source coordinates, `REUSE | ADAPT | REFERENCE_ONLY | REJECT` disposition, and the remaining project-specific gap that justifies custom design.
 
-```text
-authoritative literature → linked/open implementation
-AND
-GitHub/source implementation → scientific/institutional provenance
-```
-
-The concept MUST record a compact prior-art basis: the search scope, strongest materially relevant candidates, their provenance/source coordinates, `REUSE | ADAPT | REFERENCE_ONLY | REJECT` disposition, and the remaining project-specific gap that justifies custom design.
-
-External prior art is evidence, not project authority. User + ChatGPT decide what to adopt; the accepted concept remains the project design authority.
-
-If the gate applies but the prior-art basis is not recoverable, the concept is not ready to freeze and substantial custom implementation must not begin merely because an internal solution can be imagined quickly.
+External prior art is evidence, not project authority.
 
 Routine bug fixes, small bounded refactors, and implementation under an unchanged accepted design do not repeat the full gate.
 
-## Concept writing standard
+## Review, adjudication, freeze, projection
 
-### Core objective
+External review, prior art, Codex output, tests, and existing implementation are evidence; they do not directly redefine the concept.
 
-A concept topic should let an unfamiliar reader recover the accepted design without reconstructing prior discussion or reading current implementation.
-
-The following information should be recoverable when applicable:
-
-1. why the design object, stage, or concern exists;
-2. its responsibility and boundary;
-3. its required inputs or upstream state;
-4. the state, object, interface, or architecture it establishes;
-5. its lifecycle or state transitions when these are part of the design;
-6. ownership and downstream consumers;
-7. the condition under which the designed stage/object is considered valid or complete;
-8. the interface or handoff to adjacent stages or concerns;
-9. for gate-triggered design, the external prior-art basis and reuse/custom-gap decision.
-
-These are information requirements, not mandatory Markdown headings.
-
-### Declarative design, not an execution manual
-
-Write the accepted system state and semantics declaratively.
-
-Preferred:
-
-```text
-A registered artifact has one canonical identity within its owning scope.
-A preserved source artifact remains byte-identical across downstream read-only use.
-```
-
-Use procedural wording only when ordering, interaction, or transition is itself part of the accepted design.
-
-Detailed Agent instructions belong to `SKILL.md`; detailed bounded operational contracts belong to `references/`; implementation mechanics belong to code/schema.
-
-### One topic, one design owner
-
-Each concept topic owns one coherent design concern. Cross-topic relationships may be stated at interfaces, but the same design rule should not be independently redefined in several concept files.
-
-`reports/concept/README.md` maps the design topics and their operational projections.
-
-### Current solution only
-
-A canonical concept contains the current accepted solution. It does not serve as:
-
-- chat or decision chronology;
-- conversation-migration/context summary;
-- implementation journal;
-- Codex task/report;
-- test-result store;
-- transient filesystem/worktree state;
-- backlog of unaccepted alternatives;
-- container for model-specific scientific facts copied from sources.
-
-Historical evolution is preserved by Git history and formal collaboration reports. Conversation continuity belongs in `reports/handoff/` under `handoff.md`.
-
-### Design-level specificity
-
-Include enough detail to constrain downstream projections and make conformance auditable. Avoid implementation detail that has no design consequence.
-
-A useful distinction is:
-
-```text
-Design consequence       → concept
-Conversation continuity  → handoff
-Agent execution detail   → SKILL/reference
-Code mechanism           → implementation
-Observed evidence        → test/report/runtime artifact
-```
-
-### Recommended shape
-
-Use the smallest structure that communicates the accepted design. A common stage-oriented shape is:
-
-```markdown
-# <Design topic>
-
-## Purpose
-
-<Why this concern exists and the stable outcome it establishes.>
-
-## Boundary
-
-<What this topic owns and where adjacent ownership begins.>
-
-## Inputs / upstream state
-
-<Only design-relevant prerequisites.>
-
-## Prior-art basis
-
-<For gate-triggered design: strongest relevant external precedents, dispositions, and design consequence.>
-
-## Accepted design
-
-<Objects, states, relationships, semantics, and invariants.>
-
-## Lifecycle / transitions
-
-<Only when lifecycle is part of the design.>
-
-## Ownership and interfaces
-
-<Producer/owner/consumer and adjacent-stage handoff.>
-
-## Design acceptance
-
-<Directly assessable conditions showing the design is internally complete enough to project.>
-```
-
-The headings are optional. Structure follows the design concern rather than a fixed template.
-
-## Concept index
-
-`reports/concept/README.md` is the design map. It identifies active design topics and the downstream operational files that project each topic. It is not an implementation-status board or conversation-handoff index.
-
-A topic may use minimal metadata:
-
-```yaml
----
-id: <ID>
-title: <TITLE>
-status: active
-role: design_authority
-operational_projection:
-  - <path>
----
-```
-
-Metadata should remain minimal and should not duplicate body semantics.
-
-## Review, adjudication, freeze, and projection
-
-External review and prior art are evidence, not design authority.
-
-For a gate-triggered concern, the normal design lifecycle is:
+For gate-triggered design:
 
 ```text
 problem / design concern
-→ prior-art.md search + candidate inspection
+→ prior-art search + candidate inspection
 → reuse/adapt/reference/reject dispositions
-→ current canonical concept
-→ adversarial / expert / implementation review
+→ canonical concept proposal/update
+→ adversarial/expert/implementation review
 → findings
 → User + ChatGPT adjudication
 → User decision
    ├── reject change → concept unchanged
    └── accept change → concept updated
-→ design freeze for the current concern
+→ freeze current concern
 → SKILL/reference projection
 → implementation
 → conformance verification
 ```
 
-For routine redesign where the prior-art gate is not triggered, the lifecycle may begin at the current canonical concept.
-
-Reviewers, prior-art sources, Codex, tests, existing implementation, and conversation handoffs may expose defects, contradictions, missing requirements, proven patterns, or historical rationale. They do not directly redefine the canonical design.
+For routine redesign where prior-art is not newly triggered, work may begin at the current canonical concept.
 
 ### Adjudication
 
-User + ChatGPT review and adjudicate whether a finding or external precedent should change the accepted solution. The User retains final acceptance/override authority. A proposed change becomes design only after the User accepts it and the governing concept is updated.
+A proposed change becomes design only after User + ChatGPT review the finding and the User accepts the resulting solution.
 
-An implementation mismatch is therefore handled as:
+When implementation differs from concept:
 
 ```text
 concept = A
 projection/code = B
 
-→ inspect whether B is drift or whether A should change
+→ inspect whether B is drift or evidence A should change
 → User + ChatGPT adjudicate
-→ User decides whether the accepted design changes
+→ User decides whether accepted design changes
 → if A remains accepted, repair B
-→ if design changes, update A first and then propagate downstream
+→ if design changes, update A first then propagate downstream
 ```
 
 ### Freeze
 
-A design concern is frozen when:
+A concern is frozen when:
 
 ```text
-its responsibility and boundary are clear
+responsibility/boundary are clear
 AND any applicable prior-art gate is complete and recorded
-AND the current solution has been reviewed/adjudicated by User + ChatGPT
-AND the current solution is accepted by the User
-AND blocking design ambiguities for the intended scope are resolved
-AND downstream projection can be written without inventing new design semantics
+AND current solution is reviewed/adjudicated by User + ChatGPT
+AND User accepts the current solution
+AND blocking design ambiguities for intended scope are resolved
+AND downstream projection can be written without inventing new semantics
 ```
 
-Freeze means the current design is stable enough to project and implement. It does not mean the design can never change, that implementation is complete, or that scientific validation has already succeeded.
+Freeze means stable enough to project/implement. It does not mean permanent, implementation-complete, or scientifically validated.
 
-`freeze` is a collaboration lifecycle condition, not a required metadata enum or additional state file.
+`freeze` is a lifecycle condition, not a required metadata enum/state file.
 
-### Reopening a frozen design
+### Reopening
 
-A frozen concept is reopened only when new evidence or a new User requirement materially changes the accepted design. When the reopening introduces a new major design concern or substantially changes method/tool choice, repeat the relevant prior-art gate. User + ChatGPT adjudicate the change; the User decides whether to accept it. The concept is updated first, then re-frozen for the revised scope, and only then are Skills/references/code/tests updated.
+Reopen a frozen concept only when new evidence or a new User requirement materially changes accepted design.
+
+If reopening introduces a new major design concern or substantially changes method/tool choice, repeat the relevant prior-art gate.
+
+```text
+new evidence/requirement
+→ User + ChatGPT adjudicate
+→ User accepts/rejects change
+→ update concept first when accepted
+→ re-freeze revised scope
+→ update Skill/references/code/tests
+```
 
 Routine implementation discoveries that do not change design remain downstream implementation work.
 
-## Reading paths
+## Concept index
 
-Routine execution may use the already-derived operational projection:
+`reports/concept/README.md` is the design map. It identifies active design topics and their downstream operational projections. It is not an implementation-status board.
+
+Authoring shape/metadata guidance lives in `templates/concept.md` and is loaded only when creating or materially rewriting concept content.
+
+## Reading routes
+
+Routine execution uses the already-derived operational projection:
 
 ```text
 AGENTS.md
 → workflow SKILL.md
-→ owning sub-Skill
-→ required reference/script
+→ owning stage/reference/script
 ```
 
-Context recovery after conversation migration uses the navigation owner in `handoff.md`:
+Do not load concepts for every normal operation when the stable projection is sufficient.
 
-```text
-AGENTS.md
-→ reports/handoff/README.md
-→ current handoff only
-→ current project/collaboration authority
-→ then the relevant routine/design route
-```
-
-New project design or gate-triggered redesign begins with:
+### Design/redesign/conformance
 
 ```text
 AGENTS.md
 → reports/concept/README.md
-→ references/project/prior-art.md
-→ external evidence + strongest implementation precedents
 → relevant concept topic(s)
-→ affected SKILL/reference projection
+→ affected Skill/reference projection
 → implementation/tests as needed
 ```
 
-Design/redesign/adversarial review that does not trigger a new prior-art search may begin from the governing concept directly.
+### New project / gate-triggered redesign
+
+```text
+AGENTS.md
+→ current collaboration prior-art route
+→ external evidence + strongest implementation precedents
+→ relevant concept topic(s)
+→ projection
+→ implementation/tests
+```
+
+### Concept authoring
+
+```text
+concept.md
++ templates/concept.md
+```
+
+`SKILL.md` names both directly; do not create a mandatory reference chain.
 
 ## Collaboration-repository exception
 
-`agent-collaboration` itself is a protocol/Skill repository. Its active policy lives in `references/`; its existing `reports/concept/` files are decision history/rationale rather than canonical project design.
-
-Task/report metadata formats live in `../collaboration/templates/chatgpt-task.md` and `../collaboration/templates/codex-report.md`. Conversation handoff artifacts are governed by `handoff.md`.
+`agent-collaboration` itself is a protocol/Skill repository. Its active policy lives in `references/`; its own `reports/concept/` files are decision history/rationale rather than canonical runtime policy.
