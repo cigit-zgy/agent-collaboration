@@ -1,27 +1,23 @@
 # Project conversation handoff contract
 
-Load this reference for conversation migration/recovery semantics, handoff authority, the current-handoff index, and staleness reconciliation.
-
-When **authoring** a new handoff, `SKILL.md` also routes directly to `templates/handoff.md`. Recovery does not need the template.
+Load this reference for conversation migration/recovery semantics, handoff authority, chronology, and staleness reconciliation. Report/archive placement and filename/metadata rules are owned by `reports.md`. When authoring a new handoff, also load `templates/handoff.md`.
 
 ## Purpose and authority
 
-A handoff preserves enough project state that a new ChatGPT context can resume work without reconstructing the entire prior conversation.
-
-It is a **context-recovery artifact**, not design authority, task authority, scientific source authority, or implementation evidence.
+A handoff preserves enough project state that a new ChatGPT context can resume work without reconstructing the entire prior conversation. It is a context-recovery artifact, not design authority, task authority, scientific source authority, or implementation evidence.
 
 ```text
-reports/concept/   = accepted project design authority, when declared
-reports/chatgpt/   = committed FORMAL specification
-reports/codex/     = FORMAL execution/verification evidence
-reports/handoff/   = conversation continuity/context
+reports/concept/ = accepted project design authority, when declared
+reports/chatgpt/ = committed FORMAL specification
+reports/codex/   = FORMAL execution/verification evidence
+reports/handoff/ = conversation continuity/context
 ```
 
-If a handoff conflicts with current project authority or repository state, current authority/state wins. The handoff records what the prior conversation understood at a specific repository revision.
+If a handoff conflicts with current project authority or repository state, current authority/state wins.
 
 ## Trigger
 
-Create a handoff when materially true:
+Create a handoff only when materially true:
 
 ```text
 User explicitly requests conversation migration
@@ -30,93 +26,45 @@ work intentionally moves to a new conversation/session
 future resume would otherwise require substantial reconstruction
 ```
 
-Do not create one after every routine task/message. It is a migration checkpoint, not a running diary.
+It is a migration checkpoint, not a running diary.
 
 ## Ownership
 
-ChatGPT is the primary handoff author because the source conversation contains User + ChatGPT rationale, rejected directions, unresolved decisions, and continuity state.
+ChatGPT is the primary handoff author because the source conversation contains User + ChatGPT rationale, rejected directions, unresolved decisions, and continuity state. For repository-backed projects, ChatGPT should create/commit the handoff directly when connected capability is sufficient. Codex may read it for background but never treats it as current design/task/scientific authority.
 
-For a repository-backed project, ChatGPT should create/commit the handoff directly when connected repository capability is sufficient. Do not delegate authorship to Codex merely because Codex also performs local execution.
+## Stable layout and filename
 
-Codex may read the current handoff for background when routed there by project `AGENTS.md`, a FORMAL task, or the User. It never overrides current task/project/design/scientific authority.
-
-## Stable layout
-
-Create this only on the first real migration:
+Handoffs live only here:
 
 ```text
-reports/handoff/
-├── README.md
-├── YYMMDD_handoff_01.md
-├── YYMMDD_handoff_02.md
-└── ...
+reports/handoff/YYMMDD_handoff_NN.md
 ```
 
-Filename:
+There is no repository-root `handoff/` directory and no `reports/handoff/README.md` exception. Every handoff obeys the common `reports.md` YAML metadata envelope plus the family-specific fields in `templates/handoff.md`.
 
-```text
-YYMMDD_handoff_NN.md
-```
+Issued handoffs are historical snapshots. Do not rewrite old handoff body semantics to match later design/implementation. Create a new handoff for the next migration.
 
-Issued handoffs are historical snapshots. Do not rewrite old ones to match later design/implementation; create a new handoff for the next migration.
+## Current handoff discovery
 
-## Handoff index — required navigation surface
-
-`reports/handoff/README.md` is a small navigation index only, not a second authority/status database.
-
-Keep it approximately:
-
-```markdown
-# Conversation handoff index
-
-Current handoff: `YYMMDD_handoff_NN.md`
-
-Purpose: context recovery only; current project authority remains in AGENTS/concept/task/source artifacts.
-
-## History
-
-- `YYMMDD_handoff_NN.md` — <short scope/date note>
-- `...`
-```
-
-Update `Current handoff` whenever a new handoff is committed. Keep history deterministic/newest-first.
-
-Do not duplicate design rules, task status, or handoff prose in the index.
-
-## Fast recovery route
-
-For a new ChatGPT conversation/session:
+Normal recovery selects the newest valid handoff by canonical filename chronology and verifies its metadata. `previous_handoff` provides explicit history linkage when present.
 
 ```text
 project AGENTS.md
-→ reports/handoff/README.md
-→ current handoff only
+→ newest valid reports/handoff/YYMMDD_handoff_NN.md
 → re-resolve current collaboration/project authorities
 → inspect current repository HEAD/state relevant to resumed work
 → continue
 ```
 
-The current handoff should be substantially self-contained. A new conversation MUST NOT need every older handoff to understand the current project.
-
-Older handoffs are history drill-down only when the current handoff points to an unresolved historical rationale or the User asks for reconstruction.
-
-For Codex:
-
-```text
-FORMAL task / project AGENTS
-→ current task/project authority first
-→ current handoff only when additional context is needed
-```
-
-Codex does not preload all handoffs for every task.
+Do not preload older handoffs. Older handoffs are history drill-down only when the newest handoff points to an unresolved historical rationale or the User asks for reconstruction.
 
 ## Authoring route
 
 When creating a new handoff, read exactly:
 
 ```text
-handoff.md                # authority/index/recovery/lifecycle
-+ templates/handoff.md    # metadata/body/size/authoring checklist
+handoff.md
++ templates/handoff.md
 ```
 
 Do not load old handoffs unless current migration evidence genuinely depends on them.
@@ -152,8 +100,6 @@ handoff open questions are still unresolved
 handoff task branch is still active
 ```
 
-Use the handoff to recover context; use current authority to determine truth now.
-
 ## Cold-path rule
 
-Normal project execution does not load handoff authoring templates or historical handoffs. Conversation recovery loads only the current handoff; authoring loads the core contract plus one template.
+Normal project execution does not load handoff authoring templates or historical handoffs. Conversation recovery loads only the newest valid handoff; authoring loads the core contract plus one template.
