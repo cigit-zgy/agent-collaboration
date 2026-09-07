@@ -2,191 +2,141 @@
 
 Reusable operating contracts for collaboration among the User, ChatGPT, and Codex.
 
-The framework supports a zero-human-coding workflow: the User owns scientific/product/design/tool decisions, ChatGPT owns design/direct authoring/conversation handoff/acceptance review, Codex owns LOCAL execution and environment-bound verification/repair, and project tooling/CI provides mechanical evidence.
+The framework supports zero-human-coding workflows: the User owns scientific/product/design/tool decisions, ChatGPT owns design/direct authoring/conversation handoff/acceptance review, Codex owns LOCAL execution and environment-bound verification/repair, and project tooling/CI provides mechanical evidence.
 
-## Entry
+## Runtime entry
 
-- `AGENTS.md` — maintenance constitution for this repository.
-- `SKILL.md` — top-level collaboration router.
-- `references/` — current operational policy, organized by owner.
-- `reports/` — decision history, formal tasks, execution evidence, and project conversation handoffs when enabled by a target project.
+```text
+AGENTS.md
+→ SKILL.md
+→ one primary owning reference
+→ optional second owner only when the active concern genuinely spans both
+```
 
-## Reference architecture
+`SKILL.md` is the **sole runtime routing index**. There is intentionally no mandatory `references/INDEX.md` hop.
+
+This follows the progressive-disclosure pattern used by maintained Agent-Skill ecosystems: core trigger/routing stays in the Skill entry, specialized material loads on demand, and reference chains are avoided.
+
+## Current reference architecture
 
 ```text
 references/
 ├── collaboration/
-│   ├── protocol.md
-│   ├── implementation.md
-│   ├── shared-coding-skills.md
-│   ├── verification.md
-│   ├── agents.md
-│   └── templates/
-│       ├── chatgpt-task.md
-│       └── codex-report.md
+│   ├── protocol.md             # roles / authority / refresh / trust
+│   ├── execution.md            # DIRECT/LOCAL/FORMAL + Git/tmp/worktrees
+│   ├── formal.md               # committed task/report/acceptance/integration
+│   ├── implementation.md       # ChatGPT-first implementation discipline
+│   ├── verification.md         # levels / evidence / ChatGPT-vs-Codex placement
+│   ├── actions.md              # GitHub Actions distinct hosted claims
+│   ├── shared-coding-skills.md # immutable shared Skill alignment
+│   ├── agents.md               # AGENTS.md writing standard
+│   └── templates/              # cold: exact FORMAL task/report formats
 │
 ├── project/
-│   ├── architecture.md
-│   ├── concept.md
-│   ├── prior-art.md
-│   ├── handoff.md
-│   └── templates/
-│       ├── agents.md
-│       └── skill.md
+│   ├── architecture.md         # project ownership/integration
+│   ├── external-tools.md       # external CLI/API/schema adapters/profiles
+│   ├── concept.md              # project design authority lifecycle
+│   ├── prior-art.md            # literature↔open-source reuse gate
+│   ├── handoff.md              # conversation migration/recovery
+│   └── templates/              # cold: project AGENTS/Skill/handoff authoring
 │
 └── skill/
-    ├── repository.md
-    ├── package.md
-    ├── writing.md
-    └── templates/
-        └── agents.md
+    ├── development.md          # concept → Skill Markdown → code → tests
+    ├── writing.md              # Skill/reference authoring standard
+    ├── repository.md           # source/discovery/distribution
+    ├── package.md              # package/resources/runtime ownership
+    └── templates/              # cold: first-party Skill AGENTS template
 ```
 
-The reference families answer different questions:
+## Hot / warm / cold context
 
 ```text
-collaboration = how User, ChatGPT, and Codex work together
-project       = how a maintained project is designed, organized, recovered across conversations, and connected
-skill         = how a Skill is owned, packaged, written, and maintained
+HOT
+SKILL.md
+
+WARM
+one primary owner
+optional second owner explicitly selected by SKILL.md
+
+COLD
+templates unless creating/reviewing that artifact
+reports/concept decision history
+historical ChatGPT/Codex reports
+old handoffs
+unrelated owners
 ```
 
-Within collaboration:
+Ordinary use should never require browsing the whole repository before discovering the relevant contract.
+
+## Main routes
+
+| Concern | Read |
+|---|---|
+| ordinary implementation | `SKILL.md` → `collaboration/implementation.md` |
+| verification planning | `SKILL.md` → `collaboration/verification.md` |
+| GitHub Actions | `SKILL.md` → `collaboration/actions.md` |
+| local Git/tmp/worktree | `SKILL.md` → `collaboration/execution.md` |
+| FORMAL task/report/acceptance | `SKILL.md` → `collaboration/formal.md` + exact template only when needed |
+| Skill design/testing | `SKILL.md` → `skill/development.md` |
+| Skill Markdown quality | `SKILL.md` → `skill/writing.md` |
+| new project/major design | `SKILL.md` → `project/prior-art.md` + target project concept |
+| external tool adapter | `SKILL.md` → `project/external-tools.md` |
+| conversation migration/recovery | `SKILL.md` → `project/handoff.md` (+ template only when authoring) |
+
+## Design principles
+
+### One concern, one owner
+
+Detailed rules live once. Other files route to the owner rather than copying the manual.
+
+### Direct progressive disclosure
+
+Normal reference depth is one hop from `SKILL.md`. A reference is substantially self-contained for its concern; mandatory reference chains are avoided.
+
+### Concept-first Skill development
+
+Maintained first-party Skill behavior changes follow:
 
 ```text
-protocol             = authority, routing, Git/task boundaries, report lookup, acceptance
-implementation       = ChatGPT-first/AI-assisted code authoring + engineering discipline
-shared-coding-skills = common immutable Skill authorities + ChatGPT/Codex alignment
-verification         = verification levels + online/local/Actions placement + CI claim deduplication
+accepted concept/design
+→ SKILL.md + references
+→ scripts/code/schema
+→ design-probing tests
 ```
 
-Within project:
+Tests are used to expose general design/contract weaknesses, not to optimize production code around one current fixture.
+
+### Prior art before custom design
+
+For substantial new project/core design, inspect authoritative literature and linked/mature open-source precedents before freezing a custom concept.
+
+### Verification claim deduplication
+
+Codex/ChatGPT/Actions do not repeat the same expensive verification claim unless a second environment proves something materially distinct.
+
+### Context handoff
+
+When a project conversation is intentionally migrated, the current handoff is a high-information context snapshot, not design authority. Recovery reads only the current handoff plus current authority/state.
+
+## Reports
 
 ```text
-architecture = repository ownership, runtime boundaries, project-local tmp state, handoff placement
-concept      = accepted design authority and freeze/adjudication lifecycle
-prior-art    = mandatory literature↔open-source search and reuse/adapt/custom-gap gate for substantial new design
-handoff      = conversation migration, context snapshot schema, current-handoff index, and fast recovery route
+reports/concept/   collaboration decision history/rationale
+reports/chatgpt/   historical committed FORMAL task specifications
+reports/codex/     historical FORMAL execution evidence
 ```
 
-## Authority model
+For `agent-collaboration` itself, current operational authority lives in `references/`, not historical `reports/concept/` files.
 
-Current operational authority lives in `references/`. `reports/concept/` records this repository's decision history/rationale rather than runtime policy.
+## Context-efficiency target
 
-Maintained scientific projects may declare their own `reports/concept/` as canonical project design authority. Their model-specific scientific facts remain grounded in registered source/evidence rather than project governance documents.
-
-External prior art informs project design but does not become project authority. For new projects, core subsystems, major algorithms/architectures, and substantial tool/framework choices, the project must inspect authoritative literature and linked/mature open-source implementations before freezing a custom concept.
-
-Project conversation handoffs are also non-authoritative: they preserve a high-information snapshot of the prior ChatGPT conversation and repository state, but current `AGENTS.md`, concept/task/source authority, and current repository state always win.
-
-A local `.agents/skills` entry is discovery, not cross-Agent authority. Coding Skills that constrain both ChatGPT and Codex are identified by immutable repository/commit/path coordinates under `references/collaboration/shared-coding-skills.md` or an explicit project/task profile.
-
-## Execution modes
-
-`references/collaboration/protocol.md` defines three routes:
+The intended normal read set is:
 
 ```text
-DIRECT
-= ChatGPT completes work supported by connected capability
-
-LOCAL-QUICK
-= bounded low-risk local implementation/execution with focused verification and ChatGPT acceptance review
-
-FORMAL
-= major, long, risk-sensitive, trust/public-contract, persistent-state, or release work using a committed task and durable report
+thin SKILL.md
++ one primary owner
++ zero or one necessary secondary owner
++ zero historical preload
 ```
 
-Code authorship and verification location are decided separately. ChatGPT writes code/tests it can correctly author from repository/design/shared-Skill context; cheap available checks run online, while project-environment or time-consuming checks run through Codex locally.
-
-Repository-changing FORMAL work defaults to a dedicated task branch/worktree, so an isolated long task does not freeze the shared default branch.
-
-Formal task launch text lives in `references/collaboration/templates/chatgpt-task.md`.
-
-## Verification and GitHub Actions
-
-`references/collaboration/verification.md` treats GitHub Actions as an independent hosted evidence environment, not a mandatory duplicate test layer.
-
-```text
-Codex already proves claim X
-+ Actions would only prove X again
-→ do not run Actions
-
-Actions proves clean-room / matrix / status / release / public-reproducibility claim Y
-→ Actions may run for Y
-```
-
-Private repositories default to ChatGPT + Codex local verification with automatic Actions off unless a distinct hosted claim justifies the account budget. Public repositories may retain standard hosted CI when it materially improves external reproducibility, contributor/status feedback, packaging, or release confidence. Current GitHub billing/runner pricing is external platform state and is rechecked against official GitHub documentation when it affects the decision.
-
-## AI-assisted implementation
-
-`references/collaboration/implementation.md` requires AI-generated implementation to be transparent, reviewable, maintainable, and held to the same quality standard as maintained human-authored code.
-
-Before substantial custom implementation of a gate-triggered design, `references/project/prior-art.md` requires a prior-art review and a concept-level `REUSE | ADAPT | REFERENCE_ONLY | REJECT` decision. Existing strong implementations are understood first; custom code is reserved for the remaining justified gap.
-
-The User is not required to write code or inspect every line. Material implementation decisions and verification evidence instead remain auditable through bounded changes, shared Skill authorities, clear contracts, tests/tooling, Codex local evidence, and ChatGPT acceptance review.
-
-## Conversation handoff and recovery
-
-When a project conversation is intentionally migrated or has become too large to continue reliably, `references/project/handoff.md` defines a DIRECT ChatGPT handoff artifact under:
-
-```text
-reports/handoff/YYMMDD_handoff_NN.md
-```
-
-The project also keeps a small navigation file:
-
-```text
-reports/handoff/README.md
-```
-
-which points to the current handoff. The normal recovery route is:
-
-```text
-project AGENTS.md
-→ reports/handoff/README.md
-→ current handoff only
-→ current project/collaboration authority + current repository state
-→ continue
-```
-
-Older handoffs are historical drill-down only; do not preload them all.
-
-## Normal reading path
-
-```text
-AGENTS.md
-→ SKILL.md
-→ one owning reference
-```
-
-For CI/Actions placement or budget review:
-
-```text
-AGENTS.md
-→ SKILL.md
-→ references/collaboration/verification.md
-```
-
-For new project/core design:
-
-```text
-AGENTS.md
-→ SKILL.md
-→ references/project/prior-art.md
-→ governing project concept
-```
-
-For conversation migration/recovery:
-
-```text
-AGENTS.md
-→ SKILL.md
-→ references/project/handoff.md  # when authoring/migrating
-
-or
-
-AGENTS.md
-→ reports/handoff/README.md
-→ current handoff                # when resuming
-```
-
-Do not load the whole reference tree, every installed Skill, or every historical handoff for ordinary work.
+If an Agent must read several large collaboration files before determining the correct owner, that is a routing/design defect.
