@@ -57,7 +57,7 @@ codex_report: reports/codex/<YYMMDD_codex_NN.md>
 ---
 ```
 
-`artifact_id` equals the filename stem. `baseline_sha` is the task-branch commit after task-specific ChatGPT DIRECT inputs and before the task artifact. `codex_report` is the exact expected report path.
+`artifact_id` equals the filename stem. `baseline_sha` is the exact authorized repository baseline prepared by ChatGPT before the task artifact. `codex_report` is the exact expected report path.
 
 ## Body
 
@@ -75,11 +75,41 @@ Use the smallest task body that fully specifies execution. Typical sections are:
 ## Engineering constraints
 ## Acceptance criteria
 ## Verification
-## Git handoff / integration
+## Git / synchronization / integration
 ## Codex report
 ```
 
 Bind exact current `design/` + committed `SKILL.md`/reference owners for Skill behavior changes. List only verification categories actually required.
+
+## Remote synchronization — hard requirement
+
+Every repository-changing FORMAL task inherits the two-sided remote synchronization handshake in `../execution.md` and MUST NOT weaken it.
+
+Before any mutation Codex must:
+
+```text
+fresh-fetch remote refs
+→ resolve exact task branch + committed task coordinate + authorized baseline
+→ inspect local branch/HEAD/upstream/worktrees/User state
+→ establish the task worktree safely
+→ prove local execution HEAD == authorized fetched remote baseline
+```
+
+If the fetched remote task branch/task coordinate is not the expected issued state, Codex stops rather than silently working from a stale or unexpected baseline.
+
+After task changes Codex must:
+
+```text
+commit task-scoped changes
+→ push task branch
+→ fresh-fetch remote refs again
+→ prove local task HEAD == fetched upstream task-branch HEAD
+→ record that evidence in the Codex report
+```
+
+A successful push command alone is not sufficient. If final local/upstream equality is not established, the FORMAL task cannot report PASS.
+
+Do not use blind `git pull`, destructive reset, rebase, stash, force checkout, or force push merely to synchronize.
 
 ## Skill behavior tasks — hard requirement
 
