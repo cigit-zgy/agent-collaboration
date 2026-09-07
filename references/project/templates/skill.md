@@ -1,37 +1,40 @@
 # Project workflow SKILL.md template
 
-Read `../../skill/writing.md` for Markdown quality. When maintaining or changing Skill behavior/implementation, also read `../../skill/development.md` first.
+Read `../../skill/writing.md` first. For behavior/design changes also read `../../skill/development.md`.
 
 This template applies when a project exposes an Agent-operable multi-stage or composite workflow.
-
-## Development authority
-
-For a design-bearing Skill change, the maintained order is:
-
-```text
-governing project/Skill concept
-→ project workflow SKILL.md + owning sub-Skill/references
-→ implementation
-→ tests/evaluation
-```
-
-A project workflow Skill is an operational projection of accepted design; it is not the place to invent semantics after code/test failures.
-
-If testing exposes missing or ambiguous workflow semantics, return to the governing concept/design and update the Skill Markdown before implementation repair. Pure implementation drift may be repaired directly only when the existing design + Skill Markdown already determine behavior without interpretation.
 
 ## Required information
 
 A project workflow Skill communicates:
 
-1. workflow purpose and activation condition;
+1. workflow purpose + activation condition;
 2. minimum entry state;
 3. top-level workflow/branch structure;
 4. one owner for each top-level stage/capability;
-5. stable input, output, and progression gate for each route;
-6. progressive-disclosure routing;
+5. stable input/output/progression gate for each route;
+6. direct progressive-disclosure routing;
 7. completion semantics.
 
 These are information requirements, not mandatory headings.
+
+## Context architecture
+
+The workflow `SKILL.md` is the runtime index for that project capability.
+
+```text
+preferred
+SKILL.md → owning stage/reference
+
+avoid
+SKILL.md → second index → owner
+```
+
+Name the primary owner directly for each route. Add a second owner only when the active concern genuinely requires both.
+
+Do not instruct Agents to preload all sub-Skills/references or follow mandatory multi-reference chains.
+
+Detailed stage contracts belong in their owners; the workflow Skill keeps only the selection information needed to reach them.
 
 ## Common shape
 
@@ -61,19 +64,29 @@ description: >
 - Required input: <minimum stable input>
 - Stable output: <state/artifact>
 - Gate: <directly checkable condition>
-- Owner: <path/to/SKILL.md>
+- Owner: <path/to/SKILL.md-or-reference>
+- Also read: <NONE OR one genuinely required second owner>
 
 ## Completion
 <Directly checkable terminal state.>
 
-## References
-<Only active-branch resources.>
+## Cold paths
+<Templates/examples/history that are loaded only for the branch that needs them.>
 ````
 
-When the project uses design-authority concepts, identify the governing concept without copying it into the Skill. Optional sections such as trust/lifecycle, runtime, human checkpoints, recovery, or STOP exist only when they change routing or execution.
+When the project uses design-authority concepts, identify the governing concept without copying it into the Skill.
 
-## Test interpretation
+Optional sections such as trust/lifecycle, runtime, human checkpoints, recovery, or STOP exist only when they change routing/execution.
 
-Project Skill tests are evidence about the general workflow contract. They should probe representative flows, boundaries, stage handoffs, recovery/failure semantics, and previously clarified invariants.
+## Development rule
 
-Do not tune the workflow Skill or implementation around one task fixture. Classify a failure using `../../skill/development.md` before changing code.
+A design-bearing workflow change follows:
+
+```text
+accepted concept/design
+→ workflow/stage SKILL.md + references
+→ implementation
+→ design-probing tests
+```
+
+Do not encode a new workflow semantic only in a FORMAL task or implementation patch.
