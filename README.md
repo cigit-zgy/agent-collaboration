@@ -13,9 +13,7 @@ AGENTS.md
 → optional second owner only when the active concern genuinely spans both
 ```
 
-`SKILL.md` is the **sole runtime routing index**. There is intentionally no mandatory `references/INDEX.md` hop.
-
-This follows the progressive-disclosure pattern used by maintained Agent-Skill ecosystems: core trigger/routing stays in the Skill entry, specialized material loads on demand, and reference chains are avoided.
+`SKILL.md` is the **sole runtime routing index**. There is intentionally no mandatory second index hop.
 
 ## Current reference architecture
 
@@ -34,35 +32,62 @@ references/
 │
 ├── project/
 │   ├── architecture.md         # project ownership/integration
-│   ├── external-tools.md       # external CLI/API/schema adapters/profiles
-│   ├── concept.md              # project design authority lifecycle
+│   ├── reports.md              # report families / naming / archive
+│   ├── concept.md              # chronological design exploration/history
+│   ├── design.md               # current canonical living design + dynamic decomposition
 │   ├── prior-art.md            # literature↔open-source reuse gate
+│   ├── external-tools.md       # external CLI/API/schema adapters/profiles
 │   ├── handoff.md              # conversation migration/recovery
-│   └── templates/              # cold: project AGENTS/Skill/handoff authoring
+│   └── templates/              # cold: AGENTS/Skill/concept/design/handoff authoring
 │
 └── skill/
-    ├── development.md          # concept → Skill Markdown → code → tests
+    ├── development.md          # current design → Skill Markdown → code → tests
     ├── writing.md              # Skill/reference authoring standard
     ├── repository.md           # source/discovery/distribution
     ├── package.md              # package/resources/runtime ownership
     └── templates/              # cold: first-party Skill AGENTS template
 ```
 
+## Project design model
+
+For maintained projects using explicit design authority:
+
+```text
+reports/concept/
+= what we considered
+= dated design journal / historical reasoning
+= may contain alternatives and unresolved ideas
+= never current authority
+
+design/
+= what we currently accept
+= structured living design
+= one current set only
+= no old/draft/versioned parallel copies
+```
+
+A material concept is reduced into the living design only after User + ChatGPT adjudication.
+
+The `design/` file set is dynamic: topics are added, updated, split, merged, removed, or reordered according to real current design responsibilities. File count is not fixed by a universal project template.
+
 ## Hot / warm / cold context
 
 ```text
 HOT
 SKILL.md
+project design/README.md when current design is needed
 
 WARM
-one primary owner
-optional second owner explicitly selected by SKILL.md
+one primary collaboration owner
+one directly relevant design topic
+optional second owner only when genuinely necessary
 
 COLD
+reports/concept/ history unless reconstructing rationale/adjudicating a new idea
 templates unless creating/reviewing that artifact
-reports/concept decision history
 historical ChatGPT/Codex reports
 old handoffs
+00_archive/
 unrelated owners
 ```
 
@@ -77,38 +102,55 @@ Ordinary use should never require browsing the whole repository before discoveri
 | GitHub Actions | `SKILL.md` → `collaboration/actions.md` |
 | local Git/tmp/worktree | `SKILL.md` → `collaboration/execution.md` |
 | FORMAL task/report/acceptance | `SKILL.md` → `collaboration/formal.md` + exact template only when needed |
+| current project design | `SKILL.md` → `project/design.md` + target `design/` topic |
+| design-history / new concept note | `SKILL.md` → `project/concept.md` |
 | Skill design/testing | `SKILL.md` → `skill/development.md` |
 | Skill Markdown quality | `SKILL.md` → `skill/writing.md` |
-| new project/major design | `SKILL.md` → `project/prior-art.md` + target project concept |
+| new project/major design | `SKILL.md` → `project/prior-art.md` → current `design/` update |
 | external tool adapter | `SKILL.md` → `project/external-tools.md` |
 | conversation migration/recovery | `SKILL.md` → `project/handoff.md` (+ template only when authoring) |
 
 ## Design principles
 
-### One concern, one owner
+### One concern, one current owner
 
 Detailed rules live once. Other files route to the owner rather than copying the manual.
+
+Within project `design/`, one current semantic concern has exactly one owner file.
 
 ### Direct progressive disclosure
 
 Normal reference depth is one hop from `SKILL.md`. A reference is substantially self-contained for its concern; mandatory reference chains are avoided.
 
-### Concept-first Skill development
+### Current design separate from history
+
+```text
+concept journal
+→ adjudication
+→ living design
+→ Skill/reference projection
+→ implementation
+→ tests
+```
+
+The living design never carries old versions or rejected alternatives merely for traceability. Git history and concept notes provide that history.
+
+### Design-first Skill development
 
 Maintained first-party Skill behavior changes follow:
 
 ```text
-accepted concept/design
+current accepted design
 → SKILL.md + references
 → scripts/code/schema
 → design-probing tests
 ```
 
-Tests are used to expose general design/contract weaknesses, not to optimize production code around one current fixture.
+Tests expose general design/contract weaknesses; they do not justify task-local production patches.
 
 ### Prior art before custom design
 
-For substantial new project/core design, inspect authoritative literature and linked/mature open-source precedents before freezing a custom concept.
+For substantial new project/core design, inspect authoritative literature and linked/mature open-source precedents before accepting custom design into the living design tree.
 
 ### Verification claim deduplication
 
@@ -116,14 +158,15 @@ Codex/ChatGPT/Actions do not repeat the same expensive verification claim unless
 
 ### Context handoff
 
-When a project conversation is intentionally migrated, the current handoff is a high-information context snapshot, not design authority. Recovery reads only the current handoff plus current authority/state.
+When a project conversation is intentionally migrated, the current handoff is a high-information context snapshot, not design authority. Recovery reconciles it against current design/authority/state.
 
 ## Reports
 
 ```text
-reports/concept/   collaboration decision history/rationale
-reports/chatgpt/   historical committed FORMAL task specifications
-reports/codex/     historical FORMAL execution evidence
+reports/concept/   chronological design journal/history
+reports/chatgpt/   committed FORMAL task specifications
+reports/codex/     FORMAL execution evidence
+reports/handoff/   conversation migration snapshots
 ```
 
 For `agent-collaboration` itself, current operational authority lives in `references/`, not historical `reports/concept/` files.
@@ -136,7 +179,8 @@ The intended normal read set is:
 thin SKILL.md
 + one primary owner
 + zero or one necessary secondary owner
++ only directly relevant current design topic(s)
 + zero historical preload
 ```
 
-If an Agent must read several large collaboration files before determining the correct owner, that is a routing/design defect.
+If an Agent must read several large files before determining the correct current owner, that is a routing/design defect.
