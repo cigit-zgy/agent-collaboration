@@ -1,134 +1,186 @@
-# Project concept authority and lifecycle
+# Project concept-journal contract
 
-Load this reference for project design authority, adjudication, freeze/reopen, projection, and concept reading routes. Report-family layout, filename rules and common metadata are owned by `reports.md`. When authoring or materially rewriting a concept topic, also load `templates/concept.md`.
+Load this reference for chronological design exploration under `reports/concept/`: recording ideas, alternatives, unresolved questions, prior-art findings, design attacks, and the adjudication that may later update the canonical `design/` tree.
 
-## Stable report roles
+Current accepted design authority is owned by `design.md`. Report-family filenames/metadata are owned by `reports.md`. When authoring a concept note, also load `templates/concept.md`.
 
-```text
-reports/concept/ = current accepted project design, when declared
-reports/chatgpt/ = committed FORMAL local-execution specifications
-reports/codex/   = FORMAL execution/verification evidence
-reports/handoff/ = conversation context only, when used
-```
-
-All report artifacts obey the canonical dated family filename and YAML metadata contract in `reports.md`.
-
-## Concept responsibility
-
-When a project declares `reports/concept/` as design authority, each concept artifact is the canonical design for one bounded concern after User + ChatGPT adjudication and User acceptance.
-
-The authority chain is:
+## Core distinction — hard boundary
 
 ```text
 reports/concept/
-→ SKILL.md + references/
-→ scripts/code/schemas
-→ tests
-→ runtime artifacts
+= what we considered and how the design evolved
+= chronological design journal
+= evidence/input for design adjudication
+= NOT current design authority
+
+design/
+= what the project currently accepts
+= canonical living design authority
+= current state only
 ```
 
-Downstream artifacts conform to the governing concept. A mismatch is projection/implementation drift unless User + ChatGPT adjudicate and the User accepts a design change first.
+A concept note may be exploratory, incomplete, contain competing options, or later become obsolete. Its existence does not authorize implementation.
 
-Scientific fact authority remains separate:
+## Concept-journal responsibility
+
+Use `reports/concept/` when a discussion is worth preserving because it may help future design work recover:
 
 ```text
-project design truth   = reports/concept/
-model scientific facts = registered source + evidence/provenance
+a new design idea or requirement
+an identified design defect or ambiguity
+candidate A/B/C approaches
+prior-art findings and reuse/adapt/reject reasoning
+an adversarial review or counterexample
+an unresolved design question
+why an accepted design was changed or left unchanged
+why a plausible approach was rejected
 ```
 
-Conversation handoffs may summarize design but never become design authority.
+Do not force a concept note into polished current-system prose. The journal exists specifically so exploratory reasoning does not pollute `design/`.
 
-## External prior-art gate — hard requirement
+## Filename and chronology
 
-Before freezing a concept for a new maintained project, core subsystem, major algorithm/modeling method, major architecture redesign, important trust/provenance mechanism, or substantial framework/tool choice, User + ChatGPT MUST complete the applicable prior-art gate in `prior-art.md`.
-
-The concept records a compact basis containing search scope, strongest materially relevant candidates, source/repository coordinates, `REUSE | ADAPT | REFERENCE_ONLY | REJECT` disposition, and the remaining project-specific gap that justifies custom design. External prior art is evidence, not project authority.
-
-Routine bug fixes, small bounded refactors, and implementation under unchanged accepted design do not repeat the full gate.
-
-## Review, adjudication, freeze, projection
-
-External review, prior art, Codex output, tests, and implementation are evidence; they do not directly redefine the concept.
-
-```text
-problem / design concern
-→ prior-art gate when applicable
-→ canonical concept proposal/update
-→ adversarial/expert/implementation review
-→ User + ChatGPT adjudication
-→ User acceptance/rejection
-→ freeze current concern
-→ SKILL/reference projection
-→ implementation
-→ conformance verification
-```
-
-When implementation differs from concept, inspect whether implementation drift should be repaired or new evidence justifies reopening design. Accepted design changes are committed to concept first, then propagated to Skill/references/code/tests.
-
-### Freeze
-
-A concern is frozen when responsibility/boundary are clear, any applicable prior-art gate is complete, current solution is adjudicated and accepted, blocking design ambiguities for intended scope are resolved, and downstream projection can be written without inventing semantics.
-
-Freeze means stable enough to project/implement; it does not mean permanent, implementation-complete, or scientifically validated.
-
-### Reopening
-
-Reopen a frozen concept only when new evidence or a new User requirement materially changes accepted design. If reopening introduces a new major method/tool concern, repeat the relevant prior-art gate.
-
-## Concept identity and discovery
-
-Concept files do not use semantic filenames or `README.md` indexes. They use:
+Concept notes follow the report-family naming contract:
 
 ```text
 reports/concept/YYMMDD_concept_NN.md
 ```
 
-Each concept carries a stable semantic `concept_id`, title, status, role and summary in YAML metadata. The semantic identity therefore survives filename chronology while repository-wide naming remains uniform.
+`NN` is the two-digit sequence for that date/family. Files remain flat under `reports/concept/`.
 
-When a project needs a design map, it is itself a normal concept artifact with a `concept_id` such as `design_map` and the same canonical filename/metadata contract. It may point to active concept topics and downstream operational projections but must not become a parallel implementation-status database.
+Chronology lives in filenames/date metadata. Semantic links to current design may be carried by optional topic identifiers; concept filenames do not become current design filenames.
+
+## Metadata
+
+Use the common report metadata from `reports.md` plus only concept-specific fields that improve recovery:
+
+```yaml
+---
+artifact_type: project_concept
+artifact_id: <YYMMDD_concept_NN>
+title: <short title>
+date: <YYYY-MM-DD>
+project: <project name>
+repository: <owner/repository>
+status: <open | incorporated | rejected | superseded | recorded>
+summary: >
+  <compact searchable summary>
+design_topics:
+  - <design_id>   # optional; only known affected current concern(s)
+---
+```
+
+`artifact_id` equals the filename stem.
+
+Do not use `role: design_authority` for concept notes. Do not require `operational_projection`; implementation projection belongs to the accepted living design.
+
+A note may start as `open`. After adjudication, its status may be updated to `incorporated`, `rejected`, `superseded`, or `recorded` when useful for retrieval. Updating status does not rewrite the historical reasoning into a different conclusion.
+
+## Writing shape
+
+Concept notes are intentionally flexible. A useful note often contains only the sections needed for the actual discussion, for example:
+
+```text
+Context / problem
+Current observation
+Candidate ideas
+Evidence / prior art
+Attack / counterexample
+User + ChatGPT adjudication
+Design consequence
+Open questions
+```
+
+These are optional shapes, not mandatory headings.
+
+The important separation is:
+
+```text
+exploration / alternatives / history
+→ concept note
+
+accepted current semantics
+→ design/
+```
+
+## Prior-art relationship
+
+For a gate-triggered new project/core design, `prior-art.md` is completed before substantial custom design is accepted.
+
+The detailed search trail, strongest candidates, `REUSE | ADAPT | REFERENCE_ONLY | REJECT` reasoning, and unresolved findings may be recorded in one or more concept notes.
+
+Only the accepted current consequence is then reduced into `design/`.
+
+## Adjudication and reduction into design
+
+A concept note does not automatically produce a design change.
+
+User + ChatGPT adjudicate the material and classify its current-design consequence using `design.md`:
+
+```text
+NO_CHANGE
+UPDATE
+NEW_TOPIC
+SPLIT
+MERGE
+REMOVE
+REORDER
+```
+
+When the result changes accepted design:
+
+```text
+concept note(s)
+→ User + ChatGPT adjudication
+→ update design/ into one coherent current state
+→ update SKILL.md/references projection
+→ implementation
+→ tests/evidence
+```
+
+When the result is `NO_CHANGE`, retain the concept note as useful history and leave `design/` unchanged.
+
+## Historical integrity
+
+Issued concept notes are historical reasoning artifacts. Do not continuously rewrite their bodies to look like the current design.
+
+If a later idea contradicts an earlier note, create a new dated concept note and update living design only after adjudication. Git history plus the journal preserve evolution.
+
+Old concept notes are not moved into `design/`, and superseded design files are not moved into `reports/concept/`; these are different artifact families with different responsibilities.
 
 ## Reading routes
 
-Routine execution uses the already-derived operational projection:
+Routine project execution SHOULD NOT read concept history when operational projection is already sufficient.
+
+For current design:
 
 ```text
 AGENTS.md
-→ workflow SKILL.md
-→ owning stage/reference/script
+→ design/README.md
+→ relevant current design topic(s)
 ```
 
-### Design/redesign/conformance
+For historical rationale or a new design discussion:
 
 ```text
-AGENTS.md
-→ locate relevant reports/concept artifact by metadata (`concept_id`, title, status)
-→ governing concept topic(s)
-→ affected Skill/reference projection
-→ implementation/tests as needed
+current design topic
++ relevant reports/concept note(s) only when needed
+→ adjudication
+→ design update if accepted
 ```
 
-### New project / gate-triggered redesign
+Do not preload the entire concept journal.
 
-```text
-AGENTS.md
-→ current collaboration prior-art route
-→ external evidence + strongest implementation precedents
-→ relevant concept topic(s)
-→ projection
-→ implementation/tests
-```
+## Current-design authority
 
-### Concept authoring
+All freeze/reopen/current-structure semantics belong to `design.md`.
 
-```text
-concept.md
-+ templates/concept.md
-```
+A design concern is ready for implementation only when its current accepted semantics are represented in `design/` and downstream projection can be written without inventing missing choices.
 
 ## Roadmap/status boundary
 
-Do not create `reports/development-roadmap.md` or another parallel design/status file. Accepted architectural direction and deferred capabilities that materially constrain future design belong in the owning concept topic. Non-authoritative execution backlog belongs in tasks/issues or another explicitly declared work-management surface.
+`reports/concept/` is not an execution backlog or implementation-status board. Task execution belongs in ChatGPT/Codex task/report artifacts or another explicitly declared work-management surface.
 
 ## Collaboration-repository exception
 
-`agent-collaboration` itself is a protocol/Skill repository. Its active policy lives in `references/`; its own report history does not override runtime policy.
+`agent-collaboration` itself uses `reports/concept/` as its design-decision history. Its current operational policy remains under `references/`; concept history never overrides current runtime policy.
