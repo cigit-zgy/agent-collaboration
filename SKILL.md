@@ -45,35 +45,52 @@ Use one primary owner plus at most one explicitly necessary secondary owner. Avo
 | author/review `AGENTS.md` | `references/collaboration/agents.md` | relevant project/Skill AGENTS template |
 | project ownership/integration architecture | `references/project/architecture.md` | none |
 | reports layout, naming/metadata, archive placement, report cleanup | `references/project/reports.md` | family-specific owner/template only when needed |
+| chronological design exploration/history in `reports/concept/` | `references/project/concept.md` | `references/project/templates/concept.md` only when authoring a concept note |
+| current canonical project design under `design/`, dynamic topic decomposition | `references/project/design.md` | `references/project/templates/design.md` only when creating/restructuring living design |
 | external CLI/API/schema/parser/simulator adapter/profile/reproducibility | `references/project/external-tools.md` | none |
-| project concept authority/freeze/reopen/projection | `references/project/concept.md` | `references/project/templates/concept.md` only when authoring/materially rewriting concept content |
-| new project/core design or major architecture/tool choice | `references/project/prior-art.md` | target project concept authority |
+| new project/core design or major architecture/tool choice | `references/project/prior-art.md` | current target `design/` topic(s) after adjudication |
 | conversation migration/recovery semantics | `references/project/handoff.md` | `references/project/templates/handoff.md` only when authoring a new handoff |
-| maintained first-party Skill design/implementation/testing lifecycle | `references/skill/development.md` | target concept/design authority when declared |
+| maintained first-party Skill design/implementation/testing lifecycle | `references/skill/development.md` | current target `design/` authority when declared |
 | Skill Markdown/reference writing quality | `references/skill/writing.md` | `development.md` when behavior/design is changing |
 | Skill maintained source/discovery/distribution | `references/skill/repository.md` | none |
 | Skill package/resources/runtime ownership | `references/skill/package.md` | none |
 
 ## Hard routing rules
 
+### Project design model
+
+```text
+reports/concept/
+= what we considered / historical design thinking
+
+design/
+= what we currently accept / one canonical living design set
+```
+
+A material new idea may create a dated concept note. It changes project authority only after User + ChatGPT adjudication updates `design/` into one coherent current state.
+
+Do not keep old/draft/versioned design copies under `design/`. Use `project/design.md` for dynamic add/update/split/merge/remove/reorder rules.
+
 ### Skill behavior changes
 
 ```text
-accepted concept/design
+current accepted design/
 → target SKILL.md + references
 → implementation
 → design-probing tests
 ```
 
-Use `skill/development.md`. If tests expose `DESIGN_GAP`, return to design/Skill Markdown before code repair. Do not optimize production code around one task fixture.
+Use `skill/development.md`. If tests expose `DESIGN_GAP`, return to design adjudication and Skill Markdown before code repair. Do not optimize production code around one task fixture.
 
 ### New project / major design
 
-Use `project/prior-art.md` before concept freeze. Substantial custom implementation begins only after the reuse/adapt/custom-gap decision is durable.
+Use `project/prior-art.md` before accepting a major custom design into `design/`. Substantial custom implementation begins only after the reuse/adapt/custom-gap decision is durable in the current living design.
 
 ### Reports / archive
 
 Use `project/reports.md`. If `reports/` exists, its active surface is limited to `chatgpt/`, `codex/`, `concept/`, and `handoff/`; every report Markdown file follows the canonical dated family filename and required YAML metadata. Historical retention uses the single repository-root `00_archive/`, never `archive/` or nested `00_archive/`.
+
+`reports/concept/` is design history/input, not current design authority.
 
 ### FORMAL work
 
@@ -101,13 +118,15 @@ Do not preload:
 
 ```text
 references/**/templates/   unless creating/reviewing that artifact
-reports/concept/           except active design/conformance concern
+reports/concept/           except active design-history/adjudication work
 reports/chatgpt/           except active FORMAL task
 reports/codex/             except expected active report
 older reports/handoff/     except explicit historical reconstruction
 00_archive/                historical only
 README.md                   human orientation only
 ```
+
+For current design, read `design/README.md` and only the directly relevant topic files; do not preload the entire design tree for a bounded concern.
 
 ## Context target
 
