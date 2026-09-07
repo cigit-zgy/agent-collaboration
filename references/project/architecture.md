@@ -1,96 +1,107 @@
 # Project architecture and integration contract
 
-This contract governs how a maintained scientific/software project joins `agent-collaboration` and how repository responsibilities are separated.
+Load this reference for project repository ownership, authority surfaces, runtime reading routes, project onboarding, and report-family placement.
+
+External CLI/API/schema integration is owned by `external-tools.md`. Detailed local Git/worktree/tmp execution is owned by `../collaboration/execution.md`.
 
 ## Project entry
 
-Root `AGENTS.md` is the project-local constitution. It identifies project identity, authority, ownership boundaries, workflow entry, runtime/tooling authority, context-recovery route when used, and genuine human/trust checkpoints. Use `../collaboration/agents.md` plus `templates/agents.md` when authoring it.
+Root `AGENTS.md` is the project-local constitution. It identifies project identity, authority, ownership boundaries, workflow entry, runtime/tooling authority, context-recovery route when used, and genuine human/trust checkpoints.
+
+Use `../collaboration/agents.md` plus `templates/agents.md` when authoring it.
 
 A project workflow Skill may live at any project-declared path; it is not required to be repository-root `SKILL.md`.
 
 ## Responsibility-based architecture
 
-There is no universal or canonical project filesystem in this collaboration standard.
+There is no universal canonical project filesystem.
 
-Create only responsibilities that have a real owner, artifact, and consumer. Common patterns include:
+Create only responsibilities with a real owner, artifact, and consumer. Common patterns include:
 
 | Responsibility | Common path | Meaning |
 |---|---|---|
 | project constitution | `AGENTS.md` | repository-scoped authority and routing |
 | human orientation | `README.md` | human-facing introduction/quick start |
-| runtime/tooling authority | `pyproject.toml` or project-declared equivalent | dependencies, mechanical style, tooling when a runtime exists |
+| runtime/tooling authority | `pyproject.toml` or equivalent | dependencies, mechanical style, tooling |
 | Agent capability package | `<agent-name>/` | project-owned workflow/sub-Skills when present |
 | reusable implementation | `src/` | reusable executable code/infrastructure |
-| durable model artifacts | `models/` | project-adopted model-specific definitions/artifacts |
+| durable model artifacts | `models/` | project-adopted model-specific artifacts |
 | canonical reusable data | `data/` | project-adopted datasets |
 | mutable work state | `workspace/` | current case/model/Agent operational state |
 | controlled investigations | `experiments/` | reproducible calibration/simulation/benchmark/case-study work |
 | conformance/regression checks | `tests/` | tests for stable contracts/implementation |
 | human technical documentation | `docs/` | durable explanation beyond README |
 | publication assets | `manuscript/` | manuscript/figure/supplement materials when owned here |
-| accepted project design | `reports/concept/` | canonical design only when the project declares it |
-| formal delegated tasks | `reports/chatgpt/` | committed FORMAL local-execution specifications |
-| Codex execution evidence | `reports/codex/` | FORMAL implementation/verification reports |
-| conversation continuity | `reports/handoff/` | context-recovery snapshots + current-handoff navigation index; never design/task authority |
-| Agent-local temporary state | `tmp/` | sole project-local scratch/test/worktree/download/cache/render/disposable-env boundary |
+| accepted project design | `reports/concept/` | canonical design only when declared |
+| formal delegated tasks | `reports/chatgpt/` | committed FORMAL specifications |
+| Codex execution evidence | `reports/codex/` | FORMAL execution/verification reports |
+| conversation continuity | `reports/handoff/` | context-recovery snapshots + current-handoff index; never design/task authority |
+| Agent-local temporary state | `tmp/` | project-owned ephemeral boundary; execution rules live in collaboration `execution.md` |
 
-These are examples, not required directories. Equivalent ownership is valid when the project `AGENTS.md` makes it explicit, except that Agent-created ephemeral local state follows the `tmp/` boundary below unless the User explicitly authorizes another location.
+These are examples, not required directories. Equivalent ownership is valid when project `AGENTS.md` makes it explicit.
 
 Do not pre-create `reports/handoff/` merely because a project might someday use multiple conversations. Create it on the first real migration under `handoff.md`.
 
 ## Design authority
 
-When a scientific project declares `reports/concept/` as canonical design authority, `concept.md` owns the writing, review, adjudication, freeze, and projection lifecycle.
+When a scientific project declares `reports/concept/` as canonical design authority, `concept.md` owns writing, review, adjudication, freeze, reopen, and projection lifecycle.
 
-Before a new project, new core subsystem, major algorithm/architecture, or comparable gate-triggered design is frozen, `prior-art.md` MUST be completed. The prior-art review searches authoritative literature and linked/mature open-source implementations before User + ChatGPT settle the project-specific design.
+Before a new project, core subsystem, major algorithm/architecture, or comparable gate-triggered design is frozen, complete `prior-art.md`.
 
-External prior art informs design but does not replace project authority. The accepted concept remains the design source of truth.
+```text
+external prior art
+= design evidence
 
-Conversation handoffs are context-recovery artifacts. They may summarize accepted decisions and current repository state, but they do not become design authority and do not supersede current `AGENTS.md`, concept, committed task, registered scientific source/evidence, or current repository state. See `handoff.md`.
+accepted project concept
+= design authority
 
-Model-specific scientific facts remain grounded in the project's registered source/evidence chain rather than repository-architecture documents.
+registered source/evidence
+= model-specific scientific fact authority
+```
 
-## Runtime reading route
+Conversation handoffs are context-recovery artifacts only. They may summarize accepted decisions and repository state, but they never supersede current `AGENTS.md`, concept, committed task, registered scientific source/evidence, or current repository state.
 
-For ordinary Agent operation, expose the shortest stable route:
+## Runtime reading routes
+
+Expose the shortest stable route for routine operation:
 
 ```text
 AGENTS.md
 → declared workflow SKILL.md
-→ owning sub-Skill
-→ required reference/script
+→ owning sub-Skill/reference/script
+```
+
+Do not force ordinary execution through project design/history files when the operational projection is already stable.
+
+### New project / major design
+
+```text
+AGENTS.md
+→ current agent-collaboration SKILL route for prior art
+→ strongest relevant external precedents
+→ reports/concept/README.md
+→ governing concept
+→ operational projection
 ```
 
 ### Conversation/context recovery
 
-When a new ChatGPT conversation/session resumes an existing project and `reports/handoff/README.md` exists:
+When `reports/handoff/README.md` exists:
 
 ```text
 AGENTS.md
 → reports/handoff/README.md
 → current handoff only
-→ re-resolve current collaboration/project authorities
-→ inspect current repository HEAD/state relevant to the resumed work
-→ continue through the normal workflow/design route
+→ re-resolve current collaboration/project authority
+→ inspect current repository state
+→ continue through normal workflow/design route
 ```
 
-Do not read every historical handoff by default. Older handoffs are history drill-down only.
+Do not read every historical handoff by default.
 
-Codex reads the current handoff only when a FORMAL task, project `AGENTS.md`, or the User routes it there for additional context. Task/project authority remains primary.
+### External tool integration
 
-New project/core design follows:
-
-```text
-AGENTS.md
-→ ../project/prior-art.md
-→ authoritative literature + strongest relevant open-source precedents
-→ reports/concept/README.md
-→ governing concept
-```
-
-Routine design/redesign/conformance work follows the design-authority route in `concept.md` when the prior-art gate is not newly triggered.
-
-AI-assisted executable implementation follows `../collaboration/implementation.md`; project tooling/CI remains the owner of language-specific mechanical style and checks.
+When the active concern is an evolving external CLI/API/schema/parser/simulator interface, route directly from collaboration `SKILL.md` to `external-tools.md`; do not load the whole project architecture merely to recover adapter rules.
 
 ## Ownership boundaries
 
@@ -103,159 +114,62 @@ canonical reusable dataset    → data owner
 mutable current run state      → workspace owner
 controlled investigation      → experiment owner
 conversation continuity       → handoff owner
-Agent-created ephemeral state → tmp owner
+Agent-created ephemeral state → project tmp boundary + collaboration execution owner
 ```
 
-Promotion between responsibilities is explicit. Experiment outputs become canonical data/model artifacts only after project adoption with provenance. Exploratory code becomes reusable implementation only when a real reusable consumer and stable contract exist. Live workspace state remains mutable even when captured as an experiment input/snapshot. Handoff summaries do not promote themselves into concept/task/source authority merely because they are committed.
+Promotion between responsibilities is explicit.
 
-## Project-local ephemeral workspace — hard boundary
+Experiment outputs become canonical data/model artifacts only after project adoption with provenance. Exploratory code becomes reusable implementation only when a real reusable consumer and stable contract exist. Live workspace state remains mutable. Handoff summaries do not promote themselves into concept/task/source authority merely because they are committed.
 
-For LOCAL execution, every temporary artifact intentionally created by ChatGPT/Codex tooling on the User machine MUST remain inside the target project's root `tmp/` tree unless the User explicitly names another location.
+## Project-local ephemeral boundary
 
-Default work isolation:
+`tmp/` is the canonical project-owned location for Agent-created local ephemeral state.
 
-```text
-<PROJECT_ROOT>/tmp/<WORK_ID>/
-```
+Detailed placement, `WORK_ID`, linked-worktree, cleanup, and Git-safety semantics are owned by `../collaboration/execution.md` so local tasks need only one operational execution owner.
 
-`WORK_ID` means:
-
-```text
-FORMAL      → exact task_id
-LOCAL-QUICK → short local work/session label that is unique enough within the project
-```
-
-Create only the subdirectories actually needed, for example:
-
-```text
-worktree/   linked FORMAL worktree when needed
-run/        scratch execution/test/E2E output
-downloads/  disposable downloads
-cache/      task-local cache
-renders/    temporary render artifacts
-env/        disposable environment only when explicitly justified
-```
-
-The boundary covers Agent-chosen linked worktrees, scratch repositories, temporary downloads, test outputs, render outputs, caches, intermediate files, and disposable environments. Agents MUST NOT create persistent sibling project directories, Desktop test folders, Documents-root scratch directories, ad-hoc global temporary workspaces, or similarly scattered task state merely for convenience.
-
-Examples of non-conforming Agent-created paths include:
-
-```text
-../<project>-<sha>/
-../<project>-<task>/
-~/Desktop/tests/
-~/Documents/<project>-scratch/
-/tmp/<project>-persistent-test/
-```
-
-System/runtime caches whose location is controlled by the operating system or an external tool and cannot reasonably be redirected are outside this ownership rule; the Agent must not deliberately choose them as project scratch space.
-
-When `tmp/` exists in a maintained repository, it should normally be excluded from version control with a root-scoped ignore such as `/tmp/`. Do not commit task scratch state.
-
-Cleanup lifecycle:
-
-```text
-completed + no recovery value
-→ remove work tmp immediately
-
-BLOCKED/FAIL + deliberate recovery value
-→ retain only the minimum needed state and report why
-
-superseded/cancelled + no recovery value
-→ remove work tmp
-
-active/dirty/unpushed/uncertain state
-→ preserve until safety is established
-```
-
-No age threshold alone authorizes deletion. A retained recovery workspace should normally be reconsidered on the next local task in that project; stale task state with no recovery value should be removed rather than accumulated.
-
-Git linked worktrees are removed through Git-aware operations (`git worktree remove` followed by `git worktree prune` when appropriate), not by blind filesystem deletion. Never destroy dirty, unpushed, active, or ambiguous User state merely to satisfy cleanup.
-
-## External tool integration boundary
-
-Third-party scientific/software tools use an explicit adapter boundary when their CLI, API, file layout, schema, or runtime behavior is implementation-specific and may evolve independently.
-
-The project design layer defines required capability and artifact semantics; it should not unnecessarily freeze transient command spelling.
-
-```text
-project concept / contract
-→ required capability and artifact semantics
-
-owning adapter
-→ concrete CLI/API/schema knowledge
-→ version/profile compatibility checks
-→ invocation and output discovery
-
-other project modules
-→ consume the adapter's project-facing result
-→ do not duplicate third-party interface details
-```
-
-Concrete flags, endpoint paths, native output filename patterns, or schema branching should have one implementation owner. Duplicate external-interface knowledge only when a second occurrence is an intentionally bounded contract assertion.
-
-### Known-profile verification
-
-For an evolving external interface, prefer an explicit known-compatible profile plus verification over speculative runtime adaptation.
-
-A probe may inspect stable surfaces such as:
-
-```text
---version
---help
-capability metadata
-API version endpoint
-schema/version marker
-```
-
-The probe verifies a known profile; it does not infer a new interface automatically.
-
-If an expected capability changes in a way the adapter does not understand:
-
-```text
-unknown / semantically incompatible external profile
-→ fail closed
-→ report unsupported interface
-→ update + revalidate adapter explicitly
-```
-
-Do not guess renamed flags, select merely plausible replacements, silently switch tools/backends, or reinterpret changed semantics because an invocation happens to run.
-
-### Scientific reproducibility
-
-For result-bearing scientific tools, successful execution is not evidence of semantic compatibility by itself. Record tool/version/configuration facts that materially affect reproducibility when those facts are part of result provenance.
-
-Exact version pinning is not universal. Use a fixed version for exact-environment reproduction; otherwise a validated compatible profile may be sufficient. In both cases, reproducibility and explicit semantics outrank speculative forward compatibility.
+Project `AGENTS.md` should route to that owner rather than copy the full tmp/worktree manual.
 
 ## Project onboarding
 
 ```text
 inspect actual repository
-→ establish project AGENTS.md
+→ establish concise project AGENTS.md
 → declare real ownership + runtime/tooling boundaries
-→ run prior-art.md gate for substantial new design
+→ run prior-art gate for substantial new design
 → inspect strongest paper-linked/mature open-source precedents
-→ define and accept project design authority/concept
+→ define/accept project concept when needed
 → expose workflow Skill only when a repeatable Agent workflow exists
 → project Skills/references operationalize accepted design
-→ AI-assisted implementation follows implementation.md + project tooling
+→ implementation follows collaboration implementation contract + project tooling
 → tests/evidence verify conformance
-→ route LOCAL work through LOCAL-QUICK or FORMAL according to protocol risk
+→ route local execution through DIRECT / LOCAL-QUICK / FORMAL as appropriate
 ```
 
-Conversation handoff support is added only when the first real context migration occurs:
+Conversation handoff support is added only on first real context migration:
 
 ```text
 first migration
 → create reports/handoff/README.md
 → create first YYMMDD_handoff_NN.md
-→ thereafter update the index current pointer on each migration
+→ update the current pointer on later migrations
 ```
 
-Do not create a custom subsystem before the applicable prior-art gate merely because an internal design can be produced quickly.
-
-Project collaboration routes to `../collaboration/protocol.md`, `../collaboration/implementation.md`, `prior-art.md`, `concept.md`, `handoff.md`, and `../collaboration/verification.md` rather than copying those manuals into every repository.
+Do not create a custom subsystem before an applicable prior-art gate merely because an internal design can be produced quickly.
 
 ## Review criterion
 
-A project architecture is sufficient when an unfamiliar Agent can determine the real owners, authority sources, workflow entry, context-recovery route when handoffs exist, prior-art/reuse basis for substantial new design, mutable-state boundaries, ephemeral-state boundary, design/scientific-fact distinction, implementation/tooling authority, and external-tool adapter boundaries without inferring a canonical directory tree or hidden compatibility behavior.
+A project architecture is sufficient when an unfamiliar Agent can determine:
+
+```text
+project authority
+real artifact owners
+runtime/workflow entry
+prior-art/design route when needed
+context-recovery route when handoffs exist
+mutable versus durable state
+project tmp ownership
+scientific-fact versus design authority
+implementation/tooling authority
+```
+
+without inferring a canonical directory tree or reading unrelated collaboration manuals.
