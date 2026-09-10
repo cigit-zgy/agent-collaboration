@@ -2,7 +2,7 @@
 
 Load this reference for repository report-family layout, report filenames/metadata, archive placement, and report cleanup/migration.
 
-Current accepted project design is outside `reports/` and is owned by the repository-root `design/` tree under `design.md`.
+Current accepted project design is outside `reports/` and is owned by repository-root `design/`. Current collaboration/work edge, when used, is outside `reports/` and owned by repository-root `CURRENT.md` under `current.md`.
 
 ## Reports root — hard constraint
 
@@ -24,14 +24,15 @@ Responsibilities are fixed:
 reports/chatgpt/ = durable ChatGPT-authored Codex task specifications for LOCAL-QUICK and FORMAL
 reports/codex/   = FORMAL Codex execution/verification reports only
 reports/concept/ = chronological design exploration/history; never current design authority
-reports/handoff/ = conversation migration/context-recovery snapshots only
+reports/handoff/ = exceptional conversation-only residual delta; not normal resume state
 
-design/          = current accepted structured project design; owned separately by design.md
+design/          = current accepted structured project design
+CURRENT.md       = current work edge / resume pointer when the project uses current-state tracking
 ```
 
 LOCAL-QUICK deliberately has no `reports/codex/` artifact. FORMAL has both a ChatGPT task and bound Codex report.
 
-A roadmap, backlog, discussion diary, review log, integration note, qualification note, or historical implementation record is not a fifth report family.
+A roadmap, backlog, discussion diary, review log, integration note, qualification note, current-status diary, or historical implementation record is not a fifth report family.
 
 ## Execution ownership for report normalization
 
@@ -58,15 +59,6 @@ where `<family>` is:
 
 ```text
 chatgpt | codex | concept | handoff
-```
-
-Examples:
-
-```text
-reports/chatgpt/260907_chatgpt_01.md
-reports/codex/260907_codex_01.md
-reports/concept/260907_concept_01.md
-reports/handoff/260907_handoff_01.md
 ```
 
 `NN` is a two-digit sequence within the same date + family. Do not use semantic filenames, `README.md`, `index.md`, or another naming pattern inside active `reports/`.
@@ -138,8 +130,6 @@ current accepted design/
 → Codex implementation/verification
 ```
 
-A task artifact is not a substitute for missing living-design or Skill semantics.
-
 ## Concept-journal metadata
 
 A concept note is historical/exploratory design input, not design authority. It may identify affected current design topics:
@@ -152,9 +142,27 @@ design_topics:
 
 Detailed concept semantics are owned by `concept.md`.
 
-## Handoff discovery
+## CURRENT.md is not a report
 
-Handoffs live only in `reports/handoff/`. Normal recovery resolves the newest valid handoff by filename chronology/metadata and reconciles it against current project authority/repository state. Older handoffs are history drill-down only.
+`CURRENT.md` is a repository-root mutable current-state pointer owned by `current.md`.
+
+It may summarize only the present work edge and link to exact task/report/design owners. It must not preserve report history, duplicate report bodies, or act as a fifth report family.
+
+When the active task/report state changes, CURRENT may be rewritten to point to the new adopted work edge. Git history preserves earlier CURRENT states.
+
+## Handoff discovery — exceptional only
+
+Handoffs live only in `reports/handoff/` and are not the normal multi-conversation resume mechanism.
+
+A handoff is created only when meaningful conversation-only continuity would otherwise be lost and cannot reasonably be represented in AGENTS/design/CURRENT/task/report/concept or another real owner.
+
+Normal resume is owned by `current.md`:
+
+```text
+AGENTS.md → CURRENT.md → design/README.md → just-in-time current owner
+```
+
+When an exceptional handoff exists, CURRENT or the User may point to the one relevant handoff. Do not traverse historical handoff chains by default.
 
 ## Archive — single-root hard constraint
 
@@ -168,17 +176,18 @@ Do not create `archive/` or nested `*/00_archive/` directories.
 
 Archive is history only: never current design/task/report/runtime authority and never loaded by default. If retention has no recovery, legal, provenance, or audit value, delete rather than archive.
 
-Do not store superseded living-design copies in archive merely for convenience; Git history and `reports/concept/` already preserve design evolution.
+Do not store superseded living-design copies in archive merely for convenience; Git history and `reports/concept/` preserve design evolution.
 
 ## Roadmaps and duplicate status files
 
 ```text
 current accepted architectural direction → design/
+current active work edge                  → CURRENT.md when justified
 historical reasoning / explored ideas     → reports/concept/
 execution backlog                         → issues/tasks or declared work-management surface
 ```
 
-Do not duplicate current design in a report merely to provide status.
+Do not create a parallel current-status report or roadmap that duplicates `CURRENT.md` or `design/`.
 
 ## Migration / cleanup rule
 
@@ -186,13 +195,13 @@ When normalizing an existing project:
 
 ```text
 1. inspect current authority and Git history;
-2. preserve current ChatGPT tasks, FORMAL Codex reports and handoffs with real value;
+2. preserve current ChatGPT tasks, FORMAL Codex reports and exceptional handoffs with real value;
 3. normalize report filenames and required metadata;
 4. classify reports/concept as chronological design history;
 5. establish/update repository-root design/ separately when explicit living design is used;
-6. delete obsolete duplicate status/roadmap files when another owner already exists;
-7. move retained report-history/sidecar evidence into root 00_archive/reports/... when justified;
-8. remove non-conforming nested/non-Markdown material from active report families;
+6. establish/update CURRENT.md only when long-running/multi-conversation resume cost justifies it;
+7. delete obsolete duplicate status/roadmap files when another owner already exists;
+8. move retained report-history/sidecar evidence into root 00_archive/reports/... when justified;
 9. verify reports/ contains only the four allowed flat families.
 ```
 
