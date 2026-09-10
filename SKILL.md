@@ -80,6 +80,8 @@ new conversation
 → load only the current concern just in time
 ```
 
+When the User says something equivalent to `换对话框，给我提示词`, route to `project/current.md` and return only its canonical compact resume prompt for the active repository. Do not explain migration/handoff/current-state architecture unless explicitly asked.
+
 `CURRENT.md` records only NOW; it is not a history log. Do not preload the full design tree, concept history, old task/report files, old handoffs, archive, or collaboration reference tree merely to resume.
 
 Before the first substantive repository-changing write, refresh current collaboration authority once under `protocol.md`; this does not justify loading unrelated collaboration owners during orientation.
