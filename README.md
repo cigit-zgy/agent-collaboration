@@ -2,7 +2,7 @@
 
 Reusable operating contracts for collaboration among the User, ChatGPT, and Codex.
 
-The framework supports zero-human-coding workflows: the User owns scientific/product/design/tool decisions, ChatGPT owns design/direct authoring/durable task specification/acceptance review, Codex owns LOCAL execution and environment-bound verification/repair, and project tooling/CI provides mechanical evidence.
+The framework treats repository state as durable memory and conversations as disposable working memory. The User owns scientific/product/design/tool decisions, ChatGPT owns design/direct authoring/durable task specification/acceptance review, Codex owns LOCAL execution and environment-bound verification/repair, and project tooling/CI provides mechanical evidence.
 
 ## Runtime entry
 
@@ -20,25 +20,26 @@ AGENTS.md
 ```text
 references/
 ├── collaboration/
-│   ├── protocol.md             # roles / authority / refresh / trust
-│   ├── execution.md            # DIRECT/LOCAL/FORMAL + durable Codex task handoff + Git/tmp/worktrees
-│   ├── formal.md               # FORMAL report/acceptance/integration
-│   ├── implementation.md       # ChatGPT-first implementation discipline
-│   ├── verification.md         # levels / evidence / ChatGPT-vs-Codex placement
-│   ├── actions.md              # GitHub Actions distinct hosted claims
-│   ├── shared-coding-skills.md # immutable shared Skill alignment
-│   ├── agents.md               # AGENTS.md writing standard
-│   └── templates/              # cold: LOCAL-QUICK task + FORMAL task/report formats
+│   ├── protocol.md
+│   ├── execution.md
+│   ├── formal.md
+│   ├── implementation.md
+│   ├── verification.md
+│   ├── actions.md
+│   ├── shared-coding-skills.md
+│   ├── agents.md
+│   └── templates/
 │
 ├── project/
 │   ├── architecture.md
-│   ├── migration.md
+│   ├── current.md             # CURRENT.md + normal multi-conversation resume
+│   ├── migration.md           # actual project-policy migration
 │   ├── reports.md
 │   ├── concept.md
 │   ├── design.md
 │   ├── prior-art.md
 │   ├── external-tools.md
-│   ├── handoff.md
+│   ├── handoff.md             # exceptional conversation-only delta
 │   └── templates/
 │
 └── skill/
@@ -48,6 +49,86 @@ references/
     ├── package.md
     └── templates/
 ```
+
+## Multi-conversation project model
+
+For long-running projects:
+
+```text
+AGENTS.md
+= project constitution / authority map
+
+design/
+= what we currently accept
+
+CURRENT.md
+= what we are working on now
+= mutable present work edge + pointers only
+
+reports/concept/
+= how we thought / historical design reasoning
+
+reports/chatgpt/ + reports/codex/
+= durable delegated-task specification / execution evidence
+
+reports/handoff/
+= exceptional residual conversation-only delta only
+
+Git history
+= repository evolution
+```
+
+A full conversation normally ends by making accepted state repository-native and rewriting `CURRENT.md`. It does not trigger project migration and does not automatically create a handoff.
+
+Normal fresh-conversation resume is:
+
+```text
+AGENTS.md
+→ CURRENT.md
+→ design/README.md when present
+→ identify current concern
+→ load only the directly relevant owner(s) just in time
+```
+
+Do not preload the full design tree, concept history, old ChatGPT/Codex reports, old handoffs, archive, or complete collaboration references merely to resume.
+
+`CURRENT.md` should normally remain <= 4 KiB; above ~8 KiB is a signal that history/design/evidence or unrelated work streams have leaked into it.
+
+## Project design model
+
+```text
+reports/concept/
+= what we considered
+= chronological design history/input
+= never current authority
+
+design/
+= what we currently accept
+= one current structured design set
+= dynamic topic decomposition
+```
+
+A material concept is reduced into living design only after User + ChatGPT adjudication.
+
+## Existing-project migration
+
+Project-policy migration is separate from conversation resume:
+
+```text
+current collaboration SKILL.md
+→ project/migration.md
+→ target repository AGENTS/CURRENT/branch/HEAD/state
+→ current design and only relevant history/evidence
+→ migrate only drifted surfaces
+```
+
+Opening a new conversation does not by itself justify migration assessment or design reconstruction.
+
+## Exceptional handoff
+
+`reports/handoff/` is used only when meaningful conversation-only continuity cannot reasonably be represented in AGENTS/design/CURRENT/task/report/concept or another real owner.
+
+A handoff is a small delta capsule, normally <= 4 KiB. No handoff is preferable to a redundant handoff.
 
 ## Codex task handoff model
 
@@ -75,142 +156,54 @@ FORMAL
 → ChatGPT acceptance/integration
 ```
 
-There is no long chat prompt for either mode. If task details need expansion, update the committed task file rather than appending instructions in chat.
-
-## Project design model
-
-```text
-reports/concept/
-= what we considered
-= chronological design history/input
-= never current authority
-
-design/
-= what we currently accept
-= one current structured design set
-= dynamic topic decomposition
-```
-
-A material concept is reduced into living design only after User + ChatGPT adjudication.
-
-## Existing-project migration
-
-Migration to a newer collaboration model is repository-native and delta-based:
-
-```text
-old conversation
-→ make important session-only state durable when possible
-→ short migration bootstrap only if a new conversation is taking over
-
-new/current conversation
-→ current collaboration SKILL.md
-→ project/migration.md
-→ target repository AGENTS + branch/HEAD/state
-→ current design/ and only relevant history/evidence
-→ migrate only drifted surfaces
-```
-
-Do not paste whole project history into the migration prompt.
-
 ## Hot / warm / cold context
 
 ```text
 HOT
-SKILL.md
-active reports/chatgpt task when Codex delegation is occurring
-project design/README.md when current design is needed
+project AGENTS.md
+project CURRENT.md when used
+project design/README.md when present
+SKILL.md when collaboration intent routing is needed
 
 WARM
-one primary collaboration owner
-one directly relevant design topic
+one directly relevant current design/Skill/task/report owner
+one primary collaboration owner when required
 optional second owner only when genuinely necessary
 
 COLD
+reports/concept/ history
 historical reports/chatgpt tasks
-reports/concept/ history unless rationale/adjudication is needed
-templates unless creating/reviewing that artifact
-historical FORMAL Codex reports
-old handoffs
+historical reports/codex reports
+reports/handoff/ unless an exceptional delta is explicitly relevant
 00_archive/
-unrelated owners
+unrelated owners/templates
 ```
 
 ## Main routes
 
 | Concern | Read |
 |---|---|
+| normal conversation resume | project `AGENTS.md → CURRENT.md → design/README.md` |
 | ordinary implementation | `SKILL.md` → `collaboration/implementation.md` |
 | LOCAL-QUICK delegation | `SKILL.md` → `collaboration/execution.md` + LOCAL-QUICK task template |
 | FORMAL task/report/acceptance | `SKILL.md` → `collaboration/formal.md` + exact FORMAL template |
 | verification planning | `SKILL.md` → `collaboration/verification.md` |
 | GitHub Actions | `SKILL.md` → `collaboration/actions.md` |
 | existing-project migration | `SKILL.md` → `project/migration.md` |
+| current-work-state design | `SKILL.md` → `project/current.md` |
 | current project design | `SKILL.md` → `project/design.md` + target `design/` topic |
 | design-history / new concept note | `SKILL.md` → `project/concept.md` |
+| exceptional conversation delta | `SKILL.md` → `project/handoff.md` |
 | Skill design/testing | `SKILL.md` → `skill/development.md` |
 | new project/major design | `SKILL.md` → `project/prior-art.md` → current `design/` update |
-| conversation migration/recovery | `SKILL.md` → `project/handoff.md` |
 
-## Design principles
-
-### One concern, one current owner
-
-Detailed rules live once. Other files route to the owner rather than copying the manual.
-
-### Locator, not prompt duplication
-
-The chat handoff to Codex is only a locator to the committed task. The repository task artifact owns execution detail.
-
-### Direct progressive disclosure
-
-Normal reference depth is one hop from `SKILL.md`. Mandatory reference chains are avoided.
-
-### Repository-native migration
-
-Give the next Agent a map, not a transcript. The target repository is the system of record.
-
-### Current design separate from history
+## Core principles
 
 ```text
-concept journal
-→ adjudication
-→ living design
-→ Skill/reference projection
-→ implementation
-→ tests
+repository carries continuity
+conversation carries working memory
+CURRENT.md carries only NOW
+handoff carries only exceptional residual delta
 ```
 
-### Design-first Skill development
-
-```text
-current accepted design
-→ SKILL.md + references
-→ scripts/code/schema
-→ design-probing tests
-```
-
-### Verification claim deduplication
-
-Codex/ChatGPT/Actions do not repeat the same expensive verification claim unless a second environment proves something materially distinct.
-
-## Reports
-
-```text
-reports/chatgpt/   all durable Codex task specifications: LOCAL-QUICK + FORMAL
-reports/codex/     FORMAL execution evidence only
-reports/concept/   chronological design journal/history
-reports/handoff/   conversation migration snapshots
-```
-
-For `agent-collaboration` itself, current operational authority lives in `references/`, not historical `reports/concept/` files.
-
-## Context-efficiency target
-
-```text
-thin SKILL.md
-+ one primary owner
-+ active task artifact only when delegation occurs
-+ zero historical preload
-```
-
-If an Agent must read several large files before determining the correct current owner, that is a routing/design defect.
+The intended startup read set for a mature project is only `AGENTS.md + CURRENT.md + design/README.md`; useful work should begin before large historical context is loaded. If an Agent must reconstruct the prior conversation or read several large files merely to locate the current concern, that is a routing/state-design defect.
