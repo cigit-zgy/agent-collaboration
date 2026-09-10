@@ -2,9 +2,10 @@
 name: agent-collaboration
 description: >
   Coordinate User, ChatGPT, and Codex for repository work involving project or Skill design,
-  prior-art research, existing-project migration, direct authoring, local execution, verification,
-  GitHub Actions, Codex delegation/acceptance, shared coding-Skill alignment, project integration,
-  conversation handoff/context recovery, report/archive governance, or Skill maintenance.
+  prior-art research, existing-project migration, multi-conversation resume/current work state,
+  direct authoring, local execution, verification, GitHub Actions, Codex delegation/acceptance,
+  shared coding-Skill alignment, project integration, exceptional conversation handoff,
+  report/archive governance, or Skill maintenance.
 ---
 
 # Agent Collaboration
@@ -44,19 +45,44 @@ Use one primary owner plus at most one explicitly necessary secondary owner.
 | shared coding-Skill authority/alignment | `references/collaboration/shared-coding-skills.md` | none |
 | author/review `AGENTS.md` | `references/collaboration/agents.md` | relevant project/Skill AGENTS template |
 | project ownership/integration architecture | `references/project/architecture.md` | none |
+| normal multi-conversation resume / root `CURRENT.md` | `references/project/current.md` | `references/project/templates/current.md` only when creating/restructuring CURRENT |
 | migrate an existing project to current collaboration policy/architecture | `references/project/migration.md` | migration bootstrap template only when a new conversation needs it |
 | reports layout, naming/metadata, archive placement, report cleanup | `references/project/reports.md` | family-specific owner/template only when needed |
 | chronological design exploration/history in `reports/concept/` | `references/project/concept.md` | concept template only when authoring a concept note |
 | current canonical project design under `design/` | `references/project/design.md` | design template only when creating/restructuring living design |
 | external CLI/API/schema/parser/simulator adapter/profile/reproducibility | `references/project/external-tools.md` | none |
 | new project/core design or major architecture/tool choice | `references/project/prior-art.md` | current target `design/` topic(s) after adjudication |
-| conversation migration/recovery semantics | `references/project/handoff.md` | handoff template only when authoring a new handoff |
+| exceptional conversation-only continuity not representable elsewhere | `references/project/handoff.md` | handoff template only when authoring the exceptional delta artifact |
 | maintained first-party Skill design/implementation/testing lifecycle | `references/skill/development.md` | current target `design/` authority when declared |
 | Skill Markdown/reference writing quality | `references/skill/writing.md` | `development.md` when behavior/design is changing |
 | Skill maintained source/discovery/distribution | `references/skill/repository.md` | none |
 | Skill package/resources/runtime ownership | `references/skill/package.md` | none |
 
 ## Hard routing rules
+
+### Normal conversation resume — repository carries continuity
+
+Replacing a full conversation in an already-integrated project is **not** project migration and normally does **not** require a handoff.
+
+For projects using the current-work-state contract:
+
+```text
+old conversation
+→ make accepted durable state belong to its real repository owner
+→ rewrite root CURRENT.md to the actual work edge
+→ create handoff only for unavoidable residual conversation-only delta
+→ end
+
+new conversation
+→ AGENTS.md
+→ CURRENT.md
+→ design/README.md when present
+→ load only the current concern just in time
+```
+
+`CURRENT.md` records only NOW; it is not a history log. Do not preload the full design tree, concept history, old task/report files, old handoffs, archive, or collaboration reference tree merely to resume.
+
+Before the first substantive repository-changing write, refresh current collaboration authority once under `protocol.md`; this does not justify loading unrelated collaboration owners during orientation.
 
 ### Codex delegation — task body never lives in chat
 
@@ -84,11 +110,9 @@ FORMAL
 
 The committed task is the sole task-specific execution specification. Chat MUST NOT repeat the detailed task as a long prompt.
 
-If the task cannot be committed/pushed, do not fall back to a chat-only long instruction; report the blocker.
-
 ### Codex remote synchronization — hard boundary
 
-Every repository-changing Codex task, LOCAL-QUICK or FORMAL, executes against the latest **authorized fetched remote state**, never an assumed local checkout.
+Every repository-changing Codex task executes against the latest authorized fetched remote state.
 
 Before repository mutation:
 
@@ -98,7 +122,6 @@ fresh fetch
 → inspect local branch/HEAD/upstream/worktrees/User state
 → establish safe task branch/worktree
 → prove local execution HEAD == authorized fetched remote baseline
-→ mutate only after equality is established
 ```
 
 After repository mutation:
@@ -111,27 +134,20 @@ commit task-scoped changes
 → only then report PASS/completion
 ```
 
-A successful push command alone is insufficient. If final local/upstream equality is not established, PASS is forbidden.
-
-Synchronization does not mean blind `git pull`. Do not use reset, rebase, stash, force checkout, or force push merely to align local state; preserve pre-existing User state and use a safe task branch/worktree.
+Synchronization does not authorize blind `git pull`, reset, rebase, stash, force checkout, or force push.
 
 ### Existing-project migration
 
-Project-policy migration is not a request to reread the old conversation.
+Project-policy migration changes repository architecture/policy; it is not routine conversation resume.
 
 ```text
-old conversation
-→ make important non-repository state durable when possible
-→ emit short migration bootstrap only if a new conversation is taking over
-
-new/current conversation
-→ project/migration.md
+project/migration.md
 → current target repository state
 → only directly relevant current owners/history
 → delta migration
 ```
 
-Do not preload all concept notes, Codex reports, handoffs, or collaboration references.
+Do not reconstruct the old conversation. When migration establishes a long-running multi-conversation project, create/update `CURRENT.md` as the current work pointer rather than using a handoff as normal state.
 
 ### Project design model
 
@@ -141,6 +157,9 @@ reports/concept/
 
 design/
 = what we currently accept / one canonical living design set
+
+CURRENT.md
+= what we are working on now / current execution-work pointer
 ```
 
 A material new idea changes project authority only after User + ChatGPT adjudication updates `design/` into one coherent current state.
@@ -162,11 +181,11 @@ Use `project/prior-art.md` before accepting a major custom design into `design/`
 
 ### Reports / archive
 
-Use `project/reports.md`. If `reports/` exists, its active surface is limited to `chatgpt/`, `codex/`, `concept/`, and `handoff/`. Historical retention uses the single repository-root `00_archive/`.
+Use `project/reports.md`. If `reports/` exists, its active surface is limited to `chatgpt/`, `codex/`, `concept/`, and `handoff/`. `CURRENT.md` is a root current-state owner, not a report family. Historical retention uses the single repository-root `00_archive/`.
 
-### Conversation migration
+### Exceptional handoff
 
-Authoring reads `project/handoff.md` + its template. Recovery reads only the newest valid handoff plus current authority/state.
+`reports/handoff/` is not the default resume mechanism. Use it only when meaningful conversation-only continuity cannot reasonably be represented in AGENTS/design/CURRENT/task/report/concept or another real owner. No handoff is preferable to a redundant handoff.
 
 ## Cold paths
 
@@ -177,25 +196,28 @@ references/**/templates/   unless creating/reviewing that artifact
 reports/concept/           except active design-history/adjudication work
 reports/chatgpt/           except the active delegated task
 reports/codex/             except the expected active FORMAL report
-older reports/handoff/     except explicit historical reconstruction
+reports/handoff/           except explicit exceptional continuity recovery
 00_archive/                historical only
 README.md                   human orientation only
 ```
 
-For current design, read `design/README.md` and only directly relevant topic files.
+For normal conversation resume, the project-text orientation set is `AGENTS.md + CURRENT.md + design/README.md` when those files exist. Then read only directly relevant owners.
 
 ## Context target
 
 ```text
-this router
-+ one primary owner
-+ zero or one necessary secondary owner
-+ active task artifact only when delegation is occurring
-+ zero historical preload
+orientation
+= project AGENTS.md + CURRENT.md + design/README.md
+
+active work
+= one primary owner + zero/one necessary secondary owner
+
+historical preload
+= zero
 ```
 
-If an Agent must read several large files before discovering the correct owner, treat that as a routing/design defect.
+A mature project should normally identify the current concern before loading roughly 10–12 KiB of project text; exceeding ~16 KiB before useful work starts is a routing smell, not a reason to enlarge the handoff.
 
 ## Completion
 
-Work is complete when the selected route satisfies its durable design/implementation/execution/evidence requirements, material limitations are disclosed, remote synchronization evidence is complete for repository-changing Codex work, temporary local state is cleaned or deliberately retained for recovery, and the applicable ChatGPT acceptance/User checkpoint is satisfied.
+Work is complete when the selected route satisfies its durable design/implementation/execution/evidence requirements, CURRENT reflects the adopted current work edge when the project uses it, material limitations are disclosed, remote synchronization evidence is complete for repository-changing Codex work, temporary local state is cleaned or deliberately retained for recovery, and the applicable ChatGPT acceptance/User checkpoint is satisfied.
