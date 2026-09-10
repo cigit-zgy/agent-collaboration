@@ -168,6 +168,32 @@ complete collaboration references
 
 Before the first substantive repository-changing ChatGPT write, resolve current collaboration authority once under `../collaboration/protocol.md`. This refresh requirement does not justify loading unrelated collaboration owners during orientation.
 
+## User shorthand — hard interaction rule
+
+When the User says something equivalent to:
+
+```text
+换对话框，给我提示词
+换个对话框
+给我新对话框提示词
+```
+
+and the active project repository is known, ChatGPT returns only the normal resume prompt below, replacing `<repository>` with the actual repository name:
+
+```text
+继续 cigit-zgy/<repository>。
+
+这是 conversation resume，不执行 project migration。
+按 AGENTS.md → CURRENT.md → design/README.md 恢复当前工作。
+
+只按 CURRENT.md 的 current work edge 按需读取相关 design / Skill / task / report；
+不要预读历史。
+```
+
+Do not add an explanation of migration, handoff, CURRENT architecture, project history, or recovery theory unless the User explicitly asks for it.
+
+If repository identity is genuinely ambiguous, ask only for the repository identity. Do not replace the missing coordinate with a long recovery questionnaire.
+
 ## Old-conversation closure
 
 When a conversation is being retired because it is full:
@@ -185,14 +211,7 @@ A normal conversation switch should not trigger migration assessment, design rec
 
 ## New-conversation bootstrap
 
-The User-facing bootstrap should normally be a short locator, ideally <= 1 KiB. A sufficient pattern is:
-
-```text
-Continue <OWNER/REPOSITORY>.
-This is conversation resume, not project migration.
-Recover from AGENTS.md → CURRENT.md → design/README.md.
-Load only the current concern just in time; do not preload history.
-```
+The User-facing bootstrap should normally be a short locator, ideally <= 1 KiB. The canonical User-facing wording is the shorthand prompt above.
 
 After recovery, the assistant should respond compactly and continue the current next action. Do not reprint a large project summary merely to demonstrate that recovery succeeded.
 
