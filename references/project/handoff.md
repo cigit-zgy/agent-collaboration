@@ -1,111 +1,137 @@
-# Project conversation handoff contract
+# Exceptional conversation-handoff contract
 
-Load this reference for conversation migration/recovery semantics, handoff authority, chronology, and staleness reconciliation. Report/archive placement and filename/metadata rules are owned by `reports.md`. When authoring a new handoff, also load `templates/handoff.md`.
+Load this reference only when meaningful conversation-only continuity would otherwise be lost during a conversation switch and cannot reasonably be represented in current repository-native owners.
 
-Project-policy migration to a newer collaboration architecture is a different concern owned by `migration.md`.
+Normal multi-conversation resume/current work state is owned by `current.md`. Project-policy migration is owned by `migration.md`. Report placement/naming is owned by `reports.md`. When authoring an exceptional handoff, also load `templates/handoff.md`.
 
-## Purpose and authority
+## Core rule
 
-A handoff preserves enough non-repository continuity that a new ChatGPT context can resume work without reconstructing the entire prior conversation. It is a context-recovery artifact, not design authority, task authority, scientific source authority, implementation evidence, or a substitute for project-policy migration.
+`reports/handoff/` is **not** the default way to resume a long-running project.
 
-```text
-design/          = current accepted project design authority, when used
-reports/concept/ = chronological design exploration/history
-reports/chatgpt/ = committed FORMAL specification
-reports/codex/   = FORMAL execution/verification evidence
-reports/handoff/ = conversation continuity/context
-```
-
-If a handoff conflicts with current project authority or repository state, current authority/state wins.
-
-## Trigger
-
-Create a handoff only when materially true:
+Normal sequential conversation replacement uses:
 
 ```text
-User explicitly requests conversation migration
-current conversation is becoming too large to continue reliably
-work intentionally moves to a new conversation/session
-future resume would otherwise lose meaningful non-repository context
+old conversation
+→ make accepted state repository-native
+→ rewrite CURRENT.md to NOW
+→ end
+
+new conversation
+→ AGENTS.md
+→ CURRENT.md
+→ design/README.md when present
+→ just-in-time owner loading
 ```
 
-It is a conversation checkpoint, not a running diary and not a mandatory prerequisite for project-policy migration.
-
-If the repository already contains enough current authority/state for a new conversation and only collaboration-policy migration is needed, use `migration.md` + the compact migration bootstrap instead of manufacturing a large handoff.
-
-## Ownership
-
-ChatGPT is the primary handoff author because the source conversation may contain User + ChatGPT rationale, rejected directions, unresolved decisions, and continuity state not yet recoverable elsewhere. For repository-backed projects, ChatGPT should make durable state repository-native first when connected capability is sufficient, then keep the handoff focused on remaining continuity.
-
-Codex may read a handoff for background but never treats it as current design/task/scientific authority.
-
-## Stable layout and filename
-
-Handoffs live only here:
+Create a handoff only for residual context that is both:
 
 ```text
-reports/handoff/YYMMDD_handoff_NN.md
+material to continuation
+AND not safely/appropriately representable in AGENTS/design/CURRENT/task/report/concept or another real repository owner
 ```
 
-There is no repository-root `handoff/` directory and no `reports/handoff/README.md` exception. Every handoff obeys the common `reports.md` YAML metadata envelope plus the family-specific fields in `templates/handoff.md`.
+No handoff is preferable to a redundant handoff.
 
-Issued handoffs are historical snapshots. Do not rewrite old handoff body semantics to match later design/implementation. Create a new handoff for the next migration.
-
-## Current handoff discovery
-
-Normal recovery selects the newest valid handoff by canonical filename chronology and verifies its metadata. `previous_handoff` provides explicit history linkage when present.
+## Authority
 
 ```text
-project AGENTS.md
-→ newest valid reports/handoff/YYMMDD_handoff_NN.md
-→ re-resolve current collaboration/project authorities
-→ inspect current repository HEAD/state relevant to resumed work
-→ continue
+design/          = current accepted project design authority
+CURRENT.md       = current work edge / resume pointer
+reports/concept/ = historical design reasoning
+reports/chatgpt/ = durable Codex task specification
+reports/codex/   = FORMAL execution evidence
+reports/handoff/ = exceptional conversation-only delta
 ```
 
-Do not preload older handoffs. Older handoffs are history drill-down only when the newest handoff points to an unresolved historical rationale or the User asks for reconstruction.
+A handoff never overrides current design, task, scientific source authority, CURRENT, or actual repository state.
+
+## Valid triggers
+
+Examples:
+
+```text
+an important User intention is still only in conversation and cannot yet be safely written elsewhere
+an unresolved comparison/decision needs continuity but is not yet accepted design
+conversation-specific provenance or ordering would be expensive/impossible to reconstruct from repository artifacts
+```
+
+The following alone are not triggers:
+
+```text
+conversation is full
+project is large
+project spans many conversations
+there are many completed tasks/reports
+collaboration policy changed
+new conversation is being opened
+```
+
+A full conversation normally causes a `CURRENT.md` checkpoint, not a handoff.
+
+## Content boundary
+
+A handoff is a delta capsule. It may contain only the few residual facts needed by the next conversation.
+
+Do not copy:
+
+```text
+project objective already in AGENTS/README
+design semantics already in design/
+current work edge already in CURRENT.md
+concept history
+full task/report bodies
+test matrices
+commit catalogues
+architecture summaries
+old handoffs
+conversation transcript
+```
+
+Point to owners when a pointer is needed.
+
+## Size discipline
+
+Normal exceptional handoff target:
+
+```text
+<= 4 KiB
+```
+
+Above roughly 8 KiB, review for duplicated repository-native material before issuing. These are architecture signals, not parser quotas.
 
 ## Authoring route
 
-When creating a new handoff, read exactly:
+Before authoring:
 
 ```text
-handoff.md
-+ templates/handoff.md
+1. update accepted design/current task/report state in its real owner;
+2. rewrite CURRENT.md to the actual current work edge when the project uses it;
+3. identify the residual conversation-only delta;
+4. if residual delta is empty, create no handoff;
+5. otherwise create one canonical reports/handoff/YYMMDD_handoff_NN.md using the template;
+6. commit/push and give the User only a short resume locator.
 ```
 
-Do not load old handoffs unless current recovery genuinely depends on them.
+Do not reread old handoffs merely to compose a new one.
 
-## Recovery validation
+## Recovery
 
-A current handoff plus current project authority should let a fresh Agent recover only the continuity that is not already cheap to obtain from repository-native owners, including when relevant:
+When CURRENT explicitly points to an exceptional handoff, or the User supplies one:
 
 ```text
-project objective
-current active work edge
-authoritative current files
-settled decisions/rationale not obvious from current design
-implemented versus only designed state
-unresolved decisions + owners
-next actions
-underlying evidence pointers
+AGENTS.md
+→ CURRENT.md when present
+→ that one handoff
+→ current repository authority/state
+→ continue
 ```
 
-If this requires reading several older handoffs or reconstructing the source conversation, the current handoff is insufficient.
+Do not chain through `previous_handoff` by default. Previous coordinates are provenance only.
 
-## Staleness and reconciliation
+## Staleness
 
-A handoff is a snapshot at `repository_head` and creation time. On resume, reconcile it against current repository/authority state before substantive changes.
+A handoff is a snapshot/delta at a repository coordinate. On resume, reconcile it with current authority/state. If its statement is now durable or superseded elsewhere, use the current owner and ignore the stale handoff statement.
 
-Do not silently assume:
+## Completion
 
-```text
-handoff repository_head == current HEAD
-handoff design pointers are still current
-handoff open questions are still unresolved
-handoff task branch is still active
-```
-
-## Cold-path rule
-
-Normal project execution does not load handoff authoring templates or historical handoffs. Conversation recovery loads only the newest valid handoff; authoring loads the core contract plus one template.
+A handoff is well formed when removing all text already recoverable from current repository owners still leaves the exact residual continuity needed by the next conversation. If nothing remains, no handoff should exist for that switch.
