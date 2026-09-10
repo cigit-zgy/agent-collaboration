@@ -67,8 +67,11 @@ references/collaboration/templates/
 references/project/architecture.md
 = project ownership/integration responsibility map
 
+references/project/current.md
+= root CURRENT.md current-work-state and normal multi-conversation resume
+
 references/project/migration.md
-= existing-project migration to current collaboration architecture with low-context bootstrap
+= existing-project migration to current collaboration architecture
 
 references/project/reports.md
 = report families, task/report semantics, filenames/metadata, archive placement
@@ -86,7 +89,7 @@ references/project/external-tools.md
 = external CLI/API/schema adapter/profile/reproducibility
 
 references/project/handoff.md
-= conversation migration/recovery contract
+= exceptional conversation-only continuity artifact
 
 references/project/templates/
 = cold project authoring/bootstrap templates
@@ -120,10 +123,12 @@ change Codex delegation/Git/tmp/sync   → execution.md
 change FORMAL task/acceptance          → formal.md + exact template if needed
 change Actions policy                  → actions.md
 change verification model              → verification.md
+change conversation resume/CURRENT     → project/current.md
 change existing-project migration      → project/migration.md
 change report/task/archive contract    → project/reports.md
 change concept-journal semantics       → project/concept.md
 change current living-design semantics → project/design.md
+change exceptional handoff semantics   → project/handoff.md
 change project integration             → project/architecture.md
 change external tool policy            → project/external-tools.md
 change Skill behavior lifecycle        → skill/development.md
@@ -141,6 +146,9 @@ ChatGPT authors code/tests it can correctly produce from repository context/shar
 ## Hard invariants
 
 - `SKILL.md` is the sole runtime routing index; do not add a mandatory second reference index.
+- For long-running multi-conversation projects, root `CURRENT.md` owns only the present work edge; it is mutable NOW-state, not history/design/task evidence.
+- Routine replacement of a full conversation is conversation resume, not project migration and normally not a handoff. Resume from project `AGENTS.md → CURRENT.md → design/README.md`, then load only the current concern just in time.
+- `reports/handoff/` is exceptional residual conversation-only delta only. No handoff is preferable to a redundant project summary.
 - Every repository task delegated to Codex, including LOCAL-QUICK, MUST be committed/pushed first under `reports/chatgpt/YYMMDD_chatgpt_NN.md`.
 - The committed ChatGPT task is the sole task-specific execution specification; detailed task bodies MUST NOT be pasted into chat.
 - User-visible Codex handoff is locator-only: at most one short sentence plus one fenced `text` block with task coordinates and immutable link.
@@ -156,4 +164,3 @@ ChatGPT authors code/tests it can correctly produce from repository context/shar
 - ChatGPT and Codex use the same immutable authority for every material shared coding Skill.
 - Skill behavior changes follow current design → Skill Markdown → code → design-probing tests.
 - Local verification need alone does not transfer all code authorship from ChatGPT to Codex.
-- Conversation handoffs are context only; they never override current authority/state.
