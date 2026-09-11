@@ -1,215 +1,97 @@
 # External prior-art and reuse contract
 
-This contract governs the evidence search that must precede substantial new project design or custom implementation.
+This contract governs evidence search before substantial new project design or custom implementation.
 
 ## Purpose
 
-Do not invent a project architecture, core algorithm, scientific workflow, or major infrastructure component before checking whether a strong published/open-source precedent already exists.
-
-The default direction is:
+Do not invent a project architecture, core algorithm, scientific workflow, or major infrastructure component before checking strong published/open-source precedents.
 
 ```text
 search credible prior art
-→ inspect the strongest relevant implementations and design rationale
+→ inspect strongest implementations/rationale
 → decide REUSE | ADAPT | REFERENCE_ONLY | REJECT
-→ record the exploration in reports/concept/ when useful
-→ reduce the accepted consequence into the current design/
+→ record exploration in reports/concept/ when useful
+→ reduce accepted consequence into reports/design/
 → implement only the remaining project-specific gap
 ```
 
-External prior art is design evidence, not project authority. User + ChatGPT remain the project design decision-makers. Current accepted design lives in the repository-root `design/` tree under `design.md`.
+External prior art is evidence, not project authority. User + ChatGPT remain design decision-makers. Current accepted design lives in `reports/design/`.
 
-## Trigger — hard gate
+## Trigger
 
-Complete this gate before any of the following:
+Run this gate for a new maintained project/core subsystem/major algorithm or modeling method/major architecture redesign/new trust-provenance-state mechanism/substantial framework or dependency choice/custom capability likely to exist in mature open source.
 
-```text
-new maintained project
-new core subsystem/stage
-new major algorithm/modeling method
-major architecture redesign
-new trust/provenance/state-management mechanism
-new substantial framework/dependency/tool choice
-custom implementation of a capability likely to exist in mature open source
-```
+Ordinary bug fixes, typo/docs edits, bounded refactors, and direct implementation of already accepted design do not require reopening the gate unless a genuine new design choice appears.
 
-The gate is not required for ordinary bug fixes, typo/documentation edits, small bounded refactors, or direct implementation of an already accepted design unless the change exposes a genuine new design choice.
-
-If the gate applies and has not been completed, ChatGPT MUST NOT accept the new design into `design/` or begin substantial custom implementation. Search first.
+If the gate applies, do not accept the design into `reports/design/` or begin substantial custom implementation until the search/reuse decision is complete.
 
 ## Mandatory two-way search
 
-A gate-triggered design must search in both directions:
+Search both:
 
 ```text
 literature → code
 AND
-GitHub/source code → scientific or institutional provenance
+GitHub/source → scientific or institutional provenance
 ```
 
-### Literature → code
+For scientific/environmental work, prioritize directly relevant high-level venues such as the Nature portfolio, Water Research, ES&T and ES&T Letters when in scope, without treating venue prestige as automatic authority.
 
-Search the most authoritative literature relevant to the actual project domain, then follow Code Availability, Data Availability, supplementary material, author/group links, DOI-linked repositories, Zenodo/software records, or official project pages to the implementation.
-
-For water/environmental/scientific-computing work, explicitly include relevant high-level venues when the topic falls within their scope, for example:
-
-```text
-Nature portfolio
-- Nature
-- Nature Water
-- Nature Computational Science
-- Nature Communications
-- other directly relevant Nature journals
-
-Water / environmental engineering
-- Water Research
-- Environmental Science & Technology (ES&T)
-- Environmental Science & Technology Letters
-- other field-leading journals directly relevant to the method
-```
-
-These names are search priorities, not automatic authority. A paper without a usable implementation may still inform design, but it is not equivalent to verified reusable code.
-
-Search both recent work and foundational work when each is relevant. Do not use a rigid recency cutoff that would discard established scientific infrastructure.
-
-### GitHub / source code → provenance
-
-Search GitHub and other authoritative source hosts for mature implementations of the required capability. For each serious candidate, determine whether it is linked to:
-
-```text
-a peer-reviewed paper or DOI
-an author/research-group repository
-a journal Code Availability statement
-an official scientific organization/foundation/project
-a maintained standards ecosystem
-```
-
-GitHub stars, forks, or search ranking are maintenance/community signals only; they do not establish scientific authority.
+GitHub stars/forks/ranking are maintenance/community signals only.
 
 ## Source priority
 
-Prefer evidence in this order when relevance is comparable:
+Prefer, when relevance is comparable:
 
-1. author-maintained or official code explicitly linked from the peer-reviewed paper/project;
-2. official scientific organization, standards body, or long-lived domain project;
-3. mature maintained open source with traceable scientific provenance and real users;
-4. technically useful repositories with weaker provenance, used only as secondary engineering precedent.
-
-Do not lower scientific/product requirements merely to match a popular repository.
+1. author/official code linked from peer-reviewed work;
+2. scientific organization/standards/long-lived domain projects;
+3. mature maintained OSS with traceable scientific provenance;
+4. weaker-provenance repositories only as secondary engineering precedent.
 
 ## Candidate inspection
 
-Do not stop at the repository README or paper abstract. For a serious candidate, inspect the materials needed to understand the actual concept and implementation boundary, as available:
+For serious candidates inspect enough to recover the actual design boundary: methods/supplement, Code Availability/DOI/release, docs, architecture, API/schema/config, core flow, representative tests/examples, maintenance/release state, license, and material limitations.
+
+For each candidate determine:
 
 ```text
-paper / methods / supplement
-Code Availability / DOI / release record
-README and technical docs
-architecture/design documents
-public API/schema/configuration
-core implementation flow
-representative tests/examples
-release/activity/maintenance state
-license
-known limitations/issues when material
+problem boundary
+key objects/stages/interfaces
+invariants/trust assumptions
+reusable implementation
+adaptable pattern
+project mismatches
+remaining local gap
 ```
 
-The goal is to recover design precedent, not to copy surface syntax.
-
-For each candidate ask:
+## Disposition
 
 ```text
-What problem boundary does it own?
-What are its key objects/stages/interfaces?
-What invariants or trust assumptions does it make?
-What implementation can be reused directly?
-What design pattern can be adapted?
-What does not fit this project's scientific/product constraints?
-What would still have to be built locally?
+REUSE          adopt maintained dependency/tool/project
+ADAPT          reuse proven architecture/bounded implementation with project-specific change
+REFERENCE_ONLY use as design evidence only
+REJECT         unsuitable; record decisive reason when otherwise strong
 ```
 
-## Reuse decision
+Prefer REUSE/ADAPT when they satisfy scientific/product/trust/licensing/runtime constraints.
 
-Every materially relevant candidate receives one disposition:
+## Recording and reduction
 
-```text
-REUSE
-= adopt an existing maintained dependency/tool/project with minimal wrapper/adaptation
+Detailed search/reasoning belongs in `reports/concept/` when material. Preserve provenance/version/license coordinates for reused code and stable citations/DOIs for papers shaping design.
 
-ADAPT
-= reuse a proven architecture/pattern or bounded implementation while changing project-specific semantics
-
-REFERENCE_ONLY
-= use as design evidence but do not depend on or copy the implementation
-
-REJECT
-= not suitable; record the decisive reason when the candidate was otherwise strong
-```
-
-Prefer REUSE or ADAPT over a new custom implementation when they satisfy accepted scientific/product/trust requirements and licensing/runtime constraints.
-
-A custom implementation is justified only when the review identifies a concrete gap, incompatibility, trust/reproducibility requirement, or project-specific scientific contract that existing implementations do not satisfy.
-
-## Recording and reduction — hard requirement
-
-For gate-triggered design, keep the prior-art reasoning recoverable without turning living design into a literature review.
-
-Detailed exploration may be recorded in `reports/concept/`, for example:
-
-```text
-Search scope
-Candidate | provenance | repository/version | disposition | design consequence
-What is reused
-What pattern is adapted
-What is deliberately rejected
-Remaining project-specific gap
-Open questions
-```
-
-Record only materially relevant candidates. Do not pad to an arbitrary count.
-
-After adjudication, write only the accepted current consequence into `design/`:
+After adjudication:
 
 ```text
 reports/concept/ = search/reasoning/history
-
-design/          = current accepted semantics resulting from that reasoning
+reports/design/  = accepted current semantics only
 ```
 
 Do not copy rejected alternatives or chronological search narrative into living design.
 
-When exact code is reused or inspected for implementation-level decisions, preserve repository/version/license coordinates sufficient to recover the source. When a paper materially shapes the design, preserve a stable citation/DOI in the concept/evidence trail as appropriate.
-
-## Licensing and scientific integrity
-
-Design ideas and architecture precedent may be studied broadly. Reusing/copying code requires compatible licensing and attribution obligations to be checked before incorporation.
-
-Do not present an external implementation as scientifically validated merely because it runs, is popular, or accompanies a high-impact paper. Verify that its semantics match the project's intended scientific claim and operating boundary.
-
 ## Refresh
 
-Repeat the prior-art gate when:
-
-```text
-a new major design concern is introduced
-a current design concern is materially reopened
-an important tool/dependency is being replaced
-new evidence suggests a substantially better established solution exists
-```
-
-Do not repeat the full search for routine implementation work under unchanged current design.
+Repeat the gate when a major concern is introduced/reopened, an important tool/dependency is replaced, or new evidence suggests a substantially better established solution. Do not repeat it for routine implementation under unchanged design.
 
 ## Completion
 
-The prior-art gate is complete only when:
-
-```text
-both search directions were performed
-AND strong relevant candidates were inspected beyond titles/README summaries
-AND provenance + license/reuse boundaries are understood at the level needed for the decision
-AND each serious candidate has a disposition
-AND the reasoning is recoverable in the concept/evidence trail when material
-AND the accepted current consequence is represented in design/
-```
-
-Until then, gate-triggered custom design is not ready for implementation.
+The gate is complete when both search directions were performed, strong candidates were inspected beyond titles/README, provenance/license boundaries are understood, serious candidates have a disposition, material reasoning is recoverable, and the accepted consequence is represented in `reports/design/`.
