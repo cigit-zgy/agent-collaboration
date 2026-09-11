@@ -25,7 +25,7 @@ Updated: <YYYY-MM-DD or timestamp when useful>
 - Branch: <branch | NONE>
 - ChatGPT task: <path | NONE>
 - Codex report: <path | NONE>
-- Relevant design: <one or a few paths | NONE>
+- Relevant design: <one or a few reports/design/... paths | NONE>
 - Relevant workflow owner: <path | NONE>
 
 ## Open edge
@@ -37,58 +37,20 @@ Updated: <YYYY-MM-DD or timestamp when useful>
 <One directly executable next step.>
 ```
 
-Remove fields/sections that are unnecessary. Do not fill `NONE` ceremony when omission is clearer.
+Remove unnecessary fields rather than filling `NONE` ceremony.
 
-## Hard content rules
+Do not copy full design semantics, project architecture, completed-task history, test summaries, old commits, concept chronology, rejected alternatives, transcript, or long rationale into CURRENT.
 
-Do not copy into CURRENT:
+When work advances, rewrite CURRENT to NOW. History belongs to Git and its proper owners.
 
-```text
-full design semantics
-project architecture
-completed-task history
-full test/evidence summaries
-old branch/commit catalogue
-concept chronology
-rejected alternatives
-conversation transcript
-long rationale
-```
+Target <= 4 KiB. Above ~8 KiB, move leaked history/design/evidence to its owner.
 
-Use paths/coordinates and one current consequence instead.
-
-## Rewrite rule
-
-When work advances, rewrite CURRENT to represent the new NOW. Do not append dated progress entries.
-
-Bad:
-
-```text
-2026-09-08: finished A
-2026-09-09: finished B
-2026-09-10: started C
-```
-
-Good:
-
-```text
-Current work edge: C
-Relevant design: design/03_c.md
-Next action: validate C against <owner>
-```
-
-## Size check
-
-Target <= 4 KiB. Above ~8 KiB, stop adding content and move leaked history/design/evidence to its owning artifact.
-
-## Resume quality check
-
-A fresh conversation should be able to read:
+A fresh conversation should recover through:
 
 ```text
 AGENTS.md
 → CURRENT.md
-→ design/README.md
+→ reports/design/README.md
 ```
 
 and know what to load next without reading historical reports or the whole design tree.
