@@ -1,55 +1,63 @@
-# Project report and archive contract
+# Project report and governance-artifact contract
 
-Load this reference for repository report-family layout, report filenames/metadata, archive placement, and report cleanup/migration.
+Load this reference for `reports/` layout, report-family filenames/metadata, living-design placement, archive placement, and report cleanup/migration.
 
-Current accepted project design is outside `reports/` and is owned by repository-root `design/`. Current collaboration/work edge, when used, is outside `reports/` and owned by repository-root `CURRENT.md` under `current.md`.
+Current work state, when used, remains repository-root `CURRENT.md` under `current.md`.
 
 ## Reports root — hard constraint
 
-When a maintained project uses `reports/`, it may contain only these four direct child directories:
+A maintained project using this model may contain these direct children under `reports/`:
 
 ```text
 reports/
-├── chatgpt/
-├── codex/
-├── concept/
-└── handoff/
+├── design/      current living design authority; NOT a report family
+├── chatgpt/     durable Codex task specifications
+├── codex/       FORMAL Codex execution evidence
+├── concept/     chronological design history/input
+└── handoff/     exceptional conversation-only residual delta
 ```
 
-Each family directory is flat and contains only canonical Markdown artifacts. Supporting evidence that must be retained belongs in the single repository-root `00_archive/` or another explicitly declared non-report owner.
+`reports/design/` is special current authority. The other four are chronological report families.
 
-Responsibilities are fixed:
+Do not create additional report/governance families such as `reports/archive/`, `reports/review/`, `reports/roadmap/`, `reports/agent/`, or nested `00_archive/`.
+
+## reports/design exception
+
+`reports/design/` is governed by `design.md`, not by the report-family filename/metadata contract.
+
+It may contain:
 
 ```text
-reports/chatgpt/ = durable ChatGPT-authored Codex task specifications for LOCAL-QUICK and FORMAL
-reports/codex/   = FORMAL Codex execution/verification reports only
-reports/concept/ = chronological design exploration/history; never current design authority
-reports/handoff/ = exceptional conversation-only residual delta; not normal resume state
-
-design/          = current accepted structured project design
-CURRENT.md       = current work edge / resume pointer when the project uses current-state tracking
+README.md
+00_overview.md when justified
+NN_<semantic-topic>.md
 ```
 
-LOCAL-QUICK deliberately has no `reports/codex/` artifact. FORMAL has both a ChatGPT task and bound Codex report.
+It may be dynamically restructured by current design responsibility. It does not use dated report filenames and does not require the common report metadata envelope.
 
-A roadmap, backlog, discussion diary, review log, integration note, qualification note, current-status diary, or historical implementation record is not a fifth report family.
-
-## Execution ownership for report normalization
+Current design/history distinction:
 
 ```text
-connected repository capability sufficient
-AND no User-machine/runtime evidence required
-→ DIRECT ChatGPT
-
-local filesystem/runtime/tool evidence genuinely required
-→ LOCAL-QUICK or FORMAL under execution.md
+reports/design/  = what we currently accept
+reports/concept/ = how we thought / historical design input
 ```
 
-Do not create Codex work merely for deterministic repository-side normalization that ChatGPT can complete directly.
+There is exactly one current `reports/design/` tree. No old/draft/versioned parallel design tree is allowed.
 
-## Filename contract — hard constraint
+## Chronological report families
 
-Every Markdown artifact under `reports/` uses exactly:
+The following rules apply only to:
+
+```text
+reports/chatgpt/
+reports/codex/
+reports/concept/
+reports/handoff/
+```
+
+Each is flat and contains only canonical Markdown artifacts.
+
+Every artifact uses:
 
 ```text
 YYMMDD_<family>_NN.md
@@ -61,11 +69,9 @@ where `<family>` is:
 chatgpt | codex | concept | handoff
 ```
 
-`NN` is a two-digit sequence within the same date + family. Do not use semantic filenames, `README.md`, `index.md`, or another naming pattern inside active `reports/`.
+Do not use semantic filenames, `README.md`, nested directories, or sidecar data inside those four active families.
 
-## Common metadata envelope — required
-
-Every report Markdown file begins with at least:
+Every report artifact begins with at least:
 
 ```yaml
 ---
@@ -81,128 +87,103 @@ summary: >
 ---
 ```
 
-`artifact_id` equals the filename stem. Family templates may require additional metadata.
+`artifact_id` equals the filename stem. Family templates may require more metadata.
 
-## ChatGPT task specifications
+## ChatGPT/Codex task binding
 
-Every repository task delegated to Codex is first committed under `reports/chatgpt/`.
-
-Task metadata identifies execution mode:
+Every repository task delegated to Codex is first committed under `reports/chatgpt/` with:
 
 ```yaml
 execution_mode: local_quick | formal
 ```
 
-Templates:
-
-```text
-LOCAL-QUICK → references/collaboration/templates/local-quick-task.md
-FORMAL      → references/collaboration/templates/chatgpt-task.md
-```
-
-The committed task is the sole task-specific execution specification. Chat only carries a short immutable locator.
-
-### LOCAL-QUICK binding
+LOCAL-QUICK:
 
 ```text
 reports/chatgpt/YYMMDD_chatgpt_NN.md
 → Codex local execution
-→ compact Result contract returned in chat
+→ compact Result contract
+→ no reports/codex artifact
 ```
 
-No `reports/codex/` report is created.
-
-### FORMAL binding
+FORMAL:
 
 ```text
 reports/chatgpt/YYMMDD_chatgpt_NN.md
 ↔ reports/codex/YYMMDD_codex_NN.md
 ```
 
-The formal task binds the exact expected Codex report path.
+The committed task is the sole task-specific execution specification; chat carries only a short locator.
 
-For maintained Skill behavior changes, both modes still follow:
+Maintained Skill behavior changes still follow:
 
 ```text
-current accepted design/
-→ committed SKILL.md + references
+reports/design/ current authority
+→ SKILL.md + references
 → committed ChatGPT task
 → Codex implementation/verification
 ```
 
-## Concept-journal metadata
+## Concept journal
 
-A concept note is historical/exploratory design input, not design authority. It may identify affected current design topics:
+`reports/concept/` is historical/exploratory design input, never current design authority. It may identify affected living-design topics with `design_topics`, but one concept note does not imply one design file.
 
-```yaml
-status: <open | incorporated | rejected | superseded | recorded>
-design_topics:
-  - <design_id>
-```
+## CURRENT.md is not under reports
 
-Detailed concept semantics are owned by `concept.md`.
+`CURRENT.md` remains repository-root mutable NOW-state because it is the low-cost multi-conversation resume pointer, not design/history/report evidence.
 
-## CURRENT.md is not a report
+It points to exact `reports/design/`, task, report, and Skill owners rather than duplicating them.
 
-`CURRENT.md` is a repository-root mutable current-state pointer owned by `current.md`.
+## Handoff — exceptional only
 
-It may summarize only the present work edge and link to exact task/report/design owners. It must not preserve report history, duplicate report bodies, or act as a fifth report family.
+`reports/handoff/` is not the normal resume mechanism. Create a handoff only when meaningful conversation-only continuity cannot reasonably be represented in AGENTS/CURRENT/design/task/report/concept or another real owner.
 
-When the active task/report state changes, CURRENT may be rewritten to point to the new adopted work edge. Git history preserves earlier CURRENT states.
-
-## Handoff discovery — exceptional only
-
-Handoffs live only in `reports/handoff/` and are not the normal multi-conversation resume mechanism.
-
-A handoff is created only when meaningful conversation-only continuity would otherwise be lost and cannot reasonably be represented in AGENTS/design/CURRENT/task/report/concept or another real owner.
-
-Normal resume is owned by `current.md`:
+Normal resume is:
 
 ```text
-AGENTS.md → CURRENT.md → design/README.md → just-in-time current owner
+AGENTS.md → CURRENT.md → reports/design/README.md → just-in-time owner
 ```
 
-When an exceptional handoff exists, CURRENT or the User may point to the one relevant handoff. Do not traverse historical handoff chains by default.
+No handoff is preferable to a redundant handoff.
 
-## Archive — single-root hard constraint
+## Archive
 
-A maintained repository uses exactly one archive location when archival retention is needed:
+Historical retention uses exactly one repository-root:
 
 ```text
-<repository-root>/00_archive/
+00_archive/
 ```
 
-Do not create `archive/` or nested `*/00_archive/` directories.
+Archive is never current authority and is never loaded by default. Do not create `reports/archive/` or nested `*/00_archive/`.
 
-Archive is history only: never current design/task/report/runtime authority and never loaded by default. If retention has no recovery, legal, provenance, or audit value, delete rather than archive.
+Do not archive superseded living-design copies merely for convenience; Git history plus `reports/concept/` preserve design evolution.
 
-Do not store superseded living-design copies in archive merely for convenience; Git history and `reports/concept/` preserve design evolution.
-
-## Roadmaps and duplicate status files
+## Responsibility summary
 
 ```text
-current accepted architectural direction → design/
-current active work edge                  → CURRENT.md when justified
-historical reasoning / explored ideas     → reports/concept/
-execution backlog                         → issues/tasks or declared work-management surface
+current accepted design        → reports/design/
+current active work edge       → CURRENT.md when justified
+historical design reasoning    → reports/concept/
+Codex task specification       → reports/chatgpt/
+FORMAL execution evidence      → reports/codex/
+exceptional conversation delta → reports/handoff/
+historical retained material  → 00_archive/
 ```
 
-Do not create a parallel current-status report or roadmap that duplicates `CURRENT.md` or `design/`.
-
-## Migration / cleanup rule
+## Migration / cleanup
 
 When normalizing an existing project:
 
 ```text
 1. inspect current authority and Git history;
-2. preserve current ChatGPT tasks, FORMAL Codex reports and exceptional handoffs with real value;
-3. normalize report filenames and required metadata;
-4. classify reports/concept as chronological design history;
-5. establish/update repository-root design/ separately when explicit living design is used;
-6. establish/update CURRENT.md only when long-running/multi-conversation resume cost justifies it;
-7. delete obsolete duplicate status/roadmap files when another owner already exists;
-8. move retained report-history/sidecar evidence into root 00_archive/reports/... when justified;
-9. verify reports/ contains only the four allowed flat families.
+2. move the one current living-design tree from root design/ to reports/design/ when needed;
+3. update AGENTS/CURRENT/Skill/task pointers to reports/design/;
+4. preserve current ChatGPT tasks, FORMAL Codex reports, concept history and valuable exceptional handoffs;
+5. normalize only the four chronological report families to dated flat Markdown artifacts;
+6. keep reports/design/ under design.md semantics, including README.md and numbered topic files;
+7. establish/update CURRENT.md only when multi-conversation resume cost justifies it;
+8. remove duplicate status/roadmap authorities and move justified historical sidecar evidence to root 00_archive/;
+9. verify reports/ contains only design + the four recognized report families.
 ```
 
-Do not rewrite historical scientific/task/design reasoning merely to modernize formatting. Backfill only factual metadata recoverable from path/content/Git history.
+A path migration must not rewrite project-specific scientific/product design semantics merely to modernize layout.
