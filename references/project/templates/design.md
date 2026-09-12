@@ -1,21 +1,21 @@
-# Project living-design authoring template
+# Project living-Design authoring template
 
-Cold path: load this file only when creating/restructuring `reports/design/`.
+Cold path: load only when creating/restructuring `reports/design/`.
 
-Current-design semantics are owned by `../design.md`.
+Current-Design semantics are owned by `../design.md`; governance drift is owned by `../governance.md`.
 
 ## Directory shape
 
 ```text
 reports/design/
 ├── README.md
-├── 00_overview.md          # only when whole-system context is needed
+├── 00_overview.md          # only when whole-system context is genuinely needed
 ├── 01_<topic>.md
 ├── 02_<topic>.md
 └── ...
 ```
 
-The topic set is dynamic. `reports/design/` is not a chronological report family.
+`reports/design/` is one mutable current set, not a history directory.
 
 ## README.md
 
@@ -24,8 +24,7 @@ Keep it navigational only:
 ```markdown
 # Design map
 
-`reports/design/` is the canonical current project design.
-Historical reasoning lives in `reports/concept/`.
+`reports/design/` is the canonical current project Design.
 
 | Order | design_id | File | Responsibility |
 |---:|---|---|---|
@@ -33,11 +32,9 @@ Historical reasoning lives in `reports/concept/`.
 | 01 | <id> | `01_<topic>.md` | <one sentence> |
 ```
 
-Add short reading hints only when they reduce unrelated loading. Do not copy topic semantics into README.
+A bounded concern should route to one primary topic plus at most one necessary secondary topic. If one rule needs three or more current topics, restructure ownership before adding another topic.
 
 ## Topic file
-
-Default shape:
 
 ```markdown
 ---
@@ -55,31 +52,40 @@ operational_projection:
 
 ## Purpose
 ## Boundary
-## Inputs / upstream state
 ## Accepted design
 ## Invariants / trust boundaries
-## Lifecycle / transitions
 ## Ownership and interfaces
 ## Design acceptance
 ```
 
-Remove empty sections rather than filling `N/A`.
+Remove empty sections rather than adding ceremony.
 
-## Restructuring checks
+## One-owner check
 
-Create/split a topic only when it has an independent responsibility, stable semantics, distinct interface/state/trust/consumer/change lifecycle, and the split reduces unrelated context.
+Do not keep a current topic whose main role is to supersede, refine, override, or preserve another current topic for the same concern.
 
-Merge topics when they always need to be read/changed together or duplicate semantics.
-
-After accepted restructuring:
+When responsibility changes:
 
 ```text
-update reports/design/README.md
-→ keep only current topic files
-→ remove superseded design files from reports/design/
-→ renumber reading order when useful
-→ preserve semantic identity through design_id
-→ project accepted change into Skill/references before implementation
+update/overwrite the real owner
+→ merge/split/remove/reorder as needed
+→ update README.md
+→ remove superseded current files
 ```
 
-Reject living-design content whose primary purpose is historical reconstruction, including old copies, rejected alternatives, chronological decision narrative, progress logs, test history, or Codex execution detail. Those belong to Git history, `reports/concept/`, task/report owners, or another proper owner.
+Git preserves prior Design states. A new Concept preserves rationale only when the User explicitly requested Concept persistence.
+
+## Content check
+
+Reject content whose primary owner is:
+
+```text
+model/source-specific scientific fact
+golden qualification or closure evidence
+test/evaluation output
+Codex task/report
+current status/backlog
+historical discussion
+```
+
+Keep only current project Design semantics with a real reusable owner.
