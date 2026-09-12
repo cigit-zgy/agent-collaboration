@@ -1,25 +1,31 @@
 # Project concept-journal contract
 
-Load this reference when the User explicitly asks to persist a design discussion or decision in `reports/concept/`, or when reviewing an existing Concept artifact.
+Load this reference when the User explicitly asks to persist a design/scientific discussion or decision in `reports/concept/`, or when reviewing an existing Concept artifact.
 
-Current accepted design lives in `reports/design/` under `design.md`. Project-wide admission and drift rules live in `governance.md`.
+Current accepted design lives in `reports/design/` under `design.md`. Project-wide admission, drift, and golden-purity rules live in `governance.md`.
 
 ## Core boundary
 
 ```text
 reports/concept/
-= explicitly User-requested chronological design history
+= explicitly User-requested chronological historical discussion
+= design/scientific reasoning, correction rationale, source reconciliation, qualification reasoning when requested
 = append-only
 = never current authority
 
 reports/design/
 = current accepted design
 = one mutable current set
+
+workspace/golden_object/<model>/
+= canonical ten-layer structured object only
 ```
 
 ## Creation gate
 
-A new Concept is created only after an explicit User request such as `落实到 Concept`, `写入 Concept`, or equivalent. Ordinary discussion, correction, review, qualification, implementation, or execution evidence does not create a Concept by default.
+A new Concept is created only after an explicit User request such as `落实到 Concept`, `写入 Concept`, `记到 Concepts`, or equivalent.
+
+Ordinary discussion, correction, review, qualification, implementation, or execution does not create a Concept by default.
 
 Each accepted request creates a NEW file:
 
@@ -35,7 +41,7 @@ An explicit Concept persistence request also updates current Design in the same 
 
 ```text
 new dated Concept
-→ accepted design consequence
+→ accepted current consequence
 → update the owning reports/design topic(s)
 → update reports/design/README.md when ownership/navigation changes
 → remove superseded current-design owners when necessary
@@ -45,15 +51,36 @@ Do not leave an accepted decision only in Concept. If its current Design consequ
 
 ## Concept content
 
-When explicitly requested, Concept may preserve the problem, alternatives, relevant prior art, counterexamples, adjudication, and why the accepted Design changed.
+When explicitly requested, Concept may preserve:
 
-Do not use Concept as the owner of scientific qualification, golden-object closure, test/evaluation evidence, Codex execution evidence, current status, bug-fix logs, or source-transcription logs. Route those to their actual scientific/task/report/current owner.
+```text
+problem / question
+candidate alternatives
+prior-art or source interpretation
+scientific correction rationale
+source reconciliation
+model-specific qualification reasoning
+numerical/scientific closure discussion
+counterexamples / attacks
+User + ChatGPT adjudication
+why current Design or golden scientific content changed
+```
+
+Concept records the historical reasoning/evidence discussion; it does not become the current source of truth.
+
+Formal Codex command/test/run evidence remains in `reports/codex/`. Raw source files remain with the source/model-source owner. The canonical golden directory remains limited to the ten structured-object layers.
+
+## Design references to Concept
+
+A current Design topic MAY cite exact Concept paths when historical rationale or provenance is useful.
+
+The Design topic must still state the accepted current rule directly. A reader must not need to reconstruct Concept history to determine current semantics.
 
 ## Metadata
 
 Use the chronological report naming/metadata contract from `reports.md`. `design_topics` may point to affected current `design_id` values. Concept never carries `role: design_authority`.
 
-Because normal Concept persistence is coupled to a current Design update, `status: incorporated` is the normal completed state.
+Because normal Concept persistence is coupled to a current Design update, `status: incorporated` is the normal completed state when the requested discussion produced an accepted current consequence.
 
 ## Historical integrity
 
@@ -68,7 +95,7 @@ reports/design/README.md
 → relevant current topic(s)
 ```
 
-Read an exact Concept only when historical rationale is specifically needed. Never preload the whole Concept journal.
+Read an exact Concept only when historical rationale/evidence is specifically needed. Never preload the whole Concept journal.
 
 ## Collaboration-repository exception
 
