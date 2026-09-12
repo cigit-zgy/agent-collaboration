@@ -1,97 +1,75 @@
 # Project concept-journal contract
 
-Load this reference for chronological design exploration under `reports/concept/`: ideas, alternatives, unresolved questions, prior-art findings, design attacks, and adjudication history.
+Load this reference when the User explicitly asks to persist a design discussion or decision in `reports/concept/`, or when reviewing an existing Concept artifact.
 
-Current accepted design authority is owned by `design.md` and lives under `reports/design/`.
+Current accepted design lives in `reports/design/` under `design.md`. Project-wide admission and drift rules live in `governance.md`.
 
-## Core distinction
+## Core boundary
 
 ```text
 reports/concept/
-= what we considered / how design thinking evolved
-= chronological history/input
+= explicitly User-requested chronological design history
+= append-only
 = never current authority
 
 reports/design/
-= what the project currently accepts
-= one canonical living design set
-= current state only
+= current accepted design
+= one mutable current set
 ```
 
-A concept note may be exploratory, incomplete, contradictory, rejected, or later superseded. Its existence does not authorize implementation.
+## Creation gate
 
-## Responsibility
+A new Concept is created only after an explicit User request such as `落实到 Concept`, `写入 Concept`, or equivalent. Ordinary discussion, correction, review, qualification, implementation, or execution evidence does not create a Concept by default.
 
-Use concept notes for material worth preserving, such as new design ideas/requirements, identified gaps, candidate A/B/C approaches, prior-art findings, attacks/counterexamples, unresolved design questions, and reasons an accepted design changed or did not change.
-
-Do not force concept notes into polished current-system prose; that belongs in `reports/design/`.
-
-## Filename and metadata
-
-Concept notes use:
+Each accepted request creates a NEW file:
 
 ```text
 reports/concept/YYMMDD_concept_NN.md
 ```
 
-with the common report metadata plus optional `design_topics` identifiers.
+Use the next free sequence for that date. Keep the directory flat. Do not overwrite, repurpose, or append later reasoning to an older Concept; later reasoning gets another dated file.
 
-Do not use `role: design_authority` or require `operational_projection` in concept notes.
+## Concept and Design move together
 
-## Adjudication
-
-User + ChatGPT classify a material concept's effect on current design through `design.md`:
+An explicit Concept persistence request also updates current Design in the same work unit:
 
 ```text
-NO_CHANGE
-UPDATE
-NEW_TOPIC
-SPLIT
-MERGE
-REMOVE
-REORDER
+new dated Concept
+→ accepted design consequence
+→ update the owning reports/design topic(s)
+→ update reports/design/README.md when ownership/navigation changes
+→ remove superseded current-design owners when necessary
 ```
 
-When accepted design changes:
+Do not leave an accepted decision only in Concept. If its current Design consequence is still ambiguous, resolve that ambiguity with the User before committing a misleading Concept/Design pair.
 
-```text
-reports/concept note(s)
-→ User + ChatGPT adjudication
-→ update reports/design/ into one coherent current state
-→ update Skill/reference projection
-→ implementation
-→ tests/evidence
-```
+## Concept content
 
-When result is `NO_CHANGE`, keep the concept as history and leave `reports/design/` unchanged.
+When explicitly requested, Concept may preserve the problem, alternatives, relevant prior art, counterexamples, adjudication, and why the accepted Design changed.
+
+Do not use Concept as the owner of scientific qualification, golden-object closure, test/evaluation evidence, Codex execution evidence, current status, bug-fix logs, or source-transcription logs. Route those to their actual scientific/task/report/current owner.
+
+## Metadata
+
+Use the chronological report naming/metadata contract from `reports.md`. `design_topics` may point to affected current `design_id` values. Concept never carries `role: design_authority`.
+
+Because normal Concept persistence is coupled to a current Design update, `status: incorporated` is the normal completed state.
 
 ## Historical integrity
 
-Do not continuously rewrite historical concept bodies to match current design. Later contradictions get a new dated concept note; living design changes only through current `reports/design/` updates.
+Older Concept bodies are historical snapshots and are not rewritten to follow later Design. Git plus the dated Concept series preserve reasoning history; `reports/design/` preserves only the latest accepted state.
 
-Do not move old concept notes into `reports/design/`, and do not keep superseded design copies inside `reports/design/`.
+## Reading discipline
 
-## Reading routes
-
-Current design:
+Routine work reads current Design, not Concept history:
 
 ```text
-AGENTS.md
-→ reports/design/README.md
+reports/design/README.md
 → relevant current topic(s)
 ```
 
-Historical rationale/new design discussion:
-
-```text
-current reports/design topic
-+ exact relevant reports/concept note(s)
-→ adjudication
-→ reports/design update if accepted
-```
-
-Do not preload the whole concept journal.
+Read an exact Concept only when historical rationale is specifically needed. Never preload the whole Concept journal.
 
 ## Collaboration-repository exception
 
-`agent-collaboration` itself keeps design-decision history in `reports/concept/`, while its current operational policy lives in `references/`; historical concept notes never override current runtime policy.
+Historical Concept files already present in `agent-collaboration` remain history. Current operational policy lives in `references/` and overrides them.
