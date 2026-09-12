@@ -30,7 +30,7 @@ Codex   = LOCAL implementation/execution + environment-bound verification/repair
 | implementation quality | `references/collaboration/implementation.md` |
 | verification planning | `references/collaboration/verification.md` |
 | project architecture | `references/project/architecture.md` |
-| project governance/admission/drift | `references/project/governance.md` |
+| project governance/admission/drift/golden purity | `references/project/governance.md` |
 | normal resume / `CURRENT.md` | `references/project/current.md` |
 | existing-project migration | `references/project/migration.md` |
 | reports/layout | `references/project/reports.md` |
@@ -58,16 +58,22 @@ reports/design/
 = one current set
 
 reports/concept/
-= only explicit User-requested chronological design reasoning
+= only explicit User-requested chronological design/scientific reasoning
 = append-only artifacts
 
 CURRENT.md
 = current work edge / NOW only
+
+workspace/golden_object/<model>/
+= canonical ten-layer structured object only
+= no evidence/history/scripts/notes
 ```
 
 Concept is not a default logging mechanism. ChatGPT creates a Concept only when the User explicitly requests it. Every normal Concept persistence request creates a new dated file and updates current `reports/design/` in the same work unit.
 
-Design is mutable current state: update the real owner and remove superseded current owners rather than stacking design versions.
+Design is mutable current state: update the real owner and remove superseded current owners rather than stacking design versions. Design may cite exact Concept artifacts for historical rationale but must state current semantics directly.
+
+Golden-object directories are pure scientific object surfaces. Registered sources stay with source/model-source owners; historical correction/qualification reasoning goes to Concept only when explicitly requested; FORMAL execution evidence stays in `reports/codex/`.
 
 ## Normal conversation resume
 
