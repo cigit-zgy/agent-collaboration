@@ -1,16 +1,31 @@
-# Project concept-journal authoring template
+# Project Concept authoring template
 
-Cold path: load only when creating/editing a concept note under `reports/concept/`.
+Cold path: load only after the User has explicitly requested Concept persistence.
 
-Concept semantics are owned by `../concept.md`; current accepted design lives in `reports/design/` under `../design.md`.
+Concept semantics are owned by `../concept.md`; current accepted Design lives in `reports/design/` under `../design.md`.
 
-## Purpose
+## Preconditions
 
-A concept note preserves meaningful design thinking—ideas, alternatives, unresolved questions, attacks, prior art, or adjudication—without contaminating current living design.
+Before creating a Concept:
 
-It is not design authority.
+```text
+User explicitly requested Concept persistence
+AND the accepted current Design consequence is known
+```
 
-## Required metadata
+If the Design consequence is still ambiguous, resolve it with the User first.
+
+## File rule
+
+Always create a NEW file:
+
+```text
+reports/concept/YYMMDD_concept_NN.md
+```
+
+Use the next free sequence for that date. Never overwrite or extend an older Concept with later reasoning.
+
+## Metadata
 
 ```yaml
 ---
@@ -20,46 +35,38 @@ title: <short title>
 date: <YYYY-MM-DD>
 project: <PROJECT_NAME>
 repository: <OWNER/REPOSITORY>
-status: <open | incorporated | rejected | superseded | recorded>
+status: incorporated
 summary: >
-  <compact searchable summary>
+  <compact historical summary>
 design_topics:
-  - <design_id>   # optional
+  - <design_id>
 ---
 ```
 
-Do not add `role: design_authority`, version numbers, or implementation projections.
+Do not add `role: design_authority` or implementation projections.
 
-## Flexible body
+## Body
 
-Use only useful sections, for example:
+Use only the sections needed to preserve the requested reasoning, for example:
 
 ```text
 Context / problem
-Current observation
-Candidate ideas
-Evidence / prior art
+Options or evidence
 Attack / counterexamples
 Adjudication
-Design consequence
-Open questions
+Accepted Design consequence
 ```
 
-Do not rewrite the note after the fact into a polished current-system description. Accepted current semantics belong in `reports/design/`.
+Do not use Concept for scientific qualification, test evidence, task execution, current status, or ordinary bug-fix history.
 
-## Design consequence
+## Same-work-unit Design update
 
-A compact disposition may be:
+After creating the Concept:
 
 ```text
-NO_CHANGE
-UPDATE design_id=<...>
-NEW_TOPIC <design_id>
-SPLIT <design_id>
-MERGE <design_id...>
-REMOVE <design_id>
-REORDER
-OPEN — further adjudication required
+update/overwrite the owning reports/design topic(s)
+→ update reports/design/README.md when ownership/navigation changes
+→ remove superseded current Design owners when needed
 ```
 
-`design.md` owns the actual transformation rules.
+The Concept write is incomplete until current Design reflects the accepted consequence.
