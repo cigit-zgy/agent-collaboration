@@ -2,7 +2,7 @@
 
 Load this reference for the canonical current project design under `reports/design/`: ownership, current-state semantics, topic decomposition, naming, and projection into Skills/code/tests.
 
-`reports/concept/` is explicit User-requested historical reasoning only. Project-wide admission/drift checks are owned by `governance.md`.
+`reports/concept/` is explicit User-requested historical reasoning only. Project-wide admission, drift, and golden-object purity checks are owned by `governance.md`.
 
 ## Core boundary
 
@@ -13,9 +13,12 @@ reports/design/
 = mutable current state
 
 reports/concept/
-= dated historical reasoning
+= dated historical reasoning/evidence discussion
 = append-only when explicitly requested by the User
 = never current authority
+
+workspace/golden_object/<model>/
+= canonical ten-layer structured object only
 ```
 
 ## Single current set
@@ -32,7 +35,7 @@ Do not keep parallel root `design/`, `design_v2/`, dated design trees, drafts, b
 
 Every active design concern has exactly one current owner.
 
-A current topic is non-conforming when it mainly exists to supersede, refine, override, or preserve a previous current topic for the same semantic responsibility. Merge the accepted semantics into the real owner and remove the superseded current file.
+A current topic is non-conforming when it mainly exists to supersede, refine, override, or preserve a previous current topic for the same semantic responsibility. Merge accepted semantics into the real owner and remove the superseded current file.
 
 Cross-topic interfaces are allowed. Duplicate ownership is not.
 
@@ -67,7 +70,7 @@ a new conversation started
 a current topic can be described more specifically in another file
 ```
 
-Model-specific scientific facts normally belong to source/model/golden authority, not project living design.
+Model-specific scientific facts belong in their registered source/model representation and, when canonicalized as a golden object, in the ten Layer 01–10 structured-object files. Historical correction/qualification reasoning belongs in Concept only when the User explicitly requests it.
 
 ## Mutable current-state rule
 
@@ -86,7 +89,9 @@ History is preserved by Git and, only when explicitly requested by the User, new
 
 ## Explicit Concept coupling
 
-When the User explicitly asks to persist a decision in Concept, `concept.md` requires a new dated Concept file and a same-work-unit update to current Design. Concept is append-only; Design is mutable current state.
+When the User explicitly asks to persist a discussion/decision in Concept, `concept.md` requires a new dated Concept file and a same-work-unit update to current Design. Concept is append-only; Design is mutable current state.
+
+A Design topic MAY cite exact Concept paths for historical rationale/provenance. The accepted current rule itself must remain stated directly in Design so current semantics do not depend on reading history.
 
 ## Topic identity
 
@@ -119,7 +124,7 @@ Do not encode dates, version chains, supersession history, implementation status
 
 A topic may own purpose, boundary, accepted semantics, interfaces, invariants, lifecycle, and design acceptance when relevant.
 
-It must not become a discussion diary, scientific qualification report, model-specific fact store, task/report, test store, backlog, progress board, or archive.
+It must not become a discussion diary, scientific qualification report, source-reconciliation log, task/report, test store, backlog, progress board, or archive.
 
 ## Projection
 
@@ -143,8 +148,8 @@ reports/design/README.md
 → at most one necessary secondary current topic
 ```
 
-Read Concept history only for an explicit historical-rationale need. Do not preload all Design topics or all Concepts.
+Read Concept history only for an explicit historical-rationale/evidence need. Do not preload all Design topics or all Concepts.
 
 ## Completion
 
-Living Design conforms when there is one `reports/design/` tree, every current concern has one owner, no superseded/parallel owner remains, bounded concerns do not require multi-owner reading chains, and downstream projection can proceed without inventing missing semantics.
+Living Design conforms when there is one `reports/design/` tree, every current concern has one owner, no superseded/parallel owner remains, bounded concerns do not require multi-owner reading chains, current semantics are self-contained, and downstream projection can proceed without inventing missing semantics.
