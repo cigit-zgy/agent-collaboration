@@ -2,41 +2,34 @@
 
 Load this reference when an existing repository itself must be migrated to the current collaboration architecture. This is not normal conversation resume.
 
+Project-wide artifact admission and drift handling are owned by `governance.md`.
+
 ## Core distinction
 
 ```text
 conversation resume
 = AGENTS.md → CURRENT.md → reports/design/README.md
-= owned by current.md
-
-exceptional handoff
-= residual conversation-only delta
-= owned by handoff.md
 
 project migration
 = repository architecture/policy reconciliation
-= owned here
 ```
 
 Opening a new conversation does not trigger project migration.
 
-## Context-minimization rule
+## Recovery set
 
-Do not paste project history into the migration prompt. Repository-native artifacts are the system of record.
-
-Migration recovery uses:
+Use only:
 
 ```text
-1. current agent-collaboration SKILL.md
-2. project/migration.md
-3. target AGENTS.md + branch/HEAD/state
-4. CURRENT.md when present
-5. reports/design/README.md when present
-6. only directly relevant current design/task/report anchors
-7. historical concept notes only for a specific unresolved rationale
+current agent-collaboration SKILL.md
+→ project/migration.md + project/governance.md
+→ target AGENTS.md + branch/HEAD/state
+→ CURRENT.md when present
+→ reports/design/README.md when present
+→ only directly relevant current design/task/report anchors
 ```
 
-Do not preload all reports, handoffs, design topics, project Skills, or collaboration references.
+Do not preload all reports, handoffs, design topics, Skills, or historical Concepts.
 
 ## Assessment
 
@@ -44,6 +37,8 @@ Classify only real drift:
 
 ```text
 ALREADY_CONFORMING
+GOVERNANCE_DRIFT
+DESIGN_ARCHITECTURE_DRIFT
 ROUTING_DRIFT
 CURRENT_STATE_DRIFT
 DESIGN_DRIFT
@@ -53,60 +48,53 @@ IMPLEMENTATION_DRIFT
 OPEN_DESIGN
 ```
 
-## Living-design path migration
+## Structural reduction before relocation
 
-The current design location is:
+Migration is not a mechanical folder move.
 
-```text
-reports/design/
-```
-
-When an older project uses repository-root `design/`, migrate the single current tree to `reports/design/`.
-
-This is a path/authority migration only:
+When an older project has a divergent root `design/` tree or overloaded Concept/CURRENT/report surfaces:
 
 ```text
-root design/
-→ reports/design/
+classify every current design artifact by real responsibility
+→ retain/merge only genuine current project-design owners
+→ remove superseded/duplicate current owners from the current set
+→ keep model/source-specific scientific facts with their scientific/model/golden owners
+→ establish one reports/design/ tree
+→ normalize AGENTS/CURRENT/Skill pointers
+→ normalize chronological report names/layout
 ```
 
-Preserve current topic files/semantics; update only path-dependent pointers such as AGENTS, CURRENT, Skill/reference owners, tasks, and navigation links.
+Do not move a divergent `design/` tree unchanged into `reports/design/` and call the migration complete.
 
-Do not convert concept notes into one-to-one design files and do not rewrite scientific/product semantics merely for layout consistency.
+Do not reinterpret scientific/model semantics merely to simplify governance. If consolidation would require a scientific/product/design choice, stop that path for User + ChatGPT adjudication.
 
-If the current design must be reconstructed, use the smallest sufficient evidence set:
+## Concept handling during migration
 
-```text
-current AGENTS / declared authority
-→ current supported Skill/references
-→ unambiguous current repository contracts
-→ directly relevant concept notes
-→ exact active task/report when needed
-→ exceptional handoff only for residual continuity
-```
+Do not create new Concept notes merely to document migration or cleanup.
+
+Existing Concept files remain historical snapshots. A new Concept is created only if the User explicitly requests Concept persistence under `concept.md`; when that happens, update current Design in the same work unit.
+
+Migration may normalize non-canonical Concept filenames/metadata without rewriting historical reasoning.
 
 ## CURRENT.md
 
-For long-running/multi-conversation projects, establish/update root `CURRENT.md` after current authority/design/task state is understood. It records only NOW and points to `reports/design/...` owners.
-
-Do not create CURRENT for trivial single-session projects merely for symmetry.
-
-## Delta migration
-
-Typical migration surfaces are:
+For long-running projects, reduce CURRENT to pointer-only NOW-state under `current.md`:
 
 ```text
-AGENTS.md
-CURRENT.md
-root design/ → reports/design/
-reports/ governance/report layout
-project Skill/references
-shared coding-Skill coordinates when used
-Actions/verification placement when implicated
-local tmp/worktree policy when stale
+current work edge
+active coordinates
+direct current owners
+0–3 open edges
+one next action
 ```
 
-Already-conforming files are not rewritten for style alone.
+Do not carry model closure narratives, test summaries, completed-task history, or parallel-work diaries into CURRENT.
+
+## Reports
+
+Chronological report families are `chatgpt`, `codex`, `concept`, and `handoff`; filenames use `YYMMDD_<family>_NN.md`.
+
+Normalize non-canonical names without changing historical substance. `reports/design/` is current authority, not a chronological report family.
 
 ## Execution placement
 
@@ -114,15 +102,18 @@ Repository-only migration that connected ChatGPT can safely complete is DIRECT. 
 
 ## Completion
 
-Migration is complete when:
+Migration is complete only when:
 
 ```text
-project AGENTS routes current authority correctly
-AND CURRENT is correct/omitted deliberately
-AND current design exists as one reports/design/ tree when explicit design is used
-AND reports/concept remains history/input only
-AND Skill/references project current design
-AND duplicate/parallel authority surfaces are removed/demoted
-AND active task/report/blocker state is reconciled
-AND future conversation replacement uses normal resume rather than rerunning migration
+project AGENTS routes authority correctly
+AND governance.md conformance checks pass for the migrated surfaces
+AND CURRENT is pointer-only or deliberately absent
+AND one current reports/design/ tree exists when Design is used
+AND every current Design concern has one owner
+AND no superseded/parallel Design owner remains
+AND Concepts remain explicit-User historical artifacts only
+AND scientific facts/evidence/task results live with their real owners
+AND chronological report names/layout conform
+AND Skill/references project current Design
+AND future conversation replacement uses normal resume
 ```
