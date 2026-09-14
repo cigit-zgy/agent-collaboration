@@ -1,240 +1,90 @@
 # Execution and local-state contract
 
-Load this reference for DIRECT/LOCAL-QUICK/FORMAL route selection, Codex-local execution, Git/worktree safety, temporary-state placement, or concurrency.
+Load this reference for DIRECT/LOCAL-QUICK/FORMAL route selection, Codex-local execution, repository publication safety, temporary state, or concurrency.
 
-## Route selection
-
-Use the lightest route that preserves the required trust and evidence.
+## Choose the lightest route
 
 ### DIRECT
-
-Use when ChatGPT can complete the work with connected capability and all required evidence is available without substantial local setup.
-
-```text
-ChatGPT authors/executes
-→ runs supported cheap verification
-→ completes
-```
-
-Repository-only work remains DIRECT when connected ChatGPT capability can perform and verify the required changes itself. Do not delegate to Codex merely because a change spans many repository files, uses a task branch, or benefits from an auditable commit.
-
-Codex is justified only by a genuinely local requirement or evidence dependency. If local evidence remains, DIRECT authoring may feed LOCAL-QUICK or FORMAL rather than transferring the whole deliverable.
-
-## Durable Codex-task specification — hard boundary
-
-Every repository task delegated to Codex, whether `LOCAL-QUICK` or `FORMAL`, MUST first be written, committed, and pushed as:
-
-```text
-reports/chatgpt/YYMMDD_chatgpt_NN.md
-```
-
-The committed task artifact is the sole task-specific execution specification.
-
-Chat MUST NOT carry the detailed task body. Do not paste or paraphrase command sequences, path inventories, prohibitions, acceptance criteria, verification matrices, branch rules, or long safety instructions into the User-visible Codex prompt.
-
-User-visible delegation contains only a very short locator to the committed task. Exact LOCAL-QUICK and FORMAL locator formats live in their templates.
-
-If ChatGPT cannot commit/push the task artifact, do not substitute a long chat-only prompt; report the repository-write blocker.
+Use when ChatGPT can complete the work and obtain the required evidence with connected capabilities.
 
 ### LOCAL-QUICK
+Use for bounded local implementation/verification/filesystem work with no unresolved scientific/product decision, destructive/shared-state migration, security/credential change, public/release action, or other material trust boundary.
 
-Use for bounded, low-risk, reviewable local implementation, verification, filesystem work, or repair when there is no unresolved scientific/product/design decision, material destructive/shared-state migration, security/credential change, public/trust contract, release qualification, or other FORMAL trigger.
-
-LOCAL-QUICK still uses a durable `reports/chatgpt/` task artifact, but it does **not** create a `reports/codex/` report.
-
-```text
-committed LOCAL-QUICK task
-→ short copyable locator
-→ pre-execution remote synchronization handshake
-→ verify activated shared Skills when applicable
-→ establish project-local temporary workspace if needed
-→ implement/verify/repair
-→ focused evidence
-→ clean temporary state with no recovery value
-→ task-scoped commit/push when required
-→ post-execution remote synchronization handshake
-→ return only the task's compact Result contract
-→ ChatGPT acceptance review when needed
-```
-
-The LOCAL-QUICK task template is:
-
-```text
-templates/local-quick-task.md
-```
-
-If execution exposes unresolved design, material scope/risk growth, destructive/shared-state behavior, release/public-contract work, or another FORMAL boundary:
-
-```text
-STOP affected execution
-→ return BLOCKED with the escalation reason
-→ do not extend the task through chat instructions
-→ ChatGPT issues a new FORMAL task if continuation is approved
-```
+LOCAL-QUICK still uses a committed `reports/chatgpt/` task but no `reports/codex/` report.
 
 ### FORMAL
-
-Use for major architecture/cross-module work, scientific/product/trust/public-contract migration, persistent/destructive shared state, long multi-step local work, high security/data-loss/reproducibility risk, release qualification, or work needing durable execution evidence.
-
-FORMAL uses both:
-
-```text
-reports/chatgpt/YYMMDD_chatgpt_NN.md
-reports/codex/YYMMDD_codex_NN.md
-```
+Use when the work is materially higher-risk or benefits from durable execution evidence: major architecture/cross-module changes, scientific/product/trust contract work, persistent/destructive shared state, long multi-step local work, release qualification, or comparable security/reproducibility risk.
 
 FORMAL lifecycle is owned by `formal.md`.
 
-## Authoring versus execution
+## Task specification
 
-Do not classify a whole code deliverable as LOCAL merely because final verification requires the User machine.
+Every Codex repository task is committed under:
 
 ```text
-ChatGPT-authorable design/code/tests
-→ ChatGPT writes first
-
-cheap connected verification
-→ ChatGPT runs before handoff
-
-project/runtime/local-feedback work
-→ Codex executes locally and performs bounded repair
+reports/chatgpt/YYMMDD_chatgpt_NN.md
 ```
 
-Detailed implementation quality belongs to `implementation.md`; verification levels/evidence belong to `verification.md`.
+The task states the intended outcome, authority/boundaries, scope, completion criteria, required evidence, and true decision boundary. Chat carries only the locator.
 
-## Local ephemeral state — hard boundary
+Avoid command-by-command instructions unless a specific command sequence is itself required for correctness, reproducibility, or safety.
 
-All Agent-created persistent local scratch state on the User machine belongs under:
+## Execution autonomy
+
+Within the authorized scope, Codex may choose the engineering path:
+
+```text
+inspect → implement → run → diagnose → repair → rerun
+```
+
+It should continue until the task's completion criteria are met or a real decision boundary/blocker is reached.
+
+Do not stop merely to ask permission for routine reversible implementation choices.
+
+## Repository-state safety
+
+For repository-changing local work, two properties are required.
+
+Before mutation:
+
+```text
+execution is based on the authorized current remote/task state
+AND pre-existing User work is understood and preserved
+```
+
+At completion:
+
+```text
+the intended task-scoped changes are committed/published as required
+AND the final local result corresponds to the final remote task/work state
+```
+
+Codex chooses the appropriate Git/branch/worktree operations to establish those properties. Do not use destructive reset, force push, hidden stash, or unrelated conflict rewriting merely to manufacture alignment.
+
+If the authorized baseline or final published state cannot be established without risking User work or choosing among conflicting histories, stop with the concrete blocker.
+
+## Local scratch
+
+Task-created persistent scratch on the User machine belongs under:
 
 ```text
 <PROJECT_ROOT>/tmp/<WORK_ID>/
 ```
 
-`WORK_ID` is the task's durable `task_id` when one exists; otherwise use a short project-local work label. This boundary covers linked worktrees, scratch repositories, temporary downloads, test/E2E outputs, renders, caches, intermediates, and disposable environments.
+Use only what the task needs. Remove disposable state when the work is complete; retain blocked-state material only when it has clear recovery value.
 
-Agents MUST NOT create persistent sibling project worktrees, Desktop test folders, Documents-root scratch directories, or ad-hoc persistent `/tmp/<project>-...` workspaces merely for convenience unless the User explicitly authorizes that exact location.
+A linked worktree is optional, not mandatory. Use one when isolation materially reduces interference; otherwise prefer the simpler safe arrangement.
 
-Create only needed subdirectories, for example:
+## Verification and repair
 
-```text
-worktree/
-run/
-downloads/
-cache/
-renders/
-env/
-```
+Run checks appropriate to the change and required claim. If they pass, do not broaden or repeat testing unless new changes, failures, risk, or unresolved concerns justify it.
 
-Task scratch state is not committed.
-
-## Cleanup lifecycle
-
-```text
-completed + no recovery value
-→ remove work tmp immediately
-
-BLOCKED/FAIL + deliberate recovery value
-→ retain only the minimum needed state and report why
-
-superseded/cancelled + no recovery value
-→ remove work tmp
-
-active/dirty/unpushed/uncertain
-→ preserve until safety is established
-```
-
-Age alone never authorizes deletion.
-
-## Linked worktrees
-
-When a delegated task needs a linked worktree, prefer:
-
-```text
-<PROJECT_ROOT>/tmp/<TASK_ID>/worktree/
-```
-
-Registered worktrees are removed through Git-aware operations such as `git worktree remove`, followed by `git worktree prune` when appropriate. Do not blindly `rm -rf` a registered worktree.
-
-## Remote synchronization handshake — hard boundary
-
-Every **repository-changing** Codex task, whether `LOCAL-QUICK` or `FORMAL`, MUST prove that Codex starts from the same authorized remote state that ChatGPT/task authority published and ends with the same task state visible remotely.
-
-### Before any repository mutation
-
-Codex MUST:
-
-```text
-fresh-fetch the authorized remote refs
-→ inspect repository identity / branch / HEAD / upstream / worktrees / pre-existing User changes
-→ resolve the exact authorized task/baseline coordinate from the committed task + remote branch
-→ establish the task checkout/worktree safely
-→ prove local execution HEAD == authorized fetched remote baseline
-→ only then mutate repository state
-```
-
-The fetched remote state, not a stale local checkout, is the synchronization reference.
-
-For a pinned task branch, an unexpected remote branch head or a mismatch between the committed task coordinate and fetched remote state is a synchronization conflict. Do not silently adopt a different baseline or keep working from the stale local copy. Stop and report the conflict unless the committed task explicitly defines the reconciliation.
-
-This rule does **not** require blind `git pull` on the primary checkout. Prefer `git fetch` plus a safe branch/worktree arrangement. Do not use reset, rebase, stash, force checkout, force push, or destructive reconciliation merely to make local state match remote.
-
-### After repository changes
-
-Before reporting repository-changing task completion, Codex MUST:
-
-```text
-commit task-scoped changes
-→ push the owning task/work branch
-→ fresh-fetch the remote again after push
-→ resolve fetched upstream task/work branch HEAD
-→ prove local task HEAD == fetched upstream HEAD
-→ confirm any required task worktree cleanliness
-→ only then report PASS/completion
-```
-
-A successful `git push` exit status alone is insufficient evidence. Post-push equality is mandatory, not `when practical`.
-
-If the post-push fresh fetch shows:
-
-```text
-local task HEAD != fetched upstream task/work branch HEAD
-```
-
-then Codex MUST NOT report PASS. Preserve local/User state and return `BLOCKED` or `FAIL` according to the concrete cause.
-
-A read-only/local-only Codex task that intentionally makes no repository change does not need a push step, but it still resolves current remote/project authority when repository state materially affects the result.
-
-## Git safety
-
-For repository-changing LOCAL work, the synchronization handshake and task-scoped Git rules combine as:
-
-```text
-fresh fetch
-→ inspect branch / HEAD / upstream / worktrees / User state
-→ prove exact authorized remote baseline locally
-→ preserve pre-existing User state
-→ perform task work
-→ commit only task-scoped changes
-→ push owning branch
-→ fresh fetch again
-→ prove local HEAD == upstream HEAD
-```
-
-Do not infer permission for destructive reset, force-push, hidden automatic stash, non-trivial conflict reconciliation, or direct mutation of a stale primary checkout.
+Failures caused by the in-scope change should normally be diagnosed and repaired within scope rather than escalated as approval questions.
 
 ## Ownership boundary
 
-If the in-scope owner is correct while an out-of-scope downstream consumer remains stale:
-
-```text
-make current owner conform
-→ verify it
-→ report downstream drift
-→ stop at ownership boundary
-```
-
-Do not restore rejected upstream interfaces merely to make unrelated downstream tests green.
+If the current owner is correct and an out-of-scope consumer is stale, report the downstream drift rather than weakening the current contract to make unrelated checks pass.
 
 ## Concurrency
 
-Independent work may run concurrently only when branches/worktrees and other mutable resources do not interfere. A delegated task branch has one active execution owner. If non-interference cannot be established, serialize the work.
+Parallel work is allowed when mutable resources do not interfere. If non-interference is unclear, serialize rather than adding coordination machinery by default.
