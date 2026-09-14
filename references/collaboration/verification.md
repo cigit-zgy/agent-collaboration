@@ -1,254 +1,78 @@
 # Verification contract
 
-Load this reference for verification level, evidence-category, or ChatGPT-versus-Codex placement decisions.
+Load this reference when deciding how much verification a change needs or where that evidence should run.
 
-GitHub-hosted CI/Actions claim deduplication and private/public workflow policy are owned separately by `actions.md`; `SKILL.md` routes there directly when that is the active concern.
+## Core rule
 
-## Model
-
-Verification has two dimensions:
+Verification is proportional to the claim and risk.
 
 ```text
-level    = how much rigor/cost the task warrants
-category = what evidence is needed for the specific claim
+small reversible change
+→ focused affected checks
+
+material contract or scientific change
+→ stronger contract/integration/real-artifact evidence
+
+release-critical change
+→ release-level evidence appropriate to the actual claim
 ```
 
-A task selects one level and only the evidence categories material to its risks. Categories are not a second level system and need not all appear.
+Do not broaden or repeat testing merely to increase evidence volume. Once required checks pass, continue toward completion unless new changes, failures, or unresolved concerns justify more work.
 
 ## Levels
 
 ### LEVEL 1 — FOCUSED
-
-Default for ordinary development and LOCAL-QUICK.
-
-Use directly affected tests/checks, relevant lint/type checks, and the smallest useful smoke/integration evidence. Optimize for fast feedback.
+Default for ordinary development and LOCAL-QUICK. Run directly affected checks plus the smallest useful smoke/integration evidence when needed.
 
 ### LEVEL 2 — MAJOR
-
-Use for core architecture, scientific/product behavior, important public contracts, trust boundaries, or material cross-module changes.
-
-Add only risk-relevant evidence such as stronger contract/integration checks, real artifacts, recovery behavior, targeted security/static analysis, or an additional adversarial review perspective.
+Use for important architecture, scientific/product behavior, public contracts, or trust boundaries. Add only the stronger evidence the changed claim actually needs.
 
 ### LEVEL 3 — RELEASE
+Use for release qualification. Verify the properties required by the release claim, such as packaging/installability, supported environments, representative real artifacts, recovery/repeatability, and material dependency/static checks.
 
-Use for release qualification, open-source/release readiness, or security-sensitive release gates.
+LEVEL 3 does not mean “run every available test”.
 
-Cover the reproducibility and non-functional evidence required by the actual release claim: packaging/install, environment matrix, dependencies, static/security, real artifacts, recovery/repeatability, and similar concerns when material.
+## Placement
 
-LEVEL 3 does not mean every available test or scanner.
+Use connected ChatGPT verification when the required check is already available cheaply online.
 
-## Placement for speed
+Use Codex/local verification when evidence depends on the User machine, project runtime, native dependencies, local services, browser automation, hardware, proprietary data, large builds, or long-running execution.
 
-Choose both the evidence and the cheapest reliable place to obtain it.
+Do not duplicate an expensive check in two places unless the second environment proves a distinct property.
 
-### ChatGPT / connected verification
+## Meaningful tests
 
-Use ChatGPT when the check is directly supported by the current connected environment and does not require substantial setup or long execution, for example:
+Prefer checks that establish a real behavior, boundary, invariant, failure mode, or integration property.
 
-```text
-repository/diff/contract inspection
-syntax or structural checks
-small pure-function/unit checks in an already available runtime
-remote file/link/schema inspection
-existing CI/status evidence
-small deterministic checks cheaper than a local handoff
-```
+Avoid tests that merely mirror implementation for a reversible low-impact change. Astra-class coding agents already tend to test thoroughly; instructions should keep verification from becoming a second implementation project.
 
-Do not create a large temporary environment or duplicate the project's dependency stack merely to avoid local verification.
+## Evidence selection
 
-### Codex local verification
-
-Use Codex when the User machine/project runtime materially provides the required evidence, including:
+When relevant, evidence may include:
 
 ```text
-project Conda/venv/runtime
-full or long test suites
-native/compiled dependencies
-browser automation
-external CLI/service/credential/entitlement
-proprietary/local datasets and artifacts
-hardware-specific behavior
-large builds, rendering, benchmarks, stress, E2E/recovery work
+focused component/property checks
+contract or invariant checks
+integration checks
+representative real-artifact/tool runs
+failure/recovery/repeatability checks
+release/non-functional checks
 ```
 
-### Placement rule
+Select only what the task needs. Do not add `N/A` categories or redundant assertions.
 
-```text
-cheap + already available online
-→ ChatGPT verifies before handoff
+## Task planning
 
-setup-heavy / time-consuming / environment-bound / local-evidence-bearing
-→ Codex verifies locally
-```
-
-Implementation authorship and verification placement are independent. ChatGPT may author code/tests first, then delegate only remaining local verification and bounded repair.
-
-Do not run the same expensive check in two environments unless the second environment proves a distinct claim.
-
-A verification plan states the remaining evidence; it does not repeat checks already completed unless rerun is needed for final-state integrity.
-
-## Evidence categories
-
-### Component / property
-
-Small deterministic behavior and local invariants:
-
-```text
-focused tests
-boundary/parameterized cases
-pure-function checks
-property/fuzz tests when input-space risk warrants them
-```
-
-### Contract / invariant
-
-Stable public/project-facing behavior independent of implementation details:
-
-```text
-schema/fields
-file ownership
-state transitions
-trust boundaries
-CLI/API behavior
-fail-closed conditions
-serialization/provenance
-```
-
-Avoid self-proof where practical: critical expected invariants should not be derived only from the same production constant/code path being tested.
-
-### Integration
-
-Interactions among in-scope components or adjacent boundaries:
-
-```text
-component → component
-CLI → implementation
-registry → consumer
-adapter → orchestrator
-synthetic stage handoff
-```
-
-### Real artifact / external tool
-
-Behavior that mocks/synthetic inputs cannot establish reliably:
-
-```text
-real scientific PDF/data/model
-real parser/simulator/tool
-real package/resource layout
-representative domain edge case
-```
-
-Reuse stable expensive artifacts when fresh reconstruction adds no evidence.
-
-### E2E / recovery / repeatability
-
-Complete in-scope flow and adverse transitions when material:
-
-```text
-fresh input → stable result
-failure → no partial authoritative state
-retry/idempotency
-independent reconstruction/repeatability
-```
-
-Keep E2E sparse; lower-cost evidence should prove lower-level properties.
-
-### Release / non-functional risk
-
-Evidence that a release claim survives outside the current worktree/happy path:
-
-```text
-build + clean/non-editable install
-package self-containment
-supported runtime/OS matrix
-dependency/static/security checks
-performance/scale limits when claimed
-repository/open-source/status-gate readiness
-```
-
-Do not invent irrelevant non-functional tests to fill the category.
-
-## Level guidance
-
-```text
-LEVEL 1
-→ Component/property by default
-→ add Contract/Integration when touched
-→ higher-cost categories only when directly implicated
-
-LEVEL 2
-→ affected Component/Contract/Integration
-→ Real artifact when scientific/tool reality matters
-→ E2E/recovery/repeatability for trust/transaction/full-flow risk
-→ Release/non-functional only for concrete risk
-
-LEVEL 3
-→ every category material to the release claim
-→ commonly Contract + Real artifact + E2E/recovery/repeatability + Release/non-functional for executable scientific components
-```
-
-Do not duplicate the same assertion across categories merely to increase evidence volume.
-
-## Strengthening techniques
-
-These are optional techniques inside the relevant category, not levels/categories themselves:
-
-```text
-coverage / branch coverage
-property testing / fuzzing
-mutation testing
-fault injection
-concurrency/race testing
-benchmark/stress testing
-```
-
-Use them only against a real risk. Coverage identifies unexercised paths but does not prove correctness; mutation testing checks whether tests detect meaningful implementation changes; fault injection is valuable at failure boundaries; concurrency tests require plausible concurrent access; benchmarks require a performance/scale claim.
-
-## Security/dependency tools
-
-Select by risk:
-
-```text
-Semgrep   → targeted source/static security analysis
-CodeQL    → deeper semantic/data-flow analysis when justified and supported
-pip-audit → Python dependency-vulnerability evidence
-```
-
-Tool installation does not make a tool mandatory. A finding is evidence to investigate, not automatic proof of a defect.
-
-## Planning
-
-LOCAL-QUICK normally uses LEVEL 1 and records only the focused evidence needed for acceptance review.
-
-A FORMAL task states:
+A task should state only:
 
 ```text
 Verification level: LEVEL 1 | LEVEL 2 | LEVEL 3
-
-ChatGPT checks already completed:
-- <check>: <result>
-
-Remaining Codex-local evidence:
-- <category>: <concrete check>
+Required evidence:
+- <concrete checks needed for the claim>
 ```
 
-List only required categories; do not add `N/A` rows.
+If ChatGPT already established a claim and later changes did not invalidate it, Codex need not repeat it unless local confirmation proves a distinct property.
 
-When coding Skills materially govern implementation, the task/report identifies the shared profile and activated Skills. Alignment checks are scoped to activated Skills and are not a reason to update every installed Skill before every run.
+## Reporting
 
-## Skill testing
-
-For maintained Skill development, tests primarily probe the general Skill design/contract rather than optimizing one current fixture. Classification of `DESIGN_GAP`, `PROJECTION_DRIFT`, `IMPLEMENTATION_DRIFT`, `TEST_DEFECT`, and environment/tool defects is owned by `../skill/development.md`.
-
-Load that owner directly from `SKILL.md` when the active concern is Skill design/testing; do not load it for ordinary software verification.
-
-## Reporting and acceptance
-
-Codex reports what actually ran for each required category, including failures, skips, environment limits, and plan deviations.
-
-A `pytest PASS`, coverage number, scanner result, or CI badge does not substitute for another required evidence category.
-
-ChatGPT acceptance review asks whether the chosen level/evidence were sufficient, whether placement was efficient, whether the same shared coding-Skill authorities governed both Agents, and whether the evidence establishes the claim.
-
-Add a second reviewer/model/human perspective for LEVEL 2/3 only when scientific, architectural, trust, security, or release risk materially warrants it.
+Record what actually ran, material failures/skips/limitations, and whether the requested completion claim is established.
