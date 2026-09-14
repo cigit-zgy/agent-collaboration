@@ -1,34 +1,12 @@
 # ChatGPT FORMAL task template
 
-Cold path: load only when creating/reviewing a FORMAL task.
+Load only when creating or reviewing a FORMAL task.
 
-FORMAL lifecycle is owned by `../formal.md`; report layout by `../../project/reports.md`; Git/tmp by `../execution.md`; verification by `../verification.md`.
+FORMAL lifecycle is owned by `../formal.md`; execution safety by `../execution.md`; verification by `../verification.md`.
 
-FORMAL tasks live at:
+Tasks live at `reports/chatgpt/YYMMDD_chatgpt_NN.md`. The committed task is the sole task-specific execution specification; chat contains only the locator.
 
-```text
-reports/chatgpt/YYMMDD_chatgpt_NN.md
-```
-
-The committed task is the sole task-specific execution specification. Detailed task content must not be repeated in chat.
-
-## Before issuing
-
-ChatGPT must have:
-
-```text
-refreshed current collaboration authority
-→ inspected current project authority/evidence
-→ completed design-bearing decisions
-→ for Skill behavior changes: updated reports/design/ + SKILL.md/references first
-→ completed ChatGPT-authorable DIRECT work
-→ resolved shared coding-Skill authority
-→ selected verification level
-→ selected task branch unless explicitly excepted
-→ pinned exact collaboration revision
-```
-
-## Required metadata
+## Metadata
 
 ```yaml
 ---
@@ -42,62 +20,51 @@ repository: <OWNER/REPOSITORY>
 status: issued
 execution_mode: formal
 summary: >
-  <PURPOSE/SCOPE>
+  <ONE-SENTENCE OUTCOME>
 task_branch: <TASK_BRANCH>
-baseline_sha: <DIRECT_TASK_BASELINE_SHA>
+baseline_sha: <AUTHORIZED_BASELINE_SHA>
 verification_level: <level_1 | level_2 | level_3>
 collaboration_commit: <PINNED_AGENT_COLLABORATION_SHA>
-coding_skill_profile: >
-  cigit-zgy/agent-collaboration@<PINNED_AGENT_COLLABORATION_SHA>:
-  references/collaboration/shared-coding-skills.md
 codex_report: reports/codex/<YYMMDD_codex_NN.md>
 ---
 ```
 
-## Body
+Add other coordinates only when they materially govern the task.
 
-Use the smallest body that fully specifies execution. Bind exact `reports/design/` topic(s) plus committed Skill/reference owners for design-bearing Skill changes.
+## Preferred body
 
-## Remote synchronization — hard requirement
+```markdown
+# <Task title>
 
-Before mutation:
+## Mission
+<Final state to achieve.>
 
-```text
-fresh-fetch
-→ resolve exact task branch/task/baseline
-→ inspect local branch/HEAD/upstream/worktrees/User state
-→ establish safe task worktree
-→ prove local execution HEAD == authorized fetched baseline
+## Authority and boundaries
+<Owners and semantics that must not be reinterpreted.>
+
+## Scope
+<What may change and material non-goals.>
+
+## Completion criteria
+<Observable conditions that mean the task is done.>
+
+## Required evidence
+<Only checks needed to establish completion.>
+
+## User decision points
+<Only choices that truly require User/ChatGPT input.>
+
+## Result contract
+<Compact terminal fields and report path.>
 ```
 
-After changes:
+Prefer outcome-oriented instructions. Do not prescribe a command-by-command path unless the sequence itself is required for correctness or reproducibility.
 
-```text
-commit task-scoped changes
-→ push task branch
-→ fresh-fetch again
-→ prove local task HEAD == fetched upstream HEAD
-→ record evidence in Codex report
-```
-
-Without final equality, PASS is forbidden. Do not use blind pull/reset/rebase/stash/force operations merely to synchronize.
-
-## Skill behavior tasks
-
-```text
-User + ChatGPT adjudication
-→ reports/design/ updated
-→ SKILL.md + references updated
-→ committed task points to those exact owners
-→ Codex implements/repairs code
-→ tests probe the general contract
-```
-
-A new `DESIGN_GAP` stops the affected implementation path.
+Within scope, Codex may inspect, implement, run, diagnose, repair, and rerun until the completion criteria are met.
 
 ## User-visible locator
 
-After commit/push, at most one short sentence may precede exactly one fenced `text` block:
+After commit/push, emit the short locator:
 
 ```text
 执行 FORMAL 任务：
@@ -109,4 +76,4 @@ https://github.com/<OWNER>/<REPOSITORY>/blob/<TASK_COMMIT>/reports/chatgpt/<TASK
 以 committed task 为唯一 task-specific 执行规范。
 ```
 
-Do not repeat task steps or append task-specific prose after the locator.
+Do not repeat the task body in chat.
