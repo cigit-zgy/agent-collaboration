@@ -1,6 +1,6 @@
 # Project AGENTS.md template
 
-Keep project `AGENTS.md` concise and scope-local. Route global collaboration behavior through current/pinned `agent-collaboration/SKILL.md`.
+Keep project `AGENTS.md` concise and scope-local. It identifies authority and owners; it does not reproduce workflow manuals.
 
 ````markdown
 # <PROJECT_NAME> context
@@ -9,15 +9,15 @@ Keep project `AGENTS.md` concise and scope-local. Route global collaboration beh
 
 ```text
 explicit User instruction
-→ reports/design/                  current accepted project Design
+→ reports/design/                  current accepted Design
 → <workflow>/SKILL.md + references operational workflow
 → <implementation paths>          implementation
-→ tests                           conformance evidence
-→ <source/evidence owner>         model/domain scientific facts
+→ tests                           evidence
+→ <source/evidence owner>         domain/scientific facts when applicable
 ```
 
 `CURRENT.md` is NOW-state/navigation only.
-`reports/concept/` is explicit User-requested historical design reasoning only.
+`reports/concept/` is historical and created only when the User explicitly requests Concept persistence.
 
 Global collaboration authority:
 `cigit-zgy/agent-collaboration@<REVISION>`
@@ -26,11 +26,10 @@ Global collaboration authority:
 
 ```text
 CURRENT.md          current work edge / next action
-reports/design/     one current living Design set
+reports/design/     current living Design
 reports/chatgpt/    durable Codex tasks
 reports/codex/      FORMAL execution evidence
-reports/concept/    explicit User-requested Concept history
-reports/handoff/    exceptional conversation-only delta
+reports/concept/    explicit User-requested history
 <path>              <project-specific owner>
 ```
 
@@ -39,34 +38,19 @@ reports/handoff/    exceptional conversation-only delta
 Normal resume:
 
 ```text
-AGENTS.md
-→ CURRENT.md
-→ reports/design/README.md
-→ one directly relevant owner
+AGENTS.md → CURRENT.md → reports/design/README.md → current owner
 ```
 
-Before the first substantive repository-changing ChatGPT write, apply the bounded governance conformance gate from current `agent-collaboration`.
+Routine execution enters the relevant project Skill/reference directly. Do not preload history or unrelated Design topics.
 
-Routine execution:
+Inside authorized reversible work, infer routine implementation details and continue through repair/verification. Ask only when the missing choice changes scientific/product meaning or another explicit project checkpoint.
 
-```text
-AGENTS.md
-→ <workflow>/SKILL.md
-→ owning reference/script
-```
+## Hard boundaries
 
-## Hard invariants
-
-- `reports/design/` is the only current Design tree.
-- Every current Design concern has one owner; no superseded/refining duplicate current topics.
-- Bounded work normally reads one primary Design owner plus at most one necessary secondary owner.
-- ChatGPT creates a Concept only when the User explicitly requests Concept persistence.
-- Every Concept request creates a NEW dated `reports/concept/YYMMDD_concept_NN.md`; existing Concepts are not overwritten.
-- The same work unit also updates current `reports/design/` to the accepted consequence.
-- Scientific/model facts and qualification/execution evidence remain with their scientific/task/report owners.
-- `CURRENT.md` represents NOW only; target <=4 KiB and no project-history dump.
+- `reports/design/` is the only current Design tree when explicit Design is used.
+- Project-specific scientific/canonical-artifact rules stay with the project that owns them.
 - Every Codex repository task is committed under `reports/chatgpt/` before delegation.
 - <project-specific hard boundary>
 ````
 
-Do not copy global manuals, task history, Design bodies, Concept history, or verification logs into `AGENTS.md`.
+Do not copy global collaboration manuals, detailed test recipes, task history, Design bodies, Concept history, or verification logs into `AGENTS.md`.
