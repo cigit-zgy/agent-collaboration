@@ -1,102 +1,72 @@
 # Skill development lifecycle
 
-This contract governs design, implementation, and testing of maintained first-party Skills.
+Load this reference when changing maintained first-party Skill behavior, projection, implementation, or tests.
 
-## Core authority order
-
-```text
-reports/concept/ exploration/history when useful
-→ User + ChatGPT adjudication
-→ reports/design/ current authority
-→ SKILL.md + references/
-→ scripts/code/schema/config
-→ tests/evaluation
-→ runtime artifacts
-```
-
-For projects using the collaboration living-design model, current authority is the single `reports/design/` tree under `../project/design.md`; `reports/concept/` is history/input only.
-
-Code and tests are projections/evidence. They do not independently define Skill behavior.
-
-## Design-first boundary
-
-When work changes or questions Skill capability semantics, routing, state, trust/provenance, recovery, completion, public API/schema meaning, scientific/product semantics, or cross-stage durable interfaces:
+## Authority
 
 ```text
-observe problem / requirement
-→ record concept history when useful
-→ inspect reports/design/ + current Skill Markdown
-→ determine DESIGN_GAP vs projection/implementation drift
-→ if design: User + ChatGPT adjudicate
-→ update reports/design/ coherently
-→ project to SKILL.md/references
-→ implement
-→ test the resulting general contract
+reports/design/ current accepted semantics
+→ SKILL.md + references operational projection
+→ scripts/code/schema/config implementation
+→ tests/evaluation evidence
 ```
 
-Do not begin by patching production code when intended behavior is not explicit in durable current design/Skill Markdown.
+`reports/concept/` is historical only and is created only when the User explicitly asks to persist Concept material.
 
-## Pure implementation drift
+Code and tests do not independently define Skill behavior.
 
-Repair code directly when intended behavior is already explicit and internally consistent in `reports/design/` + Skill Markdown, implementation clearly violates it, and no new semantic choice is required.
-
-## Markdown before code
-
-For design-bearing changes:
-
-```text
-reports/design/ updated/accepted
-→ SKILL.md / references updated
-→ committed task points to exact design + Markdown authority
-→ Codex implements/repairs code to conform
-```
-
-A task is an execution specification, not the sole owner of new Skill semantics.
-
-## No task-local patching
-
-Do not add production behavior solely for one task/fixture/paper/repository/model/sample unless that behavior belongs to the accepted general Skill contract.
-
-A concrete failure may reveal a general missing rule. Fix the rule at the `reports/design/`/Skill owner, not by mechanically generalizing the patch.
-
-## Testing purpose
-
-Skill tests primarily challenge whether the design/operational contract is sufficient, coherent, general, and implementable.
-
-Prioritize representative normal flows, contract-implied boundaries, cross-stage invariants, failure/recovery, independent examples stressing generality, real artifacts when domain reality matters, and regressions for clarified general rules.
-
-## Failure classification
+## Classify the change first
 
 ```text
 DESIGN_GAP
-= reports/design/ does not determine adequate correct behavior
-→ stop affected patching
-→ User + ChatGPT adjudication
-→ update reports/design/ if accepted
+= current Design does not determine the required behavior
+→ User + ChatGPT adjudicate
+→ update reports/design/
+→ then update Skill projection
 
 PROJECTION_DRIFT
-= reports/design/ clear; Skill Markdown missing/inconsistent
-→ fix Markdown first
+= Design is clear; SKILL.md/references are stale or incomplete
+→ repair Skill Markdown
 
 IMPLEMENTATION_DRIFT
-= reports/design/ + Skill Markdown clear; code violates them
-→ repair code
+= Design + Skill Markdown are clear; code violates them
+→ repair implementation
 
 TEST_DEFECT
-= test demands behavior not required by accepted design
+= test requires behavior not owned by current Design/Skill
 → repair/remove test
 
-ENVIRONMENT / TOOL DEFECT
-= failure belongs to runtime/tool/external interface
-→ repair at its owner
+ENVIRONMENT_OR_TOOL_DEFECT
+= failure belongs to runtime/external interface
+→ repair at that owner
 ```
 
-Codex reports the classification; it does not convert DESIGN_GAP into implementation drift just to finish.
+Do not convert a real `DESIGN_GAP` into an implementation patch merely to finish a task.
+
+## Development behavior
+
+Inside already accepted semantics, Agents may choose the implementation path and should follow through through repair/retest without asking for routine approval.
+
+For a design-bearing change, make the accepted semantics durable in current Design and Skill Markdown before production implementation depends on them.
+
+A task is an execution specification, not the sole owner of new Skill semantics.
+
+## Generality
+
+Do not add production behavior solely for one task, fixture, paper, repository, model, or sample unless that behavior belongs to the intended capability class.
+
+A concrete failure may reveal a general missing rule. Fix that rule at the owning Design/Skill surface rather than accumulating special cases.
+
+## Testing
+
+Use representative evidence that challenges the general Skill contract. Prefer meaningful normal flows, boundary cases, cross-stage invariants, failure/recovery behavior, and real artifacts when domain reality matters.
+
+Do not add tests mechanically for every implementation detail or every historical incident. Verification proportionality is owned by `../collaboration/verification.md`.
 
 ## Prior art
 
-For a new Skill, major capability, or substantial redesign, apply `../project/prior-art.md` when triggered before accepting custom design into `reports/design/`.
+For a new Skill, major capability, or substantial redesign, apply `../project/prior-art.md` when that gate is triggered before accepting custom Design.
 
 ## Completion
 
-Skill development is complete when any design-bearing change is durable in `reports/design/`, Skill Markdown faithfully projects it, implementation conforms without task-specific semantics, tests probe the general contract, and required verification/acceptance is complete.
+Skill development is complete when the accepted semantics are represented once in current Design, Skill Markdown projects them clearly, implementation conforms without task-specific semantics, and the necessary evidence establishes the intended capability.
