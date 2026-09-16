@@ -32,10 +32,29 @@ Prefer, in order:
 
 ```text
 existing project pattern
-→ accepted reusable dependency/tool
+→ authoritative, maintained third-party dependency/tool
 → smallest direct implementation for the proven gap
 → new abstraction only when a real current consumer needs it
 ```
+
+Do not reimplement a substantial capability that is already provided by a suitable mature dependency merely to keep all code in-repository.
+
+When choosing among third-party candidates, weigh the signals in this order when relevance is comparable:
+
+```text
+official / standards-body / original-author / established ecosystem provenance
+→ active maintenance and recent compatible releases
+→ fit with the required API/semantics/runtime
+→ license, security posture, documentation and tests
+→ ecosystem adoption and long-term stability
+→ stars, forks, downloads or similar popularity signals
+```
+
+Popularity is supporting evidence, not authority. Do not impose a universal minimum star count: niche scientific or standards libraries may be authoritative with modest popularity, while a high-star repository may be stale or unsuitable.
+
+Prefer the mature dependency when it materially reduces custom code and maintenance burden without compromising scientific/product semantics, reproducibility, security, licensing, deployment, or runtime constraints.
+
+Do not add a heavy dependency for a trivial capability when a small direct implementation is clearer and lower-maintenance. New dependencies must serve a concrete current need.
 
 Keep changes reviewable and responsibility-bounded. Do not add registries, caches, wrappers, compatibility layers, state files, hashes, dependencies, or helper frameworks for hypothetical future use.
 
@@ -59,7 +78,11 @@ Comments/docstrings should explain non-obvious public, scientific, algorithmic, 
 
 ## Dependencies
 
-Add a dependency only for a concrete current need that it satisfies better than an existing capability or small direct implementation.
+Before adding meaningful custom functionality that is likely to exist in a mature library or tool, inspect established third-party options first. For substantial framework/tool choices, use the project prior-art gate.
+
+Add a dependency only for a concrete current need that it satisfies better than an existing capability or a small direct implementation.
+
+Record or pin the dependency/version/profile to the degree required by the project's reproducibility and compatibility contract; do not cargo-cult exact pins when the project intentionally supports a validated compatible range.
 
 For independently evolving external interfaces, use the project adapter boundary and explicit compatibility evidence; do not infer semantic compatibility from a successful command alone.
 
