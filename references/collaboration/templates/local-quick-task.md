@@ -2,14 +2,22 @@
 
 Load only when creating or reviewing a LOCAL-QUICK task.
 
-Every LOCAL-QUICK repository task is committed at `reports/chatgpt/YYMMDD_chatgpt_NN.md`. Chat contains only the locator.
+Every LOCAL-QUICK repository task uses:
+
+```text
+reports/chatgpt/YYMMDD_chatgpt_NN.md
+reports/codex/YYMMDD_codex_NN.md
+```
+
+Chat contains only the task locator. The Codex record is concise and append-only.
 
 ## Metadata
 
 ```yaml
 ---
-artifact_type: chatgpt_task
+artifact_type: chatgpt_record
 artifact_id: <YYMMDD_chatgpt_NN>
+record_kind: task
 task_id: <SHORT_TASK_ID>
 title: <SHORT_TITLE>
 date: <YYYY-MM-DD>
@@ -20,6 +28,9 @@ execution_mode: local_quick
 summary: >
   <ONE-SENTENCE OUTCOME>
 collaboration_commit: <PINNED_AGENT_COLLABORATION_SHA>
+codex_report: reports/codex/<YYMMDD_codex_NN.md>
+design_topics: []
+design_signal: none
 ---
 ```
 
@@ -31,32 +42,35 @@ For repository-changing work, also include the authorized branch/baseline coordi
 # <Task title>
 
 ## Mission
-<Final state to achieve.>
-
 ## Authority and boundaries
-<Owners and constraints that must not be reinterpreted.>
-
 ## Scope
-<What may change and material non-goals.>
-
 ## Completion criteria
-<Observable conditions that mean the task is done.>
-
 ## Required evidence
-<Only checks needed to establish completion.>
-
 ## User decision points
-<Usually NONE for LOCAL-QUICK.>
-
 ## Result contract
-<Compact terminal fields.>
 ```
 
-Do not turn LOCAL-QUICK into a command recipe. Inside the authorized scope, Codex may inspect, implement, verify, diagnose, repair, and rerun until completion criteria are met.
+Use only the sections the task actually needs. Do not turn LOCAL-QUICK into a command recipe.
 
-If work expands into a material scientific/product decision, destructive/shared-state change, public/release action, or another FORMAL boundary, stop that affected path and return the concrete escalation reason.
+Inside authorized scope, Codex may inspect, implement, verify, diagnose, repair, and rerun until completion criteria are met.
 
-LOCAL-QUICK does not create `reports/codex/`.
+If work expands into a material scientific/product decision, destructive/shared-state change, public/release action, or another FORMAL boundary, stop the affected path and report the concrete escalation reason.
+
+## Codex record
+
+Codex writes the bound concise `reports/codex/` record using `codex-report.md` with `record_kind: local_quick`.
+
+The record preserves:
+
+```text
+what changed
+focused evidence
+final repository coordinate
+limitations/blocker
+design_signal
+```
+
+Do not inflate it into a FORMAL narrative.
 
 ## User-visible locator
 
