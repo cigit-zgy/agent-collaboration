@@ -29,13 +29,15 @@ verdict: <PASS | PASS_WITH_LIMITATIONS | BLOCKED | FAIL>
 task_source_sha: <TASK_SOURCE_SHA>
 baseline_sha: <BASELINE_SHA when meaningful>
 result_sha: <FINAL_PUBLISHED_SHA when meaningful>
+task_worktree: <tmp/WORK_ID/worktree | NONE>
+branch_disposition: <active | removed | retained_for_recovery | not_applicable>
 design_topics: []
 design_signal: <none | design_change | design_drift | design_gap>
 limitations: []
 ---
 ```
 
-Add branch/upstream/evidence coordinates only when they materially establish the result.
+Add branch/upstream/evidence coordinates only when they materially establish the result. Use repository-relative worktree text rather than machine-specific absolute paths when possible.
 
 ## LOCAL-QUICK body
 
@@ -51,7 +53,7 @@ Keep it compact:
 <focused checks only>
 
 ## Result
-<final branch/SHA + limitations/blocker + Design signal>
+<final branch/SHA + worktree/branch disposition + limitations/blocker + Design signal>
 ```
 
 The point is durable reconstructability, not a long narrative.
@@ -68,10 +70,15 @@ Use enough detail to establish the task's richer evidence claim:
 ## Verification evidence
 ## Limitations / blockers
 ## Repository publication state
+## Worktree / branch disposition
 ## Design signal
 ```
 
 For repository-changing work, record the final local and fetched remote coordinates needed to prove that the published state corresponds to the executed result. A publication mismatch cannot be reported as PASS.
+
+If a linked worktree lives under `<PROJECT_ROOT>/tmp/<WORK_ID>/worktree/`, report whether it remains active for recovery or was Git-safely removed after publication/integration. Do not claim cleanup when dirty/unpublished state still exists.
+
+A retained project artifact must not exist only as an uncommitted tmp file. Durable source/docs/tests/Design/Skill/report changes belong in their real repository-relative owners and committed/published state.
 
 ## Design signal
 
