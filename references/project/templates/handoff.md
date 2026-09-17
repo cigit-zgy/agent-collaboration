@@ -1,65 +1,66 @@
-# Exceptional conversation-handoff template
+# Conversation-handoff template
 
-Cold path: load only when `../handoff.md` has determined that real conversation-only delta exists. Normal resume uses `../current.md`.
+Load only when the User explicitly ends/replaces a long conversation under `../handoff.md`.
 
-## Size target
+Target `<= 2 KiB`.
 
-```text
-normal target <= 4 KiB
-review above ~8 KiB
-```
-
-If content is recoverable from AGENTS, CURRENT, `reports/design/`, task/report, concept, Git history, or another owner, do not create the handoff.
+Handoffs live at `reports/handoff/YYMMDD_handoff_NN.md` and are append-only.
 
 ## Metadata
-
-Use the common `reports.md` envelope plus only useful handoff fields:
 
 ```yaml
 ---
 artifact_type: conversation_handoff
 artifact_id: <YYMMDD_handoff_NN>
-title: <SHORT_DELTA_TITLE>
+record_kind: conversation_boundary
+title: <SHORT_TITLE>
 date: <YYYY-MM-DD>
 project: <PROJECT_NAME>
 repository: <OWNER/REPOSITORY>
 status: current_snapshot
 summary: >
-  <one compact sentence describing residual conversation-only delta>
+  <one sentence>
+period_start: <YYYY-MM-DD or report coordinate>
+period_end: <YYYY-MM-DD or report coordinate>
+chatgpt_reports: []
+codex_reports: []
+concept_reports: []
 repository_head: <SHA_AT_HANDOFF_CREATION>
 collaboration_authority: cigit-zgy/agent-collaboration@<SHA>
-previous_handoff: <OPTIONAL_PROVENANCE_ONLY>
+design_signal: none
 ---
 ```
 
-Handoffs live only at `reports/handoff/YYMMDD_handoff_NN.md`.
+Use report ranges/paths rather than copying report bodies.
 
 ## Minimal body
 
 ```markdown
-# Conversation-only delta
+# Conversation handoff
 
-## Residual context
-- <few facts that cannot safely live in another current owner>
+## Current work edge
+<one compact paragraph or bullets>
 
-## Unresolved edge
-- <only when needed>
+## Active coordinates
+- <branch/task/report only when needed>
 
-## Resume pointer
-- Current state: `CURRENT.md`
-- Current design index: `reports/design/README.md`
-- <one directly relevant owner when needed>
+## Unresolved edges
+- <0–3 items>
+
+## Next action
+<exactly one action>
 ```
 
-Do not reproduce project overview, current design text, CURRENT content, task/report bodies, test summaries, old decision history, commit history, previous handoffs, or transcript text.
+Do not reproduce project overview, Design text, scientific background, test summaries, task/report bodies, old decisions, commit history, previous handoffs, or transcript text.
 
-## New-conversation start instruction
+## New-conversation prompt
 
 ```text
-Continue <OWNER/REPOSITORY>.
-This is conversation resume, not project migration.
-Recover from AGENTS.md → CURRENT.md → reports/design/README.md.
-CURRENT points to reports/handoff/<THIS_FILE> for one exceptional residual delta; read only that handoff and continue just in time.
+继续 cigit-zgy/<repository>。
+
+按 AGENTS.md → CURRENT.md 恢复当前工作；
+仅读取 CURRENT.md 指向的 handoff：reports/handoff/<THIS_FILE>。
+不要预读其他历史。
 ```
 
-Do not paste the handoff body into the chat prompt.
+Do not paste the handoff body into the prompt.
