@@ -1,6 +1,6 @@
 # FORMAL task, report, acceptance, and integration contract
 
-Load this reference for FORMAL delegation, task/report binding, acceptance review, or post-acceptance integration.
+Load this reference for FORMAL delegation, task/report binding, acceptance review, Design synchronization, or post-acceptance integration.
 
 FORMAL uses:
 
@@ -13,7 +13,7 @@ Exact artifact templates are cold and loaded only when creating/reviewing those 
 
 ## When FORMAL is appropriate
 
-Use FORMAL when the work has material architectural, scientific/product, trust, destructive/shared-state, security, release, reproducibility, or long-running execution risk that benefits from a durable execution record.
+Use FORMAL when the work has material architectural, scientific/product, trust, destructive/shared-state, security, release, reproducibility, or long-running execution risk that benefits from a richer durable execution record.
 
 Do not choose FORMAL merely because a task is large in line count.
 
@@ -33,27 +33,36 @@ True User decision boundary
 Result/report contract
 ```
 
-Prefer outcome-oriented constraints over a detailed itinerary. Codex may choose the implementation path inside the authorized scope.
+Prefer outcome-oriented constraints over a detailed itinerary.
 
 ## Durable coordinates
 
-A FORMAL task records the repository/task coordinates needed to recover the authorized work, including the task branch/baseline when applicable and the pinned collaboration revision.
+A FORMAL task records the repository/task coordinates needed to recover the authorized work, including branch/baseline when applicable and the pinned collaboration revision.
 
-The execution must begin from the authorized current task state and finish with the intended final state published remotely. `execution.md` owns those safety properties; the task need not restate Git choreography.
+Execution begins from the authorized current task state and finishes with the intended final state and report published remotely. `execution.md` owns repository-state safety.
 
 ## Follow-through
 
-Within scope, Codex should persist through implementation, execution, failures caused by the change, bounded repair, and reruns until the completion criteria are met.
+Within scope, Codex persists through implementation, execution, failures caused by the change, bounded repair, and reruns until completion criteria are met.
 
-Stop only for a concrete blocker or a true decision boundary defined by `protocol.md` or the task.
-
-A discovered `DESIGN_GAP` stops only the affected semantic path; Codex does not invent the missing design to finish the task.
+Stop only for a concrete blocker or true decision boundary. A discovered `DESIGN_GAP` stops the affected semantic path rather than inventing missing Design.
 
 ## FORMAL report
 
-Codex writes the bound report after execution. The report records what changed, what evidence actually ran, material deviations/limitations, final repository coordinates, and any unresolved blocker. It does not restate the full task or redefine Design.
+Codex writes the bound report after execution. It records:
 
-## Acceptance
+```text
+what changed
+what evidence actually ran
+material deviations/limitations
+final repository coordinates
+design_signal: none | design_change | design_drift | design_gap
+unresolved blocker if any
+```
+
+The report is append-only historical evidence. It does not redefine current Design and its verdict is not final acceptance.
+
+## Acceptance and Design synchronization
 
 Codex supplies evidence; ChatGPT issues:
 
@@ -61,9 +70,24 @@ Codex supplies evidence; ChatGPT issues:
 PASS | PASS WITH LIMITATIONS | BLOCKED | FAIL
 ```
 
-Acceptance asks whether the task's stated outcome and completion criteria are satisfied, whether the evidence is sufficient for the claim, and whether any material boundary was crossed.
+Acceptance asks whether the intended outcome is satisfied, evidence is sufficient, and any material boundary was crossed.
 
-Do not require an additional reviewer merely for ceremony. Add one only when the scientific, architectural, trust, security, or release risk benefits from an independent perspective.
+After acceptance, ChatGPT must classify the Design consequence:
+
+```text
+accepted Design change
+→ update the owning current Design topic in the same work unit
+
+execution/evidence only
+→ no Design change
+
+design_gap / unresolved scientific-product meaning
+→ surface the exact decision; do not guess
+```
+
+Do not wait for periodic reconciliation when the accepted consequence is already known. `project/reconciliation.md` is the backstop for missed/accumulated deltas.
+
+A material acceptance/adjudication may itself be preserved as a `reports/chatgpt/` acceptance record when future reconstruction benefits.
 
 ## Integration
 
@@ -73,11 +97,13 @@ A FORMAL task declares:
 Post-acceptance integration: AUTO | USER_CHECKPOINT
 ```
 
-Use `USER_CHECKPOINT` only when integration itself is a genuine User decision, such as release/publication authorization, destructive migration, unresolved scientific/product choice, visibility/licensing change, or another explicit checkpoint.
+Use `USER_CHECKPOINT` only when integration itself is a genuine User decision such as release/publication authorization, destructive migration, unresolved scientific/product choice, visibility/licensing change, or another explicit checkpoint.
 
 ## Completion shorthand
 
-When the User says `Codex 已完成`, ChatGPT resolves the relevant task/report and performs acceptance review. Do not create a separate completion registry.
+When the User says `Codex 已完成`, ChatGPT resolves the relevant task/report, performs acceptance, synchronizes current Design when applicable, and then proceeds with permitted integration.
+
+Do not create a separate completion registry.
 
 ## User-visible locator
 
