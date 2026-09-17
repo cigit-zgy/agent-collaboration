@@ -3,7 +3,7 @@ name: agent-collaboration
 description: >
   Coordinate User, ChatGPT, and Codex for repository work. Use when work needs
   project authority/routing, Codex delegation, local execution, verification,
-  multi-conversation resume, project governance, or maintained Skill development.
+  multi-conversation resume, project governance, Design maintenance, or maintained Skill development.
 ---
 
 # Agent Collaboration
@@ -24,7 +24,7 @@ Explicit User instructions take precedence over generic collaboration guidance.
 
 ## Default behavior
 
-For routine, reversible work inside an already-authorized scope:
+For routine, reversible work inside an authorized scope:
 
 ```text
 infer reasonable intent
@@ -35,17 +35,7 @@ infer reasonable intent
 → continue until the requested outcome is complete
 ```
 
-Do not ask for confirmation merely because an intermediate implementation choice is underspecified.
-
-Stop for User input only when missing information could materially change:
-
-```text
-scientific or product meaning
-an irreversible/destructive action
-security, credentials, or permission
-public/release/external side effects
-an explicit User checkpoint
-```
+Stop for User input only when missing information could materially change scientific/product meaning, an irreversible/destructive action, security/credentials/permission, public/release/external side effects, or an explicit User checkpoint.
 
 ## Direct routing
 
@@ -54,57 +44,70 @@ an explicit User checkpoint
 | roles / precedence / decision boundaries | `references/collaboration/protocol.md` |
 | DIRECT / LOCAL-QUICK / FORMAL / local state | `references/collaboration/execution.md` |
 | FORMAL task / report / acceptance / integration | `references/collaboration/formal.md` |
-| implementation quality | `references/collaboration/implementation.md` |
+| implementation quality / dependency reuse | `references/collaboration/implementation.md` |
 | verification proportionality | `references/collaboration/verification.md` |
 | project architecture | `references/project/architecture.md` |
 | project governance / artifact admission / drift | `references/project/governance.md` |
 | normal resume / `CURRENT.md` | `references/project/current.md` |
+| Design reconciliation / report-to-Design sync | `references/project/reconciliation.md` |
 | existing-project migration | `references/project/migration.md` |
 | reports / layout | `references/project/reports.md` |
 | explicit User-requested Concept | `references/project/concept.md` |
 | current living Design | `references/project/design.md` |
 | prior-art / reuse gate | `references/project/prior-art.md` |
-| exceptional conversation handoff | `references/project/handoff.md` |
+| conversation handoff | `references/project/handoff.md` |
 | first-party Skill development | `references/skill/development.md` |
 | Skill writing / progressive disclosure | `references/skill/writing.md` |
 
-Use one primary owner. Add a second owner only when the concern genuinely spans both responsibilities.
+Use one primary owner. Add a second only when the concern genuinely spans both responsibilities.
 
 ## Project state model
 
 ```text
-reports/design/  = current accepted project design
-reports/concept/ = explicit User-requested historical reasoning; append-only
-CURRENT.md       = current work edge / NOW only
+current accepted Design      → reports/design/ or declared self-hosting operational owner
+ChatGPT historical work      → reports/chatgpt/
+Codex historical execution   → reports/codex/
+explicit Concept history     → reports/concept/
+conversation boundary        → reports/handoff/
+current work edge            → CURRENT.md
 ```
 
+Historical report families are append-only. Current Design is replace-in-place.
+
 Project-specific canonical artifacts, scientific objects, source packages, and purity rules belong to the project that owns them, not to this generic collaboration Skill.
+
+## Design synchronization
+
+Do not wait for a scheduled summary when an accepted Design consequence is already known: update the owning current Design topic in the same work unit.
+
+Use `project/reconciliation.md` as the backstop for accumulated/missed report deltas.
 
 ## Codex delegation
 
 Every repository task delegated to Codex is committed under `reports/chatgpt/`; chat carries only the immutable locator.
 
+Every Codex repository task leaves an append-only `reports/codex/` record:
+
 ```text
-LOCAL-QUICK → bounded local work → compact result
-FORMAL      → major/high-risk local work → reports/codex report → ChatGPT acceptance
+LOCAL-QUICK → concise Codex record
+FORMAL      → richer Codex report → ChatGPT acceptance
 ```
 
-Task prompts should specify the intended outcome, authority/boundaries, completion criteria, required evidence, and true decision boundary. Avoid command-by-command itineraries unless the commands themselves are the contract.
+Task prompts specify intended outcome, authority/boundaries, completion criteria, required evidence, and true decision boundary. Avoid command-by-command itineraries unless the commands themselves are the contract.
 
 ## Verification
 
 Use the smallest evidence set that establishes the requested claim. Run broader or repeated checks only when risk, failures, new changes, or unresolved concerns justify them.
 
-## Normal conversation resume
+## Conversation resume
+
+Normal resume:
 
 ```text
-AGENTS.md
-→ CURRENT.md
-→ reports/design/README.md when present
-→ current owner only
+AGENTS.md → CURRENT.md → one directly relevant current owner
 ```
 
-When the User says `换对话框，给我提示词` or equivalent, return only the compact resume prompt owned by `project/current.md`.
+When the User explicitly switches conversation, create one compact handoff, point CURRENT to it, and return only the compact resume prompt owned by `project/current.md`.
 
 ## Cold paths
 
