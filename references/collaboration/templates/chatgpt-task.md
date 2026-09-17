@@ -2,7 +2,7 @@
 
 Load only when creating or reviewing a FORMAL task.
 
-FORMAL lifecycle is owned by `../formal.md`; execution safety by `../execution.md`; verification by `../verification.md`.
+FORMAL lifecycle is owned by `../formal.md`; execution safety, tmp/worktree placement, branch hygiene, and concurrency by `../execution.md`; verification by `../verification.md`.
 
 Tasks live at `reports/chatgpt/YYMMDD_chatgpt_NN.md`. The committed task is the sole task-specific execution specification; chat contains only the locator.
 
@@ -27,10 +27,17 @@ baseline_sha: <AUTHORIZED_BASELINE_SHA>
 verification_level: <level_1 | level_2 | level_3>
 collaboration_commit: <PINNED_AGENT_COLLABORATION_SHA>
 codex_report: reports/codex/<YYMMDD_codex_NN.md>
+mutation_scope:
+  - <REPOSITORY_RELATIVE_PATH_OR_SEMANTIC_OWNER>
+concurrency_keys: []
 design_topics: []
 design_signal: none
 ---
 ```
+
+For repository-changing work, `mutation_scope` is required. Use compact path/owner boundaries rather than an exhaustive file inventory. Add `concurrency_keys` for shared semantic owners/resources; use the same key across tasks that must serialize. Shared authority surfaces such as `AGENTS.md`, `CURRENT.md`, `reports/design/**`, shared Skill semantics, or central schema/public-interface owners serialize by default under the current execution contract.
+
+One task uses at most one task branch. Ordinary repair remains on that branch; do not create extra repair/experiment branches.
 
 Add other coordinates only when they materially govern the task.
 
@@ -64,6 +71,8 @@ Add other coordinates only when they materially govern the task.
 Prefer outcome-oriented instructions. Do not prescribe a command-by-command path unless the sequence itself is required for correctness or reproducibility.
 
 Within scope, Codex may inspect, implement, run, diagnose, repair, and rerun until completion criteria are met.
+
+Repository-changing Codex work normally uses one linked worktree at `<PROJECT_ROOT>/tmp/<WORK_ID>/worktree/`. That worktree is a real Git checkout; durable source/docs/design/report changes are edited at their normal repository-relative paths and must be committed/published before completion.
 
 ## User-visible locator
 
