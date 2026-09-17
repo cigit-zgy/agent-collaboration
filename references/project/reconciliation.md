@@ -14,7 +14,7 @@ reports/design/
 = mutable current accepted normal form
 ```
 
-Do not wait for periodic reconciliation when a design consequence is already accepted. Update the owning Design topic in the same work unit.
+Do not wait for periodic reconciliation when a Design consequence is already accepted. Update the owning Design topic in the same work unit.
 
 ## Immediate synchronization
 
@@ -48,21 +48,24 @@ OR any new report carries DESIGN_GAP or DESIGN_DRIFT
 
 `reports/handoff/` does not count toward the report threshold.
 
-For active long-running projects, a useful scheduled backstop is three checks per week. The scheduled check is not a substitute for immediate synchronization.
+For active long-running projects, the recommended scheduled backstop is three checks per week. The scheduled check is not a substitute for immediate synchronization.
 
-## Reconciliation cursor
+## Reconciliation cursor and opt-in
 
 `reports/design/README.md` may carry a compact maintenance block:
 
 ```yaml
 design_reconciliation:
+  enabled: true
   reconciled_at: YYYY-MM-DD
   chatgpt_through: YYMMDD_chatgpt_NN | null
   codex_through: YYMMDD_codex_NN | null
   concept_through: YYMMDD_concept_NN | null
 ```
 
-This is maintenance metadata only. It does not add Design semantics and must not grow into a progress log.
+`enabled: true` opts the repository into periodic ChatGPT reconciliation. Repositories without this flag are updated immediately when accepted Design changes occur but are not swept by a generic scheduled backstop.
+
+This block is maintenance metadata only. It does not add Design semantics and must not grow into a progress log.
 
 ## Reconciliation procedure
 
@@ -82,6 +85,23 @@ AMBIGUOUS_SCIENTIFIC_OR_PRODUCT_MEANING
 After all accepted current changes are reflected, advance the cursor to the newest inspected report in each family.
 
 Do not summarize reports wholesale into Design. Design must remain current-state prose, not a digest.
+
+## Automation contract
+
+A scheduled ChatGPT automation may run three times per week and inspect only repositories that explicitly opt in with `design_reconciliation.enabled: true`.
+
+For each opted-in repository:
+
+```text
+read current reconciliation cursor
+→ count only new chatgpt/codex/concept reports
+→ if no backstop trigger is met, do nothing
+→ if triggered, run bounded reconciliation
+→ update Design + cursor only for accepted current changes
+→ if scientific/product meaning is ambiguous, notify the User instead of guessing
+```
+
+Do not scan or mutate unrelated repositories, and do not create Concept automatically.
 
 ## Topic-count guard
 
