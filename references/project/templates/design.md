@@ -31,12 +31,15 @@ Keep it navigational plus compact reconciliation metadata:
 ```yaml
 ---
 design_reconciliation:
+  enabled: true
   reconciled_at: YYYY-MM-DD
   chatgpt_through: YYMMDD_chatgpt_NN | null
   codex_through: YYMMDD_codex_NN | null
   concept_through: YYMMDD_concept_NN | null
 ---
 ```
+
+Use `enabled: true` only when this repository should participate in periodic ChatGPT Design reconciliation.
 
 Then map each current topic once:
 
