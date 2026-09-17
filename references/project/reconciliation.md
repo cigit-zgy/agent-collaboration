@@ -30,7 +30,7 @@ read AGENTS.md
 → inspect the compact reconciliation cursor in reports/design/README.md
 → perform a cheap trigger check
 → if no trigger fires, continue current work without loading report history
-→ if triggered, reconcile only reports newer than the cursor
+→ if triggered, reconcile only the bounded report window
 → then continue current work
 ```
 
@@ -64,6 +64,7 @@ At project entry, run bounded reconciliation when any condition is true since th
 >= 4 new substantive reports across chatgpt + codex + concept
 OR >= 7 days elapsed since reconciled_at
 OR a new report declares design_signal: design_gap or design_drift
+OR the reconciliation cursor is missing
 ```
 
 `reports/handoff/` does not count toward the report threshold.
@@ -86,9 +87,24 @@ There is no `enabled` flag: a project that uses the standard `reports/design/` m
 
 This block is maintenance metadata only. It must not grow into a progress log.
 
+## Bootstrap when no cursor exists
+
+Do not initialize a missing cursor directly to the newest report; that could skip unreconciled Design changes. Do not scan the full project history by default either.
+
+Use Git history to find the most recent commit that materially changed `reports/design/` before the maintenance hook was introduced, and use that commit as the bootstrap boundary:
+
+```text
+last Design-changing commit
+→ inspect only chatgpt/codex/concept reports added after that point
+→ reconcile accepted current changes
+→ write the first cursor
+```
+
+If Git history cannot establish a trustworthy boundary, use the smallest recent report window that can be justified from CURRENT/current task coordinates and surface any remaining ambiguity instead of inventing a cursor.
+
 ## Reconciliation procedure
 
-Read only reports newer than the cursor, then classify each Design-relevant delta:
+Read only reports in the bounded window, then classify each Design-relevant delta:
 
 ```text
 ACCEPTED_CURRENT_CHANGE
