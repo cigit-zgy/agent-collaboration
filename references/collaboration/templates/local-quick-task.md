@@ -29,12 +29,16 @@ summary: >
   <ONE-SENTENCE OUTCOME>
 collaboration_commit: <PINNED_AGENT_COLLABORATION_SHA>
 codex_report: reports/codex/<YYMMDD_codex_NN.md>
+mutation_scope: []
+concurrency_keys: []
 design_topics: []
 design_signal: none
 ---
 ```
 
-For repository-changing work, also include the authorized branch/baseline coordinates needed to recover the task state.
+For repository-changing work, also include the authorized branch/baseline coordinates needed to recover the task state and fill `mutation_scope` with compact repository-relative paths or semantic owners. Add `concurrency_keys` when the task shares a mutable semantic owner/resource with other tasks.
+
+One repository-changing task uses at most one task branch. Ordinary repair remains on that branch; do not create extra repair/experiment branches.
 
 ## Preferred body
 
@@ -54,6 +58,8 @@ Use only the sections the task actually needs. Do not turn LOCAL-QUICK into a co
 
 Inside authorized scope, Codex may inspect, implement, verify, diagnose, repair, and rerun until completion criteria are met.
 
+For repository-changing Codex work, use the execution contract's default linked worktree at `<PROJECT_ROOT>/tmp/<WORK_ID>/worktree/` when isolation is needed or concurrent work exists. The worktree is a real Git checkout: retained project files are edited at their normal repository-relative locations and must be committed/published; accepted output must not exist only as an uncommitted tmp file.
+
 If work expands into a material scientific/product decision, destructive/shared-state change, public/release action, or another FORMAL boundary, stop the affected path and report the concrete escalation reason.
 
 ## Codex record
@@ -66,6 +72,7 @@ The record preserves:
 what changed
 focused evidence
 final repository coordinate
+worktree/branch disposition when repository-changing
 limitations/blocker
 design_signal
 ```
