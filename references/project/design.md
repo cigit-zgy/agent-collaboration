@@ -2,7 +2,7 @@
 
 Load this reference for the canonical current project Design under `reports/design/`: ownership, topic decomposition, naming, current-state semantics, and projection into Skills/code/tests.
 
-Historical work lives in Reports. Current accepted semantics live here. Periodic backstop synchronization is owned by `reconciliation.md`.
+Historical work lives in Reports. Current accepted semantics live here. Opportunistic project-entry synchronization is owned by `reconciliation.md`.
 
 ## Core boundary
 
@@ -78,6 +78,8 @@ short reading hint
 Design reconciliation cursor from reconciliation.md
 ```
 
+The project root `AGENTS.md` owns the trigger hook. README stores only the cursor/state needed to make the project-entry check cheap.
+
 It must not restate detailed Design semantics or become a progress log.
 
 ## Topic identity
@@ -118,7 +120,7 @@ update the owning topic(s) in the same work unit
 → remove superseded current semantics
 ```
 
-Do not wait for periodic reconciliation when the accepted consequence is already known.
+Do not wait for a later reconciliation when the accepted consequence is already known.
 
 History stays in Git and append-only Reports. Design never becomes a discussion diary, task report, test store, backlog, progress board, or archive.
 
