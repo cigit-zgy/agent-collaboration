@@ -1,82 +1,84 @@
-# Exceptional conversation-handoff contract
+# Conversation-handoff contract
 
-Load this reference only when meaningful conversation-only continuity would otherwise be lost and cannot reasonably be represented in current repository-native owners.
+Load this reference when the User explicitly ends/replaces a long conversation (`换对话框`, `给我新对话框提示词`, or equivalent), or when a prior handoff is the explicit resume anchor.
 
-Normal resume/current state is owned by `current.md`. Current design lives in `reports/design/`. Project migration is owned by `migration.md`.
+## Purpose
 
-## Core rule
-
-`reports/handoff/` is not the default resume mechanism.
-
-Normal switch:
+A handoff is a compact conversation-boundary record. It exists so a full/long conversation can be replaced without reloading project history.
 
 ```text
-old conversation
-→ make accepted state repository-native
-→ rewrite CURRENT.md to NOW
-→ end
-
-new conversation
-→ AGENTS.md
-→ CURRENT.md
-→ reports/design/README.md when present
-→ just-in-time owner loading
+Design   = current accepted semantics
+Reports  = historical work/evidence
+CURRENT  = NOW pointer
+Handoff  = compact boundary between two conversations
 ```
 
-Create a handoff only for residual context that is material and not safely/appropriately representable in AGENTS, `reports/design/`, CURRENT, task/report, concept, or another real owner.
+A handoff never overrides current Design, task, scientific source, or repository state.
 
-No handoff is preferable to a redundant handoff.
+## Conversation-close lifecycle
 
-## Authority
+When the User explicitly switches conversation:
 
 ```text
-reports/design/  = current accepted design
-CURRENT.md       = current work edge / resume pointer
-reports/concept/ = historical design reasoning
-reports/chatgpt/ = durable Codex task specification
-reports/codex/   = FORMAL execution evidence
-reports/handoff/ = exceptional conversation-only delta
+1. make accepted Design changes durable in the current owner;
+2. ensure material ChatGPT/Codex/Concept records are committed;
+3. reconcile Design if the backstop trigger in reconciliation.md is due;
+4. rewrite CURRENT.md to the actual NOW edge;
+5. create one NEW reports/handoff/YYMMDD_handoff_NN.md;
+6. commit/push;
+7. return only the compact resume prompt.
 ```
 
-A handoff never overrides current authority/state.
+Do not overwrite an older handoff.
 
-## Valid triggers
+## Content contract
 
-Examples: an important User intention remains conversation-only and cannot yet be safely written elsewhere; an unresolved comparison needs continuity but is not accepted design; conversation-specific provenance would be expensive/impossible to reconstruct.
+Target `<= 2 KiB`.
 
-Conversation fullness, project size, many completed tasks, collaboration-policy change, or opening a new conversation are not sufficient triggers by themselves.
-
-## Content boundary
-
-Do not copy project objective, design semantics already in `reports/design/`, current edge already in CURRENT, concept history, task/report bodies, test matrices, commit catalogues, architecture summaries, old handoffs, or transcript text.
-
-Target <= 4 KiB; above ~8 KiB, inspect for duplication.
-
-## Authoring
+Record only:
 
 ```text
-1. update accepted design/current task/report state in its real owner;
-2. rewrite CURRENT.md when used;
-3. identify residual conversation-only delta;
-4. if empty, create no handoff;
-5. otherwise create one reports/handoff/YYMMDD_handoff_NN.md;
-6. commit/push and give only a short resume locator.
+conversation time/range
+ChatGPT report range touched in this conversation
+Codex report range touched in this conversation
+Concept range when any was explicitly created/used
+current work edge
+active branch/task/report coordinates when needed
+0–3 unresolved edges
+exactly one next action
 ```
+
+Use report paths/ranges rather than copying report bodies.
+
+Do not reproduce project overview, Design bodies, scientific background, test matrices, commit history, completed-task narrative, previous handoffs, or transcript text.
 
 ## Recovery
 
-When CURRENT or the User points to an exceptional handoff:
+A new conversation normally reads:
 
 ```text
 AGENTS.md
-→ CURRENT.md when present
-→ that one handoff
-→ current repository authority/state
-→ continue
+→ CURRENT.md
+→ the exact handoff CURRENT points to
+→ one directly relevant current owner as needed
 ```
 
-Do not chain through older handoffs by default.
+Do not chain through older handoffs or preload historical Reports.
+
+## User shorthand
+
+When the repository is known, after the handoff has been committed return only:
+
+```text
+继续 cigit-zgy/<repository>。
+
+按 AGENTS.md → CURRENT.md 恢复当前工作；
+仅读取 CURRENT.md 指向的 handoff：reports/handoff/<THIS_FILE>。
+不要预读其他历史。
+```
+
+No project recap or handoff body is pasted into chat.
 
 ## Completion
 
-A handoff is well formed when removing everything already recoverable from repository owners still leaves exactly the residual continuity needed by the next conversation.
+A handoff is sufficient when the next conversation can locate the current edge and one next action from `AGENTS.md + CURRENT.md + one handoff` while all durable semantics/evidence remain in their true owners.
