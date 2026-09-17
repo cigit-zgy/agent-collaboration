@@ -2,29 +2,46 @@
 
 Cold path: load only when creating/restructuring `reports/design/`.
 
-Current-Design semantics are owned by `../design.md`; governance drift is owned by `../governance.md`.
+Current-Design semantics are owned by `../design.md`; backstop maintenance by `../reconciliation.md`.
 
 ## Directory shape
+
+Default mature shape:
 
 ```text
 reports/design/
 ├── README.md
-├── 00_overview.md          # only when whole-system context is genuinely needed
-├── 01_<topic>.md
-├── 02_<topic>.md
-└── ...
+├── 00_overview.md
+├── 01_domain_and_objects.md
+├── 02_workflow_and_state.md
+├── 03_artifacts_and_ownership.md
+├── 04_interfaces.md
+├── 05_trust_and_validation.md
+└── 06_runtime_and_skills.md
 ```
 
-`reports/design/` is one mutable current set, not a history directory.
+These semantic slots are defaults, not mandatory filenames. Omit or merge responsibilities that do not exist.
+
+Healthy default: roughly 5–8 current topics. Before adding topic 9+, inspect consolidation. Above 12, do not add another topic by default without User approval or a clearly independent responsibility.
 
 ## README.md
 
-Keep it navigational only:
+Keep it navigational plus compact reconciliation metadata:
+
+```yaml
+---
+design_reconciliation:
+  reconciled_at: YYYY-MM-DD
+  chatgpt_through: YYMMDD_chatgpt_NN | null
+  codex_through: YYMMDD_codex_NN | null
+  concept_through: YYMMDD_concept_NN | null
+---
+```
+
+Then map each current topic once:
 
 ```markdown
 # Design map
-
-`reports/design/` is the canonical current project Design.
 
 | Order | design_id | File | Responsibility |
 |---:|---|---|---|
@@ -32,7 +49,7 @@ Keep it navigational only:
 | 01 | <id> | `01_<topic>.md` | <one sentence> |
 ```
 
-A bounded concern should route to one primary topic plus at most one necessary secondary topic. If one rule needs three or more current topics, restructure ownership before adding another topic.
+Do not restate topic semantics or progress history in README.
 
 ## Topic file
 
@@ -62,6 +79,8 @@ Remove empty sections rather than adding ceremony.
 
 ## One-owner check
 
+A bounded concern routes to one primary topic plus at most one necessary secondary topic. If one rule needs three or more current topics, restructure ownership before adding another topic.
+
 Do not keep a current topic whose main role is to supersede, refine, override, or preserve another current topic for the same concern.
 
 When responsibility changes:
@@ -73,19 +92,32 @@ update/overwrite the real owner
 → remove superseded current files
 ```
 
-Git preserves prior Design states. A new Concept preserves rationale only when the User explicitly requested Concept persistence.
+Git preserves prior Design states. Reports preserve work/evidence history.
+
+## Runtime and Skill profile
+
+When multiple reusable Skills matter, keep one current Design owner for:
+
+```text
+Skill/tool
+immutable authority/source when applicable
+activation condition
+required | conditional
+purpose
+```
+
+Do not copy Skill manuals into Design.
 
 ## Content check
 
 Reject content whose primary owner is:
 
 ```text
-model/source-specific scientific fact
-golden qualification or closure evidence
+source/model-specific scientific fact
 test/evaluation output
-Codex task/report
+ChatGPT/Codex task or execution history
 current status/backlog
-historical discussion
+chronological discussion
 ```
 
 Keep only current project Design semantics with a real reusable owner.
