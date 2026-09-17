@@ -1,21 +1,22 @@
-# Codex report template
+# Codex record template
 
-Formal Codex reports live only at:
+Every Codex repository task leaves one append-only record at:
 
 ```text
 reports/codex/YYMMDD_codex_NN.md
 ```
 
-FORMAL lifecycle is owned by `../formal.md`; report filename/common metadata/archive rules by `../../project/reports.md`; remote synchronization/Git safety by `../execution.md`.
+`execution.md` owns the common requirement. FORMAL lifecycle is owned by `formal.md`.
 
-A report records implementation/execution evidence. It does not redefine project design or collaboration policy, and its verdict is not final acceptance.
+A Codex record preserves execution evidence; it does not redefine Design or self-accept.
 
-## Required metadata
+## Common metadata
 
 ```yaml
 ---
 artifact_type: codex_report
 artifact_id: <YYMMDD_codex_NN>
+record_kind: <local_quick | formal>
 task_id: <TASK_ID>
 title: <SHORT_TITLE>
 date: <YYYY-MM-DD>
@@ -25,87 +26,64 @@ status: completed
 summary: >
   <IMPLEMENTATION/RESULT SUMMARY>
 verdict: <PASS | PASS_WITH_LIMITATIONS | BLOCKED | FAIL>
-task_branch: <TASK_BRANCH>
 task_source_sha: <TASK_SOURCE_SHA>
-baseline_sha: <BASELINE_SHA>
-final_task_head: <FINAL_LOCAL_TASK_HEAD>
-upstream_task_head: <FETCHED_UPSTREAM_TASK_HEAD>
-task_head_equals_upstream: <true | false>
-verification_level: <level_1 | level_2 | level_3>
+baseline_sha: <BASELINE_SHA when meaningful>
+result_sha: <FINAL_PUBLISHED_SHA when meaningful>
+design_topics: []
+design_signal: <none | design_change | design_drift | design_gap>
 limitations: []
 ---
 ```
 
-`artifact_id` equals the filename stem. For repository-changing FORMAL work, `final_task_head`, `upstream_task_head`, and `task_head_equals_upstream` are mandatory and come from the post-push fresh-fetch verification, not from assumptions about push success.
+Add branch/upstream/evidence coordinates only when they materially establish the result.
 
-## Body
+## LOCAL-QUICK body
 
-Use a concise structure:
+Keep it compact:
+
+```markdown
+# <Task title> — Codex record
+
+## Changes
+<few bullets>
+
+## Evidence
+<focused checks only>
+
+## Result
+<final branch/SHA + limitations/blocker + Design signal>
+```
+
+The point is durable reconstructability, not a long narrative.
+
+## FORMAL body
+
+Use enough detail to establish the task's richer evidence claim:
 
 ```markdown
 # <Task title> — Codex report
 
 ## Changes
-## AI-assisted implementation transparency
-## Shared coding-Skill alignment
+## Material implementation choices / boundaries
 ## Verification evidence
-## Local temporary state
-## Acceptance criteria / blockers
-## Git synchronization result
+## Limitations / blockers
+## Repository publication state
+## Design signal
 ```
 
-State what actually changed, including implementation already authored by ChatGPT before handoff versus implementation added/repaired by Codex. For material AI-assisted implementation, make key observable engineering choices, invariants, dependencies and limitations recoverable without exposing private chain-of-thought.
+For repository-changing work, record the final local and fetched remote coordinates needed to prove that the published state corresponds to the executed result. A publication mismatch cannot be reported as PASS.
 
-Verification evidence must map to the task's actual required categories. Do not treat a single `pytest PASS`, coverage percentage, scanner result or CI badge as a substitute for distinct required evidence.
-
-For LOCAL work, record the task scratch boundary and final disposition. Do not claim cleanup when dirty, unpushed, active or uncertain state was deleted blindly.
-
-Execution-verdict meanings:
+## Design signal
 
 ```text
-PASS                  every in-scope criterion/evidence claim satisfied
-PASS_WITH_LIMITATIONS goal satisfied with named non-blocking limitations
-BLOCKED               unavailable prerequisite or genuine higher-authority decision required
-FAIL                  machine-solvable in-scope criteria remain unsatisfied
+none           no current Design consequence
+design_change  accepted result appears to require current Design update
+design_drift   implementation/current owner conflicts with accepted Design
+design_gap     current Design does not determine required semantics
 ```
 
-ChatGPT performs the acceptance review. The User retains final decision/override authority and designated human checkpoints.
+ChatGPT performs acceptance and current Design synchronization under `formal.md` / `project/reconciliation.md`.
 
-## Git synchronization result — hard requirement
+## Completion response
 
-For repository-changing FORMAL tasks, report both sides of the synchronization handshake:
-
-```text
-PRE
-fresh fetched remote task/baseline coordinate
-local execution HEAD before mutation
-equality / mismatch result
-
-POST
-final local task HEAD
-fetched upstream task-branch HEAD after push + fresh fetch
-TASK_HEAD_EQUALS_UPSTREAM = YES | NO
-worktree cleanliness when required
-preservation of pre-existing User state
-```
-
-A repository-changing report with `task_head_equals_upstream: false` MUST NOT use `PASS`.
-
-Do not claim default-branch integration unless it actually occurred after acceptance.
-
-## User-visible completion response — hard requirement
-
-After the report-containing commit has been pushed, Codex provides the compact result locator required by the active collaboration task/report contract. The durable Markdown report remains the evidence authority.
-
-Formal locator:
-
-```text
-VERDICT: <PASS | PASS_WITH_LIMITATIONS | BLOCKED | FAIL>
-REPORT: reports/codex/<REPORT_FILE>.md
-REPORT_COMMIT: <REPORT_CONTAINING_COMMIT>
-
-报告链接如下：
-https://github.com/<OWNER>/<REPOSITORY>/blob/<REPORT_CONTAINING_COMMIT>/reports/codex/<REPORT_FILE>.md
-```
-
-Use the commit that actually contains the report. If the report cannot be pushed and fresh-fetched/verifiably published, do not fabricate a remote link or claim PASS; state the publication blocker truthfully.
+After the record-containing commit is published, Codex returns only the compact Result contract required by the task, including the report path and final repository coordinate when requested.
