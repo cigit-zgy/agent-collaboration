@@ -2,11 +2,11 @@
 
 Load this reference for repository-root `CURRENT.md`, normal multi-conversation resume, current work-edge ownership, or startup-context discipline.
 
-Current accepted design lives under `reports/design/` and is owned by `design.md`. Explicit User-requested design history lives under `reports/concept/` and is owned by `concept.md`. Project governance drift/admission is owned by `governance.md`.
+Current accepted Design is owned by `design.md`; report history by `reports.md`; explicit conversation-boundary records by `handoff.md`; Design backstop synchronization by `reconciliation.md`.
 
 ## Purpose
 
-A long-running project needs one cheap answer to:
+`CURRENT.md` answers only:
 
 ```text
 What are we working on now, and what should the next conversation do first?
@@ -14,7 +14,7 @@ What are we working on now, and what should the next conversation do first?
 
 Use one repository-root `CURRENT.md` when the project spans multiple sessions or resume would otherwise be expensive.
 
-`CURRENT.md` is mutable NOW-state. It is not design authority, task authority, scientific evidence, history, backlog, or transcript.
+It is mutable NOW-state, not Design authority, task authority, scientific evidence, history, backlog, or transcript.
 
 ## Content contract
 
@@ -24,82 +24,77 @@ Keep only:
 status / updated timestamp
 current work edge
 active branch / task / report coordinates when relevant
-directly relevant reports/design/ or Skill owners
+directly relevant current Design or Skill owner
+latest handoff path when a conversation switch created one
 0–3 unresolved blockers/decisions
 one next action
 ```
 
-Target `<= 4 KiB`. Above `8 KiB` is non-conforming unless an explicit project authority justifies it; move leaked design/science/evidence/history/backlog content to its owner.
-
-Do not append dated progress. Rewrite CURRENT to represent NOW.
+Target `<= 4 KiB`. Do not append dated progress; rewrite to NOW.
 
 ## Update lifecycle
 
-At a meaningful checkpoint:
+At meaningful checkpoints:
 
 ```text
-accepted design change          → update reports/design/
-explicit User request for Concept → create new dated Concept + update reports/design/ in the same work unit
-Codex evidence                  → task/report owner
-scientific/model evidence       → scientific/model/golden owner
-current work edge               → rewrite CURRENT.md
+accepted Design change      → update current Design immediately
+ChatGPT/Codex work          → append durable report when required
+explicit Concept request    → new Concept + same-work-unit Design update when applicable
+current work edge           → rewrite CURRENT.md
+explicit conversation switch → create handoff and point CURRENT to it
 ```
 
-Do not create Concept merely because rationale or execution evidence seems worth preserving; `concept.md` requires explicit User instruction.
+Periodic reconciliation is a backstop, not a reason to delay an already-known Design update.
 
-## Normal conversation resume
+## Normal resume
 
-Routine replacement of a full conversation is conversation resume, not project migration.
+Without a handoff:
 
 ```text
 AGENTS.md
 → CURRENT.md
-→ reports/design/README.md when explicit living design is used
+→ one directly relevant current owner
 ```
 
-Then retrieve just in time only the directly relevant current owner, Skill/reference, or exact active task/report.
+When CURRENT points to a conversation handoff:
 
-Do not preload the whole design tree, Concepts, old tasks/reports/handoffs, archive, or collaboration references.
+```text
+AGENTS.md
+→ CURRENT.md
+→ that exact handoff
+→ one directly relevant current owner as needed
+```
 
-Before the first substantive repository-changing write, resolve current collaboration authority once and apply the bounded governance conformance gate from `governance.md`. Deterministic governance drift is repaired before the new work expands it; scientific/design ambiguity returns to User + ChatGPT.
+Do not preload the whole Design tree, Concepts, old tasks/reports/handoffs, archive, or collaboration references.
 
 ## User shorthand
 
-When the User says `换对话框，给我提示词` or equivalent and the repository is known, return only:
+When the User says `换对话框`, `给我新对话框提示词`, or equivalent and the repository is known:
+
+```text
+close the conversation under handoff.md
+→ commit/push the new handoff and updated CURRENT
+→ return only the compact prompt below
+```
 
 ```text
 继续 cigit-zgy/<repository>。
 
-这是 conversation resume，不执行 project migration。
-按 AGENTS.md → CURRENT.md → reports/design/README.md 恢复当前工作。
-
-只按 CURRENT.md 的 current work edge 按需读取相关 design / Skill / task / report；
-不要预读历史。
+按 AGENTS.md → CURRENT.md 恢复当前工作；
+仅读取 CURRENT.md 指向的 handoff：reports/handoff/<THIS_FILE>。
+不要预读其他历史。
 ```
 
-Do not add recovery theory or project history unless explicitly requested.
-
-## Old-conversation closure
-
-When retiring a full conversation:
-
-```text
-finish/safely checkpoint the atomic work
-→ make accepted state durable in its real owner
-→ ensure active task/report/branch coordinates are durable
-→ rewrite CURRENT.md to NOW
-→ create handoff only for unavoidable residual conversation-only delta
-→ end without project-wide recap
-```
-
-A normal switch does not trigger project migration or historical review.
+Do not add a prose project recap.
 
 ## Startup-context target
 
-Before identifying the current concern, normal project text is only:
+A fresh conversation should identify the current concern from:
 
 ```text
-AGENTS.md + CURRENT.md + reports/design/README.md
+AGENTS.md + CURRENT.md + at most one current handoff
 ```
 
-If a fresh conversation cannot locate the current work and first next action from this small set, simplify routing/state ownership rather than adding a larger handoff.
+Then load only the relevant current Design/Skill/task/report owner just in time.
+
+If this small set cannot identify the work edge and first next action, simplify ownership/routing rather than making CURRENT or Handoff larger.
