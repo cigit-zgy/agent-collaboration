@@ -1,6 +1,6 @@
 # Execution and local-state contract
 
-Load this reference for DIRECT/LOCAL-QUICK/FORMAL route selection, Codex-local execution, repository publication safety, temporary state, or concurrency.
+Load this reference for DIRECT/LOCAL-QUICK/FORMAL route selection, Codex-local execution, repository publication safety, temporary state, branches/worktrees, or concurrency.
 
 ## Choose the lightest route
 
@@ -32,6 +32,15 @@ Every Codex repository task is committed under `reports/chatgpt/` before executi
 
 The task states intended outcome, authority/boundaries, scope, completion criteria, required evidence, and true decision boundary. Chat carries only the locator.
 
+For repository-changing work, the task also declares the mutation surface needed for concurrency safety. Prefer repository-relative paths and semantic owners rather than exhaustive file inventories.
+
+```yaml
+mutation_scope:
+  - <repository-relative path or semantic owner>
+concurrency_keys:
+  - <shared owner/resource key when applicable>
+```
+
 Avoid command-by-command instructions unless a specific sequence is itself required for correctness, reproducibility, or safety.
 
 ## Execution autonomy
@@ -62,9 +71,122 @@ the intended task-scoped changes and Codex record are committed/published
 AND the final local result corresponds to the final remote task/work state
 ```
 
-Codex chooses appropriate Git/branch/worktree operations to establish those properties. Do not use destructive reset, force push, hidden stash, or unrelated conflict rewriting merely to manufacture alignment.
+Codex chooses appropriate Git operations to establish those properties. Do not use destructive reset, force push, hidden stash, or unrelated conflict rewriting merely to manufacture alignment.
 
 If the authorized baseline or final published state cannot be established without risking User work or choosing among conflicting histories, stop with the concrete blocker.
+
+## Task branches and linked worktrees
+
+Repository-changing Codex work uses the smallest branch/worktree footprint that safely isolates the task.
+
+```text
+read-only/local-only task
+→ no task branch/worktree unless genuinely needed
+
+repository-changing task
+→ at most one task branch
+→ normally one linked worktree at <PROJECT_ROOT>/tmp/<WORK_ID>/worktree/
+→ all bounded repair stays on that same branch/worktree
+```
+
+Do not create nested repair branches, experiment branches, or additional worktrees merely because a task encounters ordinary implementation failures. A superseding task may create a new branch only when task semantics materially change.
+
+The linked worktree is a real Git checkout even though it lives under `tmp/`. Source, tests, Design, Skill Markdown, reports, and other repository artifacts are edited at their normal repository-relative paths inside that worktree.
+
+A completed project artifact must never exist only as an uncommitted file under `tmp/`. Before completion, retained `.py`, `.md`, `.yaml`, config, tests, Design, Skill, or report changes must be committed/published on the task branch or otherwise placed in their real durable owner.
+
+## Local scratch
+
+All task-local temporary state remains under:
+
+```text
+<PROJECT_ROOT>/tmp/<WORK_ID>/
+```
+
+Typical layout:
+
+```text
+worktree/   linked Git checkout for the active task when needed
+run/        transient runtime output
+cache/      disposable cache
+renders/    disposable render output
+downloads/  temporary downloads
+```
+
+`tmp/` is not an alternative project tree or durable result owner. The worktree may contain real project files because it is a Git checkout; disposable outputs outside the worktree must not be promoted accidentally.
+
+Do not remove an active/dirty/unpublished worktree as generic tmp cleanup. After the task is safely published and no recovery value remains, remove the linked worktree with Git-aware cleanup (`git worktree remove` / `git worktree prune` as appropriate) and remove disposable task scratch.
+
+## Parallel-task safety
+
+Multiple Codex windows may operate on one repository only when their mutation surfaces do not conflict.
+
+Before starting mutation, inspect currently active linked worktrees/task branches and the durable task specifications when needed. Parallel execution is allowed only when both are true:
+
+```text
+mutation_scope does not overlap materially
+AND concurrency_keys do not overlap
+```
+
+Treat the same semantic owner as overlapping even when two tasks currently touch different files.
+
+Shared authority surfaces serialize by default, including repository constitution/current-state/living-Design and other project-declared shared schema/config/public-interface owners. Examples include:
+
+```text
+AGENTS.md
+CURRENT.md
+reports/design/**
+shared workflow/Skill semantics
+central schemas or public interfaces declared as shared owners
+```
+
+If non-interference cannot be established cheaply, serialize instead of adding coordination machinery.
+
+### Active-concurrency cap
+
+Per repository, keep repository-changing Codex tasks deliberately small in number:
+
+```text
+normal target: <= 4 active task worktrees/branches
+5th concurrent repo-changing task: serialize unless the User explicitly overrides
+```
+
+Read-only tasks do not count toward this cap.
+
+## Branch hygiene
+
+Temporary task branches are execution state, not history storage.
+
+```text
+normal target: <= 10 temporary remote task branches
+>= 15 temporary remote task branches:
+  perform branch hygiene before opening another routine task branch
+after cleanup target: <= 8
+```
+
+Cleanup rules:
+
+```text
+accepted + integrated
+→ remove linked worktree
+→ delete local/remote task branch when no longer needed
+
+cancelled / superseded / rejected
+→ do not merge merely to reduce branch count
+→ first preserve any uniquely valuable state in its real durable owner
+→ then delete branch/worktree
+
+blocked + deliberate recovery value
+→ retain only while recovery is genuinely expected
+
+unknown / dirty / unpublished
+→ inspect before deletion
+
+age alone
+→ never sufficient reason to delete
+```
+
+Do not merge a branch solely for branch-count hygiene.
 
 ## Durable Codex record
 
@@ -98,24 +220,20 @@ none           no Design consequence
 
 ChatGPT acceptance handles current Design under `project/reconciliation.md` and `project/design.md`.
 
-## Local scratch
-
-Task-created persistent scratch on the User machine belongs under `<PROJECT_ROOT>/tmp/<WORK_ID>/`.
-
-Use only what the task needs. Remove disposable state when complete; retain blocked-state material only when it has clear recovery value.
-
-A linked worktree is optional. Use one when isolation materially reduces interference.
-
 ## Verification and repair
 
 Run checks appropriate to the change and required claim. If they pass, do not broaden or repeat testing unless new changes, failures, risk, or unresolved concerns justify it.
 
 Failures caused by the in-scope change should normally be diagnosed and repaired within scope rather than escalated as approval questions.
 
+## Integration discipline
+
+Parallel task execution may be concurrent; integration into the current accepted branch/state is serialized.
+
+After each accepted integration, later task branches refresh against the newly current remote state and re-establish that their result remains valid before their own integration.
+
+Do not allow several task agents to mutate the canonical accepted branch concurrently.
+
 ## Ownership boundary
 
 If the current owner is correct and an out-of-scope consumer is stale, report downstream drift rather than weakening the current contract to make unrelated checks pass.
-
-## Concurrency
-
-Parallel work is allowed when mutable resources do not interfere. If non-interference is unclear, serialize rather than adding coordination machinery by default.
