@@ -27,6 +27,7 @@ A good task defines:
 Mission / intended outcome
 Authority and frozen boundaries
 Scope / material non-goals
+Mutation scope / concurrency keys for repository-changing work
 Completion criteria
 Required evidence
 True User decision boundary
@@ -39,7 +40,7 @@ Prefer outcome-oriented constraints over a detailed itinerary.
 
 A FORMAL task records the repository/task coordinates needed to recover the authorized work, including branch/baseline when applicable and the pinned collaboration revision.
 
-Execution begins from the authorized current task state and finishes with the intended final state and report published remotely. `execution.md` owns repository-state safety.
+Execution begins from the authorized current task state and finishes with the intended final state and report published remotely. `execution.md` owns repository-state safety, tmp/worktree placement, branch hygiene, and concurrency safety.
 
 ## Follow-through
 
@@ -99,9 +100,21 @@ Post-acceptance integration: AUTO | USER_CHECKPOINT
 
 Use `USER_CHECKPOINT` only when integration itself is a genuine User decision such as release/publication authorization, destructive migration, unresolved scientific/product choice, visibility/licensing change, or another explicit checkpoint.
 
+Task execution may be parallel, but integration into the accepted branch/state is serialized. After one task integrates, every later task re-establishes compatibility with the newly current remote state before its own integration.
+
+After successful integration and publication:
+
+```text
+remove task linked worktree when no recovery value remains
+→ delete the local/remote task branch when no longer needed
+→ prune stale worktree registrations when appropriate
+```
+
+Do not retain completed task branches as historical archives; Git history and append-only ChatGPT/Codex records preserve the task history. Do not delete a blocked/dirty/unpublished branch or worktree merely to satisfy branch-count targets.
+
 ## Completion shorthand
 
-When the User says `Codex 已完成`, ChatGPT resolves the relevant task/report, performs acceptance, synchronizes current Design when applicable, and then proceeds with permitted integration.
+When the User says `Codex 已完成`, ChatGPT resolves the relevant task/report, performs acceptance, synchronizes current Design when applicable, and then proceeds with permitted serialized integration and task-state cleanup.
 
 Do not create a separate completion registry.
 
