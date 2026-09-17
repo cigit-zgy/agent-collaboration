@@ -78,9 +78,11 @@ Project-specific canonical artifacts, scientific objects, source packages, and p
 
 ## Design synchronization
 
-Do not wait for a scheduled summary when an accepted Design consequence is already known: update the owning current Design topic in the same work unit.
+Do not wait when an accepted Design consequence is already known: update the owning current Design topic in the same work unit.
 
-Use `project/reconciliation.md` as the backstop for accumulated/missed report deltas.
+Long-running projects with `reports/design/` keep a compact reconciliation cursor in `reports/design/README.md` and a Design-maintenance hook in root `AGENTS.md`. When ChatGPT enters the project for substantive work, it performs the cheap trigger check from `project/reconciliation.md`; only if triggered does it read new historical reports and reconcile current Design.
+
+No generic background scheduler is required. If the project is not being worked on, reconciliation does not run.
 
 ## Codex delegation
 
