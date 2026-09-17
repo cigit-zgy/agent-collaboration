@@ -1,107 +1,88 @@
 # Project living-design contract
 
-Load this reference for the canonical current project design under `reports/design/`: ownership, current-state semantics, topic decomposition, naming, and projection into Skills/code/tests.
+Load this reference for the canonical current project Design under `reports/design/`: ownership, topic decomposition, naming, current-state semantics, and projection into Skills/code/tests.
 
-`reports/concept/` is explicit User-requested historical reasoning only. Project-wide admission, drift, and golden-object purity checks are owned by `governance.md`.
+Historical work lives in Reports. Current accepted semantics live here. Periodic backstop synchronization is owned by `reconciliation.md`.
 
 ## Core boundary
 
 ```text
 reports/design/
 = what the project currently accepts
-= exactly one current design set
-= mutable current state
+= one mutable current normal form
+= current authority
 
-reports/concept/
-= dated historical reasoning/evidence discussion
-= append-only when explicitly requested by the User
-= never current authority
-
-workspace/golden_object/<model>/
-= canonical ten-layer structured object only
+reports/chatgpt/ + reports/codex/ + reports/concept/
+= append-only historical work/evidence
+= never current Design authority
 ```
 
-## Single current set
-
-Use exactly one:
-
-```text
-reports/design/
-```
-
-Do not keep parallel root `design/`, `design_v2/`, dated design trees, drafts, backups, or archived current-design copies.
+Do not keep parallel root `design/`, dated Design snapshots, drafts, backups, old versions, or superseded current owners.
 
 ## One concern, one owner
 
-Every active design concern has exactly one current owner.
+Every active Design concern has exactly one current owner.
 
-A current topic is non-conforming when it mainly exists to supersede, refine, override, or preserve a previous current topic for the same semantic responsibility. Merge accepted semantics into the real owner and remove the superseded current file.
+A topic is non-conforming when it mainly exists to supersede, refine, override, or preserve another current topic for the same semantic responsibility. Merge accepted semantics into the real owner and remove the duplicate current file.
 
-Cross-topic interfaces are allowed. Duplicate ownership is not.
+A bounded concern normally reads:
 
-For bounded work, the normal current-design read set is one primary owner plus at most one genuinely necessary secondary owner. If one rule routinely requires three or more current design topics to establish its meaning, treat that as `DESIGN_ARCHITECTURE_DRIFT` under `governance.md` and consolidate ownership before adding more topics.
+```text
+one primary Design owner
++ at most one genuinely necessary secondary owner
+```
 
-## Shape
+Persistent three-plus-owner reading chains are Design architecture drift.
+
+## Default normal form
+
+A mature project normally needs roughly 5–8 topics. Use semantic responsibilities rather than chronology.
+
+A useful default decomposition is:
 
 ```text
 reports/design/
 ├── README.md
-├── 00_overview.md          # only when whole-system topology is genuinely needed
-├── 01_<semantic-topic>.md
-├── 02_<semantic-topic>.md
-└── ...
+├── 00_overview.md
+├── 01_domain_and_objects.md
+├── 02_workflow_and_state.md
+├── 03_artifacts_and_ownership.md
+├── 04_interfaces.md
+├── 05_trust_and_validation.md
+└── 06_runtime_and_skills.md
 ```
 
-`README.md` is navigation only: `design_id`, file, one-line responsibility, and short reading hints. It does not restate detailed design semantics.
+These names are defaults, not mandatory filenames. Merge, rename, or omit topics when the project has fewer real responsibilities.
 
-`00_overview.md` owns only cross-topic system scope/topology. Do not use it as a second copy of detailed topic rules.
-
-## Topic creation gate
-
-Create a new topic only when it has an independent responsibility with a distinct purpose/boundary and a stable consumer/interface/state/trust/change lifecycle. Splitting must reduce unrelated context.
-
-Do not create a topic merely because:
+Topic-count guard:
 
 ```text
-a model or dataset needs one correction
-a task produced a result
-a current file is long
-a new conversation started
-a current topic can be described more specifically in another file
+5–8 current topics      healthy default
+adding topic 9+         inspect for consolidation first
+> 12 current topics     no additional topic by default; consolidate first
 ```
 
-Model-specific scientific facts belong in their registered source/model representation and, when canonicalized as a golden object, in the ten Layer 01–10 structured-object files. Historical correction/qualification reasoning belongs in Concept only when the User explicitly requests it.
+Exceeding 12 requires explicit User approval or a clearly independent responsibility that cannot be merged without harming ownership clarity.
 
-## Mutable current-state rule
+## README.md
 
-Design is current-only and replace-in-place.
+`reports/design/README.md` is navigation plus compact Design-maintenance metadata only.
 
-When accepted design changes:
+It may contain:
 
 ```text
-update/overwrite the owning current topic(s)
-→ merge/split/remove/reorder when responsibility changes
-→ update README.md
-→ remove superseded current design files
+design_id
+file
+one-line responsibility
+short reading hint
+Design reconciliation cursor from reconciliation.md
 ```
 
-History is preserved by Git and, only when explicitly requested by the User, new dated Concept artifacts. Do not preserve old Design beside the replacement.
-
-## Explicit Concept coupling
-
-When the User explicitly asks to persist a discussion/decision in Concept, `concept.md` requires a new dated Concept file and a same-work-unit update to current Design. Concept is append-only; Design is mutable current state.
-
-A Design topic MAY cite exact Concept paths for historical rationale/provenance. The accepted current rule itself must remain stated directly in Design so current semantics do not depend on reading history.
+It must not restate detailed Design semantics or become a progress log.
 
 ## Topic identity
 
-Current topic files use:
-
-```text
-NN_<semantic-topic>.md
-```
-
-with two-digit reading-order prefixes. Stable identity lives in `design_id`, not the number.
+Current topic files use `NN_<semantic-topic>.md`; the numeric prefix is reading order only. Stable identity lives in `design_id`.
 
 Each topic begins with compact metadata:
 
@@ -118,17 +99,52 @@ operational_projection:
 ---
 ```
 
-Do not encode dates, version chains, supersession history, implementation status, task status, or test history in living-design metadata.
+Do not encode dates, version chains, implementation status, task state, or test history in topic metadata.
 
-## Content boundary
+## Topic creation gate
 
-A topic may own purpose, boundary, accepted semantics, interfaces, invariants, lifecycle, and design acceptance when relevant.
+Create a new topic only when it has an independent responsibility with a distinct boundary and stable consumer/interface/state/trust/change lifecycle.
 
-It must not become a discussion diary, scientific qualification report, source-reconciliation log, task/report, test store, backlog, progress board, or archive.
+Do not create a topic merely because a file is long, a task produced a result, one model needs a correction, a new conversation started, or a more specific filename seems convenient.
+
+## Mutable current-state rule
+
+When accepted Design changes:
+
+```text
+update the owning topic(s) in the same work unit
+→ merge/split/remove/reorder only when responsibility changes
+→ update README routing when needed
+→ remove superseded current semantics
+```
+
+Do not wait for periodic reconciliation when the accepted consequence is already known.
+
+History stays in Git and append-only Reports. Design never becomes a discussion diary, task report, test store, backlog, progress board, or archive.
+
+## Runtime and Skill profile
+
+For projects with multiple reusable Skills, current Skill selection belongs to one Design owner, normally `runtime_and_skills` or an equivalent concern.
+
+Record only what future Agents need to choose correctly:
+
+```text
+Skill / tool
+immutable authority or source when applicable
+activation condition
+required | conditional
+purpose
+```
+
+Do not copy the Skill manuals into Design. `AGENTS.md` should route to this owner rather than maintain a second Skill-profile truth.
+
+## Reports and historical rationale
+
+A current topic may cite exact ChatGPT/Codex/Concept report paths when historical provenance is useful, but current semantics must remain understandable from Design without reconstructing history.
+
+Concept creation remains subject to the explicit User gate in `concept.md`.
 
 ## Projection
-
-Accepted current Design flows downward:
 
 ```text
 reports/design/
@@ -138,18 +154,21 @@ reports/design/
 → runtime artifacts
 ```
 
-Tests may expose a `DESIGN_GAP`; they do not redefine current Design silently.
+Tests and reports may expose a Design gap; they do not silently redefine Design.
 
-## Reading discipline
+## Self-hosting Skill-repository exception
+
+When a repository's maintained product is itself an operational Skill/policy and `SKILL.md + references/` are intentionally the canonical current operational contract, do not duplicate the same current semantics into `reports/design/` merely for symmetry.
+
+For such a self-hosting repository, including `agent-collaboration` itself:
 
 ```text
-reports/design/README.md
-→ one primary current topic
-→ at most one necessary secondary current topic
+SKILL.md + references/ = current operational authority
+reports/chatgpt/ + reports/codex/ + reports/concept/ = historical work/evidence
 ```
 
-Read Concept history only for an explicit historical-rationale/evidence need. Do not preload all Design topics or all Concepts.
+Use `reports/design/` only if the repository has a genuinely separate project Design responsibility.
 
 ## Completion
 
-Living Design conforms when there is one `reports/design/` tree, every current concern has one owner, no superseded/parallel owner remains, bounded concerns do not require multi-owner reading chains, current semantics are self-contained, and downstream projection can proceed without inventing missing semantics.
+Living Design conforms when there is one current normal form, every concern has one owner, topic count remains justified, current Skill/runtime selection has one owner when needed, accepted changes are synchronized promptly, and downstream work can proceed without reconstructing report history.
