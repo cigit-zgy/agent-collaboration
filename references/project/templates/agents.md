@@ -51,15 +51,20 @@ When CURRENT points to a handoff, read that one handoff before the current owner
 
 Routine execution enters the relevant project Skill/reference directly.
 
-Design maintenance:
+## Design maintenance hook
+
+Before substantive project work, perform the cheap Design-reconciliation trigger check defined by current `agent-collaboration/references/project/reconciliation.md`:
 
 ```text
-accepted Design consequence
-→ update the owning current Design topic immediately
-
-accumulated reports / periodic backstop
-→ agent-collaboration project/reconciliation.md
+inspect reports/design/README.md reconciliation cursor
+→ inspect only new report filenames/metadata needed for the trigger check
+→ if <4 new substantive reports, <7 days, and no design_gap/design_drift signal: continue normally
+→ otherwise reconcile only reports newer than the cursor before continuing
 ```
+
+Do not run repository-wide background/scheduled reconciliation. If this project is not being worked on, nothing happens.
+
+An accepted Design consequence discovered during the current work is updated immediately in its one current Design owner; do not wait for the next reconciliation check.
 
 Inside authorized reversible work, infer routine implementation details and continue through repair/verification. Ask only when the missing choice changes scientific/product meaning or another explicit project checkpoint.
 
