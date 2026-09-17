@@ -2,7 +2,7 @@
 
 Cold path: load only when creating/restructuring `reports/design/`.
 
-Current-Design semantics are owned by `../design.md`; backstop maintenance by `../reconciliation.md`.
+Current-Design semantics are owned by `../design.md`; maintenance by `../reconciliation.md`.
 
 ## Directory shape
 
@@ -31,7 +31,6 @@ Keep it navigational plus compact reconciliation metadata:
 ```yaml
 ---
 design_reconciliation:
-  enabled: true
   reconciled_at: YYYY-MM-DD
   chatgpt_through: YYMMDD_chatgpt_NN | null
   codex_through: YYMMDD_codex_NN | null
@@ -39,7 +38,7 @@ design_reconciliation:
 ---
 ```
 
-Use `enabled: true` only when this repository should participate in periodic ChatGPT Design reconciliation.
+The root `AGENTS.md` owns the project-entry trigger hook. `README.md` stores only the cursor/state needed to make that check cheap; it does not enable a background scheduler.
 
 Then map each current topic once:
 
