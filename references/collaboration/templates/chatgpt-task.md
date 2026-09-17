@@ -10,8 +10,9 @@ Tasks live at `reports/chatgpt/YYMMDD_chatgpt_NN.md`. The committed task is the 
 
 ```yaml
 ---
-artifact_type: chatgpt_task
+artifact_type: chatgpt_record
 artifact_id: <YYMMDD_chatgpt_NN>
+record_kind: task
 task_id: <TASK_ID>
 title: <SHORT_TITLE>
 date: <YYYY-MM-DD>
@@ -26,6 +27,8 @@ baseline_sha: <AUTHORIZED_BASELINE_SHA>
 verification_level: <level_1 | level_2 | level_3>
 collaboration_commit: <PINNED_AGENT_COLLABORATION_SHA>
 codex_report: reports/codex/<YYMMDD_codex_NN.md>
+design_topics: []
+design_signal: none
 ---
 ```
 
@@ -60,11 +63,11 @@ Add other coordinates only when they materially govern the task.
 
 Prefer outcome-oriented instructions. Do not prescribe a command-by-command path unless the sequence itself is required for correctness or reproducibility.
 
-Within scope, Codex may inspect, implement, run, diagnose, repair, and rerun until the completion criteria are met.
+Within scope, Codex may inspect, implement, run, diagnose, repair, and rerun until completion criteria are met.
 
 ## User-visible locator
 
-After commit/push, emit the short locator:
+After commit/push, emit only the short locator:
 
 ```text
 执行 FORMAL 任务：
