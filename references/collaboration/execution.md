@@ -62,14 +62,22 @@ Rules:
 - use a direct GitHub link to the changed file, task, report, commit, or other most useful durable artifact;
 - do not add a second long prose recap of the same changes unless the User asks.
 
-When ChatGPT issues a Codex task, the task handoff is always one copyable fenced code block in exactly this minimal shape:
+When ChatGPT issues a Codex task, the user-visible console handoff is always one copyable fenced code block. Target 5–7 lines; hard maximum 10 lines.
+
+Use this canonical 6-line shape:
 
 ```text
+任务: <ONE SHORT MISSION LINE>
+范围: <ONE SHORT SCOPE LINE>
+完成: <ONE SHORT COMPLETION/EVIDENCE LINE>
 任务链接：
 <IMMUTABLE_GITHUB_TASK_URL>
+以链接内 committed task 为唯一执行规范。
 ```
 
-The immutable URL points to the committed `reports/chatgpt/...` task at its task-containing commit. Do not put repository/task coordinates, execution instructions, explanations, or prose inside or after the task-link block unless the User explicitly asks.
+The three summary lines are navigation only, not task authority. They may summarize only mission, bounded scope, and completion/evidence at a high level. They MUST NOT restate command sequences, file inventories, prohibitions, verification matrices, dependency details, branch mechanics, or the task body.
+
+The immutable URL points to the committed `reports/chatgpt/...` task at its task-containing commit. The committed task is the sole task-specific authority. Do not add prose before or after the fenced block unless the User explicitly asks.
 
 ## Execution autonomy
 
