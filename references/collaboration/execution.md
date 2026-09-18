@@ -77,7 +77,7 @@ Use this canonical 6-line shape:
 
 The three summary lines are navigation only, not task authority. They may summarize only mission, bounded scope, and completion/evidence at a high level. They MUST NOT restate command sequences, file inventories, prohibitions, verification matrices, dependency details, branch mechanics, or the task body.
 
-The immutable URL points to the committed `reports/chatgpt/...` task at its task-containing commit. The committed task is the sole task-specific authority. Do not add prose before or after the fenced block unless the User explicitly asks.
+The immutable URL points to the committed `reports/chatgpt/...` task at its task-containing commit. The committed task is the sole task-specific authority. Do not attach, generate, export, materialize, or offer a downloadable `.md` copy of the task. The GitHub link is the task handoff. Do not add prose before or after the fenced block unless the User explicitly asks.
 
 ## Execution autonomy
 
