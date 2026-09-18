@@ -87,4 +87,4 @@ https://github.com/<OWNER>/<REPOSITORY>/blob/<TASK_COMMIT>/reports/chatgpt/<TASK
 以链接内 committed task 为唯一执行规范。
 ```
 
-Keep each summary line short. Do not restate task steps, file inventories, prohibitions, dependency details, verification matrices, branch mechanics, or other task-body content. Do not add prose before or after the block unless the User explicitly asks.
+Keep each summary line short. Do not restate task steps, file inventories, prohibitions, dependency details, verification matrices, branch mechanics, or other task-body content. Do not attach or offer a downloadable `.md` copy; the immutable GitHub task URL is sufficient. Do not add prose before or after the block unless the User explicitly asks.
