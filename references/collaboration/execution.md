@@ -43,6 +43,34 @@ concurrency_keys:
 
 Avoid command-by-command instructions unless a specific sequence is itself required for correctness, reproducibility, or safety.
 
+## User-visible repository-change summary
+
+Whenever ChatGPT changes GitHub repository content, the user-visible response includes a compact change summary, ordered by importance and limited to the ten most important changed artifacts:
+
+```text
+本次更改内容：
+
+1. <名称>: <GitHub link>
+2. <名称>: <GitHub link>
+```
+
+Rules:
+
+- include only artifacts actually changed/published in the current work unit;
+- order by user/project importance, not commit chronology;
+- show at most 10 items;
+- use a direct GitHub link to the changed file, task, report, commit, or other most useful durable artifact;
+- do not add a second long prose recap of the same changes unless the User asks.
+
+When ChatGPT issues a Codex task, the task handoff is always one copyable fenced code block in exactly this minimal shape:
+
+```text
+任务链接：
+<IMMUTABLE_GITHUB_TASK_URL>
+```
+
+The immutable URL points to the committed `reports/chatgpt/...` task at its task-containing commit. Do not put repository/task coordinates, execution instructions, explanations, or prose inside or after the task-link block unless the User explicitly asks.
+
 ## Execution autonomy
 
 Within authorized scope, Codex may choose the engineering path:
