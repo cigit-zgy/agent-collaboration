@@ -97,6 +97,8 @@ FORMAL      → richer Codex report → ChatGPT acceptance
 
 Task prompts specify intended outcome, authority/boundaries, completion criteria, required evidence, and true decision boundary. Avoid command-by-command itineraries unless the commands themselves are the contract.
 
+The user-visible Codex handoff is intentionally tiny: one copyable code block, target 5–7 lines and never more than 10. It contains only one short mission line, one short scope line, one short completion/evidence line, the immutable committed task link, and a one-line statement that the linked task is the sole execution authority. Never paste the task body into the console.
+
 ## Verification
 
 Use the smallest evidence set that establishes the requested claim. Run broader or repeated checks only when risk, failures, new changes, or unresolved concerns justify them.
