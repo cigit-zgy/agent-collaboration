@@ -118,13 +118,8 @@ When the User says `Codex 已完成`, ChatGPT resolves the relevant task/report,
 
 Do not create a separate completion registry.
 
-## User-visible task link
+## User-visible task handoff
 
-After the task is committed, use the exact minimal Codex task-link format owned by `execution.md`:
+After the task is committed, use the 5–7 line concise handoff owned by `execution.md` (hard maximum 10 lines). The summary is non-authoritative navigation; the immutable committed task link remains the sole task-specific authority.
 
-```text
-任务链接：
-<IMMUTABLE_GITHUB_TASK_URL>
-```
-
-Do not duplicate task coordinates or task-body prose in chat.
+Do not duplicate task coordinates, task-body prose, command lists, prohibitions, or verification details in chat.
