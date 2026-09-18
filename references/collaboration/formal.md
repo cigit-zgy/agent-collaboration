@@ -118,6 +118,13 @@ When the User says `Codex 已完成`, ChatGPT resolves the relevant task/report,
 
 Do not create a separate completion registry.
 
-## User-visible locator
+## User-visible task link
 
-After the task is committed, the User receives only the short immutable locator defined by the task template. Do not duplicate the task body in chat.
+After the task is committed, use the exact minimal Codex task-link format owned by `execution.md`:
+
+```text
+任务链接：
+<IMMUTABLE_GITHUB_TASK_URL>
+```
+
+Do not duplicate task coordinates or task-body prose in chat.
