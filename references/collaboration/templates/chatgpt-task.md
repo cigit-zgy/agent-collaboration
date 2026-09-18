@@ -74,13 +74,17 @@ Within scope, Codex may inspect, implement, run, diagnose, repair, and rerun unt
 
 Repository-changing Codex work normally uses one linked worktree at `<PROJECT_ROOT>/tmp/<WORK_ID>/worktree/`. That worktree is a real Git checkout; durable source/docs/design/report changes are edited at their normal repository-relative paths and must be committed/published before completion.
 
-## User-visible task link
+## User-visible task handoff
 
-After commit/push, emit exactly one copyable fenced block:
+After commit/push, emit exactly one copyable fenced block. Target 5–7 lines; hard maximum 10 lines:
 
 ```text
+任务: <ONE SHORT MISSION LINE>
+范围: <ONE SHORT SCOPE LINE>
+完成: <ONE SHORT COMPLETION/EVIDENCE LINE>
 任务链接：
 https://github.com/<OWNER>/<REPOSITORY>/blob/<TASK_COMMIT>/reports/chatgpt/<TASK_FILE>.md
+以链接内 committed task 为唯一执行规范。
 ```
 
-Do not add repository/task coordinates, task steps, explanations, or prose after the block unless the User explicitly asks.
+Keep each summary line short. Do not restate task steps, file inventories, prohibitions, dependency details, verification matrices, branch mechanics, or other task-body content. Do not add prose before or after the block unless the User explicitly asks.
